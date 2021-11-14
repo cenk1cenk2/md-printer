@@ -1,0 +1,34 @@
+{
+  "compilerOptions": {
+    "target": "es2020",
+    "lib": ["ES6", "ESNext"],
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "removeComments": true,
+    "noUnusedLocals": false,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "incremental": true,
+    "strictNullChecks": false,
+    "esModuleInterop": true,
+    "downlevelIteration": true,
+    "declaration": true,
+    "composite": false,
+
+    "outDir": "./dist",
+    "rootDir": "src",
+    "baseUrl": "src",
+
+    "paths": {
+      "@src/*": ["*"],
+      "@commands/*": ["commands/*"],
+      "@helpers/*": ["helpers/*"],
+      "@interfaces/*": ["interfaces/*"],
+      "@context/*": ["interfaces/commands/*"],
+      "@templates/*": ["templates/*"]
+    }
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"]
+}
