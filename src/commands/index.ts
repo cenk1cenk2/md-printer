@@ -6,6 +6,7 @@ import fs from 'fs-extra'
 import mdToPdf from 'md-to-pdf'
 import { PdfConfig } from 'md-to-pdf/dist/lib/config'
 import { join, extname } from 'path'
+import { basename } from 'path/posix'
 
 export default class MDPrinter extends BaseCommand {
   static description = 'Generates a PDF from the given markdown file with the selected HTML template.'
@@ -95,8 +96,10 @@ export default class MDPrinter extends BaseCommand {
           let output: string
           if (args.output) {
             output = args.output
-          } else {
+          } else if (pdf.filename) {
             output = pdf.filename
+          } else {
+            output = `${basename(args.file)}.pdf`
           }
 
           if (!output) {
