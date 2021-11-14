@@ -99,7 +99,7 @@ export default class MDPrinter extends BaseCommand {
           } else if (pdf.filename) {
             output = pdf.filename
           } else {
-            output = `${basename(args.file)}.pdf`
+            output = `${basename(args.file, extname(args.file))}.pdf`
           }
 
           if (!output) {
