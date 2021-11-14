@@ -1,3 +1,9 @@
+## [1.0.1](https://github.com/cenk1cenk2/md-printer/compare/v1.0.0...v1.0.1) (2021-11-14)
+
+### Bug Fixes
+
+- add fallback to file name ([6a5d110](https://github.com/cenk1cenk2/md-printer/commit/6a5d1109d76706c00536cfb83002184e55209f77))
+
 # 1.0.0 (2021-11-14)
 
 ### Bug Fixes
