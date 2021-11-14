@@ -1,3 +1,9 @@
+## [1.0.2](https://github.com/cenk1cenk2/md-printer/compare/v1.0.1...v1.0.2) (2021-11-14)
+
+### Bug Fixes
+
+- remove extension in default name ([7bb0f49](https://github.com/cenk1cenk2/md-printer/commit/7bb0f4945c1242cdc7804361dd6c5b8afca511e2))
+
 ## [1.0.1](https://github.com/cenk1cenk2/md-printer/compare/v1.0.0...v1.0.1) (2021-11-14)
 
 ### Bug Fixes
