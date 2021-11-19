@@ -457,6 +457,18 @@
     debug "^4.1.1"
     semver "^7.3.2"
 
+"@oclif/command@^1.8.3":
+  version "1.8.3"
+  resolved "https://registry.yarnpkg.com/@oclif/command/-/command-1.8.3.tgz#1f8bc2c4ecf94b6659a5134d95da179e1dffad9e"
+  integrity sha512-OGjrhdVgTT2TAAj/2RrdXjwxaDoTm16c2LfAzrta1xIFe6/XhgQIYDmeRN/RptQoZQBX8e9Vv2JoQq+TbghJmw==
+  dependencies:
+    "@oclif/config" "^1.15.1"
+    "@oclif/errors" "^1.3.5"
+    "@oclif/parser" "^3.8.5"
+    "@oclif/plugin-help" "^3.2.4"
+    debug "^4.1.1"
+    semver "^7.3.2"
+
 "@oclif/config@^1.15.1", "@oclif/config@^1.17.0":
   version "1.17.0"
   resolved "https://registry.yarnpkg.com/@oclif/config/-/config-1.17.0.tgz#ba8639118633102a7e481760c50054623d09fcab"
@@ -464,6 +476,18 @@
   dependencies:
     "@oclif/errors" "^1.3.3"
     "@oclif/parser" "^3.8.0"
+    debug "^4.1.1"
+    globby "^11.0.1"
+    is-wsl "^2.1.1"
+    tslib "^2.0.0"
+
+"@oclif/config@^1.17.1":
+  version "1.17.1"
+  resolved "https://registry.yarnpkg.com/@oclif/config/-/config-1.17.1.tgz#383515f6715b91d8df5db8108214e93bb46e86ca"
+  integrity sha512-UqV5qsN2np96TNlJspSNlRl7CpFmxYSrB0iLe3XV9NDkbFEE5prGP++h6w6xOR/FL3QV7BoqrbwGuJdJdFbidw==
+  dependencies:
+    "@oclif/errors" "^1.3.3"
+    "@oclif/parser" "^3.8.6"
     debug "^4.1.1"
     globby "^11.0.1"
     is-wsl "^2.1.1"
@@ -514,6 +538,16 @@
     chalk "^2.4.2"
     tslib "^1.9.3"
 
+"@oclif/parser@^3.8.5", "@oclif/parser@^3.8.6":
+  version "3.8.6"
+  resolved "https://registry.yarnpkg.com/@oclif/parser/-/parser-3.8.6.tgz#d5a108af9c708a051cc6b1d27d47359d75f41236"
+  integrity sha512-tXb0NKgSgNxmf6baN6naK+CCwOueaFk93FG9u202U7mTBHUKsioOUlw1SG/iPi9aJM3WE4pHLXmty59pci0OEw==
+  dependencies:
+    "@oclif/errors" "^1.2.2"
+    "@oclif/linewrap" "^1.0.0"
+    chalk "^4.1.0"
+    tslib "^2.0.0"
+
 "@oclif/plugin-help@^3", "@oclif/plugin-help@^3.2.0":
   version "3.2.4"
   resolved "https://registry.yarnpkg.com/@oclif/plugin-help/-/plugin-help-3.2.4.tgz#100e0e09d806e20595096609f2220d009ee096e2"
@@ -522,6 +556,22 @@
     "@oclif/command" "^1.5.20"
     "@oclif/config" "^1.15.1"
     "@oclif/errors" "^1.2.2"
+    chalk "^4.1.0"
+    indent-string "^4.0.0"
+    lodash "^4.17.21"
+    string-width "^4.2.0"
+    strip-ansi "^6.0.0"
+    widest-line "^3.1.0"
+    wrap-ansi "^4.0.0"
+
+"@oclif/plugin-help@^3.2.4":
+  version "3.2.5"
+  resolved "https://registry.yarnpkg.com/@oclif/plugin-help/-/plugin-help-3.2.5.tgz#dab0f5e655971b2c49dd80ee472f97b6e69a1297"
+  integrity sha512-fjkZTstvacCPicF2oaa3Lc+Yw3ocKEaW6x6O7doVqMLuoMUX6wBOQ+f1a3VFzO1fErqNeFPDlUlVUhwq9yMzQg==
+  dependencies:
+    "@oclif/command" "^1.8.3"
+    "@oclif/config" "^1.17.1"
+    "@oclif/errors" "^1.3.5"
     chalk "^4.1.0"
     indent-string "^4.0.0"
     lodash "^4.17.21"
@@ -2424,10 +2474,10 @@ has@^1.0.3:
   dependencies:
     function-bind "^1.1.1"
 
-highlight.js@11.2.0:
-  version "11.2.0"
-  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-11.2.0.tgz#a7e3b8c1fdc4f0538b93b2dc2ddd53a40c6ab0f0"
-  integrity sha512-JOySjtOEcyG8s4MLR2MNbLUyaXqUunmSnL2kdV/KuGJOmHZuAR5xC54Ko7goAXBWNhf09Vy3B+U7vR62UZ/0iw==
+highlight.js@11.3.1:
+  version "11.3.1"
+  resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-11.3.1.tgz#813078ef3aa519c61700f84fe9047231c5dc3291"
+  integrity sha512-PUhCRnPjLtiLHZAQ5A/Dt5F8cWZeMyj9KRsACsWT+OD6OP0x6dp5OmT5jdx0JgEyPxPZZIPQpRN2TciUT7occw==
 
 homedir-polyfill@^1.0.1:
   version "1.0.3"
@@ -3139,15 +3189,15 @@ map-stream@~0.1.0:
   resolved "https://registry.yarnpkg.com/map-stream/-/map-stream-0.1.0.tgz#e56aa94c4c8055a16404a0674b78f215f7c8e194"
   integrity sha1-5WqpTEyAVaFkBKBnS3jyFffI4ZQ=
 
-marked@3.0.4:
-  version "3.0.4"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-3.0.4.tgz#b8a1539e5e05c6ea9e93f15c0bad1d54ce890406"
-  integrity sha512-jBo8AOayNaEcvBhNobg6/BLhdsK3NvnKWJg33MAAPbvTWiG4QBn9gpW1+7RssrKu4K1dKlN+0goVQwV41xEfOA==
+marked@4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-4.0.3.tgz#986760a428d8fd666251ec578429bf9a239a34bc"
+  integrity sha512-vSwKKtw+lCA0uFK/02JT4tBfNxEREpoTg21NoXqcmX0ySBIEyLMYWmt8WPsM61QNFaDBZkggupyNXLsV7uPuRg==
 
-md-to-pdf@^5.0.0:
-  version "5.0.0"
-  resolved "https://registry.yarnpkg.com/md-to-pdf/-/md-to-pdf-5.0.0.tgz#6715ff0b7ec2596f882a718e99910225e019f140"
-  integrity sha512-1cdc3qm9jkJBQEqgGzhFXtiLhPxg40G2/dLDvoHwrh2XaHkzoNXxFrSBi8wcMX1ceI35v7/LvZscSFiV+8WyBg==
+md-to-pdf@^5.0.1:
+  version "5.0.1"
+  resolved "https://registry.yarnpkg.com/md-to-pdf/-/md-to-pdf-5.0.1.tgz#2fc990b29f628f19090726b9d1570c2d28333afe"
+  integrity sha512-pUpsyOlew43CYZbHGWK1OIo3l2RicTIxG4n6gZMbeA6BBUg9gVCnUeeH/fLT1gxaZPeN8/xhOoWtye7fhqiUxw==
   dependencies:
     arg "5.0.1"
     chalk "4.1.2"
@@ -3155,10 +3205,10 @@ md-to-pdf@^5.0.0:
     get-port "5.1.1"
     get-stdin "8.0.0"
     gray-matter "4.0.3"
-    highlight.js "11.2.0"
+    highlight.js "11.3.1"
     iconv-lite "0.6.3"
     listr "0.14.3"
-    marked "3.0.4"
+    marked "4.0.3"
     puppeteer ">=8.0.0"
     semver "7.3.5"
     serve-handler "6.1.3"
