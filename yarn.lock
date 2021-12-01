@@ -210,17 +210,17 @@
     "@babel/helper-validator-identifier" "^7.15.7"
     to-fast-properties "^2.0.0"
 
-"@cenk1cenk2/boilerplate-oclif@^1.10.5":
-  version "1.10.5"
-  resolved "https://registry.yarnpkg.com/@cenk1cenk2/boilerplate-oclif/-/boilerplate-oclif-1.10.5.tgz#c1b5c07caa9488d021dd9365db925df047795d9e"
-  integrity sha512-Z85Xzn2kUGwExvdXchnnLOXnJOHGLiWZSEsfmjMileUfCyjzB7XJ+T9ExbwIqcsLiQ9N3cZh1e9I7gOwOp32wA==
+"@cenk1cenk2/boilerplate-oclif@^1.10.6":
+  version "1.10.6"
+  resolved "https://registry.yarnpkg.com/@cenk1cenk2/boilerplate-oclif/-/boilerplate-oclif-1.10.6.tgz#0fdcdffe4fe6a2444eb102dbce59148d75053328"
+  integrity sha512-oxdI0Xkv80Oeq2FOX4cUt0BjpcipA4MSgkjsia+TAcD7M3YDc0MtN/2KsFF2T2h2ckLog7NkdCpEaHZPg83Elg==
   dependencies:
     chalk "^4.1.2"
     config "^3.3.6"
     deepmerge "^4.2.2"
     figures "^3.2.0"
     object-path-immutable "^4.1.2"
-    table "^6.7.1"
+    table "6.7.3"
     tslib "^2.3.1"
     types "^0.1.1"
     winston "^3.3.3"
@@ -4330,7 +4330,7 @@ symbol-observable@^1.1.0:
   resolved "https://registry.yarnpkg.com/symbol-observable/-/symbol-observable-1.2.0.tgz#c22688aed4eab3cdc2dfeacbb561660560a00804"
   integrity sha512-e900nM8RRtGhlV36KGEU9k65K3mPb1WV70OdjfxlG2EAuM1noi/E/BaW/uMhL7bPEssK8QV57vN3esixjUvcXQ==
 
-table@^6.7.1:
+table@6.7.3:
   version "6.7.3"
   resolved "https://registry.yarnpkg.com/table/-/table-6.7.3.tgz#255388439715a738391bd2ee4cbca89a4d05a9b7"
   integrity sha512-5DkIxeA7XERBqMwJq0aHZOdMadBx4e6eDoFRuyT5VR82J0Ycg2DwM6GfA/EQAhJ+toRTaS1lIdSQCqgrmhPnlw==
