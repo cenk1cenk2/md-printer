@@ -457,6 +457,18 @@
     debug "^4.1.1"
     semver "^7.3.2"
 
+"@oclif/command@^1.8.13":
+  version "1.8.13"
+  resolved "https://registry.yarnpkg.com/@oclif/command/-/command-1.8.13.tgz#bc596d3a40328724a458eae60ad3aadbfbd57f50"
+  integrity sha512-yJcOWEJA3DTkdE2VDh3TqpRAuokpSeVyaGRh4qkcBNTIROp+WRlk/XnK6IvS8b3UreBEFmz1BKZrBa6aQpn4Ew==
+  dependencies:
+    "@oclif/config" "^1.18.2"
+    "@oclif/errors" "^1.3.5"
+    "@oclif/parser" "^3.8.6"
+    "@oclif/plugin-help" "3.2.14"
+    debug "^4.1.1"
+    semver "^7.3.2"
+
 "@oclif/command@^1.8.8", "@oclif/command@^1.8.9":
   version "1.8.9"
   resolved "https://registry.yarnpkg.com/@oclif/command/-/command-1.8.9.tgz#9a3cf897b1b83ef9e116657577324987c2d7f063"
