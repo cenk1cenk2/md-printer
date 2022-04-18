@@ -1,18 +1,19 @@
-import { BaseCommand, deepMergeWithArrayOverwrite } from '@cenk1cenk2/boilerplate-oclif'
 import { flags } from '@oclif/command'
-import { INPUT_FILE_ACCEPTED_TYPES, OUTPUT_FILE_ACCEPTED_TYPES, TemplateFiles, TEMPLATE_DIRECTORY } from '@src/constants'
-import { MdPrinterCtx } from '@src/interfaces/commands'
+import type { IOptionFlag } from '@oclif/command/lib/flags'
 import fs from 'fs-extra'
 import mdToPdf from 'md-to-pdf'
-import { PdfConfig } from 'md-to-pdf/dist/lib/config'
+import type { PdfConfig } from 'md-to-pdf/dist/lib/config'
 import { join, extname } from 'path'
 import { basename } from 'path/posix'
+
+import { BaseCommand, deepMergeWithArrayOverwrite } from '@cenk1cenk2/boilerplate-oclif'
+import { INPUT_FILE_ACCEPTED_TYPES, OUTPUT_FILE_ACCEPTED_TYPES, TemplateFiles, TEMPLATE_DIRECTORY } from '@src/constants'
+import type { MdPrinterCtx } from '@src/interfaces/commands'
 
 export default class MDPrinter extends BaseCommand {
   static description = 'Generates a PDF from the given markdown file with the selected HTML template.'
 
-  static flags = {
-    help: flags.help({ char: 'h' }),
+  static flags: Record<'template' | 'title', IOptionFlag<string>> = {
     template: flags.string({
       char: 't',
       default: 'default',
@@ -37,7 +38,7 @@ export default class MDPrinter extends BaseCommand {
     }
   ]
 
-  async run (): Promise<void> {
+  public async run (): Promise<void> {
     const { args, flags } = this.parse(MDPrinter)
 
     this.tasks.options = { rendererSilent: true }
@@ -72,6 +73,7 @@ export default class MDPrinter extends BaseCommand {
           await Promise.all(
             Object.values(TemplateFiles).map(async (file) => {
               const current = join(templates, file)
+
               if (!fs.existsSync(current)) {
                 throw new Error(`Template file does not exists: ${current}`)
               }
@@ -94,6 +96,7 @@ export default class MDPrinter extends BaseCommand {
           const pdf = await mdToPdf({ content: ctx.content }, ctx.options)
 
           let output: string
+
           if (args.output) {
             output = args.output
           } else if (pdf.filename) {

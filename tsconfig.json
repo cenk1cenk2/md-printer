@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
-    "target": "es2020",
-    "lib": ["ES6", "ESNext"],
+    "target": "es2021",
+    "lib": ["ESNext"],
     "module": "commonjs",
     "moduleResolution": "node",
     "sourceMap": true,
@@ -15,11 +15,10 @@
     "downlevelIteration": true,
     "declaration": true,
     "composite": false,
-
+    "skipLibCheck": true,
     "outDir": "./dist",
     "rootDir": "src",
     "baseUrl": "src",
-
     "paths": {
       "@src/*": ["*"],
       "@commands/*": ["commands/*"],

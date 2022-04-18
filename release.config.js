@@ -1,6 +1,9 @@
 module.exports = {
   branches: [
+    'main',
     'master',
+    'next',
+    'next-major',
     {
       name: 'alpha',
       prerelease: true
@@ -12,19 +15,23 @@ module.exports = {
     {
       name: 'rc',
       prerelease: true
+    },
+    {
+      name: 'rc',
+      prerelease: true
     }
   ],
-  verifyConditions: [ '@semantic-release/changelog', '@semantic-release/git', '@semantic-release/npm' ],
   plugins: [
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
+    '@semantic-release/npm',
     '@semantic-release/changelog',
     [
       '@semantic-release/git',
       {
-        assets: [ 'CHANGELOG.md', 'package.json', 'README.md' ]
+        assets: [ 'CHANGELOG.md', 'README.md', 'yarn.lock', 'package.json' ]
       }
     ],
-    [ '@semantic-release/npm' ]
+    '@semantic-release/gitlab'
   ]
 }
