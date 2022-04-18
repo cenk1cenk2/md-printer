@@ -1,3 +1,35 @@
+# [2.0.0](https://gitlab.kilic.dev/utils/md-printer/compare/v1.0.2...v2.0.0) (2022-04-18)
+
+### Bug Fixes
+
+- **deps:** update all minor dependency updates ([0d56ecb](https://gitlab.kilic.dev/utils/md-printer/commit/0d56ecb485c27df622ed1a71445c110a2fe8b561))
+- **deps:** update all minor dependency updates ([44cfe59](https://gitlab.kilic.dev/utils/md-printer/commit/44cfe592f402f64559b5514f6dd8eeee2c55e01e))
+- **deps:** update all minor dependency updates ([f8e0963](https://gitlab.kilic.dev/utils/md-printer/commit/f8e09630fcefc0fb2c15ff5c4deb5d6f60b2f5c3))
+- **deps:** update all minor dependency updates ([f523a56](https://gitlab.kilic.dev/utils/md-printer/commit/f523a56fd43c4093d10603e9ea0de63db67e975d))
+- **deps:** update dependency @cenk1cenk2/boilerplate-oclif to ^1.10.6 ([d1ca100](https://gitlab.kilic.dev/utils/md-printer/commit/d1ca10071e358825c9b6ecbc330ff0146194e031))
+- **deps:** update dependency @oclif/command to ^1.8.13 ([1f8f431](https://gitlab.kilic.dev/utils/md-printer/commit/1f8f4314d8e06f0fd61589603040da73fbdbabe7))
+- **deps:** update dependency @oclif/command to ^1.8.16 ([06f6f58](https://gitlab.kilic.dev/utils/md-printer/commit/06f6f585863ed275f54c638ae182be6b84aa087e))
+- **deps:** update dependency @oclif/command to ^1.8.4 ([38eba2f](https://gitlab.kilic.dev/utils/md-printer/commit/38eba2fc101bd61f1f098a5a5efe2846548e1326))
+- **deps:** update dependency @oclif/config to ^1.18.3 ([20288ab](https://gitlab.kilic.dev/utils/md-printer/commit/20288abebebe90a159c88b919f5151cd7d0c6bd7))
+- **deps:** update dependency config to ^3.3.7 ([d7c0749](https://gitlab.kilic.dev/utils/md-printer/commit/d7c07493d6e4a5dad8428289508f8e05bd564d6e))
+- **deps:** update dependency fs-extra to ^10.0.1 ([b23c5ca](https://gitlab.kilic.dev/utils/md-printer/commit/b23c5ca8dd6c361411b764fa5f8ef9a88532c8d6))
+- **deps:** update dependency fs-extra to ^10.1.0 ([e8ddb04](https://gitlab.kilic.dev/utils/md-printer/commit/e8ddb0410534c43234b9b5d2f06e6fc859631747))
+- **deps:** update dependency globby to ^11.1.0 ([3f77b72](https://gitlab.kilic.dev/utils/md-printer/commit/3f77b72a8e1e351fdad3a65911e7180d44b212b6))
+- **deps:** update dependency listr2 to ^3.13.4 ([98f291b](https://gitlab.kilic.dev/utils/md-printer/commit/98f291bf189513b3ed9a27238f29e348a9e7ee17))
+- **deps:** update dependency listr2 to ^3.13.5 ([bf1febd](https://gitlab.kilic.dev/utils/md-printer/commit/bf1febd1f332a8849bd0f3796c48316d158a860b))
+- **deps:** update dependency listr2 to ^3.13.6 ([2d8c821](https://gitlab.kilic.dev/utils/md-printer/commit/2d8c82193aa9524f24074d407d57de89cbf29f0f))
+- **deps:** update dependency listr2 to ^3.14.0 ([473c075](https://gitlab.kilic.dev/utils/md-printer/commit/473c07541fc622fad1b58b6700910fd6d8af3f6a))
+- **deps:** update dependency md-to-pdf to ^5.0.2 ([ddc8892](https://gitlab.kilic.dev/utils/md-printer/commit/ddc8892b9409ab926cfa952105fff85f567c90b7))
+- **deps:** update dependency md-to-pdf to ^5.1.0 ([b7ff337](https://gitlab.kilic.dev/utils/md-printer/commit/b7ff3379aec3e037a35235e16ad480df3285d2fa))
+
+### Features
+
+- migrate to gitlab ci ([a226bd5](https://gitlab.kilic.dev/utils/md-printer/commit/a226bd590d18017f42b68fbcdb474801ee179ad0))
+
+### BREAKING CHANGES
+
+- min node 16 support
+
 ## [1.0.2](https://github.com/cenk1cenk2/md-printer/compare/v1.0.1...v1.0.2) (2021-11-14)
 
 ### Bug Fixes
