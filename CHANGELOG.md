@@ -1,3 +1,9 @@
+# [2.1.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.0.1...v2.1.0) (2022-06-06)
+
+### Features
+
+- add working through a direct path ([5e7c892](https://gitlab.kilic.dev/utils/md-printer/commit/5e7c892014578df057301e20d2515f7a3a38ae59))
+
 ## [2.0.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.0.0...v2.0.1) (2022-04-18)
 
 ### Bug Fixes
