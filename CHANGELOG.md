@@ -1,3 +1,9 @@
+## [2.1.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.1.0...v2.1.1) (2022-06-06)
+
+### Bug Fixes
+
+- add plugin ([4b4a551](https://gitlab.kilic.dev/utils/md-printer/commit/4b4a551a2ad1daf119e4c7b848c26c0fdbedc288))
+
 # [2.1.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.0.1...v2.1.0) (2022-06-06)
 
 ### Features
