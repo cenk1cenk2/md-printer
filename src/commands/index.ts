@@ -68,7 +68,7 @@ export default class MDPrinter extends BaseCommand {
         task: async (ctx): Promise<void> => {
           this.logger.debug('Loading template: %s', flags.template)
 
-          const templates = join(this.config.root, TEMPLATE_DIRECTORY, flags.template)
+          const templates = new RegExp(/\.\.?\//).test(flags.template) ? join(process.cwd(), flags.template) : join(this.config.root, TEMPLATE_DIRECTORY, flags.template)
 
           await Promise.all(
             Object.values(TemplateFiles).map(async (file) => {
