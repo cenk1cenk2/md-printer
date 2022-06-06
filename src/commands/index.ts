@@ -3,8 +3,7 @@ import type { IOptionFlag } from '@oclif/command/lib/flags'
 import fs from 'fs-extra'
 import mdToPdf from 'md-to-pdf'
 import type { PdfConfig } from 'md-to-pdf/dist/lib/config'
-import { join, extname } from 'path'
-import { basename } from 'path/posix'
+import { join, extname, basename, dirname } from 'path'
 
 import { BaseCommand, deepMergeWithArrayOverwrite } from '@cenk1cenk2/boilerplate-oclif'
 import { INPUT_FILE_ACCEPTED_TYPES, OUTPUT_FILE_ACCEPTED_TYPES, TemplateFiles, TEMPLATE_DIRECTORY } from '@src/constants'
@@ -104,6 +103,8 @@ export default class MDPrinter extends BaseCommand {
           } else {
             output = `${basename(args.file, extname(args.file))}.pdf`
           }
+
+          await fs.mkdirp(dirname(output))
 
           if (!output) {
             throw new Error('Output should either be defined with the variable or front-matter.')
