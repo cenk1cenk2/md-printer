@@ -1,3 +1,10 @@
+## [2.1.2](https://gitlab.kilic.dev/utils/md-printer/compare/v2.1.1...v2.1.2) (2022-06-11)
+
+
+### Bug Fixes
+
+* always create the output folder ([746a1da](https://gitlab.kilic.dev/utils/md-printer/commit/746a1dacb07e3b9ee8d84d132369e9f5bbd1c861))
+
 ## [2.1.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.1.0...v2.1.1) (2022-06-06)
 
 ### Bug Fixes
