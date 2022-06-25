@@ -1,0 +1,9 @@
+{
+  "body_class": [],
+  "highlight_style": "atom-one-dark",
+  "pdf_options": {
+    "format": "A4",
+    "margin": "18mm 12mm",
+    "printBackground": true
+  }
+}

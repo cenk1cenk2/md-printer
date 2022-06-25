@@ -10,6 +10,7 @@
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
     "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo",
     "strictNullChecks": false,
     "esModuleInterop": true,
     "downlevelIteration": true,
