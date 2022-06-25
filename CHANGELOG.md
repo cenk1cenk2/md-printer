@@ -1,3 +1,10 @@
+# [2.2.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.1.2...v2.2.0) (2022-06-25)
+
+
+### Features
+
+* add watch mode and debug mode as well as the privatrechnung ([a68128c](https://gitlab.kilic.dev/utils/md-printer/commit/a68128ca14061bcafdc59795adca657eb4574f01))
+
 ## [2.1.2](https://gitlab.kilic.dev/utils/md-printer/compare/v2.1.1...v2.1.2) (2022-06-11)
 
 
