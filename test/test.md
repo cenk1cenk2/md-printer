@@ -14,6 +14,7 @@ sender:
   postcode: 123
   location: Wien/Österreich
   phone: '+43127368'
+  email: 'cenk@kilic.dev'
 
 receiver:
   name: Cenk Kilic

@@ -8,24 +8,29 @@
 </head>
 <body>
   <div class="max-w-full leading-tight prose">
-    <h1 class="mb-2 text-center">Privatrechnung</h1>
+    <h1 class="mb-2 text-center border-b-2">Privatrechnung</h1>
     <div class="text-center">
-      <p class="p-0 m-0 font-bold">Rechnungsnummer</p>
-      <p class="p-0 m-0 font-bold">{{ id }}</p>
+      <p class="m-0 font-bold">Rechnungsnummer</p>
+      <p class="m-0 font-bold">{{ id }}</p>
     </div>
-    <div class="grid grid-cols-2">
+    <div class="grid grid-cols-2" style="margin-bottom: 1em !important;">
       <div class="grid-cols-1">
           <div>
             <h4 class="">Absender</h4>
           </div>
           <div>
-            <p class="p-0 my-2 font-semibold">{{ sender.name }}</p>
-            {% if sender.phone %}
-            <p class="p-0 m-0 mb-2">{{ sender.phone }}</p>
+            <p class="my-2 font-semibold">{{ sender.name }}</p>
+            {% if sender.email %}
+            <p class="m-0 my-2">{{ sender.email }}</p>
             {% endif %}
-            <p class="p-0 m-0">{{ sender.address }}</p>
-            <p class="p-0 m-0">{{ sender.postcode }}</p>
-            <p class="p-0 m-0">{{ sender.location }}</p>
+            {% if sender.phone %}
+            <p class="m-0 my-2">{{ sender.phone }}</p>
+            {% endif %}
+            <div class="mt-4">
+              <p class="m-0">{{ sender.address }}</p>
+              <p class="m-0">{{ sender.postcode }}</p>
+              <p class="m-0">{{ sender.location }}</p>
+            </div>
           </div>
       </div>
       <div class="grid-cols-1 text-right">
@@ -33,18 +38,23 @@
             <h4 class="">Empfänger</h4>
           </div>
           <div class="leading-tight">
-            <p class="p-0 my-2 font-semibold">{{ receiver.name }}</p>
-            {% if receiver.phone %}
-            <p class="p-0 m-0 mb-2">{{ receiver.phone }}</p>
+            <p class="my-2 font-semibold">{{ receiver.name }}</p>
+            {% if receiver.email %}
+            <p class="m-0 my-2">{{ receiver.email }}</p>
             {% endif %}
-            <p class="p-0 m-0">{{ receiver.address }}</p>
-            <p class="p-0 m-0">{{ receiver.postcode }}</p>
-            <p class="p-0 m-0">{{ receiver.location }}</p>
+            {% if receiver.phone %}
+            <p class="m-0 my-2">{{ receiver.phone }}</p>
+            {% endif %}
+            <div class="mt-4">
+              <p class="m-0">{{ receiver.address }}</p>
+              <p class="m-0">{{ receiver.postcode }}</p>
+              <p class="m-0">{{ receiver.location }}</p>
+            </div>
           </div>
           </div>
       </div>
-    <div>
-        <h4>Dies ist eine Privatrechnung über eine nicht gewerbliche Tätigkeit. Umsatzsteuer wird daher nicht in Rechnung gestellt.</h4>
+    <div class="border-t-2">
+        <p class="font-bold">Dies ist eine Privatrechnung über eine nicht gewerbliche Tätigkeit. Umsatzsteuer wird daher nicht in Rechnung gestellt.</p>
       <table class="w-full rounded-lg border-gray-200 table-fixed">
         <thead class="border-b-2 border-primary-500">
           <tr class="bg-gray-200">
@@ -115,14 +125,14 @@
         </tfoot>
       </table>
     </div>
-    <hr />
+    <hr class="border-t-2 !mt-0 !mb-2" style="margin-top: 0 !important; margin-bottom: 1.5em !important;" />
     <div class="grid grid-cols-2 font-semibold">
-        <div class="flex flex-row items-center text-center">
-          <div class="w-full">
-            <p class="p-0 m-0">{{ location }}</p>
-            <p class="p-0 m-0">{{ date }}</p>
-          </div>
+      <div class="flex flex-row items-center text-center">
+        <div class="w-full">
+          <p class="my-4">{{ location }}</p>
+          <p class="my-4">{{ date }}</p>
         </div>
+      </div>
       <div class="p-20 text-center rounded-lg border-2 border-gray-200">Unterschrift</div>
     </div>
   </div>
