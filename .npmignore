@@ -7,3 +7,4 @@
 !config/**
 !templates/
 !templates/**
+!oclif.manifest.json

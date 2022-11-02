@@ -11,3 +11,9 @@ include:
   - project: devops/pipes
     file: /templates/semantic-release.gitlab-ci.yml
     ref: main
+
+build:
+  artifacts:
+    paths:
+      - dist/
+      - oclif.manifest.json

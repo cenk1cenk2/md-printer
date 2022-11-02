@@ -1,6 +1,4 @@
-import { flags } from '@oclif/command'
 import { watch } from 'chokidar'
-import fs from 'fs-extra'
 import { read as graymatter } from 'gray-matter'
 import mdToPdf from 'md-to-pdf'
 import type { PdfConfig } from 'md-to-pdf/dist/lib/config'
@@ -8,28 +6,29 @@ import type { PdfOutput } from 'md-to-pdf/dist/lib/generate-output'
 import Nunjucks from 'nunjucks'
 import { basename, dirname, extname, join } from 'path'
 
-import { BaseCommand, deepMergeWithArrayOverwrite } from '@cenk1cenk2/boilerplate-oclif'
+import type { InferArgs, InferFlags } from '@cenk1cenk2/oclif-common'
+import { Command, Flags } from '@cenk1cenk2/oclif-common'
 import { INPUT_FILE_ACCEPTED_TYPES, OUTPUT_FILE_ACCEPTED_TYPES, RequiredTemplateFiles, TemplateFiles, TEMPLATE_DIRECTORY } from '@src/constants'
 import type { MdPrinterCtx } from '@src/interfaces/commands'
 
-export default class MDPrinter extends BaseCommand {
+export default class MDPrinter extends Command<MdPrinterCtx, InferFlags<typeof MDPrinter>, InferArgs<typeof MDPrinter>> {
   static description = 'Generates a PDF from the given markdown file with the selected HTML template.'
 
   static flags = {
-    template: flags.string({
+    template: Flags.string({
       char: 't',
       default: 'default',
       description: 'HTML template for the generated PDF file.'
     }),
-    title: flags.string({
+    title: Flags.string({
       char: 'T',
       description: 'Overwrite document title.'
     }),
-    watch: flags.boolean({
+    watch: Flags.boolean({
       char: 'w',
       description: 'Watch the changes on the given file.'
     }),
-    dev: flags.boolean({
+    dev: Flags.boolean({
       char: 'd',
       description: 'Run with Chrome browser instead of publishing the file.'
     })
@@ -55,21 +54,21 @@ export default class MDPrinter extends BaseCommand {
     lstripBlocks: false
   })
 
-  public async run (): Promise<void> {
-    const { args, flags } = this.parse(MDPrinter)
-
+  public async shouldRunBefore (): Promise<void> {
     this.tasks.options = { rendererSilent: true }
+  }
 
-    const tasks = this.tasks.newListr<MdPrinterCtx>([
+  public async run (): Promise<void> {
+    this.tasks.add([
       {
         task: async (ctx): Promise<void> => {
-          const file = join(process.cwd(), args.file)
+          const file = join(process.cwd(), this.args.file)
 
           if (!INPUT_FILE_ACCEPTED_TYPES.includes(extname(file))) {
             throw new Error(`Input file should be ending with the extension: ${INPUT_FILE_ACCEPTED_TYPES.join(', ')} -> current: ${extname(file)}`)
           }
 
-          if (!fs.existsSync(file)) {
+          if (!this.fs.exists(file)) {
             throw new Error(`File does not exists: ${file}`)
           }
 
@@ -77,7 +76,7 @@ export default class MDPrinter extends BaseCommand {
 
           ctx.file = file
 
-          ctx.content = await fs.readFile(file, 'utf-8')
+          ctx.content = await this.fs.read(file)
 
           ctx.graymatter = graymatter(ctx.file)
         }
@@ -85,7 +84,7 @@ export default class MDPrinter extends BaseCommand {
 
       {
         task: async (ctx): Promise<void> => {
-          const template = ctx.graymatter?.data?.template ?? flags.template
+          const template = ctx.graymatter?.data?.template ?? this.flags.template
 
           this.logger.debug('Loading template: %s', template)
 
@@ -95,7 +94,7 @@ export default class MDPrinter extends BaseCommand {
             RequiredTemplateFiles.map(async (file) => {
               const current = join(ctx.templates, file)
 
-              if (!fs.existsSync(current)) {
+              if (!this.fs.exists(current)) {
                 throw new Error(`Template does not exists: ${current}`)
               }
             })
@@ -109,33 +108,36 @@ export default class MDPrinter extends BaseCommand {
             [TemplateFiles.TEMPLATE]: join(ctx.templates, TemplateFiles.TEMPLATE)
           }
 
-          ctx.options = deepMergeWithArrayOverwrite<Partial<PdfConfig>>(await fs.readJSON(paths[TemplateFiles.SETTINGS]), {
-            pdf_options: {},
-            dest: args?.output ?? ctx.graymatter.data?.dest ?? `${basename(args.file, extname(args.file))}.pdf`,
-            document_title: ctx.graymatter.data?.document_title ?? flags.title ?? args.file
-          })
+          ctx.options = await this.cs.extend<PdfConfig>([
+            paths[TemplateFiles.SETTINGS],
+            {
+              pdf_options: {},
+              dest: this.args?.output ?? ctx.graymatter.data?.dest ?? `${basename(this.args.file, extname(this.args.file))}.pdf`,
+              document_title: ctx.graymatter.data?.document_title ?? this.flags.title ?? this.args.file
+            }
+          ])
 
-          if (fs.existsSync(paths[TemplateFiles.CSS])) {
+          if (this.fs.exists(paths[TemplateFiles.CSS])) {
             this.logger.debug('CSS exists for template.')
-            ctx.options.css = await fs.readFile(paths[TemplateFiles.CSS], 'utf-8')
+            ctx.options.css = await this.fs.read(paths[TemplateFiles.CSS])
           }
 
-          if (fs.existsSync(paths[TemplateFiles.HEADER])) {
+          if (this.fs.exists(paths[TemplateFiles.HEADER])) {
             this.logger.debug('Header exists for template.')
 
-            ctx.options.pdf_options.headerTemplate = await fs.readFile(paths[TemplateFiles.HEADER], 'utf-8')
+            ctx.options.pdf_options.headerTemplate = await this.fs.read(paths[TemplateFiles.HEADER])
           }
 
-          if (fs.existsSync(paths[TemplateFiles.FOOTER])) {
+          if (this.fs.exists(paths[TemplateFiles.FOOTER])) {
             this.logger.debug('Footer exists for template.')
 
-            ctx.options.pdf_options.footerTemplate = await fs.readFile(paths[TemplateFiles.FOOTER], 'utf-8')
+            ctx.options.pdf_options.footerTemplate = await this.fs.read(paths[TemplateFiles.FOOTER])
           }
 
-          if (fs.existsSync(paths[TemplateFiles.TEMPLATE])) {
+          if (this.fs.exists(paths[TemplateFiles.TEMPLATE])) {
             this.logger.debug('Design template exists for template.')
 
-            ctx.template = await fs.readFile(paths[TemplateFiles.TEMPLATE], 'utf-8')
+            ctx.template = await this.fs.read(paths[TemplateFiles.TEMPLATE])
 
             ctx.content = ctx.graymatter.content
 
@@ -146,7 +148,7 @@ export default class MDPrinter extends BaseCommand {
 
       {
         task: async (ctx): Promise<void> => {
-          if (flags.dev) {
+          if (this.flags.dev) {
             ctx.options.devtools = true
           }
 
@@ -154,14 +156,15 @@ export default class MDPrinter extends BaseCommand {
         }
       }
     ])
+  }
 
-    const ctx = await tasks.run()
-
-    if (flags.watch) {
+  public async shouldRunAfter (ctx: MdPrinterCtx): Promise<void> {
+    if (this.flags.watch) {
       this.logger.info('Running in watch mode.')
 
-      watch([ args.file, join(ctx.templates, '**/*') ]).on('change', async () => {
-        await tasks.run()
+      watch([ this.args.file, join(ctx.templates, '**/*') ]).on('change', async () => {
+        await this.run()
+        await this.runTasks()
 
         this.logger.info('Waiting for the next change.')
       })
@@ -181,7 +184,7 @@ export default class MDPrinter extends BaseCommand {
 
     const output = pdf.filename
 
-    await fs.mkdirp(dirname(output))
+    await this.fs.mkdir(dirname(output))
 
     if (!output) {
       throw new Error('Output should either be defined with the variable or front-matter.')
@@ -194,7 +197,7 @@ export default class MDPrinter extends BaseCommand {
     if (pdf) {
       this.logger.info('Writing file to output: %s', output)
 
-      await fs.writeFile(output, pdf.content)
+      await this.fs.write(output, pdf.content)
     }
   }
 }

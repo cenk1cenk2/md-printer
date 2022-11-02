@@ -1,6 +1,0 @@
-loglevel: module
-logcolor: true
-logcolorAll: true
-configDir: '.config/md-printer'
-localConfig: '.md-printer.local.yml'
-lock: '.md-printer.lock'
