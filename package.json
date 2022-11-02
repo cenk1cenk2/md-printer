@@ -7,7 +7,7 @@
   "author": "Cenk Kilic",
   "license": "MIT",
   "bin": {
-    "md-printer": "bin/run.js"
+    "md-printer": "bin/run"
   },
   "publishConfig": {
     "access": "public"
