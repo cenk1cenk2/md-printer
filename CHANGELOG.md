@@ -1,3 +1,10 @@
+## [2.2.3](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.2...v2.2.3) (2022-11-02)
+
+
+### Bug Fixes
+
+* start script issue ([5fe844f](https://gitlab.kilic.dev/utils/md-printer/commit/5fe844f1ac0f53335e1c3e82f49a6f539821daf3))
+
 ## [2.2.2](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.1...v2.2.2) (2022-11-02)
 
 
