@@ -1,3 +1,10 @@
+## [2.2.2](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.1...v2.2.2) (2022-11-02)
+
+
+### Performance Improvements
+
+* migrate to oclif-tools instead of boilerplate ([ac03d20](https://gitlab.kilic.dev/utils/md-printer/commit/ac03d205294e4edd45a0b5ae9b57de6d306bc8fd))
+
 ## [2.2.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.0...v2.2.1) (2022-06-25)
 
 ### Bug Fixes
