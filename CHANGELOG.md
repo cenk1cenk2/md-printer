@@ -1,16 +1,20 @@
-## [2.2.3](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.2...v2.2.3) (2022-11-02)
-
+## [2.2.4](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.3...v2.2.4) (2022-11-03)
 
 ### Bug Fixes
 
-* start script issue ([5fe844f](https://gitlab.kilic.dev/utils/md-printer/commit/5fe844f1ac0f53335e1c3e82f49a6f539821daf3))
+- **deps:** update all minor dependency updates ([0904038](https://gitlab.kilic.dev/utils/md-printer/commit/09040382124e9a4cc7680777fb8ad402ac90e583))
+
+## [2.2.3](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.2...v2.2.3) (2022-11-02)
+
+### Bug Fixes
+
+- start script issue ([5fe844f](https://gitlab.kilic.dev/utils/md-printer/commit/5fe844f1ac0f53335e1c3e82f49a6f539821daf3))
 
 ## [2.2.2](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.1...v2.2.2) (2022-11-02)
 
-
 ### Performance Improvements
 
-* migrate to oclif-tools instead of boilerplate ([ac03d20](https://gitlab.kilic.dev/utils/md-printer/commit/ac03d205294e4edd45a0b5ae9b57de6d306bc8fd))
+- migrate to oclif-tools instead of boilerplate ([ac03d20](https://gitlab.kilic.dev/utils/md-printer/commit/ac03d205294e4edd45a0b5ae9b57de6d306bc8fd))
 
 ## [2.2.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.0...v2.2.1) (2022-06-25)
 
