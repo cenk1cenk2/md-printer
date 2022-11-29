@@ -80,7 +80,7 @@
     "fs-extra": "^10.1.0",
     "globby": "^11.1.0",
     "gray-matter": "^4.0.3",
-    "listr2": "^5.0.5",
+    "listr2": "^5.0.6",
     "md-to-pdf": "^5.2.0",
     "nunjucks": "^3.2.3",
     "tsup": "^6.5.0",
