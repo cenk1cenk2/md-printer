@@ -1,3 +1,10 @@
+## [2.2.10](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.9...v2.2.10) (2022-12-09)
+
+### Bug Fixes
+
+- **deps:** update dependency class-validator to ^0.14.0 ([e7dee62](https://gitlab.kilic.dev/utils/md-printer/commit/e7dee6242056fe53917661444f5cad66ca34c232))
+- **deps:** update dependency listr2 to ^5.0.6 ([13ed2ec](https://gitlab.kilic.dev/utils/md-printer/commit/13ed2ec40d1308e2d3b667b073738a8f162e172c))
+
 ## [2.2.9](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.8...v2.2.9) (2022-11-15)
 
 ### Bug Fixes
