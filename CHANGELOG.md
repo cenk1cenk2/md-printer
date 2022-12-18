@@ -1,9 +1,14 @@
-## [2.2.13](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.12...v2.2.13) (2022-12-16)
-
+## [2.2.14](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.13...v2.2.14) (2022-12-18)
 
 ### Bug Fixes
 
-* **deps:** update dependency fs-extra to v11 ([edbf9c9](https://gitlab.kilic.dev/utils/md-printer/commit/edbf9c9d188c6cd6f262a20cff3474e7b528bf6d))
+- **deps:** update dependency md-to-pdf to ^5.2.1 ([63b1e8f](https://gitlab.kilic.dev/utils/md-printer/commit/63b1e8f58afed910bf2de17e80cfc97bdd906d3b))
+
+## [2.2.13](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.12...v2.2.13) (2022-12-16)
+
+### Bug Fixes
+
+- **deps:** update dependency fs-extra to v11 ([edbf9c9](https://gitlab.kilic.dev/utils/md-printer/commit/edbf9c9d188c6cd6f262a20cff3474e7b528bf6d))
 
 ## [2.2.12](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.11...v2.2.12) (2022-12-12)
 
