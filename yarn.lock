@@ -3240,7 +3240,7 @@ has@^1.0.3:
   dependencies:
     function-bind "^1.1.1"
 
-highlight.js@^11.6.0:
+highlight.js@^11.7.0:
   version "11.7.0"
   resolved "https://registry.yarnpkg.com/highlight.js/-/highlight.js-11.7.0.tgz#3ff0165bc843f8c9bce1fd89e2fda9143d24b11e"
   integrity sha512-1rRqesRFhMO/PRF+G86evnyJkCgaZFOI+Z6kdj15TA18funfoqJXvgPCLSf0SWq3SRfg1j3HlDs8o4s3EGq1oQ==
@@ -4256,15 +4256,15 @@ make-fetch-happen@^9.1.0:
     socks-proxy-agent "^6.0.0"
     ssri "^8.0.0"
 
-marked@4.2.2:
-  version "4.2.2"
-  resolved "https://registry.yarnpkg.com/marked/-/marked-4.2.2.tgz#1d2075ad6cdfe42e651ac221c32d949a26c0672a"
-  integrity sha512-JjBTFTAvuTgANXx82a5vzK9JLSMoV6V3LBVn4Uhdso6t7vXrGx7g1Cd2r6NYSsxrYbQGFCMqBDhFHyK5q2UvcQ==
+marked@^4.2.4:
+  version "4.2.4"
+  resolved "https://registry.yarnpkg.com/marked/-/marked-4.2.4.tgz#5a4ce6c7a1ae0c952601fce46376ee4cf1797e1c"
+  integrity sha512-Wcc9ikX7Q5E4BYDPvh1C6QNSxrjC9tBgz+A/vAhp59KXUgachw++uMvMKiSW8oA85nopmPZcEvBoex/YLMsiyA==
 
-md-to-pdf@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/md-to-pdf/-/md-to-pdf-5.2.0.tgz#11fb8551410d22c99172e0a380754b0017ef2e97"
-  integrity sha512-4UgPIktRdZadVefFZHSb1L2qgxx03HNApZKEsw9adq9myDX/PhqVwp22bn51oktI4Bb9fV2+rZrDHfsm8ME6tA==
+md-to-pdf@^5.2.1:
+  version "5.2.1"
+  resolved "https://registry.yarnpkg.com/md-to-pdf/-/md-to-pdf-5.2.1.tgz#a84892169076336bb30db06ec0f4a38befe63e17"
+  integrity sha512-pNT9I+EtmguyOkuzkCJt9CjNdPNoPTqTMzn8aM31VW6upkFRTnw4RuwqDYThMl0nZCnfU/5jBxRpjFUNh2Et1g==
   dependencies:
     arg "^5.0.2"
     chalk "^4.1.2"
@@ -4272,10 +4272,10 @@ md-to-pdf@^5.2.0:
     get-port "^5.1.1"
     get-stdin "^8.0.0"
     gray-matter "^4.0.3"
-    highlight.js "^11.6.0"
+    highlight.js "^11.7.0"
     iconv-lite "^0.6.3"
     listr "^0.14.3"
-    marked "4.2.2"
+    marked "^4.2.4"
     puppeteer ">=8.0.0"
     semver "^7.3.7"
     serve-handler "^6.1.3"
