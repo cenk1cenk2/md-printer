@@ -388,9 +388,9 @@
     tslib "^2"
 
 "@oclif/core@^1", "@oclif/core@^1.20.4", "@oclif/core@^1.23.1":
-  version "1.23.2"
-  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-1.23.2.tgz#6779f412d787ddc885b507cb00927dae71b641da"
-  integrity sha512-NdaOaUDTRc6g1yTkOAKiEVOiQhc5CNcWNXa0QF4IS4yTjNqp4DOzgtF9Dwe585nPEKzSbTBiz1wyLOa4qIHSRQ==
+  version "1.24.0"
+  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-1.24.0.tgz#e94e2f3a1259ebb3cc867d04b12c5bfc31c21f50"
+  integrity sha512-J41suyV4fLfLcRRySZdtgFYSjIlpYqD90SY01Fm4+ZJUMcfDh/eQAD4sogyYOsIT0bfEzYOyYCjmfHmgcoX5aA==
   dependencies:
     "@oclif/linewrap" "^1.0.0"
     "@oclif/screen" "^3.0.4"
@@ -1179,9 +1179,9 @@ available-typed-arrays@^1.0.5:
   integrity sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==
 
 aws-sdk@^2.1231.0:
-  version "2.1292.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1292.0.tgz#bff92d794b8bbb71628c2f7b9d799c34ef2f27b4"
-  integrity sha512-GqN75aYmaZrirMCJI5CwvYW/bQRyBs59t/tDYBuwb9RMppL8vv9cEwGu3H74yxeoz89LyrbQtoOB8ZgHxNDNmA==
+  version "2.1293.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1293.0.tgz#01d5755e1e77935c85f0204e298ddd8afe5d5502"
+  integrity sha512-Wq4zPwJsrYLerXkWzllrTky3DM/Gwg8rKmC/79cDckGzDT8vZ2w/JfI5lW94ckRHjbqQXalChMH3GmWp0sV29Q==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
@@ -5317,10 +5317,10 @@ pupa@^2.1.1:
   dependencies:
     escape-goat "^2.0.0"
 
-puppeteer-core@19.5.0:
-  version "19.5.0"
-  resolved "https://registry.yarnpkg.com/puppeteer-core/-/puppeteer-core-19.5.0.tgz#2a1236764ad6f5e42d27c03907506727a90a3037"
-  integrity sha512-s2EE2x/7UfvR4AP+6OokY7yEmIboZoQFc2InuWUu5grWG7uka3W2Nch6+R4ERQepH4NO8kkkEBzNO4PqtwU4lQ==
+puppeteer-core@19.5.1:
+  version "19.5.1"
+  resolved "https://registry.yarnpkg.com/puppeteer-core/-/puppeteer-core-19.5.1.tgz#6bcca3bcb12382c30ce9b3964bade2abcde4f78d"
+  integrity sha512-+ai/wdeAulICv1a7Gs3W+WKb+CCqsNRM1n5IdR3w+KVGg/wcqE9VPgp6fXsjA16XAA+4kWofYxN6xLl1S0OKpg==
   dependencies:
     cross-fetch "3.1.5"
     debug "4.3.4"
@@ -5334,15 +5334,15 @@ puppeteer-core@19.5.0:
     ws "8.11.0"
 
 puppeteer@>=8.0.0:
-  version "19.5.0"
-  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-19.5.0.tgz#7d2bf90c03ae75265caa6aca4953d196f649913f"
-  integrity sha512-601tKJdKu/mlL6l5wklNJiQbIxyEU2N4pwZzFkwhr1VizNYV0Fly1aFMT7qAp7CvzklYLypQGKn7/Zgpy+HheA==
+  version "19.5.1"
+  resolved "https://registry.yarnpkg.com/puppeteer/-/puppeteer-19.5.1.tgz#25a159e0ffc86a31ebac9333b7435cc11c4d844f"
+  integrity sha512-8097xQkzbeA7jw4ubXvz7R5Lmt5Tpj9RzbetP/W1BGiHoIwgoniFwl6gpoWtGsLfI8m69YCLnxzWCW5XBMtz1g==
   dependencies:
     cosmiconfig "8.0.0"
     https-proxy-agent "5.0.1"
     progress "2.0.3"
     proxy-from-env "1.1.0"
-    puppeteer-core "19.5.0"
+    puppeteer-core "19.5.1"
 
 querystring@0.2.0:
   version "0.2.0"
