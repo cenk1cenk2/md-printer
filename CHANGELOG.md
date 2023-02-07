@@ -1,3 +1,10 @@
+## [2.2.25](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.24...v2.2.25) (2023-02-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency tsup to ^6.6.0 ([e765103](https://gitlab.kilic.dev/utils/md-printer/commit/e765103ca02e1b80486d9849c85e98fb33c35fd5))
+
 ## [2.2.24](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.23...v2.2.24) (2023-02-05)
 
 
