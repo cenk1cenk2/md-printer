@@ -527,9 +527,9 @@
     wrap-ansi "^7.0.0"
 
 "@oclif/core@^2.1.7", "@oclif/core@^2.3.0", "@oclif/core@^2.3.1":
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-2.3.1.tgz#82d977338c68b3faeda84f780c2f97a3dd322cb2"
-  integrity sha512-18CkjjF16hwhBd/42z+0CHAwvZlBfpyCmdZxpasN/od8c/hdm0oDEJvVB33/xD0LDYg8glKoQ5zVNVvPM/uJ/Q==
+  version "2.4.0"
+  resolved "https://registry.yarnpkg.com/@oclif/core/-/core-2.4.0.tgz#8e5983dd0d50a3c0c170a844fe8925cb639f0a9f"
+  integrity sha512-wWUnOOfQQty0k1Cstm/iWW6pbG0mHzU7rcUtab2Sni9kjBPCcy6ENTgpsWbb/WdITopqtXmvpYII2fgcjKdzUA==
   dependencies:
     "@types/cli-progress" "^3.11.0"
     ansi-escapes "^4.3.2"
@@ -583,9 +583,9 @@
     lodash "^4.17.21"
 
 "@oclif/plugin-warn-if-update-available@^2.0.14":
-  version "2.0.28"
-  resolved "https://registry.yarnpkg.com/@oclif/plugin-warn-if-update-available/-/plugin-warn-if-update-available-2.0.28.tgz#87f04469601acdf266dec1b4c5d3a75c0e7fa5c9"
-  integrity sha512-j1xZYlYfz9arRGwwlxT0jPWqZX1SqZV0jmqDUBLSEPRu7Zsh9UNX2NxuNQx96wO4K0paPg/hFvx9McAEaS4+gQ==
+  version "2.0.29"
+  resolved "https://registry.yarnpkg.com/@oclif/plugin-warn-if-update-available/-/plugin-warn-if-update-available-2.0.29.tgz#a9cedb9a9cc39a452a713aaf927f7ef2d0a7aa73"
+  integrity sha512-F69P5DwKzKYQgIND//ekFWTo7IGHhSOgC9mC3SieImP0+X8catxnyxSHZZA1uElSntK4xqGyd9ZPuURilBTJOw==
   dependencies:
     "@oclif/core" "^2.1.7"
     chalk "^4.1.0"
@@ -1341,9 +1341,9 @@ available-typed-arrays@^1.0.5:
   integrity sha512-DMD0KiN46eipeziST1LPP/STfDU0sufISXmjSgvVsoU2tqxctQeASejWcfNtxYKqETM1UxQ8sp2OrSBWpHY6sw==
 
 aws-sdk@^2.1231.0:
-  version "2.1324.0"
-  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1324.0.tgz#fede7d75a2abcc7835c994907560fbfd038b7b9e"
-  integrity sha512-7T9Jn6qtzCANdqRcdhxZ9Fx31/U+h/VPFxEU3+sFEnC7WtGtRlgmsJOY2lIdFKRXkHYT3Jw5MqDyjnb/i1QqbA==
+  version "2.1325.0"
+  resolved "https://registry.yarnpkg.com/aws-sdk/-/aws-sdk-2.1325.0.tgz#4529ede089ee8db79d6eb04ab46a211bfddbbe5b"
+  integrity sha512-ztg9HG5aoUHTprY+/eqjqb25E4joCgz+8ToxsP4OSKFQCtaBcF6my03j4e/J2j3fmpPifJnZSPMu4kV7DBj8WA==
   dependencies:
     buffer "4.9.2"
     events "1.1.1"
