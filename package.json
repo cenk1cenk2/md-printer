@@ -98,7 +98,7 @@
     "@types/nunjucks": "^3.2.2",
     "eslint": "^8.35.0",
     "lint-staged": "^13.1.2",
-    "oclif": "^3",
+    "oclif": "^3.7.0",
     "postcss": "^8.4.21",
     "prettier": "^2.8.4",
     "simple-git-hooks": "^2.8.1",
