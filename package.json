@@ -83,7 +83,7 @@
     "listr2": "^5.0.8",
     "md-to-pdf": "^5.2.3",
     "nunjucks": "^3.2.3",
-    "tsup": "^6.6.3",
+    "tsup": "^6.7.0",
     "yaml": "^2.2.1"
   },
   "devDependencies": {
