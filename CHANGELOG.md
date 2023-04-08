@@ -1,16 +1,32 @@
-## [2.2.25](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.24...v2.2.25) (2023-02-07)
-
+## [2.2.26](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.25...v2.2.26) (2023-04-08)
 
 ### Bug Fixes
 
-* **deps:** update dependency tsup to ^6.6.0 ([e765103](https://gitlab.kilic.dev/utils/md-printer/commit/e765103ca02e1b80486d9849c85e98fb33c35fd5))
+- **deps:** update all minor dependency updates ([3d11497](https://gitlab.kilic.dev/utils/md-printer/commit/3d11497b8619a7095abf2368ab547735788ca20a))
+- **deps:** update dependency @oclif/core to ^1.26.2 ([dadfd3a](https://gitlab.kilic.dev/utils/md-printer/commit/dadfd3a39ccdd8f845a1dd76b81109ae5d7e1772))
+- **deps:** update dependency @oclif/plugin-help to ^5.2.5 ([1ddafca](https://gitlab.kilic.dev/utils/md-printer/commit/1ddafcacff5c4d6a175a466d38f0cb4c0ad11150))
+- **deps:** update dependency @oclif/plugin-help to ^5.2.6 ([ab925db](https://gitlab.kilic.dev/utils/md-printer/commit/ab925dbd2d6413d10f7e0d5809a785828ebc8566))
+- **deps:** update dependency @oclif/plugin-help to ^5.2.7 ([e04e5cf](https://gitlab.kilic.dev/utils/md-printer/commit/e04e5cff364df90ed49fede2f697fa396d619dfe))
+- **deps:** update dependency @oclif/plugin-help to ^5.2.9 ([1f03f2f](https://gitlab.kilic.dev/utils/md-printer/commit/1f03f2f93bfe5db1e67ad81431879a3f43f7a908))
+- **deps:** update dependency fs-extra to ^11.1.1 ([69ce0aa](https://gitlab.kilic.dev/utils/md-printer/commit/69ce0aa68f5d52df44ac1b2a16946824d8aa5c80))
+- **deps:** update dependency listr2 to ^5.0.8 ([2d8d75f](https://gitlab.kilic.dev/utils/md-printer/commit/2d8d75fe726300e8673a22f1ace292bb70d97551))
+- **deps:** update dependency md-to-pdf to ^5.2.4 ([280719c](https://gitlab.kilic.dev/utils/md-printer/commit/280719c2b81253f32eef233b7796f79c0d69ef02))
+- **deps:** update dependency tsup to ^6.6.2 ([6296b9a](https://gitlab.kilic.dev/utils/md-printer/commit/6296b9aca609fb7fc694165ba2ffdb64cd0a593e))
+- **deps:** update dependency tsup to ^6.6.3 ([be2306b](https://gitlab.kilic.dev/utils/md-printer/commit/be2306bec6c32fcaf61abcce23e5fb1d4c052a97))
+- **deps:** update dependency tsup to ^6.7.0 ([9b56083](https://gitlab.kilic.dev/utils/md-printer/commit/9b56083bd9bc0d1377af25b93b0038dc1141e407))
+- update dependencies to latest version ([0bf5bf4](https://gitlab.kilic.dev/utils/md-printer/commit/0bf5bf4545eb0ec86bbef7790270c3bc5f9dbcc2))
+
+## [2.2.25](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.24...v2.2.25) (2023-02-07)
+
+### Bug Fixes
+
+- **deps:** update dependency tsup to ^6.6.0 ([e765103](https://gitlab.kilic.dev/utils/md-printer/commit/e765103ca02e1b80486d9849c85e98fb33c35fd5))
 
 ## [2.2.24](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.23...v2.2.24) (2023-02-05)
 
-
 ### Bug Fixes
 
-* **deps:** update dependency @oclif/plugin-help to ^5.2.4 ([c4a57bf](https://gitlab.kilic.dev/utils/md-printer/commit/c4a57bf8ff19151bb7117f3010ed92415bc5e352))
+- **deps:** update dependency @oclif/plugin-help to ^5.2.4 ([c4a57bf](https://gitlab.kilic.dev/utils/md-printer/commit/c4a57bf8ff19151bb7117f3010ed92415bc5e352))
 
 ## [2.2.23](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.22...v2.2.23) (2023-01-28)
 
