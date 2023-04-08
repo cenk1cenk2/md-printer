@@ -91,3 +91,6 @@ typings/
 dist/
 ./test/test.pdf
 oclif.manifest.json
+
+templates/privat-rechnung/main.css
+test/*.pdf

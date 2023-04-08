@@ -1,6 +1,8 @@
+/* eslint-disable no-console */
 /* eslint-disable import/no-extraneous-dependencies */
 import execa from 'execa'
-import { join } from 'path'
+import globby from 'globby'
+import { dirname, join } from 'path'
 import { defineConfig } from 'tsup'
 
 import { TEMPLATE_DIRECTORY } from './src/constants/template.constants'
@@ -22,14 +24,20 @@ export default defineConfig((options) => ({
   splitting: false,
   clean: true,
   minify: false,
+  keepNames: true,
 
   onSuccess: async (): Promise<void> => {
-    await Promise.all(
+    await Promise.all([
+      execa.command('pnpm run manifest', { stdout: process.stdout, stderr: process.stderr }),
+      execa.command('pnpm exec tsconfig-replace-paths', { stdout: process.stdout, stderr: process.stderr }),
       // eslint-disable-next-line max-len
-      [ 'privat-rechnung' ].map((path) => execa('tailwindcss', [ '-c', './tailwind.config.js', '-i', './tailwind.css', '-o', './main.css' ], { cwd: join(TEMPLATE_DIRECTORY, path) }))
-    )
+      ...await globby([ '**/tailwind.css' ], { cwd: join(TEMPLATE_DIRECTORY) }).then((paths) => {
+        console.log('tailwind template builds:', paths)
 
-    // eslint-disable-next-line no-console
-    console.log('Finished template builds.')
+        return paths.map((path) =>
+          execa('tailwindcss', [ '-c', './tailwind.config.js', '-i', './tailwind.css', '-o', './main.css' ], { cwd: join(TEMPLATE_DIRECTORY, dirname(path)) })
+        )
+      })
+    ])
   }
 }))

@@ -6,15 +6,15 @@ import type { PdfOutput } from 'md-to-pdf/dist/lib/generate-output'
 import Nunjucks from 'nunjucks'
 import { basename, dirname, extname, join } from 'path'
 
-import type { InferArgs, InferFlags } from '@cenk1cenk2/oclif-common'
-import { Command, Flags } from '@cenk1cenk2/oclif-common'
+import type { ArgInput, FlagInput, InferArgs, InferFlags } from '@cenk1cenk2/oclif-common'
+import { Command, Flags, Args } from '@cenk1cenk2/oclif-common'
 import { INPUT_FILE_ACCEPTED_TYPES, OUTPUT_FILE_ACCEPTED_TYPES, RequiredTemplateFiles, TemplateFiles, TEMPLATE_DIRECTORY } from '@src/constants'
 import type { MdPrinterCtx } from '@src/interfaces/commands'
 
 export default class MDPrinter extends Command<MdPrinterCtx, InferFlags<typeof MDPrinter>, InferArgs<typeof MDPrinter>> {
   static description = 'Generates a PDF from the given markdown file with the selected HTML template.'
 
-  static flags = {
+  static flags: FlagInput = {
     template: Flags.string({
       char: 't',
       default: 'default',
@@ -34,18 +34,16 @@ export default class MDPrinter extends Command<MdPrinterCtx, InferFlags<typeof M
     })
   }
 
-  static args = [
-    {
-      name: 'file',
+  static args: ArgInput = {
+    file: Args.string({
       description: 'Markdown file to be processed.',
       required: true
-    },
-    {
-      name: 'output',
+    }),
+    output: Args.string({
       description: 'Output file that will be generated. Overwrites the one define in front-matter.',
       required: false
-    }
-  ]
+    })
+  }
 
   private nunjucks = Nunjucks.configure({
     autoescape: false,
@@ -55,7 +53,7 @@ export default class MDPrinter extends Command<MdPrinterCtx, InferFlags<typeof M
   })
 
   public async shouldRunBefore (): Promise<void> {
-    this.tasks.options = { rendererSilent: true }
+    this.tasks.options = { silentRendererCondition: true }
   }
 
   public async run (): Promise<void> {

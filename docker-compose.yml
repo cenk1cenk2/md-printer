@@ -1,9 +1,11 @@
-version: '3.7'
+version: '3'
 services:
   monorepo:
     image: cenk1cenk2/node-fnm:latest
     environment:
+      PACKAGE_MANAGER: pnpm
       DEFAULTS_LOGS: 'true'
+      DEFAULTS_COMMAND: pnpm run dev:start
       SERVICE_0_NAME: cli
     volumes:
       - .:/data

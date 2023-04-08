@@ -3,6 +3,11 @@ stages:
   - build
   - publish
 
+variables:
+  NODE_VERSION: 18-alpine
+  NODE_PACKAGE_MANAGER: pnpm
+  NODE_LINT_COMMAND: lint
+
 include:
   - project: devops/pipes
     file: /templates/node.gitlab-ci.yml
@@ -17,3 +22,4 @@ build:
     paths:
       - dist/
       - oclif.manifest.json
+      - templates/*/main.css
