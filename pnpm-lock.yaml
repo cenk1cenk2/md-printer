@@ -44,8 +44,8 @@ dependencies:
     specifier: ^5.2.4
     version: 5.2.4(typescript@5.0.4)
   nunjucks:
-    specifier: ^3.2.3
-    version: 3.2.3(chokidar@3.5.3)
+    specifier: ^3.2.4
+    version: 3.2.4(chokidar@3.5.3)
   yaml:
     specifier: ^2.2.1
     version: 2.2.1
@@ -4888,8 +4888,8 @@ packages:
     resolution: {integrity: sha512-4jbtZXNAsfZbAHiiqjLPBiCl16dES1zI4Hpzzxw61Tk+loF+sBDBKx1ICKKKwIqQ7M0mFn1TmkN7euSncWgHiQ==}
     engines: {node: '>=0.10.0'}
 
-  /nunjucks@3.2.3(chokidar@3.5.3):
-    resolution: {integrity: sha512-psb6xjLj47+fE76JdZwskvwG4MYsQKXUtMsPh6U0YMvmyjRtKRFcxnlXGWglNybtNTNVmGdp94K62/+NjF5FDQ==}
+  /nunjucks@3.2.4(chokidar@3.5.3):
+    resolution: {integrity: sha512-26XRV6BhkgK0VOxfbU5cQI+ICFUtMLixv1noZn1tGU38kQH5A5nmmbk/O45xdyBhD1esk47nKrY0mvQpZIhRjQ==}
     engines: {node: '>= 6.9.0'}
     hasBin: true
     peerDependencies:
