@@ -1,9 +1,14 @@
-## [2.2.31](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.30...v2.2.31) (2023-04-13)
-
+## [2.2.32](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.31...v2.2.32) (2023-04-16)
 
 ### Bug Fixes
 
-* **deps:** update dependency nunjucks to ^3.2.4 ([1d8a789](https://gitlab.kilic.dev/utils/md-printer/commit/1d8a789f00d5d1a43c719491f53d8cf023ca3d7f))
+- **deps:** update dependency listr2 to ^6.3.0 ([2cc9e6a](https://gitlab.kilic.dev/utils/md-printer/commit/2cc9e6a9fe68836ba9c70f448cf69d8a50bb5a5b))
+
+## [2.2.31](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.30...v2.2.31) (2023-04-13)
+
+### Bug Fixes
+
+- **deps:** update dependency nunjucks to ^3.2.4 ([1d8a789](https://gitlab.kilic.dev/utils/md-printer/commit/1d8a789f00d5d1a43c719491f53d8cf023ca3d7f))
 
 ## [2.2.30](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.29...v2.2.30) (2023-04-13)
 
