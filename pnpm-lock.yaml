@@ -47,8 +47,8 @@ dependencies:
     specifier: ^3.2.4
     version: 3.2.4(chokidar@3.5.3)
   yaml:
-    specifier: ^2.2.1
-    version: 2.2.1
+    specifier: ^2.2.2
+    version: 2.2.2
 
 devDependencies:
   '@cenk1cenk2/cz-cc':
@@ -224,7 +224,7 @@ packages:
       reflect-metadata: 0.1.13
       through: 2.3.8
       winston: 3.8.2
-      yaml: 2.2.1
+      yaml: 2.2.2
     dev: false
 
   /@colors/colors@1.5.0:
@@ -4122,7 +4122,7 @@ packages:
       object-inspect: 1.12.3
       pidtree: 0.6.0
       string-argv: 0.3.1
-      yaml: 2.2.1
+      yaml: 2.2.2
     transitivePeerDependencies:
       - enquirer
       - supports-color
@@ -6893,8 +6893,8 @@ packages:
     engines: {node: '>= 6'}
     dev: true
 
-  /yaml@2.2.1:
-    resolution: {integrity: sha512-e0WHiYql7+9wr4cWMx3TVQrNwejKaEe7/rHNmQmqRjazfOP5W8PB6Jpebb5o6fIapbz9o9+2ipcaTM2ZwDI6lw==}
+  /yaml@2.2.2:
+    resolution: {integrity: sha512-CBKFWExMn46Foo4cldiChEzn7S7SRV+wqiluAb6xmueD/fGyRHIhX8m14vVGgeFWjN540nKCNVj6P21eQjgTuA==}
     engines: {node: '>= 14'}
 
   /yargs-parser@21.1.1:
