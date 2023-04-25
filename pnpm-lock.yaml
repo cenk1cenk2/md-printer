@@ -1692,8 +1692,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /aws-sdk@2.1364.0:
-    resolution: {integrity: sha512-PFoq9Rnu0DVi07wZ/SjKlrJDwso8AxE5q/ufLdNtINZPaSkB92OqKYVdlfQ4srsH2ala2NCrg8gFX98SCmqW3w==}
+  /aws-sdk@2.1365.0:
+    resolution: {integrity: sha512-GRwHfzYufi7BhBtgyzeHvqS5yCMRC5ZCqmDU/TBMnr8IaH6sabSG2iAhVn1Kkpjv3tDnWHwDr5s8wNMTzJLPmg==}
     engines: {node: '>= 10.0.0'}
     dependencies:
       buffer: 4.9.2
@@ -4428,7 +4428,7 @@ packages:
       iconv-lite: 0.6.3
       listr: 0.14.3
       marked: 4.3.0
-      puppeteer: 19.11.0(typescript@5.0.4)
+      puppeteer: 19.11.1(typescript@5.0.4)
       semver: 7.5.0
       serve-handler: 6.1.5
     transitivePeerDependencies:
@@ -4973,7 +4973,7 @@ packages:
       '@oclif/plugin-help': 5.2.9(@swc/core@1.3.55)(@types/node@18.16.0)(typescript@5.0.4)
       '@oclif/plugin-not-found': 2.3.23(@swc/core@1.3.55)(@types/node@18.16.0)(typescript@5.0.4)
       '@oclif/plugin-warn-if-update-available': 2.0.36(@swc/core@1.3.55)(@types/node@18.16.0)(typescript@5.0.4)
-      aws-sdk: 2.1364.0
+      aws-sdk: 2.1365.0
       concurrently: 7.6.0
       debug: 4.3.4(supports-color@8.1.1)
       find-yarn-workspace-root: 2.0.0
@@ -5464,8 +5464,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /puppeteer-core@19.11.0(typescript@5.0.4):
-    resolution: {integrity: sha512-UBlwpyTEKcaOt7bIWWhlhIXDlFbR1wVBcxpMibBhImwagkwDB8ld8ehT5dOdfKIcCHjxXzVEaMtgDKzfwcf7Rg==}
+  /puppeteer-core@19.11.1(typescript@5.0.4):
+    resolution: {integrity: sha512-qcuC2Uf0Fwdj9wNtaTZ2OvYRraXpAK+puwwVW8ofOhOgLPZyz1c68tsorfIZyCUOpyBisjr+xByu7BMbEYMepA==}
     engines: {node: '>=14.14.0'}
     peerDependencies:
       typescript: '>= 4.7.4'
@@ -5492,8 +5492,8 @@ packages:
       - utf-8-validate
     dev: false
 
-  /puppeteer@19.11.0(typescript@5.0.4):
-    resolution: {integrity: sha512-xE0BTOFIR/fEXEHQNfGGMWGr3IQBB2AY760K+pE11kjBKe5P0jivzWG1LHr0TA1/xiHxu9nAhQzv5zh2Dy0YEQ==}
+  /puppeteer@19.11.1(typescript@5.0.4):
+    resolution: {integrity: sha512-39olGaX2djYUdhaQQHDZ0T0GwEp+5f9UB9HmEP0qHfdQHIq0xGQZuAZ5TLnJIc/88SrPLpEflPC+xUqOTv3c5g==}
     requiresBuild: true
     dependencies:
       '@puppeteer/browsers': 0.5.0(typescript@5.0.4)
@@ -5501,7 +5501,7 @@ packages:
       https-proxy-agent: 5.0.1
       progress: 2.0.3
       proxy-from-env: 1.1.0
-      puppeteer-core: 19.11.0(typescript@5.0.4)
+      puppeteer-core: 19.11.1(typescript@5.0.4)
     transitivePeerDependencies:
       - bufferutil
       - encoding
