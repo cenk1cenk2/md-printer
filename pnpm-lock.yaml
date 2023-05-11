@@ -999,8 +999,8 @@ packages:
       '@octokit/openapi-types': 12.11.0
     dev: true
 
-  /@puppeteer/browsers@1.1.0(typescript@5.0.4):
-    resolution: {integrity: sha512-+Nfk52G9cRAKq/V2LEaOlKIMsIuERSofk8hXEy6kMQtjg9Te1iuKymWOR+iKwwzj1RCkZU0fuOoSIclR839MNw==}
+  /@puppeteer/browsers@1.2.0(typescript@5.0.4):
+    resolution: {integrity: sha512-F2ygRTaNKq2HQQGsvypvy2S/Dg7aqqp2zxv4uolkxxTQvdbYfI0DcLPFNdqenaC+rZX5ldSPs/s39yAPpTVZ0A==}
     engines: {node: '>=16.0.0'}
     hasBin: true
     peerDependencies:
@@ -1704,8 +1704,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /aws-sdk@2.1376.0:
-    resolution: {integrity: sha512-ja/Xnft8BDcDEz786VJFPrWpuWpOgsA+QzBAwzsjYeIolQ/vEs/bbXkoS085fOoeAPEhYWQh9wog7cVvrQPJFQ==}
+  /aws-sdk@2.1377.0:
+    resolution: {integrity: sha512-59T3v/o40fk2I2zpgh2E0Z/BBK5awBQUva7VLjLHo9rsMvTM58mgya667hYTua00rHC1A3GJSCNORUhXvhomYQ==}
     engines: {node: '>= 10.0.0'}
     dependencies:
       buffer: 4.9.2
@@ -4440,7 +4440,7 @@ packages:
       iconv-lite: 0.6.3
       listr: 0.14.3
       marked: 4.3.0
-      puppeteer: 20.1.2(typescript@5.0.4)
+      puppeteer: 20.2.0(typescript@5.0.4)
       semver: 7.5.0
       serve-handler: 6.1.5
     transitivePeerDependencies:
@@ -4984,7 +4984,7 @@ packages:
       '@oclif/plugin-help': 5.2.9(@swc/core@1.3.57)(@types/node@18.16.5)(typescript@5.0.4)
       '@oclif/plugin-not-found': 2.3.23(@swc/core@1.3.57)(@types/node@18.16.5)(typescript@5.0.4)
       '@oclif/plugin-warn-if-update-available': 2.0.36(@swc/core@1.3.57)(@types/node@18.16.5)(typescript@5.0.4)
-      aws-sdk: 2.1376.0
+      aws-sdk: 2.1377.0
       concurrently: 7.6.0
       debug: 4.3.4(supports-color@8.1.1)
       find-yarn-workspace-root: 2.0.0
@@ -5490,8 +5490,8 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /puppeteer-core@20.1.2(typescript@5.0.4):
-    resolution: {integrity: sha512-S1BLte+jVC/ugZkNoxFW9Fvbyr30CKZ0IIumf98FFqLh06Vuc21fddsr34botKtz27T81pqkpDYXNXYomA01dg==}
+  /puppeteer-core@20.2.0(typescript@5.0.4):
+    resolution: {integrity: sha512-QKLu4ELW/609vlLqp/NvQA564LzvLaF6x1ZH+4BhPhxPgreoY8WR/AYOzXS12hgtPPjNCqPKiRLxmyXGnlIK8A==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       typescript: '>= 4.7.4'
@@ -5499,7 +5499,7 @@ packages:
       typescript:
         optional: true
     dependencies:
-      '@puppeteer/browsers': 1.1.0(typescript@5.0.4)
+      '@puppeteer/browsers': 1.2.0(typescript@5.0.4)
       chromium-bidi: 0.4.7(devtools-protocol@0.0.1120988)
       cross-fetch: 3.1.5
       debug: 4.3.4(supports-color@8.1.1)
@@ -5513,13 +5513,13 @@ packages:
       - utf-8-validate
     dev: false
 
-  /puppeteer@20.1.2(typescript@5.0.4):
-    resolution: {integrity: sha512-QYDp+iVMP30TwlkXFOocON9qR3Nac5ez7PdXbY90mfuEgZb9vf3/OXL2vHprxwPtb2hgD4AxXvLZhEIqfD2y8Q==}
+  /puppeteer@20.2.0(typescript@5.0.4):
+    resolution: {integrity: sha512-mGiCtWGq7S8MRUefZQV0AUiYGSPGmVlL/eYKPB4X9s9x0kuhzJmbSXSoWYFyo8MXaFmjUOqeMNP/3KeLZw207A==}
     requiresBuild: true
     dependencies:
-      '@puppeteer/browsers': 1.1.0(typescript@5.0.4)
+      '@puppeteer/browsers': 1.2.0(typescript@5.0.4)
       cosmiconfig: 8.1.3
-      puppeteer-core: 20.1.2(typescript@5.0.4)
+      puppeteer-core: 20.2.0(typescript@5.0.4)
     transitivePeerDependencies:
       - bufferutil
       - encoding
