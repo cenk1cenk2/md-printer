@@ -1,3 +1,17 @@
+## [2.2.34](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.33...v2.2.34) (2023-05-13)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @oclif/core to ^2.8.4 ([95e5c69](https://gitlab.kilic.dev/utils/md-printer/commit/95e5c69cd11a32cb61e73688361ecfdcaf90a515))
+* **deps:** update dependency @oclif/core to ^2.8.5 ([2b40c74](https://gitlab.kilic.dev/utils/md-printer/commit/2b40c746ebb1cd26d177118221bdef70c64dcc6e))
+* **deps:** update dependency execa to ^7.1.1 ([0375e6a](https://gitlab.kilic.dev/utils/md-printer/commit/0375e6a6eabb867235d08c3aaf9665f699d42275))
+* **deps:** update dependency listr2 to ^6.4.0 ([e738031](https://gitlab.kilic.dev/utils/md-printer/commit/e73803162685ab501b1f01912b6815ae9a6134ae))
+* **deps:** update dependency listr2 to ^6.4.1 ([82e3891](https://gitlab.kilic.dev/utils/md-printer/commit/82e389149ce674a06e388ad65b673f111d156535))
+* **deps:** update dependency listr2 to ^6.4.2 ([0650d8f](https://gitlab.kilic.dev/utils/md-printer/commit/0650d8f09f011b3b9f78ca4eb2ae8ab662076aa0))
+* **deps:** update dependency listr2 to ^6.5.0 ([e487c78](https://gitlab.kilic.dev/utils/md-printer/commit/e487c78ac7395ddda5e4651c0a7cbc2c1d60aa24))
+* **deps:** update dependency yaml to ^2.2.2 ([30ee382](https://gitlab.kilic.dev/utils/md-printer/commit/30ee3828a7777329519ed757490ba486e4fe8a93))
+
 ## [2.2.33](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.32...v2.2.33) (2023-04-17)
 
 ### Bug Fixes
