@@ -1,3 +1,10 @@
+## [2.2.36](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.35...v2.2.36) (2023-05-17)
+
+
+### Bug Fixes
+
+* **deps:** update dependency listr2 to ^6.6.0 ([0912d3e](https://gitlab.kilic.dev/utils/md-printer/commit/0912d3e74d7dc76f2da363e7ea270df902802934))
+
 ## [2.2.35](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.34...v2.2.35) (2023-05-14)
 
 
