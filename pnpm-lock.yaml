@@ -2625,8 +2625,8 @@ packages:
       object-keys: 1.1.1
     dev: true
 
-  /degenerator@4.0.2:
-    resolution: {integrity: sha512-HKwIFvZROUMfH3qI3gBpD61BYh7q3c3GXD5UGZzoVNJwVSYgZKvYl1fRMXc9ozoTxl/VZxKJ5v/bA+19tywFiw==}
+  /degenerator@4.0.3:
+    resolution: {integrity: sha512-2wY8vmCfxrQpe2PKGYdiWRre5HQRwsAXbAAWRbC+z2b80MEpnWc8A3a9k4TwqwN3Z/Fm3uhNm5vYUZIbMhyRxQ==}
     engines: {node: '>= 14'}
     dependencies:
       ast-types: 0.13.4
@@ -5622,7 +5622,7 @@ packages:
     resolution: {integrity: sha512-dg497MhVT7jZegPRuOScQ/z0aV/5WR0gTdRu1md+Irs9J9o+ls5jIuxjo1WfaTG+eQQkxyn5HMGvWK+w7EIBkQ==}
     engines: {node: '>= 14'}
     dependencies:
-      degenerator: 4.0.2
+      degenerator: 4.0.3
       ip: 1.1.8
       netmask: 2.0.2
     dev: false
