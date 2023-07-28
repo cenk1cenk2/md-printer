@@ -1,3 +1,10 @@
+## [2.2.53](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.52...v2.2.53) (2023-07-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency execa to ^7.2.0 ([ecb0796](https://gitlab.kilic.dev/utils/md-printer/commit/ecb0796f38530fe21c4f3878202b6a57d9b3aba4))
+
 ## [2.2.52](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.51...v2.2.52) (2023-07-26)
 
 
