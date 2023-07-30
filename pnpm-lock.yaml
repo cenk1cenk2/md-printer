@@ -882,8 +882,8 @@ packages:
       - supports-color
     dev: true
 
-  /@oclif/color@1.0.9:
-    resolution: {integrity: sha512-ntc/fZwuf4NRfYbXVoUNFyMB9IxVx/ls/WbSLKbkD9UpsmwY1I3J4DJKKRFRpenmTuxGQW8Lyzm7X3vhzHpDQA==}
+  /@oclif/color@1.0.10:
+    resolution: {integrity: sha512-INWEDAL3SzzR3pIhkrqk22HV6JravLUeRZXAIpoQqIeLReauaibCVcNTzOlt0z0S8YrqRhksc54ZxZC4Oa8xBw==}
     engines: {node: '>=12.0.0'}
     dependencies:
       ansi-styles: 4.3.0
@@ -948,7 +948,7 @@ packages:
     resolution: {integrity: sha512-uXUpw6o2e0aqnNn+XkGL7LbL+Th2rBD1JGtFbb6anmvUvz2skiGz0o23BYmrQW8tvU92ajPOykfClKD75ptZcw==}
     engines: {node: '>=12.0.0'}
     dependencies:
-      '@oclif/color': 1.0.9
+      '@oclif/color': 1.0.10
       '@oclif/core': 2.11.1(@swc/core@1.3.72)(@types/node@18.17.1)(typescript@5.1.6)
       fast-levenshtein: 3.0.0
     transitivePeerDependencies:
@@ -958,8 +958,8 @@ packages:
       - typescript
     dev: true
 
-  /@oclif/plugin-warn-if-update-available@2.0.45(@swc/core@1.3.72)(@types/node@18.17.1)(typescript@5.1.6):
-    resolution: {integrity: sha512-MEncCUHW1vCOQdvt1z46jAblwvuGcs3Q1Gjl8IghazGJ0GRHzGOMILABpqVWR5uH/YJ3gfs05Tt7M4LdZ40N3g==}
+  /@oclif/plugin-warn-if-update-available@2.0.46(@swc/core@1.3.72)(@types/node@18.17.1)(typescript@5.1.6):
+    resolution: {integrity: sha512-TyOvPHzl1e8lLeRF8A9nhte+H9LR0arWqu+MYhNxzislx7SbG4M5yRhoH5F1MmwGxgJBbWHZVsmLjZm4S9cEog==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@oclif/core': 2.11.1(@swc/core@1.3.72)(@types/node@18.17.1)(typescript@5.1.6)
@@ -1977,7 +1977,7 @@ packages:
     resolution: {integrity: sha512-xq+q3SRMOxGivLhBNaUdC64hDTQwejJ+H0T/NB1XMtTVEwNTrfFF3gAxiyW0Bu/xWEGhjVKgUcMhCrUy2+uCWg==}
     dependencies:
       base64-js: 1.5.1
-      ieee754: 1.2.1
+      ieee754: 1.1.13
       isarray: 1.0.0
     dev: true
 
@@ -2127,7 +2127,6 @@ packages:
   /callsites@3.1.0:
     resolution: {integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==}
     engines: {node: '>=6'}
-    requiresBuild: true
 
   /camelcase-css@2.0.1:
     resolution: {integrity: sha512-QOSvevhslijgYwRx6Rv7zKdMF8lbRmx+uQGx2+vDc+KI/eBnsy9kit5aj23AgGu3pa4t9AgwbnXWqS+iOY+2aA==}
@@ -2940,7 +2939,7 @@ packages:
     dependencies:
       debug: 3.2.7
       is-core-module: 2.12.1
-      resolve: 1.22.2
+      resolve: 1.22.3
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -3383,7 +3382,7 @@ packages:
     engines: {node: '>=14'}
     dependencies:
       cross-spawn: 7.0.3
-      signal-exit: 4.0.2
+      signal-exit: 4.1.0
     dev: true
 
   /fs-extra@11.1.1:
@@ -4046,7 +4045,6 @@ packages:
 
   /is-arrayish@0.2.1:
     resolution: {integrity: sha512-zz06S8t0ozoDXMG+ube26zeCTNXcKIPJZJi8hBrF4idCLms4CG9QtK7qBl1boi5ODzFpjswb5JPmHCbMpjaYzg==}
-    requiresBuild: true
 
   /is-arrayish@0.3.2:
     resolution: {integrity: sha512-eVRqCvVlZbuw3GrM63ovNSNAeA1K16kaR/LRY/92w0zxQ5/1YzwblUX652i4Xs9RwAGjW9d9y6X88t8OaAJfWQ==}
@@ -5468,7 +5466,7 @@ packages:
       '@oclif/core': 2.11.1(@swc/core@1.3.72)(@types/node@18.17.1)(typescript@5.1.6)
       '@oclif/plugin-help': 5.2.15(@swc/core@1.3.72)(@types/node@18.17.1)(typescript@5.1.6)
       '@oclif/plugin-not-found': 2.3.34(@swc/core@1.3.72)(@types/node@18.17.1)(typescript@5.1.6)
-      '@oclif/plugin-warn-if-update-available': 2.0.45(@swc/core@1.3.72)(@types/node@18.17.1)(typescript@5.1.6)
+      '@oclif/plugin-warn-if-update-available': 2.0.46(@swc/core@1.3.72)(@types/node@18.17.1)(typescript@5.1.6)
       aws-sdk: 2.1425.0
       concurrently: 7.6.0
       debug: 4.3.4(supports-color@8.1.1)
@@ -5726,7 +5724,6 @@ packages:
   /parent-module@1.0.1:
     resolution: {integrity: sha512-GQ2EWRpQV8/o+Aw8YqtfZZPfNRWZYkbidE9k5rpl/hC3vtHHBfGm2Ifi6qWV+coDGkrUKZAxE3Lot5kcsRlh+g==}
     engines: {node: '>=6'}
-    requiresBuild: true
     dependencies:
       callsites: 3.1.0
 
@@ -6270,7 +6267,6 @@ packages:
   /resolve-from@4.0.0:
     resolution: {integrity: sha512-pb/MYmXstAkysRFx8piNI1tGFNQIFA3vkE3Gq4EuA1dF6gHp/+vgZqsCGJapvy8N3Q+4o7FwvquPJcnZ7RYy4g==}
     engines: {node: '>=4'}
-    requiresBuild: true
 
   /resolve-from@5.0.0:
     resolution: {integrity: sha512-qYg9KP24dD5qka9J47d0aVky0N+b4fTU89LN9iDnjB5waksiC49rvMB0PrUJQGoTmH50XPiqOvAjDfaijGxYZw==}
@@ -6502,8 +6498,8 @@ packages:
   /signal-exit@3.0.7:
     resolution: {integrity: sha512-wnD2ZE+l+SPC/uoS0vXeE9L1+0wuaMqKlfz9AMUo38JsyLSBWSFcHR1Rri62LZc12vLr1gb3jl7iwQhgwpAbGQ==}
 
-  /signal-exit@4.0.2:
-    resolution: {integrity: sha512-MY2/qGx4enyjprQnFaZsHib3Yadh3IXyV2C321GY0pjGfVBu4un0uDJkwgdxqO+Rdx8JMT8IfJIRwbYVz3Ob3Q==}
+  /signal-exit@4.1.0:
+    resolution: {integrity: sha512-bzyZ1e88w9O1iNJbKnOlvYTrWPDl46O1bG0D3XInv+9tkPrxrN8jUUTiFlDkkmKWgn1M6CfIA13SuGqOa9Korw==}
     engines: {node: '>=14'}
     dev: true
 
