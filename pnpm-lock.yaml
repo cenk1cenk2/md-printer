@@ -7,7 +7,7 @@ settings:
 dependencies:
   '@cenk1cenk2/oclif-common':
     specifier: ^5.0.8
-    version: 5.0.8(@oclif/core@2.11.1)(class-transformer@0.5.1)(class-validator@0.14.0)(enquirer@2.4.1)(execa@7.2.0)(fs-extra@11.1.1)(listr2@6.6.0)
+    version: 5.0.8(@oclif/core@2.11.1)(class-transformer@0.5.1)(class-validator@0.14.0)(enquirer@2.4.1)(execa@7.2.0)(fs-extra@11.1.1)(listr2@6.6.1)
   '@oclif/core':
     specifier: ^2.11.1
     version: 2.11.1(@swc/core@1.3.72)(@types/node@18.17.0)(typescript@5.1.6)
@@ -42,8 +42,8 @@ dependencies:
     specifier: ^4.0.3
     version: 4.0.3
   listr2:
-    specifier: ^6.6.0
-    version: 6.6.0(enquirer@2.4.1)
+    specifier: ^6.6.1
+    version: 6.6.1(enquirer@2.4.1)
   md-to-pdf:
     specifier: ^5.2.4
     version: 5.2.4(typescript@5.1.6)
@@ -174,7 +174,7 @@ packages:
       enquirer: 2.4.1
       external-editor: 3.1.0
       find-git-root: 1.0.4
-      listr2: 6.6.0(enquirer@2.4.1)
+      listr2: 6.6.1(enquirer@2.4.1)
     optionalDependencies:
       '@commitlint/load': 17.6.7(@swc/core@1.3.72)
     transitivePeerDependencies:
@@ -218,7 +218,7 @@ packages:
       - typescript
     dev: true
 
-  /@cenk1cenk2/oclif-common@5.0.8(@oclif/core@2.11.1)(class-transformer@0.5.1)(class-validator@0.14.0)(enquirer@2.4.1)(execa@7.2.0)(fs-extra@11.1.1)(listr2@6.6.0):
+  /@cenk1cenk2/oclif-common@5.0.8(@oclif/core@2.11.1)(class-transformer@0.5.1)(class-validator@0.14.0)(enquirer@2.4.1)(execa@7.2.0)(fs-extra@11.1.1)(listr2@6.6.1):
     resolution: {integrity: sha512-z8wYXz49ajdBrjAbrK1jyrrQ8mQJ0TKzM8ws38E8IQS5aH1mR8tEjkE1uKeSu7LvQMcFO7qJVGtpuWKQD7bH0Q==}
     engines: {node: '>= 16'}
     peerDependencies:
@@ -243,7 +243,7 @@ packages:
       enquirer: 2.4.1
       execa: 7.2.0
       fs-extra: 11.1.1
-      listr2: 6.6.0(enquirer@2.4.1)
+      listr2: 6.6.1(enquirer@2.4.1)
       object-path-immutable: 4.1.2
       reflect-metadata: 0.1.13
       through: 2.3.8
@@ -4534,8 +4534,8 @@ packages:
       wrap-ansi: 7.0.0
     dev: true
 
-  /listr2@6.6.0(enquirer@2.4.1):
-    resolution: {integrity: sha512-qkLg7IeYcZGkxo5sZzl676xHwQzNZ8qAQLQSDMA88sLM1SDcabwyXD1mXHi/PGQHyt/mu81adJdkqsCSUSuQzQ==}
+  /listr2@6.6.1(enquirer@2.4.1):
+    resolution: {integrity: sha512-+rAXGHh0fkEWdXBmX+L6mmfmXmXvDGEKzkjxO+8mP3+nI/r/CWznVBvsibXdxda9Zz0OW2e2ikphN3OwCT/jSg==}
     engines: {node: '>=16.0.0'}
     peerDependencies:
       enquirer: '>= 2.3.0 < 3'
