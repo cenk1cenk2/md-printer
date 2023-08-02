@@ -46,7 +46,7 @@ dependencies:
     version: 6.6.1(enquirer@2.4.1)
   md-to-pdf:
     specifier: ^5.2.4
-    version: 5.2.4(typescript@5.1.6)
+    version: 5.2.4
   nunjucks:
     specifier: ^3.2.4
     version: 3.2.4(chokidar@3.5.3)
@@ -1091,22 +1091,16 @@ packages:
     dev: true
     optional: true
 
-  /@puppeteer/browsers@1.4.6(typescript@5.1.6):
-    resolution: {integrity: sha512-x4BEjr2SjOPowNeiguzjozQbsc6h437ovD/wu+JpaenxVLm3jkgzHY2xOslMTp50HoTvQreMjiexiGQw1sqZlQ==}
+  /@puppeteer/browsers@1.5.0:
+    resolution: {integrity: sha512-za318PweGINh5LnHSph7C4xhs0tmRjCD8EPpzcKlw4nzSPhnULj+LTG3+TGefZvW1ti5gjw2JkdQvQsivBeZlg==}
     engines: {node: '>=16.3.0'}
     hasBin: true
-    peerDependencies:
-      typescript: '>= 4.7.4'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
     dependencies:
       debug: 4.3.4(supports-color@8.1.1)
       extract-zip: 2.0.1
       progress: 2.0.3
       proxy-agent: 6.3.0
       tar-fs: 3.0.4
-      typescript: 5.1.6
       unbzip2-stream: 1.4.3
       yargs: 17.7.1
     transitivePeerDependencies:
@@ -1887,8 +1881,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /aws-sdk@2.1427.0:
-    resolution: {integrity: sha512-PIbBIKwvkvvic7hNQevpzi5Xqbi0YzzbLaFv8NZMorwu73b8ydyF+/B/G2iJ0w82jlAzDPQpWqf/7MuP59X9Gg==}
+  /aws-sdk@2.1428.0:
+    resolution: {integrity: sha512-z8RfFfbPCbtEPeu2W7UJTRcwXu5WNj2ehoDAhmIkvwKMGb5Y1/TbGmny51bucSWt8QKqZlmLxWs9zBGgy7slXw==}
     engines: {node: '>= 10.0.0'}
     dependencies:
       buffer: 4.9.2
@@ -2197,13 +2191,13 @@ packages:
     engines: {node: '>=10'}
     dev: true
 
-  /chromium-bidi@0.4.16(devtools-protocol@0.0.1147663):
-    resolution: {integrity: sha512-7ZbXdWERxRxSwo3txsBjjmc/NLxqb1Bk30mRb0BMS4YIaiV6zvKZqL/UAH+DdqcDYayDWk2n/y8klkBDODrPvA==}
+  /chromium-bidi@0.4.20(devtools-protocol@0.0.1147663):
+    resolution: {integrity: sha512-ruHgVZFEv00mAQMz1tQjfjdG63jiPWrQPF6HLlX2ucqLqVTJoWngeBEKHaJ6n1swV/HSvgnBNbtTRIlcVyW3Fw==}
     peerDependencies:
       devtools-protocol: '*'
     dependencies:
       devtools-protocol: 0.0.1147663
-      mitt: 3.0.0
+      mitt: 3.0.1
     dev: false
 
   /class-transformer@0.5.1:
@@ -4002,6 +3996,27 @@ packages:
       wrap-ansi: 7.0.0
     dev: true
 
+  /inquirer@8.2.6:
+    resolution: {integrity: sha512-M1WuAmb7pn9zdFRtQYk26ZBoY043Sse0wVDdk4Bppr+JOXyQYybdtvK+l9wUibhtjdjvtoiNy8tk+EgsYIUqKg==}
+    engines: {node: '>=12.0.0'}
+    dependencies:
+      ansi-escapes: 4.3.2
+      chalk: 4.1.2
+      cli-cursor: 3.1.0
+      cli-width: 3.0.0
+      external-editor: 3.1.0
+      figures: 3.2.0
+      lodash: 4.17.21
+      mute-stream: 0.0.8
+      ora: 5.4.1
+      run-async: 2.4.1
+      rxjs: 7.8.1
+      string-width: 4.2.3
+      strip-ansi: 6.0.1
+      through: 2.3.8
+      wrap-ansi: 6.2.0
+    dev: true
+
   /internal-slot@1.0.5:
     resolution: {integrity: sha512-Y+R5hJrzs52QCG2laLn4udYVnxsfny9CpOhNhUvk/SSSVyF6T27FzRbF0sroPidSu3X8oEAkOn2K804mjpt6UQ==}
     engines: {node: '>= 0.4'}
@@ -4783,7 +4798,7 @@ packages:
     hasBin: true
     dev: false
 
-  /md-to-pdf@5.2.4(typescript@5.1.6):
+  /md-to-pdf@5.2.4:
     resolution: {integrity: sha512-s6080i4ZSBfvn7qplSVjdqP9eWi9rIWj+t5pucEKnpAHan89VLQuQPhVx06vWIM+6JX2HrJ1wNRFMiwLlS01vg==}
     engines: {node: '>=12.0'}
     hasBin: true
@@ -4798,14 +4813,13 @@ packages:
       iconv-lite: 0.6.3
       listr: 0.14.3
       marked: 4.3.0
-      puppeteer: 20.9.0(typescript@5.1.6)
+      puppeteer: 21.0.0
       semver: 7.5.4
       serve-handler: 6.1.5
     transitivePeerDependencies:
       - bufferutil
       - encoding
       - supports-color
-      - typescript
       - utf-8-validate
       - zen-observable
       - zenObservable
@@ -5022,8 +5036,8 @@ packages:
       yallist: 4.0.0
     dev: true
 
-  /mitt@3.0.0:
-    resolution: {integrity: sha512-7dX2/10ITVyqh4aOSVI9gdape+t9l2/8QxHrFmUXu4EEUpdlxl6RudZUPZoc+zuY2hk1j7XxVroIVIan/pD/SQ==}
+  /mitt@3.0.1:
+    resolution: {integrity: sha512-vKivATfr97l2/QBCYAkXYDbrIWPM2IIKEl7YPhjCvKlG3kE2gm+uBo6nEXK3M5/Ffh/FLpKExzOQ3JJoJGFKBw==}
     dev: false
 
   /mkdirp-classic@0.5.3:
@@ -5467,7 +5481,7 @@ packages:
       '@oclif/plugin-help': 5.2.15(@swc/core@1.3.73)(@types/node@18.17.1)(typescript@5.1.6)
       '@oclif/plugin-not-found': 2.3.34(@swc/core@1.3.73)(@types/node@18.17.1)(typescript@5.1.6)
       '@oclif/plugin-warn-if-update-available': 2.0.46(@swc/core@1.3.73)(@types/node@18.17.1)(typescript@5.1.6)
-      aws-sdk: 2.1427.0
+      aws-sdk: 2.1428.0
       concurrently: 7.6.0
       debug: 4.3.4(supports-color@8.1.1)
       find-yarn-workspace-root: 2.0.0
@@ -6033,21 +6047,15 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
-  /puppeteer-core@20.9.0(typescript@5.1.6):
-    resolution: {integrity: sha512-H9fYZQzMTRrkboEfPmf7m3CLDN6JvbxXA3qTtS+dFt27tR+CsFHzPsT6pzp6lYL6bJbAPaR0HaPO6uSi+F94Pg==}
+  /puppeteer-core@21.0.0:
+    resolution: {integrity: sha512-frnAOQ0pKrwxlYLziy+aB8q7cOm8Ym9Y5VqbdE7alOaOPIK3ynpYLi/1D6XJSKw3WExHmeI2z6TVO85SUxpVAQ==}
     engines: {node: '>=16.3.0'}
-    peerDependencies:
-      typescript: '>= 4.7.4'
-    peerDependenciesMeta:
-      typescript:
-        optional: true
     dependencies:
-      '@puppeteer/browsers': 1.4.6(typescript@5.1.6)
-      chromium-bidi: 0.4.16(devtools-protocol@0.0.1147663)
+      '@puppeteer/browsers': 1.5.0
+      chromium-bidi: 0.4.20(devtools-protocol@0.0.1147663)
       cross-fetch: 4.0.0
       debug: 4.3.4(supports-color@8.1.1)
       devtools-protocol: 0.0.1147663
-      typescript: 5.1.6
       ws: 8.13.0
     transitivePeerDependencies:
       - bufferutil
@@ -6056,19 +6064,18 @@ packages:
       - utf-8-validate
     dev: false
 
-  /puppeteer@20.9.0(typescript@5.1.6):
-    resolution: {integrity: sha512-kAglT4VZ9fWEGg3oLc4/de+JcONuEJhlh3J6f5R1TLkrY/EHHIHxWXDOzXvaxQCtedmyVXBwg8M+P8YCO/wZjw==}
+  /puppeteer@21.0.0:
+    resolution: {integrity: sha512-a3rpCJuKQ7mzlwMJzKX6GhvGeg4CUn4d9+dv+riQDpY4mns32Q9OnmkfTZ3VlbDhGyrdBf1xXF1Z4y0of00WYg==}
     engines: {node: '>=16.3.0'}
     requiresBuild: true
     dependencies:
-      '@puppeteer/browsers': 1.4.6(typescript@5.1.6)
+      '@puppeteer/browsers': 1.5.0
       cosmiconfig: 8.2.0
-      puppeteer-core: 20.9.0(typescript@5.1.6)
+      puppeteer-core: 21.0.0
     transitivePeerDependencies:
       - bufferutil
       - encoding
       - supports-color
-      - typescript
       - utf-8-validate
     dev: false
 
@@ -7652,7 +7659,7 @@ packages:
       find-up: 5.0.0
       globby: 11.1.0
       grouped-queue: 2.0.0
-      inquirer: 8.2.5
+      inquirer: 8.2.6
       is-scoped: 2.1.0
       isbinaryfile: 4.0.10
       lodash: 4.17.21
