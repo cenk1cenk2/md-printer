@@ -107,7 +107,7 @@
     "tsconfig-paths": "^4.2.0",
     "tsconfig-replace-paths": "^0.0.14",
     "tsup": "^7.2.0",
-    "typescript": "^5.1.6"
+    "typescript": "^5.2.2"
   },
   "config": {
     "commitizen": {
