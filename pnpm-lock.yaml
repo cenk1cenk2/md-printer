@@ -77,13 +77,13 @@ devDependencies:
     specifier: ^11.0.1
     version: 11.0.1
   '@types/node':
-    specifier: ^18.17.6
+    specifier: ^18.17.11
     version: 18.17.11
   '@types/nunjucks':
     specifier: ^3.2.3
     version: 3.2.3
   eslint:
-    specifier: ^8.47.0
+    specifier: ^8.48.0
     version: 8.48.0
   lint-staged:
     specifier: ^13.3.0
