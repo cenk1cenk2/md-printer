@@ -913,8 +913,8 @@ packages:
       - '@types/node'
       - typescript
 
-  /@oclif/core@3.0.0-beta.5(@swc/core@1.3.81)(@types/node@18.17.12)(typescript@5.2.2):
-    resolution: {integrity: sha512-M2GOYi2uAnE9ouI74IWp/Xby93LQj4DO1OKQlVmEotZBp4ZBHhfIza+t61bBffDRNTe3+FH+aQisGZQOuiCpGw==}
+  /@oclif/core@3.0.0-beta.9(@swc/core@1.3.81)(@types/node@18.17.12)(typescript@5.2.2):
+    resolution: {integrity: sha512-UfC0VjjjBZbH7EYFinyG7/QdnrQrrVdTTZgDuLVQF7AJW7WLXM5vuyFntMn2bnqP3BcQ2HLZbcpQ5zI7f9mdOg==}
     engines: {node: '>=16.0.0'}
     dependencies:
       '@types/cli-progress': 3.11.0
@@ -1918,8 +1918,8 @@ packages:
     engines: {node: '>= 0.4'}
     dev: true
 
-  /aws-sdk@2.1448.0:
-    resolution: {integrity: sha512-15r8YKdAAXLgtPfQTAzD/qNxxgndF1SMEw6F+mXvLxZrLkG4BHnzOW2g2sQc3C2qG5yqCb3K6R+OrjbvGOAmdQ==}
+  /aws-sdk@2.1449.0:
+    resolution: {integrity: sha512-3AXg7S8mhOhUQDaqE8CpbkvRXCvVhzoLAGJ0Ngv7a6/m3JoZkGx7115HHcbiIqR13/AtMyid8MjIVHP0DPdwHw==}
     engines: {node: '>= 10.0.0'}
     dependencies:
       buffer: 4.9.2
@@ -2011,7 +2011,7 @@ packages:
     resolution: {integrity: sha512-xq+q3SRMOxGivLhBNaUdC64hDTQwejJ+H0T/NB1XMtTVEwNTrfFF3gAxiyW0Bu/xWEGhjVKgUcMhCrUy2+uCWg==}
     dependencies:
       base64-js: 1.5.1
-      ieee754: 1.2.1
+      ieee754: 1.1.13
       isarray: 1.0.0
     dev: true
 
@@ -4081,7 +4081,6 @@ packages:
 
   /is-arrayish@0.2.1:
     resolution: {integrity: sha512-zz06S8t0ozoDXMG+ube26zeCTNXcKIPJZJi8hBrF4idCLms4CG9QtK7qBl1boi5ODzFpjswb5JPmHCbMpjaYzg==}
-    requiresBuild: true
 
   /is-arrayish@0.3.2:
     resolution: {integrity: sha512-eVRqCvVlZbuw3GrM63ovNSNAeA1K16kaR/LRY/92w0zxQ5/1YzwblUX652i4Xs9RwAGjW9d9y6X88t8OaAJfWQ==}
@@ -5470,11 +5469,11 @@ packages:
     engines: {node: '>=12.0.0'}
     hasBin: true
     dependencies:
-      '@oclif/core': 3.0.0-beta.5(@swc/core@1.3.81)(@types/node@18.17.12)(typescript@5.2.2)
+      '@oclif/core': 3.0.0-beta.9(@swc/core@1.3.81)(@types/node@18.17.12)(typescript@5.2.2)
       '@oclif/plugin-help': 5.2.18(@swc/core@1.3.81)(@types/node@18.17.12)(typescript@5.2.2)
       '@oclif/plugin-not-found': 2.4.0(@swc/core@1.3.81)(@types/node@18.17.12)(typescript@5.2.2)
       '@oclif/plugin-warn-if-update-available': 2.0.49(@swc/core@1.3.81)(@types/node@18.17.12)(typescript@5.2.2)
-      aws-sdk: 2.1448.0
+      aws-sdk: 2.1449.0
       concurrently: 7.6.0
       debug: 4.3.4(supports-color@8.1.1)
       find-yarn-workspace-root: 2.0.0
@@ -5927,8 +5926,8 @@ packages:
       source-map-js: 1.0.2
     dev: true
 
-  /preferred-pm@3.0.3:
-    resolution: {integrity: sha512-+wZgbxNES/KlJs9q40F/1sfOd/j7f1O9JaHcW5Dsn3aUUOZg3L2bjpVUcKV2jvtElYfoTuQiNeMfQJ4kwUAhCQ==}
+  /preferred-pm@3.1.1:
+    resolution: {integrity: sha512-CsZgOVLKHifdoRu2y66P1s6oLb2WfT5Njkcgi80I/52FWTTVkWG6z0Z13vPkXC4hsT0nMrYXqX30buH8+D2eRQ==}
     engines: {node: '>=10'}
     dependencies:
       find-up: 5.0.0
@@ -7685,7 +7684,7 @@ packages:
       p-queue: 6.6.2
       p-transform: 1.3.0
       pacote: 12.0.3
-      preferred-pm: 3.0.3
+      preferred-pm: 3.1.1
       pretty-bytes: 5.6.0
       readable-stream: 4.4.2
       semver: 7.5.4
