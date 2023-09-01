@@ -68,7 +68,7 @@
   ],
   "dependencies": {
     "@cenk1cenk2/oclif-common": "^5.0.8",
-    "@oclif/core": "^2.14.0",
+    "@oclif/core": "^2.15.0",
     "@oclif/plugin-help": "^5.2.18",
     "chokidar": "^3.5.3",
     "class-transformer": "^0.5.1",
