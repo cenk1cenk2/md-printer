@@ -1,3 +1,10 @@
+## [2.2.64](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.63...v2.2.64) (2023-09-07)
+
+
+### Bug Fixes
+
+* **deps:** update dependency execa to v8 ([7e2846f](https://gitlab.kilic.dev/utils/md-printer/commit/7e2846fb5bcedc94dfbbd9c8bffb1ca4ef2538a7))
+
 ## [2.2.63](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.62...v2.2.63) (2023-09-02)
 
 
