@@ -89,8 +89,8 @@ devDependencies:
     specifier: ^14.0.1
     version: 14.0.1(enquirer@2.4.1)
   oclif:
-    specifier: ^3.15.1
-    version: 3.15.1(@swc/core@1.3.84)(@types/node@18.17.15)(typescript@5.2.2)
+    specifier: ^3.16.0
+    version: 3.16.0(@swc/core@1.3.84)(@types/node@18.17.15)(typescript@5.2.2)
   postcss:
     specifier: ^8.4.29
     version: 8.4.29
@@ -1977,7 +1977,7 @@ packages:
     resolution: {integrity: sha512-xq+q3SRMOxGivLhBNaUdC64hDTQwejJ+H0T/NB1XMtTVEwNTrfFF3gAxiyW0Bu/xWEGhjVKgUcMhCrUy2+uCWg==}
     dependencies:
       base64-js: 1.5.1
-      ieee754: 1.1.13
+      ieee754: 1.2.1
       isarray: 1.0.0
     dev: true
 
@@ -5482,8 +5482,8 @@ packages:
       es-abstract: 1.22.1
     dev: true
 
-  /oclif@3.15.1(@swc/core@1.3.84)(@types/node@18.17.15)(typescript@5.2.2):
-    resolution: {integrity: sha512-3xpR4rOQ1aTJC3Mr+TaguZapJqZ0360gvM+UKKsYBz4B5dqRCfPp75E2qWRmzaUmCjo+LYanMdD/h7Ja/yNPVA==}
+  /oclif@3.16.0(@swc/core@1.3.84)(@types/node@18.17.15)(typescript@5.2.2):
+    resolution: {integrity: sha512-qbPJ9SifBDPeMnuYIyJc0+kGyXmLubJs/lOD1wjrvAiKqTWQ1xy/EFlNMgBGETCf7RQf1iSJmvf+s22ZkLc7Ow==}
     engines: {node: '>=12.0.0'}
     hasBin: true
     dependencies:
