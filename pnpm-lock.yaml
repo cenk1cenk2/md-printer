@@ -56,8 +56,8 @@ dependencies:
 
 devDependencies:
   '@cenk1cenk2/cz-cc':
-    specifier: ^1.6.7
-    version: 1.6.7(@swc/core@1.3.86)
+    specifier: ^1.7.0
+    version: 1.7.1(@swc/core@1.3.86)
   '@cenk1cenk2/eslint-config':
     specifier: ^2.7.20
     version: 2.7.20(eslint@8.49.0)(typescript@5.2.2)
@@ -166,16 +166,17 @@ packages:
       regenerator-runtime: 0.14.0
     dev: true
 
-  /@cenk1cenk2/cz-cc@1.6.7(@swc/core@1.3.86):
-    resolution: {integrity: sha512-yGmBR11AYSB16rfAEbZnpzXEgKxfq79j6vl1RZWWiG6eKivifWsmneVpgdxbC9zg+aGV7p5SIx/oVOsgY8w/qw==}
+  /@cenk1cenk2/cz-cc@1.7.1(@swc/core@1.3.86):
+    resolution: {integrity: sha512-v4/vT83yWiUFYbiau35v5feTvmZ/dvQyNJTWIe9YKfyvO0Th/xCwtYG/gFoUQV598QGvBdgfIhd0L9EtsVGKWA==}
     engines: {node: '>= 16'}
     dependencies:
+      '@listr2/prompt-adapter-enquirer': 1.0.1(enquirer@2.4.1)
       commitizen: 4.3.0(@swc/core@1.3.86)
       conventional-commit-types: 3.0.0
       enquirer: 2.4.1
       external-editor: 3.1.0
       find-git-root: 1.0.4
-      listr2: 6.6.1(enquirer@2.4.1)
+      listr2: 7.0.1
     optionalDependencies:
       '@commitlint/load': 17.7.1(@swc/core@1.3.86)
     transitivePeerDependencies:
@@ -644,6 +645,15 @@ packages:
     dependencies:
       '@jridgewell/resolve-uri': 3.1.1
       '@jridgewell/sourcemap-codec': 1.4.15
+
+  /@listr2/prompt-adapter-enquirer@1.0.1(enquirer@2.4.1):
+    resolution: {integrity: sha512-gC+0QFhX9ysk0n40036Fvt8U7ZIu805gSO4vVQBlOw2syPr60vWWgNI9hONPq47XOOqAMdax8fEcwlYsB7KtSg==}
+    engines: {node: '>=16.0.0'}
+    peerDependencies:
+      enquirer: '>= 2.3.0 < 3'
+    dependencies:
+      enquirer: 2.4.1
+    dev: true
 
   /@nodelib/fs.scandir@2.1.5:
     resolution: {integrity: sha512-vq24Bq3ym5HEQm2NKCr3yXDwjc7vTsEThRDnkp2DK9p1uqLR+DHurm/NOTo0KG7HYHU7eppKZj3MyqYuMBf62g==}
@@ -4582,6 +4592,18 @@ packages:
       log-update: 5.0.1
       rfdc: 1.3.0
       wrap-ansi: 8.1.0
+
+  /listr2@7.0.1:
+    resolution: {integrity: sha512-nz+7hwgbDp8eWNoDgzdl4hA/xDSLrNRzPu1TLgOYs6l5Y+Ma6zVWWy9Oyt9TQFONwKoSPoka3H50D3vD5EuNwg==}
+    engines: {node: '>=16.0.0'}
+    dependencies:
+      cli-truncate: 3.1.0
+      colorette: 2.0.20
+      eventemitter3: 5.0.1
+      log-update: 5.0.1
+      rfdc: 1.3.0
+      wrap-ansi: 8.1.0
+    dev: true
 
   /listr@0.14.3:
     resolution: {integrity: sha512-RmAl7su35BFd/xoMamRjpIE4j3v+L28o8CT5YhAXQJm1fD+1l9ngXY8JAQRJ+tFK2i5njvi0iRUKV09vPwA0iA==}
