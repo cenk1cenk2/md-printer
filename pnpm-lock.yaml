@@ -4106,7 +4106,6 @@ packages:
 
   /is-arrayish@0.2.1:
     resolution: {integrity: sha512-zz06S8t0ozoDXMG+ube26zeCTNXcKIPJZJi8hBrF4idCLms4CG9QtK7qBl1boi5ODzFpjswb5JPmHCbMpjaYzg==}
-    requiresBuild: true
 
   /is-arrayish@0.3.2:
     resolution: {integrity: sha512-eVRqCvVlZbuw3GrM63ovNSNAeA1K16kaR/LRY/92w0zxQ5/1YzwblUX652i4Xs9RwAGjW9d9y6X88t8OaAJfWQ==}
@@ -6411,8 +6410,8 @@ packages:
       glob: 7.2.3
     dev: true
 
-  /rimraf@5.0.3:
-    resolution: {integrity: sha512-8BvsxqiTk8MEW6egd3oshF0e31BpiON1m/drw6nnn5AsRTAXDapBMENd2pf4ehjLJBlf9saQ+uMeBUfrRIHxvw==}
+  /rimraf@5.0.4:
+    resolution: {integrity: sha512-rizQI/o/YAMM1us0Zyax0uRfIK39XR52EAjjOi0fzMolpGp0onj6CWzBAXuOx6+6Xi9Rgi0d9tUZojhJerLUmQ==}
     engines: {node: '>=14'}
     hasBin: true
     dependencies:
@@ -6980,7 +6979,7 @@ packages:
       glob: 10.3.7
       mkdirp: 3.0.1
       path-scurry: 1.10.1
-      rimraf: 5.0.3
+      rimraf: 5.0.4
     dev: true
 
   /tailwindcss@3.3.3(ts-node@10.9.1):
@@ -7224,7 +7223,7 @@ packages:
       foreground-child: 3.1.1
       mkdirp: 3.0.1
       resolve-import: 1.4.1
-      rimraf: 5.0.3
+      rimraf: 5.0.4
       sync-content: 1.0.2
       typescript: 5.2.2
       walk-up-path: 3.0.1
