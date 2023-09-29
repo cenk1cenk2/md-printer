@@ -12,8 +12,8 @@ dependencies:
     specifier: ^2.15.0
     version: 2.15.0(@swc/core@1.3.90)(@types/node@18.18.0)(typescript@5.2.2)
   '@oclif/plugin-help':
-    specifier: ^5.2.19
-    version: 5.2.19(@swc/core@1.3.90)(@types/node@18.18.0)(typescript@5.2.2)
+    specifier: ^5.2.20
+    version: 5.2.20(@swc/core@1.3.90)(@types/node@18.18.0)(typescript@5.2.2)
   chokidar:
     specifier: ^3.5.3
     version: 3.5.3
@@ -922,8 +922,8 @@ packages:
       - '@types/node'
       - typescript
 
-  /@oclif/plugin-help@5.2.19(@swc/core@1.3.90)(@types/node@18.18.0)(typescript@5.2.2):
-    resolution: {integrity: sha512-gf6/dFtzMJ8RA4ovlBCBGJsZsd4jPXhYWJho+Gh6KmA+Ev9LupoExbE0qT+a2uHJyHEvIg4uX/MBW3qdERD/8g==}
+  /@oclif/plugin-help@5.2.20(@swc/core@1.3.90)(@types/node@18.18.0)(typescript@5.2.2):
+    resolution: {integrity: sha512-u+GXX/KAGL9S10LxAwNUaWdzbEBARJ92ogmM7g3gDVud2HioCmvWQCDohNRVZ9GYV9oKwZ/M8xwd6a1d95rEKQ==}
     engines: {node: '>=12.0.0'}
     dependencies:
       '@oclif/core': 2.15.0(@swc/core@1.3.90)(@types/node@18.18.0)(typescript@5.2.2)
@@ -5526,7 +5526,7 @@ packages:
     hasBin: true
     dependencies:
       '@oclif/core': 2.15.0(@swc/core@1.3.90)(@types/node@18.18.0)(typescript@5.2.2)
-      '@oclif/plugin-help': 5.2.19(@swc/core@1.3.90)(@types/node@18.18.0)(typescript@5.2.2)
+      '@oclif/plugin-help': 5.2.20(@swc/core@1.3.90)(@types/node@18.18.0)(typescript@5.2.2)
       '@oclif/plugin-not-found': 2.4.1(@swc/core@1.3.90)(@types/node@18.18.0)(typescript@5.2.2)
       '@oclif/plugin-warn-if-update-available': 2.1.0(@swc/core@1.3.90)(@types/node@18.18.0)(typescript@5.2.2)
       async-retry: 1.3.3
