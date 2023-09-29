@@ -1,3 +1,10 @@
+## [2.2.65](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.64...v2.2.65) (2023-09-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @oclif/plugin-help to ^5.2.20 ([ce2ba30](https://gitlab.kilic.dev/utils/md-printer/commit/ce2ba30e1da4e3646fe0071258ca003179683742))
+
 ## [2.2.64](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.63...v2.2.64) (2023-09-07)
 
 
