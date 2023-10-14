@@ -82,7 +82,7 @@
     "listr2": "^6.6.1",
     "md-to-pdf": "^5.2.4",
     "nunjucks": "^3.2.4",
-    "yaml": "^2.3.2"
+    "yaml": "^2.3.3"
   },
   "devDependencies": {
     "@cenk1cenk2/cz-cc": "^1.7.1",
