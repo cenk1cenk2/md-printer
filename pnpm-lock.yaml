@@ -71,11 +71,11 @@ devDependencies:
     specifier: ^0.5.10
     version: 0.5.10(tailwindcss@3.3.3)
   '@types/config':
-    specifier: ^3.3.1
-    version: 3.3.1
+    specifier: ^3.3.2
+    version: 3.3.2
   '@types/fs-extra':
-    specifier: ^11.0.2
-    version: 11.0.2
+    specifier: ^11.0.3
+    version: 11.0.3
   '@types/node':
     specifier: ^18.18.5
     version: 18.18.5
@@ -1342,16 +1342,16 @@ packages:
     dependencies:
       '@types/node': 18.18.5
 
-  /@types/config@3.3.1:
-    resolution: {integrity: sha512-ZhBk8IVIbc3cuES10j2I+xa3L68rpl1X35FdsNce/AiE7yJnhQaA7tvO5MRZblqpBny4OIddJ+WQL04I1933Zg==}
+  /@types/config@3.3.2:
+    resolution: {integrity: sha512-NAxsgr73BakGnfpHq5eKmtba/x+JyPcZmSa0DzCTdR4JCxeSC+KpwSQuOMGvACs7axkjGqi44/zYRkhiX7aDew==}
     dev: true
 
   /@types/expect@1.20.4:
     resolution: {integrity: sha512-Q5Vn3yjTDyCMV50TB6VRIbQNxSE4OmZR86VSbGaNpfUolm0iePBB4KdEEHmxoY5sT2+2DIvXW0rvMDP2nHZ4Mg==}
     dev: true
 
-  /@types/fs-extra@11.0.2:
-    resolution: {integrity: sha512-c0hrgAOVYr21EX8J0jBMXGLMgJqVf/v6yxi0dLaJboW9aQPh16Id+z6w2Tx1hm+piJOLv8xPfVKZCLfjPw/IMQ==}
+  /@types/fs-extra@11.0.3:
+    resolution: {integrity: sha512-sF59BlXtUdzEAL1u0MSvuzWd7PdZvZEtnaVkzX5mjpdWTJ8brG0jUqve3jPCzSzvAKKMHTG8F8o/WMQLtleZdQ==}
     dependencies:
       '@types/jsonfile': 6.1.2
       '@types/node': 18.18.5
