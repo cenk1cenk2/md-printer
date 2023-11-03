@@ -51,7 +51,7 @@ dependencies:
     specifier: ^3.2.4
     version: 3.2.4(chokidar@3.5.3)
   yaml:
-    specifier: ^2.3.3
+    specifier: ^2.3.4
     version: 2.3.4
 
 devDependencies:
