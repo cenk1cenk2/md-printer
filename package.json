@@ -93,7 +93,7 @@
     "@types/config": "^3.3.3",
     "@types/fs-extra": "^11.0.3",
     "@types/node": "^18.18.8",
-    "@types/nunjucks": "^3.2.5",
+    "@types/nunjucks": "^3.2.6",
     "eslint": "^8.53.0",
     "lint-staged": "^14.0.1",
     "oclif": "^3.17.2",
