@@ -77,13 +77,13 @@ devDependencies:
     specifier: ^11.0.4
     version: 11.0.4
   '@types/node':
-    specifier: ^18.18.9
+    specifier: ^18.18.10
     version: 18.18.10
   '@types/nunjucks':
     specifier: ^3.2.6
     version: 3.2.6
   eslint:
-    specifier: ^8.53.0
+    specifier: ^8.54.0
     version: 8.54.0
   lint-staged:
     specifier: ^14.0.1
@@ -95,7 +95,7 @@ devDependencies:
     specifier: ^8.4.31
     version: 8.4.31
   prettier:
-    specifier: ^3.0.3
+    specifier: ^3.1.0
     version: 3.1.0
   simple-git-hooks:
     specifier: ^2.9.0
