@@ -77,7 +77,7 @@ devDependencies:
     specifier: ^11.0.4
     version: 11.0.4
   '@types/node':
-    specifier: ^18.19.2
+    specifier: ^18.19.3
     version: 18.19.3
   '@types/nunjucks':
     specifier: ^3.2.6
