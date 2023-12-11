@@ -1,3 +1,11 @@
+## [2.2.69](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.68...v2.2.69) (2023-12-11)
+
+
+### Bug Fixes
+
+* **deps:** update dependency globby to v14 ([b06e70c](https://gitlab.kilic.dev/utils/md-printer/commit/b06e70ca8bd5b37ae44fcc5635c202ce58a2d0a9))
+* **deps:** update dependency listr2 to v8 ([d86defb](https://gitlab.kilic.dev/utils/md-printer/commit/d86defbda82bda659077d04ec383d2ea4841f19f))
+
 ## [2.2.68](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.67...v2.2.68) (2023-12-06)
 
 
