@@ -1,20 +1,21 @@
+import { Args, Flags } from '@oclif/core'
 import { watch } from 'chokidar'
-import { read as graymatter } from 'gray-matter'
-import mdToPdf from 'md-to-pdf'
-import type { PdfConfig } from 'md-to-pdf/dist/lib/config'
-import type { PdfOutput } from 'md-to-pdf/dist/lib/generate-output'
+import { default as graymatter } from 'gray-matter'
+import { mdToPdf } from 'md-to-pdf'
+import type { PdfConfig } from 'md-to-pdf/dist/lib/config.js'
+import type { PdfOutput } from 'md-to-pdf/dist/lib/generate-output.js'
 import Nunjucks from 'nunjucks'
 import { basename, dirname, extname, join } from 'path'
 
-import type { ArgInput, FlagInput, InferArgs, InferFlags } from '@cenk1cenk2/oclif-common'
-import { Command, Flags, Args } from '@cenk1cenk2/oclif-common'
-import { INPUT_FILE_ACCEPTED_TYPES, OUTPUT_FILE_ACCEPTED_TYPES, RequiredTemplateFiles, TemplateFiles, TEMPLATE_DIRECTORY } from '@src/constants'
-import type { MdPrinterCtx } from '@src/interfaces/commands'
+import type { ShouldRunAfterHook, ShouldRunBeforeHook } from '@cenk1cenk2/oclif-common'
+import { Command, ConfigService, FileSystemService } from '@cenk1cenk2/oclif-common'
+import { INPUT_FILE_ACCEPTED_TYPES, OUTPUT_FILE_ACCEPTED_TYPES, RequiredTemplateFiles, TEMPLATE_DIRECTORY, TemplateFiles } from '@constants'
+import type { MdPrinterCtx } from '@interfaces'
 
-export default class MDPrinter extends Command<MdPrinterCtx, InferFlags<typeof MDPrinter>, InferArgs<typeof MDPrinter>> {
+export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> implements ShouldRunBeforeHook, ShouldRunAfterHook {
   static description = 'Generates a PDF from the given markdown file with the selected HTML template.'
 
-  static flags: FlagInput = {
+  static flags = {
     template: Flags.string({
       char: 't',
       default: 'default',
@@ -34,7 +35,7 @@ export default class MDPrinter extends Command<MdPrinterCtx, InferFlags<typeof M
     })
   }
 
-  static args: ArgInput = {
+  static args = {
     file: Args.string({
       description: 'Markdown file to be processed.',
       required: true
@@ -51,8 +52,13 @@ export default class MDPrinter extends Command<MdPrinterCtx, InferFlags<typeof M
     trimBlocks: true,
     lstripBlocks: false
   })
+  private cs: ConfigService
+  private fs: FileSystemService
 
   public async shouldRunBefore (): Promise<void> {
+    this.cs = this.app.get(ConfigService)
+    this.fs = this.app.get(FileSystemService)
+
     this.tasks.options = { silentRendererCondition: true }
   }
 
@@ -76,7 +82,7 @@ export default class MDPrinter extends Command<MdPrinterCtx, InferFlags<typeof M
 
           ctx.content = await this.fs.read(file)
 
-          ctx.graymatter = graymatter(ctx.file)
+          ctx.graymatter = graymatter.read(ctx.file)
         }
       },
 
@@ -111,7 +117,11 @@ export default class MDPrinter extends Command<MdPrinterCtx, InferFlags<typeof M
             {
               pdf_options: {},
               dest: this.args?.output ?? ctx.graymatter.data?.dest ?? `${basename(this.args.file, extname(this.args.file))}.pdf`,
-              document_title: ctx.graymatter.data?.document_title ?? this.flags.title ?? this.args.file
+              document_title: ctx.graymatter.data?.document_title ?? this.flags.title ?? this.args.file,
+              // https://github.com/simonhaenisch/md-to-pdf/issues/247
+              launch_options: {
+                headless: 'new'
+              }
             }
           ])
 

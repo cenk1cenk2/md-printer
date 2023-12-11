@@ -1,2 +1,2 @@
-export * from './template.constants'
-export * from './file.constants'
+export * from './template.constants.js'
+export * from './file.constants.js'

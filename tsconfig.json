@@ -1,34 +1,30 @@
 {
   "compilerOptions": {
-    "target": "es2021",
-    "lib": ["ESNext"],
-    "module": "commonjs",
-    "moduleResolution": "node",
+    "lib": ["ES2023"],
+    "module": "Node16",
+    "target": "ES2022",
+    "moduleResolution": "Node16",
+    "resolveJsonModule": true,
+    "declaration": true,
     "sourceMap": true,
-    "removeComments": true,
+    "removeComments": false,
     "noUnusedLocals": false,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "incremental": true,
-    "tsBuildInfoFile": ".tsbuildinfo",
+    "incremental": false,
     "strictNullChecks": false,
     "esModuleInterop": true,
-    "downlevelIteration": true,
-    "declaration": true,
-    "composite": false,
+    "allowSyntheticDefaultImports": true,
     "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "rootDir": "src",
-    "baseUrl": "src",
+    "rootDir": "./src/",
+    "baseUrl": "./src/",
     "paths": {
-      "@src/*": ["*"],
-      "@commands/*": ["commands/*"],
-      "@helpers/*": ["helpers/*"],
-      "@interfaces/*": ["interfaces/*"],
-      "@context/*": ["interfaces/commands/*"],
-      "@templates/*": ["templates/*"]
+      "@interfaces": ["interfaces/index.js"],
+      "@constants": ["constants/index.js"]
     }
   },
-  "include": ["src"],
-  "exclude": ["node_modules", "dist"]
+  "exclude": ["node_modules"],
+  "include": ["src/**/*"]
 }

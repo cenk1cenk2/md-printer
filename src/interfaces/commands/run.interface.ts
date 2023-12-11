@@ -1,5 +1,5 @@
 import type { GrayMatterFile } from 'gray-matter'
-import type { PdfConfig } from 'md-to-pdf/dist/lib/config'
+import type { PdfConfig } from 'md-to-pdf/dist/lib/config.js'
 
 export interface MdPrinterCtx {
   file: string
