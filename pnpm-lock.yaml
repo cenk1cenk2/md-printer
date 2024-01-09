@@ -77,8 +77,8 @@ devDependencies:
     specifier: ^15.2.0
     version: 15.2.0
   oclif:
-    specifier: ^4.1.4
-    version: 4.1.4(eslint@8.56.0)(typescript@5.3.3)
+    specifier: ^4.2.0
+    version: 4.2.0(eslint@8.56.0)(typescript@5.3.3)
   postcss:
     specifier: ^8.4.33
     version: 8.4.33
@@ -2184,7 +2184,7 @@ packages:
     resolution: {integrity: sha512-xq+q3SRMOxGivLhBNaUdC64hDTQwejJ+H0T/NB1XMtTVEwNTrfFF3gAxiyW0Bu/xWEGhjVKgUcMhCrUy2+uCWg==}
     dependencies:
       base64-js: 1.5.1
-      ieee754: 1.1.13
+      ieee754: 1.2.1
       isarray: 1.0.0
     dev: true
 
@@ -5801,8 +5801,8 @@ packages:
       es-abstract: 1.22.3
     dev: true
 
-  /oclif@4.1.4(eslint@8.56.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-tgZTmJqwakJAU+7FokbhaYcj6Eaj/mVvCfeuitP6qQOzAC1s8yhkY7gZ7DsAzAEh9VqT4h4xZmTJxV21Lc8CLQ==}
+  /oclif@4.2.0(eslint@8.56.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-pqfc1R+tDNxlViQ6xYf79lGwMr7Erq2Bo4A5p5jMwJrbpHpIunsZXGifZV6V2f4wUTo1dcqjxP6Be8LmeI3Czw==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     dependencies:
