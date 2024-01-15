@@ -77,8 +77,8 @@ devDependencies:
     specifier: ^15.2.0
     version: 15.2.0
   oclif:
-    specifier: ^4.3.3
-    version: 4.3.3(eslint@8.56.0)(typescript@5.3.3)
+    specifier: ^4.3.4
+    version: 4.3.4(eslint@8.56.0)(typescript@5.3.3)
   postcss:
     specifier: ^8.4.33
     version: 8.4.33
@@ -6849,8 +6849,8 @@ packages:
       es-abstract: 1.22.3
     dev: true
 
-  /oclif@4.3.3(eslint@8.56.0)(typescript@5.3.3):
-    resolution: {integrity: sha512-g9exbT7RYTKvw68qAVK2SdLgDGQk+0vXyBNDx0Ybt3DTOKuj+RAlOXnrYMIpexdUUVLdpM9vahvDwGL/COXX/A==}
+  /oclif@4.3.4(eslint@8.56.0)(typescript@5.3.3):
+    resolution: {integrity: sha512-5dThcqdBkJDLhcvEl7XGmEmLVhaEH4UsRnOKput8rWloVnta8uv6qNV6EErmr53qeTyRttcA1VhJ5IeGDgfC0g==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     dependencies:
