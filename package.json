@@ -93,7 +93,7 @@
     "execa": "^8.0.1",
     "globby": "^14.0.0",
     "lint-staged": "^15.2.1",
-    "oclif": "^4.4.3",
+    "oclif": "^4.4.4",
     "postcss": "^8.4.33",
     "prettier": "^3.2.5",
     "simple-git-hooks": "^2.9.0",
