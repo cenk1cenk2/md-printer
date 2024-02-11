@@ -77,8 +77,8 @@ devDependencies:
     specifier: ^15.2.2
     version: 15.2.2
   oclif:
-    specifier: ^4.4.8
-    version: 4.4.8
+    specifier: ^4.4.9
+    version: 4.4.9
   postcss:
     specifier: ^8.4.35
     version: 8.4.35
@@ -6916,8 +6916,8 @@ packages:
       es-abstract: 1.22.3
     dev: true
 
-  /oclif@4.4.8:
-    resolution: {integrity: sha512-kzfWdpwAiRHnXltAZj54gFHPvejvf6KBXjcSC/KbFeN/PzQxbetRhtyKnpyuTMZPIwFUnR2gAAaR/Ff7I6fCTw==}
+  /oclif@4.4.9:
+    resolution: {integrity: sha512-hHiLH1n7CsZL8YDK5puRXi99AYDCAWmu7IgTO+02iAP2PHH1Je4MG8hUHlXyuWJp+opp01ejjfIiPJ8hu1s9Cg==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     dependencies:
