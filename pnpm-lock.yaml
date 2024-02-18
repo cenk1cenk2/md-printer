@@ -1692,8 +1692,8 @@ packages:
       fast-levenshtein: 3.0.0
     dev: true
 
-  /@oclif/plugin-warn-if-update-available@3.0.10:
-    resolution: {integrity: sha512-dUuBnoU80VQ6Rt/cMhqMsz5abFMnCi/IqnAhRNfO5EQbJ8PvYpU+0kPx15cbtQcU4olQ2kqigLt4BU7ms4RqMA==}
+  /@oclif/plugin-warn-if-update-available@3.0.11:
+    resolution: {integrity: sha512-L3WqhpkSAry0V/OAmScgvQol4lQedhNUg6vx3CkOVKdu2K54lRcQ/v74SLLSTC//0+Kg03JNKflnuYlcbR2RJQ==}
     engines: {node: '>=18.0.0'}
     dependencies:
       '@oclif/core': 3.19.2
@@ -4276,7 +4276,7 @@ packages:
       string.prototype.trimstart: 1.0.7
       typed-array-buffer: 1.0.1
       typed-array-byte-length: 1.0.0
-      typed-array-byte-offset: 1.0.0
+      typed-array-byte-offset: 1.0.1
       typed-array-length: 1.0.4
       unbox-primitive: 1.0.2
       which-typed-array: 1.1.14
@@ -5934,8 +5934,8 @@ packages:
     engines: {node: '>=14'}
     dev: true
 
-  /lilconfig@3.1.0:
-    resolution: {integrity: sha512-p3cz0JV5vw/XeouBU3Ldnp+ZkBjE+n8ydJ4mcwBrOiXXPqNlrzGBqWs9X4MWF7f+iKUBu794Y8Hh8yawiJbCjw==}
+  /lilconfig@3.1.1:
+    resolution: {integrity: sha512-O18pf7nyvHTckunPWCV1XUNXU1piu01y2b7ATJ0ppkUkk8ocqVWBrYjJBCwHDjD/ZWcfyrA0P4gKhzWGi5EINQ==}
     engines: {node: '>=14'}
     dev: true
 
@@ -6967,7 +6967,7 @@ packages:
       '@oclif/core': 3.19.2
       '@oclif/plugin-help': 6.0.13
       '@oclif/plugin-not-found': 3.0.10
-      '@oclif/plugin-warn-if-update-available': 3.0.10
+      '@oclif/plugin-warn-if-update-available': 3.0.11
       async-retry: 1.3.3
       change-case: 4.1.2
       debug: 4.3.4(supports-color@8.1.1)
@@ -7400,7 +7400,7 @@ packages:
       ts-node:
         optional: true
     dependencies:
-      lilconfig: 3.1.0
+      lilconfig: 3.1.1
       postcss: 8.4.35
       ts-node: 10.9.2(@swc/core@1.4.1)(@types/node@20.11.19)(typescript@5.3.3)
       yaml: 2.3.4
@@ -8777,13 +8777,14 @@ packages:
       is-typed-array: 1.1.13
     dev: true
 
-  /typed-array-byte-offset@1.0.0:
-    resolution: {integrity: sha512-RD97prjEt9EL8YgAgpOkf3O4IF9lhJFr9g0htQkm0rchFp/Vx7LW5Q8fSXXub7BXAODyUQohRMyOc3faCPd0hg==}
+  /typed-array-byte-offset@1.0.1:
+    resolution: {integrity: sha512-tcqKMrTRXjqvHN9S3553NPCaGL0VPgFI92lXszmrE8DMhiDPLBYLlvo8Uu4WZAAX/aGqp/T1sbA4ph8EWjDF9Q==}
     engines: {node: '>= 0.4'}
     dependencies:
       available-typed-arrays: 1.0.6
       call-bind: 1.0.7
       for-each: 0.3.3
+      gopd: 1.0.1
       has-proto: 1.0.1
       is-typed-array: 1.1.13
     dev: true
