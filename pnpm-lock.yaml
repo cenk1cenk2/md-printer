@@ -15,8 +15,8 @@ dependencies:
     specifier: ^3.23.0
     version: 3.23.0
   '@oclif/plugin-help':
-    specifier: ^6.0.17
-    version: 6.0.17
+    specifier: ^6.0.18
+    version: 6.0.18
   chokidar:
     specifier: ^3.6.0
     version: 3.6.0
@@ -1676,8 +1676,8 @@ packages:
       wordwrap: 1.0.0
       wrap-ansi: 7.0.0
 
-  /@oclif/plugin-help@6.0.17:
-    resolution: {integrity: sha512-zHKRQf/SkaOyF8xwz9EJxQ4bsB9bK+ED+i0YF24dud/1DkTj5cEDvrNV6sj+YH34ONz7z4et230URdFM3SJKeQ==}
+  /@oclif/plugin-help@6.0.18:
+    resolution: {integrity: sha512-Ly0gu/+eq7GfIMT76cirbHgElYGlu+PaZ5elrAKmDiegBh31AXqaPQAj8PH4+sG8RSv5srYtrkrygZaw8IF9CQ==}
     engines: {node: '>=18.0.0'}
     dependencies:
       '@oclif/core': 3.23.0
@@ -7003,7 +7003,7 @@ packages:
       '@aws-sdk/client-cloudfront': 3.529.1
       '@aws-sdk/client-s3': 3.529.1
       '@oclif/core': 3.23.0
-      '@oclif/plugin-help': 6.0.17
+      '@oclif/plugin-help': 6.0.18
       '@oclif/plugin-not-found': 3.0.14
       '@oclif/plugin-warn-if-update-available': 3.0.13
       async-retry: 1.3.3
