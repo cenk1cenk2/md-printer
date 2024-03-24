@@ -77,8 +77,8 @@ devDependencies:
     specifier: ^15.2.2
     version: 15.2.2
   oclif:
-    specifier: ^4.6.1
-    version: 4.6.1
+    specifier: ^4.6.2
+    version: 4.6.2
   postcss:
     specifier: ^8.4.38
     version: 8.4.38
@@ -5653,8 +5653,8 @@ packages:
       es-object-atoms: 1.0.0
     dev: true
 
-  /oclif@4.6.1:
-    resolution: {integrity: sha512-PImUoF6NiWVjaZ1GHeqD6aUUsWLot/7wey1WxOzei/dn4lK1nGH3/UXRSAGG6OciSlzuwNClPKfqNwKAVPm3OQ==}
+  /oclif@4.6.2:
+    resolution: {integrity: sha512-k0QUbKBYhG+iam1wL5AJ8AimLemPTX8DhxnRnhrSJnuVn6BciFwrJ19MYKPmt3w47d2MZtyOfKfyZFBlvfr1gA==}
     engines: {node: '>=18.0.0'}
     hasBin: true
     dependencies:
