@@ -95,7 +95,7 @@
     "lint-staged": "^15.2.5",
     "oclif": "^4.12.0",
     "postcss": "^8.4.38",
-    "prettier": "^3.2.5",
+    "prettier": "^3.3.0",
     "simple-git-hooks": "^2.11.1",
     "source-map-support": "^0.5.21",
     "tailwindcss": "^3.4.3",
