@@ -47,8 +47,10 @@
   "oclif": {
     "bin": "md-printer",
     "dirname": "md-printer",
-    "commands": "./dist/commands",
-    "default": "run",
+    "commands": {
+      "strategy": "single",
+      "target": "./dist/commands/index.js"
+    },
     "plugins": [
       "@oclif/plugin-help"
     ],
@@ -90,7 +92,7 @@
     "@types/node": "^20.13.0",
     "@types/nunjucks": "^3.2.6",
     "eslint": "^8.57.0",
-    "execa": "^8.0.1",
+    "execa": "^9.1.0",
     "globby": "^14.0.1",
     "lint-staged": "^15.2.5",
     "oclif": "^4.12.0",

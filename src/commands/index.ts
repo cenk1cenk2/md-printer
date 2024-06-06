@@ -1,4 +1,3 @@
-import { Args, Flags } from '@oclif/core'
 import { watch } from 'chokidar'
 import { default as graymatter } from 'gray-matter'
 import { mdToPdf } from 'md-to-pdf'
@@ -8,7 +7,7 @@ import Nunjucks from 'nunjucks'
 import { basename, dirname, extname, join } from 'path'
 
 import type { ShouldRunAfterHook, ShouldRunBeforeHook } from '@cenk1cenk2/oclif-common'
-import { Command, ConfigService, FileSystemService } from '@cenk1cenk2/oclif-common'
+import { Args, Flags, Command, ConfigService, FileSystemService } from '@cenk1cenk2/oclif-common'
 import { INPUT_FILE_ACCEPTED_TYPES, OUTPUT_FILE_ACCEPTED_TYPES, RequiredTemplateFiles, TEMPLATE_DIRECTORY, TemplateFiles } from '@constants'
 import type { MdPrinterCtx } from '@interfaces'
 
@@ -120,7 +119,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
               document_title: ctx.graymatter.data?.document_title ?? this.flags.title ?? this.args.file,
               // https://github.com/simonhaenisch/md-to-pdf/issues/247
               launch_options: {
-                headless: 'new'
+                headless: true
               }
             }
           ])
