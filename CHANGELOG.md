@@ -1,3 +1,11 @@
+## [2.2.78](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.77...v2.2.78) (2024-06-11)
+
+
+### Bug Fixes
+
+* **deps:** update all minor dependency updates ([d0b961a](https://gitlab.kilic.dev/utils/md-printer/commit/d0b961a2025cc0ce76bdef8a1b3dd5f925542c3a))
+* **deps:** update dependency @oclif/plugin-help to ^6.2.1 ([ae2c7db](https://gitlab.kilic.dev/utils/md-printer/commit/ae2c7dbf86b0e8ee93dcca4df015fd6f8735ed69))
+
 ## [2.2.77](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.76...v2.2.77) (2024-06-05)
 
 
