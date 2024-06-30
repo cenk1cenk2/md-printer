@@ -91,7 +91,7 @@
     "@types/nunjucks": "^3.2.6",
     "eslint": "^8.57.0",
     "execa": "^8.0.1",
-    "globby": "^14.0.1",
+    "globby": "^14.0.2",
     "lint-staged": "^15.2.7",
     "oclif": "^4.13.12",
     "postcss": "^8.4.39",
