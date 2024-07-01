@@ -1,3 +1,15 @@
+## [2.2.81](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.80...v2.2.81) (2024-07-01)
+
+
+### Bug Fixes
+
+* **deps:** update all minor dependency updates ([d0b38d1](https://gitlab.kilic.dev/utils/md-printer/commit/d0b38d10bf3289d8addb491a98a7247446ee0846))
+* **deps:** update all minor dependency updates ([af26efd](https://gitlab.kilic.dev/utils/md-printer/commit/af26efd59473c1be4e56c38958f9b2ae80cbbc1c))
+* **deps:** update dependency @oclif/core to ^4.0.7 ([f729fca](https://gitlab.kilic.dev/utils/md-printer/commit/f729fca06ad2bd5fda23557057246756108bdbbd))
+* **deps:** update dependency @oclif/core to ^4.0.8 ([12f30c5](https://gitlab.kilic.dev/utils/md-printer/commit/12f30c561928fc94bc217010431fba4340a2636d))
+* **deps:** update dependency @oclif/core to v4 ([77d5a90](https://gitlab.kilic.dev/utils/md-printer/commit/77d5a90b09dbf1ea2f90a77d36ef6cc9152b479a))
+* **deps:** update dependency @oclif/plugin-help to ^6.2.4 ([79b8095](https://gitlab.kilic.dev/utils/md-printer/commit/79b80950308ba6ec26344fc2108a42c5f725140c))
+
 ## [2.2.80](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.79...v2.2.80) (2024-06-19)
 
 
