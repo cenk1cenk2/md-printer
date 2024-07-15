@@ -50,10 +50,10 @@ importers:
         version: 1.6.13
       '@tailwindcss/forms':
         specifier: ^0.5.7
-        version: 0.5.7(tailwindcss@3.4.4(ts-node@10.9.2(@swc/core@1.6.13)(@types/node@20.14.10)(typescript@5.5.3)))
+        version: 0.5.7(tailwindcss@3.4.5(ts-node@10.9.2(@swc/core@1.6.13)(@types/node@20.14.10)(typescript@5.5.3)))
       '@tailwindcss/typography':
         specifier: ^0.5.13
-        version: 0.5.13(tailwindcss@3.4.4(ts-node@10.9.2(@swc/core@1.6.13)(@types/node@20.14.10)(typescript@5.5.3)))
+        version: 0.5.13(tailwindcss@3.4.5(ts-node@10.9.2(@swc/core@1.6.13)(@types/node@20.14.10)(typescript@5.5.3)))
       '@types/config':
         specifier: ^3.3.4
         version: 3.3.4
@@ -94,8 +94,8 @@ importers:
         specifier: ^0.5.21
         version: 0.5.21
       tailwindcss:
-        specifier: ^3.4.4
-        version: 3.4.4(ts-node@10.9.2(@swc/core@1.6.13)(@types/node@20.14.10)(typescript@5.5.3))
+        specifier: ^3.4.5
+        version: 3.4.5(ts-node@10.9.2(@swc/core@1.6.13)(@types/node@20.14.10)(typescript@5.5.3))
       theme-colors:
         specifier: ^0.1.0
         version: 0.1.0
@@ -3533,8 +3533,8 @@ packages:
     resolution: {integrity: sha512-e900nM8RRtGhlV36KGEU9k65K3mPb1WV70OdjfxlG2EAuM1noi/E/BaW/uMhL7bPEssK8QV57vN3esixjUvcXQ==}
     engines: {node: '>=0.10.0'}
 
-  tailwindcss@3.4.4:
-    resolution: {integrity: sha512-ZoyXOdJjISB7/BcLTR6SEsLgKtDStYyYZVLsUtWChO4Ps20CBad7lfJKVDiejocV4ME1hLmyY0WJE3hSDcmQ2A==}
+  tailwindcss@3.4.5:
+    resolution: {integrity: sha512-DlTxttYcogpDfx3tf/8jfnma1nfAYi2cBUYV2YNoPPecwmO3YGiFlOX9D8tGAu+EDF38ryBzvrDKU/BLMsUwbw==}
     engines: {node: '>=14.0.0'}
     hasBin: true
 
@@ -5263,18 +5263,18 @@ snapshots:
     dependencies:
       defer-to-connect: 2.0.1
 
-  '@tailwindcss/forms@0.5.7(tailwindcss@3.4.4(ts-node@10.9.2(@swc/core@1.6.13)(@types/node@20.14.10)(typescript@5.5.3)))':
+  '@tailwindcss/forms@0.5.7(tailwindcss@3.4.5(ts-node@10.9.2(@swc/core@1.6.13)(@types/node@20.14.10)(typescript@5.5.3)))':
     dependencies:
       mini-svg-data-uri: 1.4.4
-      tailwindcss: 3.4.4(ts-node@10.9.2(@swc/core@1.6.13)(@types/node@20.14.10)(typescript@5.5.3))
+      tailwindcss: 3.4.5(ts-node@10.9.2(@swc/core@1.6.13)(@types/node@20.14.10)(typescript@5.5.3))
 
-  '@tailwindcss/typography@0.5.13(tailwindcss@3.4.4(ts-node@10.9.2(@swc/core@1.6.13)(@types/node@20.14.10)(typescript@5.5.3)))':
+  '@tailwindcss/typography@0.5.13(tailwindcss@3.4.5(ts-node@10.9.2(@swc/core@1.6.13)(@types/node@20.14.10)(typescript@5.5.3)))':
     dependencies:
       lodash.castarray: 4.4.0
       lodash.isplainobject: 4.0.6
       lodash.merge: 4.6.2
       postcss-selector-parser: 6.0.10
-      tailwindcss: 3.4.4(ts-node@10.9.2(@swc/core@1.6.13)(@types/node@20.14.10)(typescript@5.5.3))
+      tailwindcss: 3.4.5(ts-node@10.9.2(@swc/core@1.6.13)(@types/node@20.14.10)(typescript@5.5.3))
 
   '@tootallnate/quickjs-emscripten@0.23.0': {}
 
@@ -7980,7 +7980,7 @@ snapshots:
 
   symbol-observable@1.2.0: {}
 
-  tailwindcss@3.4.4(ts-node@10.9.2(@swc/core@1.6.13)(@types/node@20.14.10)(typescript@5.5.3)):
+  tailwindcss@3.4.5(ts-node@10.9.2(@swc/core@1.6.13)(@types/node@20.14.10)(typescript@5.5.3)):
     dependencies:
       '@alloc/quick-lru': 5.2.0
       arg: 5.0.2
