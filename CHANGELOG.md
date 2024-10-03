@@ -1,3 +1,10 @@
+## [2.2.90](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.89...v2.2.90) (2024-10-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @oclif/core to ^4.0.27 ([6f38cab](https://gitlab.kilic.dev/utils/md-printer/commit/6f38cab7666c3f9fcdb1e0d539350ed19f31ace1))
+
 ## [2.2.89](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.88...v2.2.89) (2024-10-01)
 
 
