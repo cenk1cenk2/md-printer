@@ -70,7 +70,7 @@
   "dependencies": {
     "@cenk1cenk2/oclif-common": "^6.3.20",
     "@listr2/manager": "^2.0.13",
-    "@oclif/core": "^4.0.27",
+    "@oclif/core": "^4.0.28",
     "@oclif/plugin-help": "^6.2.14",
     "chokidar": "^3.6.0",
     "fs-extra": "^11.2.0",
