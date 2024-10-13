@@ -18,7 +18,7 @@ importers:
         specifier: ^4.0.28
         version: 4.0.28
       '@oclif/plugin-help':
-        specifier: ^6.2.14
+        specifier: ^6.2.15
         version: 6.2.15
       chokidar:
         specifier: ^3.6.0
