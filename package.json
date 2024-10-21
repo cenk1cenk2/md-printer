@@ -68,10 +68,10 @@
     "cenk1cenk2"
   ],
   "dependencies": {
-    "@cenk1cenk2/oclif-common": "^6.3.20",
+    "@cenk1cenk2/oclif-common": "^6.3.21",
     "@listr2/manager": "^2.0.13",
     "@oclif/core": "^4.0.29",
-    "@oclif/plugin-help": "^6.2.15",
+    "@oclif/plugin-help": "^6.2.16",
     "chokidar": "^3.6.0",
     "fs-extra": "^11.2.0",
     "gray-matter": "^4.0.3",
