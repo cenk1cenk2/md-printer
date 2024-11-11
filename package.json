@@ -94,7 +94,7 @@
     "globby": "^14.0.2",
     "lint-staged": "^15.2.10",
     "oclif": "^4.15.24",
-    "postcss": "^8.4.48",
+    "postcss": "^8.4.49",
     "prettier": "^3.3.3",
     "simple-git-hooks": "^2.11.1",
     "source-map-support": "^0.5.21",
