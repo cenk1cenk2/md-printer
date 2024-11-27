@@ -72,7 +72,7 @@
     "@listr2/manager": "^2.0.13",
     "@oclif/core": "^4.0.31",
     "@oclif/plugin-help": "^6.2.16",
-    "chokidar": "^3.6.0",
+    "chokidar": "^4.0.1",
     "fs-extra": "^11.2.0",
     "gray-matter": "^4.0.3",
     "listr2": "^8.2.5",
