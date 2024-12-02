@@ -90,7 +90,7 @@
     "@types/node": "^20.17.9",
     "@types/nunjucks": "^3.2.6",
     "eslint": "^8.57.1",
-    "execa": "^8.0.1",
+    "execa": "^9.5.1",
     "globby": "^14.0.2",
     "lint-staged": "^15.2.10",
     "oclif": "^4.16.0",
