@@ -2,12 +2,12 @@ const colors = require('theme-colors').getColors
 
 /** @type {import("tailwindcss").Config} */
 module.exports = {
-  content: [ './template.html.j2' ],
+  content: ['./template.html.j2'],
   theme: {
     extend: {
       fontFamily: {
-        sans: [ 'Montserrat' ],
-        serif: [ 'Montserrat' ]
+        sans: ['Montserrat'],
+        serif: ['Montserrat']
       },
       colors: {
         primary: colors('#cd0043')
@@ -70,5 +70,5 @@ module.exports = {
       })
     }
   },
-  plugins: [ require('@tailwindcss/forms'), require('@tailwindcss/typography') ]
+  plugins: [require('@tailwindcss/forms'), require('@tailwindcss/typography')]
 }

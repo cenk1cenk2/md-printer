@@ -1,140 +1,36 @@
+<!--
+  vim: ft=html
+-->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Document</title>
 </head>
+
 <body>
-  <div class="max-w-full leading-tight prose">
-    <h1 class="mb-2 text-center border-b-2">Privatrechnung</h1>
-    <div class="text-center">
-      <p class="m-0 font-bold">Rechnungsnummer</p>
-      <p class="m-0 font-bold">{{ id }}</p>
-    </div>
-    <div class="grid grid-cols-2" style="margin-bottom: 1em !important;">
-      <div class="grid-cols-1">
-          <div>
-            <h4 class="">Absender</h4>
-          </div>
-          <div>
-            <p class="my-2 font-semibold">{{ sender.name }}</p>
-            {% if sender.email %}
-            <p class="m-0 my-2">{{ sender.email }}</p>
-            {% endif %}
-            {% if sender.phone %}
-            <p class="m-0 my-2">{{ sender.phone }}</p>
-            {% endif %}
-            <div class="mt-4">
-              <p class="m-0">{{ sender.address }}</p>
-              <p class="m-0">{{ sender.postcode }}</p>
-              <p class="m-0">{{ sender.location }}</p>
-            </div>
-          </div>
-      </div>
-      <div class="grid-cols-1 text-right">
-          <div>
-            <h4 class="">Empfänger</h4>
-          </div>
-          <div class="leading-tight">
-            <p class="my-2 font-semibold">{{ receiver.name }}</p>
-            {% if receiver.email %}
-            <p class="m-0 my-2">{{ receiver.email }}</p>
-            {% endif %}
-            {% if receiver.phone %}
-            <p class="m-0 my-2">{{ receiver.phone }}</p>
-            {% endif %}
-            <div class="mt-4">
-              <p class="m-0">{{ receiver.address }}</p>
-              <p class="m-0">{{ receiver.postcode }}</p>
-              <p class="m-0">{{ receiver.location }}</p>
-            </div>
-          </div>
-          </div>
-      </div>
-    <div class="border-t-2">
-        <p class="font-bold">Dies ist eine Privatrechnung über eine nicht gewerbliche Tätigkeit. Umsatzsteuer wird daher nicht in Rechnung gestellt.</p>
-      <table class="w-full rounded-lg border-gray-200 table-fixed">
-        <thead class="border-b-2 border-primary-500">
-          <tr class="bg-gray-200">
-            <th class="px-2 w-full">
-              Leistung
-            </th>
-            <th class="px-8">
-              Menge
-            </th>
-            <th class="px-4">
-              Einzelpreis
-            </th>
-            <th class="px-4">
-              Gesamtpreis
-            </th>
-          </tr>
-        </thead>
-        <tbody>
-          {% set sum = 0 %}
-          {% for item in items %}
-          <tr class="even:bg-gray-50">
-              <td class="px-2">{{ item.description }}</td>
-              <td class="text-center">{{ item.quantity }} {{ item.type }}</td>
-              <td class="text-center">{{ item.price }}{{ currency }}</td>
-              <td class="font-semibold text-center">{{ item.quantity * item.price }}{{ currency }}</td>
-          </tr>
-          {% set sum = sum + item.quantity * item.price %}
-          {% endfor %}
-        </tbody>
-        <tfoot class="text-black border-t-2 border-primary-500">
-          <tr class="border-0 !bg-gray-200">
-            <td></td>
-            <td></td>
-            <th class="text-center">Gesamt</th>
-            <td class="font-bold text-center text-primary-500">{{ sum }}{{ currency }}</td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-    <h3>Anmerkung</h3>
-    <div class="py-2 px-4 mt-0 w-full rounded-lg border-2 border-gray-200">{{ content }}</div>
-    <h3>Zahlungsdaten</h3>
-    <div>
-      <table class="mt-0 w-full rounded-lg border-gray-200 table-fixed">
-        <thead class="border-b-2 border-gray-500">
-          <tr class="text-center bg-gray-200">
-            <th class="px-24">
-              Name
-            </th>
-            <th class="px-24">
-              Bank
-            </th>
-            <th class="px-12">
-              BIC
-            </th>
-            <th class="w-full">
-              IBAN
-            </th>
-          </tr>
-        </thead>
-        <tfoot class="text-black border-t-2 border-primary-500">
-          <tr class="border-0 !bg-gray-100 font-semibold text-center">
-            <td>{{ payment.name }}</td>
-            <td>{{ payment.bank }}</td>
-            <td>{{ payment.bic }}</td>
-            <td>{{ payment.iban }}</td>
-          </tr>
-        </tfoot>
-      </table>
-    </div>
-    <hr class="border-t-2 !mt-0 !mb-2" style="margin-top: 0 !important; margin-bottom: 1.5em !important;" />
-    <div class="grid grid-cols-2 font-semibold">
-      <div class="flex flex-row items-center text-center">
-        <div class="w-full">
-          <p class="my-4">{{ location }}</p>
-          <p class="my-4">{{ date }}</p>
+  <div class="h-screen w-screen leading-tight prose border-2 rounded-md">
+    <div class="flex flex-col">
+      <div class="basis-1/2 flex flex-col flex-nowrap">
+        <div class="basis-1/4">
+          <span><b>1 asdf</b></span>
+        </div>
+        <div class="basis-auto">
+          <span>2 asdf</span>
         </div>
       </div>
-      <div class="p-20 text-center rounded-lg border-2 border-gray-200">Unterschrift</div>
+      <div class="basis-1/2 flex flex-col flex-nowrap">
+        <div class="basis-1/4">
+          <span>3 asdf</span>
+        </div>
+        <div class="basis-auto">
+          <span>4 asdf</span>
+        </div>
+      </div>
     </div>
-  </div>
 </body>
+
 </html>

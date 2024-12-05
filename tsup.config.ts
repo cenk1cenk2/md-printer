@@ -29,13 +29,7 @@ export default defineConfig((options) => ({
   onSuccess: async (): Promise<void> => {
     await Promise.all([
       command('pnpm run manifest', { stdout: process.stdout, stderr: process.stderr }),
-      command('pnpm exec tsconfig-replace-paths', { stdout: process.stdout, stderr: process.stderr }),
-      // eslint-disable-next-line max-len
-      ...(await globby(['**/tailwind.css'], { cwd: join(TEMPLATE_DIRECTORY) }).then((paths) => {
-        console.log('tailwind template builds:', paths)
-
-        return paths.map((path) => command('tailwindcss -c ./tailwind.config.js -i ./tailwind.css -o ./main.css', { cwd: join(TEMPLATE_DIRECTORY, dirname(path)) }))
-      }))
+      command('pnpm exec tsconfig-replace-paths', { stdout: process.stdout, stderr: process.stderr })
     ])
   }
 }))

@@ -1,8 +1,10 @@
 {
   "body_class": [],
   "pdf_options": {
-    "width": "25mm",
-    "height": "38mm",
+    "format": null,
+    "width": "38mm",
+    "height": "25mm",
+    "margin": "0.5mm 0.5mm",
     "printBackground": false
   }
 }

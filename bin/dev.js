@@ -16,7 +16,7 @@ async function main() {
   tsNode.register({ project })
   tsConfigPaths.register({
     baseUrl: dirname(project),
-    paths: await import(project, { assert: { type: 'json' } }).then((json) => {
+    paths: await import(project, { with: { type: 'json' } }).then((json) => {
       return json.default.compilerOptions.paths
     })
   })

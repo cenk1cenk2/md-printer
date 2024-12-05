@@ -5,10 +5,12 @@ import type { PdfConfig } from 'md-to-pdf/dist/lib/config.js'
 import type { PdfOutput } from 'md-to-pdf/dist/lib/generate-output.js'
 import Nunjucks from 'nunjucks'
 import { basename, dirname, extname, join } from 'path'
+import postcss from 'postcss'
+import tailwind from 'tailwindcss'
 
 import type { ShouldRunAfterHook, ShouldRunBeforeHook } from '@cenk1cenk2/oclif-common'
-import { Args, Flags, Command, ConfigService, FileSystemService } from '@cenk1cenk2/oclif-common'
-import { INPUT_FILE_ACCEPTED_TYPES, OUTPUT_FILE_ACCEPTED_TYPES, RequiredTemplateFiles, TEMPLATE_DIRECTORY, TemplateFiles } from '@constants'
+import { Args, Flags, Command, ConfigService, FileSystemService, ParserService, JsonParser, YamlParser } from '@cenk1cenk2/oclif-common'
+import { OUTPUT_FILE_ACCEPTED_TYPES, RequiredTemplateFiles, TEMPLATE_DIRECTORY, TemplateFiles } from '@constants'
 import type { MdPrinterCtx } from '@interfaces'
 
 export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> implements ShouldRunBeforeHook, ShouldRunAfterHook {
@@ -36,7 +38,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
 
   static args = {
     file: Args.string({
-      description: 'Markdown file to be processed.',
+      description: 'File to be processed.',
       required: true
     }),
     output: Args.string({
@@ -58,6 +60,8 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
     this.cs = this.app.get(ConfigService)
     this.fs = this.app.get(FileSystemService)
 
+    await this.app.get(ParserService).register(JsonParser, YamlParser)
+
     this.tasks.options = { silentRendererCondition: true }
   }
 
@@ -67,10 +71,6 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
         task: async(ctx): Promise<void> => {
           const file = join(process.cwd(), this.args.file)
 
-          if (!INPUT_FILE_ACCEPTED_TYPES.includes(extname(file))) {
-            throw new Error(`Input file should be ending with the extension: ${INPUT_FILE_ACCEPTED_TYPES.join(', ')} -> current: ${extname(file)}`)
-          }
-
           if (!this.fs.exists(file)) {
             throw new Error(`File does not exists: ${file}`)
           }
@@ -78,16 +78,35 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
           this.logger.debug('Loading file: %s', file)
 
           ctx.file = file
+          switch (extname(ctx.file)) {
+            case '.md': {
+              const data = graymatter.read(ctx.file)
 
-          ctx.content = await this.fs.read(file)
+              ctx.content = await this.fs.read(file)
+              ctx.content = data.content
 
-          ctx.graymatter = graymatter.read(ctx.file)
+              ctx.metadata = data.data
+
+              break
+            }
+
+            case '.yml': {
+              ctx.content = await this.fs.read(file)
+
+              ctx.metadata = await this.app.get(ParserService).parse(ctx.file, ctx.content)
+
+              break
+            }
+
+            default:
+              throw new Error('File type is not accepted.')
+          }
         }
       },
 
       {
         task: async(ctx): Promise<void> => {
-          const template = ctx.graymatter?.data?.template ?? this.flags.template
+          const template = ctx.metadata?.template ?? this.flags.template
 
           this.logger.debug('Loading template: %s', template)
 
@@ -106,6 +125,8 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
           const paths: Record<TemplateFiles, string> = {
             [TemplateFiles.SETTINGS]: join(ctx.templates, TemplateFiles.SETTINGS),
             [TemplateFiles.CSS]: join(ctx.templates, TemplateFiles.CSS),
+            [TemplateFiles.TAILWIND_CSS]: join(ctx.templates, TemplateFiles.TAILWIND_CSS),
+            [TemplateFiles.TAILWIND_CONFIG]: join(ctx.templates, TemplateFiles.TAILWIND_CONFIG),
             [TemplateFiles.HEADER]: join(ctx.templates, TemplateFiles.HEADER),
             [TemplateFiles.FOOTER]: join(ctx.templates, TemplateFiles.FOOTER),
             [TemplateFiles.TEMPLATE]: join(ctx.templates, TemplateFiles.TEMPLATE)
@@ -114,20 +135,16 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
           ctx.options = await this.cs.extend<PdfConfig>([
             paths[TemplateFiles.SETTINGS],
             {
-              pdf_options: {},
-              dest: this.args?.output ?? ctx.graymatter.data?.dest ?? `${basename(this.args.file, extname(this.args.file))}.pdf`,
-              document_title: ctx.graymatter.data?.document_title ?? this.flags.title ?? this.args.file,
+              dest: this.args?.output ?? ctx.metadata?.dest ?? `${basename(this.args.file, extname(this.args.file))}.pdf`,
+              document_title: ctx.metadata?.document_title ?? this.flags.title ?? this.args.file
               // https://github.com/simonhaenisch/md-to-pdf/issues/247
-              launch_options: {
-                headless: true
-              }
+              // launch_options: {
+              //   headless: true
+              // }
             }
           ])
 
-          if (this.fs.exists(paths[TemplateFiles.CSS])) {
-            this.logger.debug('CSS exists for template.')
-            ctx.options.css = await this.fs.read(paths[TemplateFiles.CSS])
-          }
+          this.logger.debug('Options: %o', ctx.options)
 
           if (this.fs.exists(paths[TemplateFiles.HEADER])) {
             this.logger.debug('Header exists for template.')
@@ -146,9 +163,25 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
 
             ctx.template = await this.fs.read(paths[TemplateFiles.TEMPLATE])
 
-            ctx.content = ctx.graymatter.content
+            this.logger.debug('Metadata: %o', ctx.metadata)
+          }
 
-            this.logger.debug('Frontmatter: %o', ctx.graymatter.data)
+          if (this.fs.exists(paths[TemplateFiles.CSS])) {
+            this.logger.debug('CSS exists for template.')
+            ctx.options.css = await this.fs.read(paths[TemplateFiles.CSS])
+          }
+
+          if (this.fs.exists(paths[TemplateFiles.TAILWIND_CSS])) {
+            this.logger.debug('Tailwind CSS exists for template.')
+
+            ctx.options.css = await postcss([
+              tailwind({
+                ...(await import(paths[TemplateFiles.TAILWIND_CONFIG]).then((m) => m.default)),
+                content: [ { raw: ctx.template ?? ctx.content, extension: 'html' } ]
+              })
+            ])
+              .process(await this.fs.read(paths[TemplateFiles.TAILWIND_CSS]), { from: undefined })
+              .then((result) => result.css)
           }
         }
       },
@@ -157,9 +190,9 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
         task: async(ctx): Promise<void> => {
           if (this.flags.dev) {
             ctx.options.devtools = true
-          }
 
-          return this.runMd2Pdf(ctx)
+            this.logger.info('Running in dev mode.')
+          }
         }
       }
     ])
@@ -169,13 +202,17 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
     if (this.flags.watch) {
       this.logger.info('Running in watch mode.')
 
-      watch([this.args.file, join(ctx.templates, '**/*')]).on('change', async() => {
+      watch([TEMPLATE_DIRECTORY, this.args.file, join(ctx.templates, '**/*')]).on('change', async() => {
         await this.run()
         await this.runTasks()
 
         this.logger.info('Waiting for the next change.')
+
+        return this.runMd2Pdf(ctx)
       })
     }
+
+    return this.runMd2Pdf(ctx)
   }
 
   private async runMd2Pdf(ctx: MdPrinterCtx): Promise<void> {
@@ -183,7 +220,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
 
     if (ctx.template) {
       this.logger.debug('Rendering as template.')
-      pdf = await mdToPdf({ content: this.nunjucks.renderString(ctx.template, { ...(ctx.graymatter?.data ?? {}), content: ctx.content }) }, ctx.options)
+      pdf = await mdToPdf({ content: this.nunjucks.renderString(ctx.template, { ...(ctx.metadata ?? {}), content: ctx.content }) }, ctx.options)
     } else {
       this.logger.debug('Rendering as plain file.')
       pdf = await mdToPdf({ content: ctx.content }, ctx.options)
