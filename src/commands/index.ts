@@ -54,17 +54,17 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
   private cs: ConfigService
   private fs: FileSystemService
 
-  public async shouldRunBefore (): Promise<void> {
+  public async shouldRunBefore(): Promise<void> {
     this.cs = this.app.get(ConfigService)
     this.fs = this.app.get(FileSystemService)
 
     this.tasks.options = { silentRendererCondition: true }
   }
 
-  public async run (): Promise<void> {
+  public async run(): Promise<void> {
     this.tasks.add([
       {
-        task: async (ctx): Promise<void> => {
+        task: async(ctx): Promise<void> => {
           const file = join(process.cwd(), this.args.file)
 
           if (!INPUT_FILE_ACCEPTED_TYPES.includes(extname(file))) {
@@ -86,7 +86,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
       },
 
       {
-        task: async (ctx): Promise<void> => {
+        task: async(ctx): Promise<void> => {
           const template = ctx.graymatter?.data?.template ?? this.flags.template
 
           this.logger.debug('Loading template: %s', template)
@@ -94,7 +94,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
           ctx.templates = new RegExp(/\.\.?\//).test(template) ? join(process.cwd(), template) : join(this.config.root, TEMPLATE_DIRECTORY, template)
 
           await Promise.all(
-            RequiredTemplateFiles.map(async (file) => {
+            RequiredTemplateFiles.map(async(file) => {
               const current = join(ctx.templates, file)
 
               if (!this.fs.exists(current)) {
@@ -154,7 +154,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
       },
 
       {
-        task: async (ctx): Promise<void> => {
+        task: async(ctx): Promise<void> => {
           if (this.flags.dev) {
             ctx.options.devtools = true
           }
@@ -165,11 +165,11 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
     ])
   }
 
-  public async shouldRunAfter (ctx: MdPrinterCtx): Promise<void> {
+  public async shouldRunAfter(ctx: MdPrinterCtx): Promise<void> {
     if (this.flags.watch) {
       this.logger.info('Running in watch mode.')
 
-      watch([ this.args.file, join(ctx.templates, '**/*') ]).on('change', async () => {
+      watch([this.args.file, join(ctx.templates, '**/*')]).on('change', async() => {
         await this.run()
         await this.runTasks()
 
@@ -178,12 +178,12 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
     }
   }
 
-  private async runMd2Pdf (ctx: MdPrinterCtx): Promise<void> {
+  private async runMd2Pdf(ctx: MdPrinterCtx): Promise<void> {
     let pdf: PdfOutput
 
     if (ctx.template) {
       this.logger.debug('Rendering as template.')
-      pdf = await mdToPdf({ content: this.nunjucks.renderString(ctx.template, { ...ctx.graymatter?.data ?? {}, content: ctx.content }) }, ctx.options)
+      pdf = await mdToPdf({ content: this.nunjucks.renderString(ctx.template, { ...(ctx.graymatter?.data ?? {}), content: ctx.content }) }, ctx.options)
     } else {
       this.logger.debug('Rendering as plain file.')
       pdf = await mdToPdf({ content: ctx.content }, ctx.options)
