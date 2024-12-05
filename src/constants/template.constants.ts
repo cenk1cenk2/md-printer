@@ -6,6 +6,6 @@ export enum TemplateFiles {
   SETTINGS = 'settings.json'
 }
 
-export const RequiredTemplateFiles = [ TemplateFiles.SETTINGS ]
+export const RequiredTemplateFiles = [TemplateFiles.SETTINGS]
 
 export const TEMPLATE_DIRECTORY = 'templates'

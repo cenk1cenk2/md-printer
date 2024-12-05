@@ -1,0 +1,13 @@
+html {
+  font-size: 12px;
+}
+
+.page-break {
+  page-break-after: always;
+}
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@400);

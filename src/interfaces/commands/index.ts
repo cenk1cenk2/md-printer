@@ -1,1 +1,1 @@
-export * from './run.interface.js'
+export type * from './run.interface.js'
