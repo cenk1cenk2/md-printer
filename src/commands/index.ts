@@ -6,6 +6,7 @@ import type { PdfOutput } from 'md-to-pdf/dist/lib/generate-output.js'
 import Nunjucks from 'nunjucks'
 import { basename, dirname, extname, join } from 'path'
 import postcss from 'postcss'
+import showdown from 'showdown'
 import tailwind from 'tailwindcss'
 
 import type { ShouldRunAfterHook, ShouldRunBeforeHook } from '@cenk1cenk2/oclif-common'
@@ -62,6 +63,9 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
 
     await this.app.get(ParserService).register(JsonParser, YamlParser)
 
+    this.nunjucks.addFilter('markdown_to_html', (markdown: string) => {
+      return new showdown.Converter().makeHtml(markdown)
+    })
     this.tasks.options = { silentRendererCondition: true }
   }
 
@@ -172,12 +176,12 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
           }
 
           if (this.fs.exists(paths[TemplateFiles.TAILWIND_CSS])) {
-            this.logger.debug('Tailwind CSS exists for template.')
+            this.logger.debug('Tailwind CSS exists for template, generating configuration from: %s -> %s', paths[TemplateFiles.TAILWIND_CONFIG], paths[TemplateFiles.TAILWIND_CSS])
 
             ctx.options.css = await postcss([
               tailwind({
                 ...(await import(paths[TemplateFiles.TAILWIND_CONFIG]).then((m) => m.default)),
-                content: [ { raw: ctx.template ?? ctx.content, extension: 'html' } ]
+                content: [ { raw: ctx.template, extension: 'html' } ]
               })
             ])
               .process(await this.fs.read(paths[TemplateFiles.TAILWIND_CSS]), { from: undefined })

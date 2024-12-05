@@ -1,2 +1,7 @@
 dest: ./test/test.pdf
 template: label-25x38-cable
+top: Ethernet cable 1m whatever
+bottom: |
+  from: asdf
+
+  to: qwe
