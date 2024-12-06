@@ -70,10 +70,10 @@
     "cenk1cenk2"
   ],
   "dependencies": {
-    "@cenk1cenk2/oclif-common": "^6.3.15",
+    "@cenk1cenk2/oclif-common": "^6.3.28",
     "@listr2/manager": "^2.0.13",
     "@oclif/core": "^4.0.34",
-    "@oclif/plugin-help": "^6.2.0",
+    "@oclif/plugin-help": "^6.2.18",
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
     "chokidar": "^4.0.1",
