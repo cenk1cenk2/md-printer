@@ -89,7 +89,7 @@
   "devDependencies": {
     "@cenk1cenk2/cz-cc": "^1.7.12",
     "@cenk1cenk2/eslint-config": "^3.1.13",
-    "@swc/core": "^1.5.25",
+    "@swc/core": "^1.10.0",
     "@types/config": "^3.3.5",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.10.1",
@@ -100,14 +100,14 @@
     "globby": "^14.0.2",
     "lint-staged": "^15.2.10",
     "oclif": "^4.16.0",
-    "prettier": "^3.3.1",
+    "prettier": "^3.4.2",
     "simple-git-hooks": "^2.11.1",
     "source-map-support": "^0.5.21",
     "theme-colors": "^0.1.0",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "tsconfig-replace-paths": "^0.0.14",
-    "tsup": "^8.1.0",
+    "tsup": "^8.3.5",
     "typescript": "^5.7.2"
   },
   "config": {
