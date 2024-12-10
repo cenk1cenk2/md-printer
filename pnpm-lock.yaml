@@ -61,7 +61,7 @@ importers:
         specifier: ^3.1.13
         version: 3.1.13(eslint@9.16.0(jiti@1.21.6))(typescript@5.7.2)
       '@swc/core':
-        specifier: ^1.10.0
+        specifier: ^1.10.1
         version: 1.10.1
       '@types/config':
         specifier: ^3.3.5
