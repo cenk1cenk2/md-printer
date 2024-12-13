@@ -1,3 +1,18 @@
+# [2.3.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.98...v2.3.0) (2024-12-13)
+
+
+### Bug Fixes
+
+* add a way to generate labels ([e3a067a](https://gitlab.kilic.dev/utils/md-printer/commit/e3a067a4c9c0c7129ed70b9c0bf30862e1ab6673))
+* **deps:** update all minor dependency updates ([f22c261](https://gitlab.kilic.dev/utils/md-printer/commit/f22c26131a8196a4809f01ddd03b7245a1eb0d54))
+* **deps:** update all minor dependency updates ([4d6a259](https://gitlab.kilic.dev/utils/md-printer/commit/4d6a259432f2de999b0d06672b68ae120736845d))
+
+
+### Features
+
+* generate tailwind stuff on the go instead ([f09b724](https://gitlab.kilic.dev/utils/md-printer/commit/f09b7242430bfebc6d7adbc0b208577b1e2ebc2a))
+* label printing draft ([24bb80c](https://gitlab.kilic.dev/utils/md-printer/commit/24bb80c4f596e87fa6fb91d9376bce99b53e89ba))
+
 ## [2.2.98](https://gitlab.kilic.dev/utils/md-printer/compare/v2.2.97...v2.2.98) (2024-11-07)
 
 
