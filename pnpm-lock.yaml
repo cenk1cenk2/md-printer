@@ -58,10 +58,10 @@ importers:
         specifier: ^1.7.12
         version: 1.7.12(@types/node@22.10.2)(typescript@5.7.2)
       '@cenk1cenk2/eslint-config':
-        specifier: ^3.1.13
-        version: 3.1.13(eslint@9.16.0(jiti@1.21.6))(typescript@5.7.2)
+        specifier: ^3.1.14
+        version: 3.1.14(eslint@9.16.0(jiti@1.21.6))(typescript@5.7.2)
       '@swc/core':
-        specifier: ^1.10.0
+        specifier: ^1.10.1
         version: 1.10.1
       '@types/config':
         specifier: ^3.3.5
@@ -306,8 +306,8 @@ packages:
     resolution: {integrity: sha512-X+xrAstaoz/zmnsVaRrQCp3zuoE0BukHUPdsl0PbI1a/FnN+494zw8X2pD7V2TAJyfnytzZdGN5HnrSqjIrL2A==}
     engines: {node: '>= 16'}
 
-  '@cenk1cenk2/eslint-config@3.1.13':
-    resolution: {integrity: sha512-Tq02O7LEVW0AgNXVGmiV5hqbCbEBuYAhaCAC3NfWffach+KDLjAfRPlBBY7768C8ifXLYOfD+wehKBfGPsr0DA==}
+  '@cenk1cenk2/eslint-config@3.1.14':
+    resolution: {integrity: sha512-k0CmqkYNBAGhKOaWuMWwxC6sSgqBiFwAV7Z8m5jhTbT+BiiliPfMDO+os+Lbl8cwzvLLsIb06dx4J2GHLQv6Jg==}
     peerDependencies:
       '@vue/eslint-config-typescript': '>= 14.1.1'
       eslint: '>= 9'
@@ -2355,6 +2355,10 @@ packages:
 
   globals@14.0.0:
     resolution: {integrity: sha512-oahGvuMGQlPw/ivIYBjVSrWAfWLBeku5tpPE2fOPLi+WHffIWbuh2tCjhyQhTBPMf5E9jDEH4FOmTYgYwbKwtQ==}
+    engines: {node: '>=18'}
+
+  globals@15.13.0:
+    resolution: {integrity: sha512-49TewVEz0UxZjr1WYYsWpPrhyC/B/pA8Bq0fUmet2n+eR7yn0IvNzNaoBwnK6mdkzcN+se7Ez9zUgULTz2QH4g==}
     engines: {node: '>=18'}
 
   globalthis@1.0.4:
@@ -4715,7 +4719,7 @@ snapshots:
       - '@types/node'
       - typescript
 
-  '@cenk1cenk2/eslint-config@3.1.13(eslint@9.16.0(jiti@1.21.6))(typescript@5.7.2)':
+  '@cenk1cenk2/eslint-config@3.1.14(eslint@9.16.0(jiti@1.21.6))(typescript@5.7.2)':
     dependencies:
       '@eslint/js': 9.16.0
       '@stylistic/eslint-plugin': 2.12.0(eslint@9.16.0(jiti@1.21.6))(typescript@5.7.2)
@@ -4723,6 +4727,7 @@ snapshots:
       '@typescript-eslint/parser': 8.18.0(eslint@9.16.0(jiti@1.21.6))(typescript@5.7.2)
       eslint: 9.16.0(jiti@1.21.6)
       eslint-plugin-import: 2.31.0(@typescript-eslint/parser@8.18.0(eslint@9.16.0(jiti@1.21.6))(typescript@5.7.2))(eslint@9.16.0(jiti@1.21.6))
+      globals: 15.13.0
       load-tsconfig: 0.2.5
       typescript-eslint: 8.18.0(eslint@9.16.0(jiti@1.21.6))(typescript@5.7.2)
     transitivePeerDependencies:
@@ -7038,6 +7043,8 @@ snapshots:
       which: 1.3.1
 
   globals@14.0.0: {}
+
+  globals@15.13.0: {}
 
   globalthis@1.0.4:
     dependencies:
