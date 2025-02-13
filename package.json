@@ -92,7 +92,7 @@
     "@swc/core": "^1.10.4",
     "@types/config": "^3.3.5",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^22.13.2",
+    "@types/node": "^22.13.4",
     "@types/nunjucks": "^3.2.6",
     "@types/showdown": "^2.0.6",
     "eslint": "^9.17.0",
