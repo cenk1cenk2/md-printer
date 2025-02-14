@@ -58,10 +58,10 @@ importers:
         specifier: ^1.8.0
         version: 1.8.0(@types/node@22.13.4)(typescript@5.7.3)
       '@cenk1cenk2/eslint-config':
-        specifier: ^3.1.18
-        version: 3.1.26(eslint@9.20.1(jiti@2.4.2))(typescript@5.7.3)
+        specifier: ^3.1.27
+        version: 3.1.27(eslint@9.20.1(jiti@2.4.2))(typescript@5.7.3)
       '@swc/core':
-        specifier: ^1.10.4
+        specifier: ^1.10.16
         version: 1.10.16
       '@types/config':
         specifier: ^3.3.5
@@ -79,7 +79,7 @@ importers:
         specifier: ^2.0.6
         version: 2.0.6
       eslint:
-        specifier: ^9.17.0
+        specifier: ^9.20.1
         version: 9.20.1(jiti@2.4.2)
       execa:
         specifier: ^9.5.2
@@ -94,7 +94,7 @@ importers:
         specifier: ^4.17.27
         version: 4.17.27(@types/node@22.13.4)
       prettier:
-        specifier: ^3.4.2
+        specifier: ^3.5.1
         version: 3.5.1
       simple-git-hooks:
         specifier: ^2.11.1
@@ -115,10 +115,10 @@ importers:
         specifier: ^0.0.14
         version: 0.0.14
       tsup:
-        specifier: ^8.3.5
+        specifier: ^8.3.6
         version: 8.3.6(@swc/core@1.10.16)(jiti@2.4.2)(postcss@8.5.2)(typescript@5.7.3)(yaml@2.7.0)
       typescript:
-        specifier: ^5.7.2
+        specifier: ^5.7.3
         version: 5.7.3
 
 packages:
@@ -294,8 +294,8 @@ packages:
     resolution: {integrity: sha512-BNCK1mWSoKCsiHIqx251KE+rrCOr36y+d6pEOCayNB690g9Tk7L/eJhfAdZg1dI0KNSfBA/dzS7bcVgo+EEP+A==}
     engines: {node: '>= 16'}
 
-  '@cenk1cenk2/eslint-config@3.1.26':
-    resolution: {integrity: sha512-GcEiqPCh2LhP7QJZj6sOFuJmtNeXlgZ+tIdJwzH3Ac34OUXhPRWzE8qD3ISzKEzjXHc0XCr2cgmfz4GYULcvVw==}
+  '@cenk1cenk2/eslint-config@3.1.27':
+    resolution: {integrity: sha512-gmEgmkNxlyBANgh3vrvWxWWLiOOUPVV4QdTp2RPGqLdHVZFHkw5X4si/hbViMJ0fXviDuTI7g8OHghSocKRf9w==}
     peerDependencies:
       '@vue/eslint-config-typescript': '>= 14.1.1'
       eslint: '>= 9'
@@ -4762,7 +4762,7 @@ snapshots:
       - '@types/node'
       - typescript
 
-  '@cenk1cenk2/eslint-config@3.1.26(eslint@9.20.1(jiti@2.4.2))(typescript@5.7.3)':
+  '@cenk1cenk2/eslint-config@3.1.27(eslint@9.20.1(jiti@2.4.2))(typescript@5.7.3)':
     dependencies:
       '@eslint/js': 9.20.0
       '@stylistic/eslint-plugin': 2.13.0(eslint@9.20.1(jiti@2.4.2))(typescript@5.7.3)
