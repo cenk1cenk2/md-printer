@@ -98,7 +98,7 @@
     "eslint": "^9.20.1",
     "execa": "^9.5.2",
     "globby": "^14.1.0",
-    "lint-staged": "^15.4.3",
+    "lint-staged": "^15.5.0",
     "oclif": "^4.17.34",
     "prettier": "^3.5.1",
     "simple-git-hooks": "^2.11.1",
