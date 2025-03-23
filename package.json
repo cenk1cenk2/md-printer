@@ -99,7 +99,7 @@
     "execa": "^9.5.2",
     "globby": "^14.1.0",
     "lint-staged": "^15.5.0",
-    "oclif": "^4.17.39",
+    "oclif": "^4.17.40",
     "prettier": "^3.5.1",
     "simple-git-hooks": "^2.12.1",
     "source-map-support": "^0.5.21",
