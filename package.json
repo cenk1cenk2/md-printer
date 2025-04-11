@@ -88,27 +88,27 @@
   },
   "devDependencies": {
     "@cenk1cenk2/cz-cc": "^1.8.0",
-    "@cenk1cenk2/eslint-config": "^3.1.27",
-    "@swc/core": "^1.10.16",
+    "@cenk1cenk2/eslint-config": "^3.1.33",
+    "@swc/core": "^1.11.20",
     "@types/config": "^3.3.5",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^22.14.0",
     "@types/nunjucks": "^3.2.6",
     "@types/showdown": "^2.0.6",
-    "eslint": "^9.20.1",
+    "eslint": "^9.24.0",
     "execa": "^9.5.2",
     "globby": "^14.1.0",
     "lint-staged": "^15.5.1",
     "oclif": "^4.17.43",
-    "prettier": "^3.5.1",
+    "prettier": "^3.5.3",
     "simple-git-hooks": "^2.12.1",
     "source-map-support": "^0.5.21",
     "theme-colors": "^0.1.0",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
     "tsconfig-replace-paths": "^0.0.14",
-    "tsup": "^8.3.6",
-    "typescript": "^5.7.3"
+    "tsup": "^8.4.0",
+    "typescript": "^5.8.3"
   },
   "config": {
     "commitizen": {
