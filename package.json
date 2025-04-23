@@ -101,7 +101,7 @@
     "lint-staged": "^15.5.1",
     "oclif": "^4.17.46",
     "prettier": "^3.5.3",
-    "simple-git-hooks": "^2.12.1",
+    "simple-git-hooks": "^2.13.0",
     "source-map-support": "^0.5.21",
     "theme-colors": "^0.1.0",
     "ts-node": "^10.9.2",
