@@ -59,7 +59,7 @@ importers:
         version: 1.8.1(@types/node@22.15.3)(typescript@5.8.3)
       '@cenk1cenk2/eslint-config':
         specifier: ^3.1.38
-        version: 3.1.38(eslint@9.26.0(jiti@2.4.2))(typescript@5.8.3)
+        version: 3.1.39(eslint@9.26.0(jiti@2.4.2))(typescript@5.8.3)
       '@swc/core':
         specifier: ^1.11.24
         version: 1.11.24
@@ -294,8 +294,8 @@ packages:
     resolution: {integrity: sha512-OXigQ4AtdZ2+WN3Ogdnwq4pmv68cQWFJujXI1fMJ1UdRPI0G978EOisAO/zFAo0DwMbFOyRqKUj+A4K5dcnbMA==}
     engines: {node: '>= 16'}
 
-  '@cenk1cenk2/eslint-config@3.1.38':
-    resolution: {integrity: sha512-Hr5FrDPdE2pxkjCyBdwNi0sOJXUOUxnjZiJekAbm9CiD7ZWLaExk+sE3jBQFoaQcngRd7AZAqV/cMSWDkJMGTQ==}
+  '@cenk1cenk2/eslint-config@3.1.39':
+    resolution: {integrity: sha512-K9UQ+b790y799RUEvKWVGFoiabEKu8nTGowMI2y2CZDwq0vTt39kWsNtY+hxEXsysR0eBPnq/WPbVJBH+2fbUQ==}
     peerDependencies:
       '@vue/eslint-config-typescript': '>= 14.1.1'
       eslint: '>= 9'
@@ -819,12 +819,12 @@ packages:
     resolution: {integrity: sha512-eFLP2yjiK+xMRGcv9k9jOWV08HB+/Cgg1ND91zS4Uwgp1krMoL39Is+hIqnZOKkmiEMtiv8k5EDqCVv+DTRywg==}
     engines: {node: '>=18.0.0'}
 
-  '@oclif/plugin-not-found@3.2.50':
-    resolution: {integrity: sha512-ZjGns73P00bYWkan6BWtTyjWWWHPq0d+ehMlgPJU25DDpK6FIv0OvHloYjfK/Zmo973puKxru7UQLdjCcNUdTA==}
+  '@oclif/plugin-not-found@3.2.51':
+    resolution: {integrity: sha512-hnYH4GS7lYD3Z59LO9RZAIXQPmuW+rNnTjCheSwAzWyoUH1M2Va6dUpamfnMf/GryrFvn1srBDdgKHr5KRf+Qw==}
     engines: {node: '>=18.0.0'}
 
-  '@oclif/plugin-warn-if-update-available@3.1.38':
-    resolution: {integrity: sha512-lwYtVXdQaBJV94DglPu140Bc6NmmysHhX5PZtdxeNcUG2BgSX/Sre7oCzMEgmuhe4Lu2jDviMxTX81a8wv6v1w==}
+  '@oclif/plugin-warn-if-update-available@3.1.39':
+    resolution: {integrity: sha512-2KF+pD9iR8keMae6Le2+GHckUhRBRPhgpQeR7RYtlg68AdQyFm9F2rfMqAdV2f6Ipt+TfcEHODeT2jgUiAA5UA==}
     engines: {node: '>=18.0.0'}
 
   '@pkgjs/parseargs@0.11.0':
@@ -4985,7 +4985,7 @@ snapshots:
       - '@types/node'
       - typescript
 
-  '@cenk1cenk2/eslint-config@3.1.38(eslint@9.26.0(jiti@2.4.2))(typescript@5.8.3)':
+  '@cenk1cenk2/eslint-config@3.1.39(eslint@9.26.0(jiti@2.4.2))(typescript@5.8.3)':
     dependencies:
       '@eslint/js': 9.26.0
       '@stylistic/eslint-plugin': 2.13.0(eslint@9.26.0(jiti@2.4.2))(typescript@5.8.3)
@@ -5497,7 +5497,7 @@ snapshots:
     dependencies:
       '@oclif/core': 4.3.0
 
-  '@oclif/plugin-not-found@3.2.50(@types/node@22.15.3)':
+  '@oclif/plugin-not-found@3.2.51(@types/node@22.15.3)':
     dependencies:
       '@inquirer/prompts': 7.5.0(@types/node@22.15.3)
       '@oclif/core': 4.3.0
@@ -5506,7 +5506,7 @@ snapshots:
     transitivePeerDependencies:
       - '@types/node'
 
-  '@oclif/plugin-warn-if-update-available@3.1.38':
+  '@oclif/plugin-warn-if-update-available@3.1.39':
     dependencies:
       '@oclif/core': 4.3.0
       ansis: 3.17.0
@@ -8306,8 +8306,8 @@ snapshots:
       '@inquirer/select': 2.5.0
       '@oclif/core': 4.3.0
       '@oclif/plugin-help': 6.2.28
-      '@oclif/plugin-not-found': 3.2.50(@types/node@22.15.3)
-      '@oclif/plugin-warn-if-update-available': 3.1.38
+      '@oclif/plugin-not-found': 3.2.51(@types/node@22.15.3)
+      '@oclif/plugin-warn-if-update-available': 3.1.39
       async-retry: 1.3.3
       chalk: 4.1.2
       change-case: 4.1.2
