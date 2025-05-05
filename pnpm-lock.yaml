@@ -70,7 +70,7 @@ importers:
         specifier: ^11.0.4
         version: 11.0.4
       '@types/node':
-        specifier: ^22.15.4
+        specifier: ^22.15.5
         version: 22.15.5
       '@types/nunjucks':
         specifier: ^3.2.6
