@@ -45,7 +45,7 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(chokidar@4.0.3)
       postcss:
-        specifier: ^8.5.3
+        specifier: ^8.5.4
         version: 8.5.4
       showdown:
         specifier: ^2.1.0
