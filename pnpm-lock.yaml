@@ -290,6 +290,59 @@ packages:
     resolution: {integrity: sha512-D2hP9eA+Sqx1kBZgzxZh0y1trbuU+JoDkiEwqhQ36nodYqJwyEIhPSdMNd7lOm/4io72luTPWH20Yda0xOuUow==}
     engines: {node: '>=6.9.0'}
 
+  '@biomejs/biome@2.0.6':
+    resolution: {integrity: sha512-RRP+9cdh5qwe2t0gORwXaa27oTOiQRQvrFf49x2PA1tnpsyU7FIHX4ZOFMtBC4QNtyWsN7Dqkf5EDbg4X+9iqA==}
+    engines: {node: '>=14.21.3'}
+    hasBin: true
+
+  '@biomejs/cli-darwin-arm64@2.0.6':
+    resolution: {integrity: sha512-AzdiNNjNzsE6LfqWyBvcL29uWoIuZUkndu+wwlXW13EKcBHbbKjNQEZIJKYDc6IL+p7bmWGx3v9ZtcRyIoIz5A==}
+    engines: {node: '>=14.21.3'}
+    cpu: [arm64]
+    os: [darwin]
+
+  '@biomejs/cli-darwin-x64@2.0.6':
+    resolution: {integrity: sha512-wJjjP4E7bO4WJmiQaLnsdXMa516dbtC6542qeRkyJg0MqMXP0fvs4gdsHhZ7p9XWTAmGIjZHFKXdsjBvKGIJJQ==}
+    engines: {node: '>=14.21.3'}
+    cpu: [x64]
+    os: [darwin]
+
+  '@biomejs/cli-linux-arm64-musl@2.0.6':
+    resolution: {integrity: sha512-CVPEMlin3bW49sBqLBg2x016Pws7eUXA27XYDFlEtponD0luYjg2zQaMJ2nOqlkKG9fqzzkamdYxHdMDc2gZFw==}
+    engines: {node: '>=14.21.3'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@biomejs/cli-linux-arm64@2.0.6':
+    resolution: {integrity: sha512-ZSVf6TYo5rNMUHIW1tww+rs/krol7U5A1Is/yzWyHVZguuB0lBnIodqyFuwCNqG9aJGyk7xIMS8HG0qGUPz0SA==}
+    engines: {node: '>=14.21.3'}
+    cpu: [arm64]
+    os: [linux]
+
+  '@biomejs/cli-linux-x64-musl@2.0.6':
+    resolution: {integrity: sha512-mKHE/e954hR/hSnAcJSjkf4xGqZc/53Kh39HVW1EgO5iFi0JutTN07TSjEMg616julRtfSNJi0KNyxvc30Y4rQ==}
+    engines: {node: '>=14.21.3'}
+    cpu: [x64]
+    os: [linux]
+
+  '@biomejs/cli-linux-x64@2.0.6':
+    resolution: {integrity: sha512-geM1MkHTV1Kh2Cs/Xzot9BOF3WBacihw6bkEmxkz4nSga8B9/hWy5BDiOG3gHDGIBa8WxT0nzsJs2f/hPqQIQw==}
+    engines: {node: '>=14.21.3'}
+    cpu: [x64]
+    os: [linux]
+
+  '@biomejs/cli-win32-arm64@2.0.6':
+    resolution: {integrity: sha512-290V4oSFoKaprKE1zkYVsDfAdn0An5DowZ+GIABgjoq1ndhvNxkJcpxPsiYtT7slbVe3xmlT0ncdfOsN7KruzA==}
+    engines: {node: '>=14.21.3'}
+    cpu: [arm64]
+    os: [win32]
+
+  '@biomejs/cli-win32-x64@2.0.6':
+    resolution: {integrity: sha512-bfM1Bce0d69Ao7pjTjUS+AWSZ02+5UHdiAP85Th8e9yV5xzw6JrHXbL5YWlcEKQ84FIZMdDc7ncuti1wd2sdbw==}
+    engines: {node: '>=14.21.3'}
+    cpu: [x64]
+    os: [win32]
+
   '@cenk1cenk2/cz-cc@1.8.1':
     resolution: {integrity: sha512-OXigQ4AtdZ2+WN3Ogdnwq4pmv68cQWFJujXI1fMJ1UdRPI0G978EOisAO/zFAo0DwMbFOyRqKUj+A4K5dcnbMA==}
     engines: {node: '>= 16'}
@@ -3533,12 +3586,12 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  puppeteer-core@24.11.0:
-    resolution: {integrity: sha512-ncLty0wRjCX67UxzXemmD1mOxb6y1Xzrx1nym8SAQ6cYrcypOVf77CfcZru6P+EiMA9gNDeQNscowKSE9xvhMw==}
+  puppeteer-core@24.11.1:
+    resolution: {integrity: sha512-I0Gv3jWBRY9E3NTBElp7br7Gaid5RbFTxCRRMHym1kCf0ompO0Pel4REGsGDwMWkg3uwFzIH7t7qXs3T4DKRWA==}
     engines: {node: '>=18'}
 
-  puppeteer@24.11.0:
-    resolution: {integrity: sha512-7XFpexeYIMen/pfGiDjUpIV7BB9EuVQBtXeQ0cUOmVJTkAuQD3oPHVU7iYeA/mrIJyk79sfOmT20a6SEDwGTLQ==}
+  puppeteer@24.11.1:
+    resolution: {integrity: sha512-QbccB/LgxX4tSZRzr9KQ1Jajdvu3n35Dlf/Otjz0QfR+6mDoZdMWLcWF94uQoC3OJerCyYm5hlU2Ru4nBoId2A==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -4000,8 +4053,8 @@ packages:
     resolution: {integrity: sha512-65P7iz6X5yEr1cwcgvQxbbIw7Uk3gOy5dIdtZ4rDveLqhrdJP+Li/Hx6tyK0NEb+2GCyneCMJiGqrADCSNk8sQ==}
     engines: {node: '>=8.0'}
 
-  token-types@6.0.0:
-    resolution: {integrity: sha512-lbDrTLVsHhOMljPscd0yitpozq7Ga2M5Cvez5AjGg8GASBjtt6iERCAJ93yommPmz62fb45oFIXHEZ3u9bfJEA==}
+  token-types@6.0.1:
+    resolution: {integrity: sha512-jK12SoPQ9D33HTOIQaOhc5tN4Vr+hlbiP/GSPviCyo8/7xgPG5j4AYvl7Zd4k8RhL55eT/IUhBGl7fL06w3mrQ==}
     engines: {node: '>=14.16'}
 
   tr46@0.0.3:
@@ -4261,8 +4314,8 @@ packages:
   wrappy@1.0.2:
     resolution: {integrity: sha512-l4Sp/DRseor9wL6EvV2+TuQn63dMkPjZ/sp9XkghTEbV9KlPS1xUsZ3u7/IQO4wxtcFB4bgpQPRcR3QCvezPcQ==}
 
-  ws@8.18.2:
-    resolution: {integrity: sha512-DMricUmwGZUVr++AEAe2uiVM7UoO9MAVZMDu05UQOaUII0lp+zOzLLU4Xqh/JvTqklB1T4uELaaPBKyjE1r4fQ==}
+  ws@8.18.3:
+    resolution: {integrity: sha512-PEIGCY5tSlUt50cqyMXfCzX+oOPqN0vuGqWzbcJ2xvnkzkq46oOpz7dQaTDBdfICb4N14+GARUDw2XV2N4tvzg==}
     engines: {node: '>=10.0.0'}
     peerDependencies:
       bufferutil: ^4.0.1
@@ -4835,6 +4888,41 @@ snapshots:
       picocolors: 1.1.1
 
   '@babel/helper-validator-identifier@7.27.1': {}
+
+  '@biomejs/biome@2.0.6':
+    optionalDependencies:
+      '@biomejs/cli-darwin-arm64': 2.0.6
+      '@biomejs/cli-darwin-x64': 2.0.6
+      '@biomejs/cli-linux-arm64': 2.0.6
+      '@biomejs/cli-linux-arm64-musl': 2.0.6
+      '@biomejs/cli-linux-x64': 2.0.6
+      '@biomejs/cli-linux-x64-musl': 2.0.6
+      '@biomejs/cli-win32-arm64': 2.0.6
+      '@biomejs/cli-win32-x64': 2.0.6
+
+  '@biomejs/cli-darwin-arm64@2.0.6':
+    optional: true
+
+  '@biomejs/cli-darwin-x64@2.0.6':
+    optional: true
+
+  '@biomejs/cli-linux-arm64-musl@2.0.6':
+    optional: true
+
+  '@biomejs/cli-linux-arm64@2.0.6':
+    optional: true
+
+  '@biomejs/cli-linux-x64-musl@2.0.6':
+    optional: true
+
+  '@biomejs/cli-linux-x64@2.0.6':
+    optional: true
+
+  '@biomejs/cli-win32-arm64@2.0.6':
+    optional: true
+
+  '@biomejs/cli-win32-x64@2.0.6':
+    optional: true
 
   '@cenk1cenk2/cz-cc@1.8.1(@types/node@22.15.34)(typescript@5.8.3)':
     dependencies:
@@ -5894,7 +5982,7 @@ snapshots:
     dependencies:
       debug: 4.4.1(supports-color@8.1.1)
       fflate: 0.8.2
-      token-types: 6.0.0
+      token-types: 6.0.1
     transitivePeerDependencies:
       - supports-color
 
@@ -7070,7 +7158,7 @@ snapshots:
     dependencies:
       '@tokenizer/inflate': 0.2.7
       strtok3: 10.3.1
-      token-types: 6.0.0
+      token-types: 6.0.1
       uint8array-extras: 1.4.0
     transitivePeerDependencies:
       - supports-color
@@ -7887,7 +7975,7 @@ snapshots:
       iconv-lite: 0.6.3
       listr: 0.14.3
       marked: 4.3.0
-      puppeteer: 24.11.0(typescript@5.8.3)
+      puppeteer: 24.11.1(typescript@5.8.3)
       semver: 7.7.2
       serve-handler: 6.1.6
     transitivePeerDependencies:
@@ -8342,27 +8430,27 @@ snapshots:
 
   punycode@2.3.1: {}
 
-  puppeteer-core@24.11.0:
+  puppeteer-core@24.11.1:
     dependencies:
       '@puppeteer/browsers': 2.10.5
       chromium-bidi: 5.1.0(devtools-protocol@0.0.1464554)
       debug: 4.4.1(supports-color@8.1.1)
       devtools-protocol: 0.0.1464554
       typed-query-selector: 2.12.0
-      ws: 8.18.2
+      ws: 8.18.3
     transitivePeerDependencies:
       - bare-buffer
       - bufferutil
       - supports-color
       - utf-8-validate
 
-  puppeteer@24.11.0(typescript@5.8.3):
+  puppeteer@24.11.1(typescript@5.8.3):
     dependencies:
       '@puppeteer/browsers': 2.10.5
       chromium-bidi: 5.1.0(devtools-protocol@0.0.1464554)
       cosmiconfig: 9.0.0(typescript@5.8.3)
       devtools-protocol: 0.0.1464554
-      puppeteer-core: 24.11.0
+      puppeteer-core: 24.11.1
       typed-query-selector: 2.12.0
     transitivePeerDependencies:
       - bare-buffer
@@ -8918,8 +9006,9 @@ snapshots:
     dependencies:
       is-number: 7.0.0
 
-  token-types@6.0.0:
+  token-types@6.0.1:
     dependencies:
+      '@biomejs/biome': 2.0.6
       '@tokenizer/token': 0.3.0
       ieee754: 1.2.1
 
@@ -9245,7 +9334,7 @@ snapshots:
 
   wrappy@1.0.2: {}
 
-  ws@8.18.2: {}
+  ws@8.18.3: {}
 
   y18n@5.0.8: {}
 
