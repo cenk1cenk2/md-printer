@@ -79,7 +79,7 @@
     "chokidar": "^4.0.3",
     "fs-extra": "^11.3.0",
     "gray-matter": "^4.0.3",
-    "listr2": "^8.3.3",
+    "listr2": "^9.0.1",
     "md-to-pdf": "^5.2.4",
     "nunjucks": "^3.2.4",
     "postcss": "^8.5.6",
