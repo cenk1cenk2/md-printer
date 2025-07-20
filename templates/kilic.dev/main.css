@@ -1,0 +1,59 @@
+@import url(https://unpkg.com/github-markdown-css/github-markdown-light.css);
+@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@400);
+@import url(https://fonts.googleapis.com/css2?family=Roboto+Mono);
+
+.markdown-body {
+  font-size: 11px;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.page-break {
+  page-break-after: always;
+}
+
+.markdown-body pre > code {
+  white-space: pre-wrap;
+  padding: 0;
+  margin: 0;
+
+  font-family: 'Roboto Mono', monospace;
+}
+
+.markdown-body .document-title-header {
+  height: 500px;
+  margin: auto auto;
+  padding-top: 50%;
+  page-break-after: always;
+  border-bottom: 0;
+  font-size: 2.5em;
+}
+
+.markdown-body pre {
+  background-color: #1e2127;
+  padding: 12px 8px;
+}
+
+.markdown-body output pre {
+  margin-top: -36px;
+  background-color: #1e2127;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+  border-top-color: #38404b;
+  border-top-width: 2px;
+  border-top-style: solid;
+}
+
+.markdown-body output::before {
+  padding: 4px 16px;
+  position: relative;
+  top: -24px;
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  color: #a0a0a0;
+  background-color: #1e2127;
+  content: '> output';
+  font-size: 0.85em;
+  border-top-color: #38404b;
+  border-top-width: 2px;
+  border-top-style: solid;
+}
