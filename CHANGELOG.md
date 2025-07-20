@@ -1,3 +1,15 @@
+# [2.4.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.3.3...v2.4.0) (2025-07-20)
+
+
+### Bug Fixes
+
+* update formatting ([dcd8af3](https://gitlab.kilic.dev/utils/md-printer/commit/dcd8af3f5810ec6b2a5edbeda70aadedf904772e))
+
+
+### Features
+
+* update log messages ([2a89a4a](https://gitlab.kilic.dev/utils/md-printer/commit/2a89a4a0f7d27557f2a5bd3af914301454872e7c))
+
 ## [2.3.3](https://gitlab.kilic.dev/utils/md-printer/compare/v2.3.2...v2.3.3) (2025-07-20)
 
 
