@@ -77,7 +77,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
   public async run(): Promise<void> {
     this.tasks.add([
       {
-        task: async (ctx): Promise<void> => {
+        task: async(ctx): Promise<void> => {
           const file = join(process.cwd(), this.args.file)
 
           if (!this.fs.exists(file)) {
@@ -114,7 +114,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
       },
 
       {
-        task: async (ctx): Promise<void> => {
+        task: async(ctx): Promise<void> => {
           const template = ctx.metadata?.template ?? this.flags.template
 
           ctx.templates = new RegExp(/\.\.?\//).test(template) ? join(process.cwd(), template) : join(this.config.root, TEMPLATE_DIRECTORY, template)
@@ -122,7 +122,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
           this.logger.info('Loading template: %s from %s', template, ctx.templates)
 
           await Promise.all(
-            RequiredTemplateFiles.map(async (file) => {
+            RequiredTemplateFiles.map(async(file) => {
               const current = join(ctx.templates, file)
 
               if (!this.fs.exists(current)) {
@@ -196,7 +196,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
       },
 
       {
-        task: async (ctx): Promise<void> => {
+        task: async(ctx): Promise<void> => {
           if (this.flags.dev) {
             ctx.options.devtools = true
 
@@ -211,7 +211,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
     if (this.flags.watch) {
       this.logger.info('Running in watch mode.')
 
-      watch([TEMPLATE_DIRECTORY, this.args.file, join(ctx.templates, '**/*')]).on('change', async () => {
+      watch([TEMPLATE_DIRECTORY, this.args.file, join(ctx.templates, '**/*')]).on('change', async() => {
         await this.run()
         await this.runTasks()
 
