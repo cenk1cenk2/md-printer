@@ -1,3 +1,4 @@
+import tailwind from '@tailwindcss/postcss'
 import { watch } from 'chokidar'
 import { default as graymatter } from 'gray-matter'
 import { mdToPdf } from 'md-to-pdf'
@@ -7,7 +8,6 @@ import Nunjucks from 'nunjucks'
 import { basename, dirname, extname, join } from 'path'
 import postcss from 'postcss'
 import showdown from 'showdown'
-import tailwind from 'tailwindcss'
 
 import type { ShouldRunAfterHook, ShouldRunBeforeHook } from '@cenk1cenk2/oclif-common'
 import { Args, Flags, Command, ConfigService, FileSystemService, ParserService, JsonParser, YamlParser } from '@cenk1cenk2/oclif-common'
@@ -181,7 +181,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
             ctx.options.css = await postcss([
               tailwind({
                 ...(await import(paths[TemplateFiles.TAILWIND_CONFIG]).then((m) => m.default)),
-                content: [ { raw: ctx.template, extension: 'html' } ]
+                content: [{ raw: ctx.template, extension: 'html' }]
               })
             ])
               .process(await this.fs.read(paths[TemplateFiles.TAILWIND_CSS]), { from: undefined })
