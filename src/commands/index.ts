@@ -27,6 +27,11 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
       char: 'T',
       description: 'Overwrite document title.'
     }),
+    browser: Flags.string({
+      char: 'b',
+      description: 'Browser path that is going to be used for the PDF generation.',
+      default: '/usr/bin/brave'
+    }),
     watch: Flags.boolean({
       char: 'w',
       description: 'Watch the changes on the given file.'
@@ -112,9 +117,9 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
         task: async(ctx): Promise<void> => {
           const template = ctx.metadata?.template ?? this.flags.template
 
-          this.logger.debug('Loading template: %s', template)
-
           ctx.templates = new RegExp(/\.\.?\//).test(template) ? join(process.cwd(), template) : join(this.config.root, TEMPLATE_DIRECTORY, template)
+
+          this.logger.debug('Loading template: %s from %s', template, ctx.templates)
 
           await Promise.all(
             RequiredTemplateFiles.map(async(file) => {
@@ -130,7 +135,6 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
             [TemplateFiles.SETTINGS]: join(ctx.templates, TemplateFiles.SETTINGS),
             [TemplateFiles.CSS]: join(ctx.templates, TemplateFiles.CSS),
             [TemplateFiles.TAILWIND_CSS]: join(ctx.templates, TemplateFiles.TAILWIND_CSS),
-            [TemplateFiles.TAILWIND_CONFIG]: join(ctx.templates, TemplateFiles.TAILWIND_CONFIG),
             [TemplateFiles.HEADER]: join(ctx.templates, TemplateFiles.HEADER),
             [TemplateFiles.FOOTER]: join(ctx.templates, TemplateFiles.FOOTER),
             [TemplateFiles.TEMPLATE]: join(ctx.templates, TemplateFiles.TEMPLATE)
@@ -140,11 +144,12 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
             paths[TemplateFiles.SETTINGS],
             {
               dest: this.args?.output ?? ctx.metadata?.dest ?? `${basename(this.args.file, extname(this.args.file))}.pdf`,
-              document_title: ctx.metadata?.document_title ?? this.flags.title ?? this.args.file
+              document_title: ctx.metadata?.document_title ?? this.flags.title ?? this.args.file,
               // https://github.com/simonhaenisch/md-to-pdf/issues/247
-              // launch_options: {
-              //   headless: true
-              // }
+              launch_options: {
+                executablePath: this.flags.browser
+                // headless: true
+              }
             }
           ])
 
@@ -176,15 +181,15 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
           }
 
           if (this.fs.exists(paths[TemplateFiles.TAILWIND_CSS])) {
-            this.logger.debug('Tailwind CSS exists for template, generating configuration from: %s -> %s', paths[TemplateFiles.TAILWIND_CONFIG], paths[TemplateFiles.TAILWIND_CSS])
+            this.logger.debug('Tailwind CSS exists for template: %s -> %s', paths[TemplateFiles.TAILWIND_CSS])
 
             ctx.options.css = await postcss([
               tailwind({
-                ...(await import(paths[TemplateFiles.TAILWIND_CONFIG]).then((m) => m.default)),
-                content: [{ raw: ctx.template, extension: 'html' }]
+                // content: [{ raw: ctx.template, extension: 'html' }],
+                base: ctx.templates
               })
             ])
-              .process(await this.fs.read(paths[TemplateFiles.TAILWIND_CSS]), { from: undefined })
+              .process(await this.fs.read(paths[TemplateFiles.TAILWIND_CSS]), { from: paths[TemplateFiles.TAILWIND_CSS] })
               .then((result) => result.css)
           }
         }
