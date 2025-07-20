@@ -1,3 +1,10 @@
+## [2.4.2](https://gitlab.kilic.dev/utils/md-printer/compare/v2.4.1...v2.4.2) (2025-07-20)
+
+
+### Bug Fixes
+
+* update setup ([dfacbac](https://gitlab.kilic.dev/utils/md-printer/commit/dfacbac7cb256271cfd08c9bc19aeb9f7ab07b46))
+
 ## [2.4.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.4.0...v2.4.1) (2025-07-20)
 
 
