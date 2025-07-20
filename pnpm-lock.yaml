@@ -15,10 +15,10 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1
       '@oclif/core':
-        specifier: ^4.5.0
+        specifier: ^4.5.1
         version: 4.5.1
       '@oclif/plugin-help':
-        specifier: ^6.2.30
+        specifier: ^6.2.31
         version: 6.2.31
       '@tailwindcss/forms':
         specifier: ^0.5.10
