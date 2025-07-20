@@ -1,3 +1,22 @@
+## [2.3.3](https://gitlab.kilic.dev/utils/md-printer/compare/v2.3.2...v2.3.3) (2025-07-20)
+
+
+### Bug Fixes
+
+* **deps:** update all minor dependency updates ([40e44e3](https://gitlab.kilic.dev/utils/md-printer/commit/40e44e3e7b8286fa71fb6028c71dea8b40ec2c63))
+* **deps:** update all minor dependency updates ([a276976](https://gitlab.kilic.dev/utils/md-printer/commit/a2769762ccac434dcc0b05ebaf59970552653569))
+* **deps:** update all minor dependency updates ([60185fa](https://gitlab.kilic.dev/utils/md-printer/commit/60185faf2c70c02091c5e98a56338405418b81a4))
+* **deps:** update all minor dependency updates ([31c0d87](https://gitlab.kilic.dev/utils/md-printer/commit/31c0d87f557969d9a3c61666f202edf1eced90e0))
+* **deps:** update all minor dependency updates ([85cddaa](https://gitlab.kilic.dev/utils/md-printer/commit/85cddaaad553d571b9872fe3f0020d410a72d983))
+* **deps:** update all minor dependency updates ([58f0551](https://gitlab.kilic.dev/utils/md-printer/commit/58f055136e027b65c716e913527346e9cd09f16b))
+* update templates ([0b1a49a](https://gitlab.kilic.dev/utils/md-printer/commit/0b1a49a974705382f14d2e713c5c91ee7c89ce5a))
+* update to work with tailwind4 ([5960a86](https://gitlab.kilic.dev/utils/md-printer/commit/5960a86e5f8b1c28c6c2b9b11a8654a85ad2e26f))
+
+
+### Performance Improvements
+
+* convert to tailwind 4 and update major deps ([95a070c](https://gitlab.kilic.dev/utils/md-printer/commit/95a070c2b6b7fbc6a5b62306bb22e24a81924489))
+
 ## [2.3.2](https://gitlab.kilic.dev/utils/md-printer/compare/v2.3.1...v2.3.2) (2024-12-25)
 
 
