@@ -8,6 +8,6 @@ export default [
     tsconfig: 'tsconfig.json'
   }),
   {
-    ignores: ['/bin/**']
+    ignores: ['./dist/', './bin', './tsdown.config.ts']
   }
 ]

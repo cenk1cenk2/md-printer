@@ -1,4 +1,3 @@
-version: '3'
 services:
   monorepo:
     image: cenk1cenk2/node-fnm:latest
