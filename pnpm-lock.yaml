@@ -15,7 +15,7 @@ importers:
         specifier: ^3.0.1
         version: 3.0.1
       '@oclif/core':
-        specifier: ^4.5.1
+        specifier: ^4.5.2
         version: 4.5.2
       '@oclif/plugin-help':
         specifier: ^6.2.31
