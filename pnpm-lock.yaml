@@ -18,7 +18,7 @@ importers:
         specifier: ^4.5.2
         version: 4.5.2
       '@oclif/plugin-help':
-        specifier: ^6.2.31
+        specifier: ^6.2.32
         version: 6.2.32
       '@tailwindcss/forms':
         specifier: ^0.5.10
