@@ -106,7 +106,7 @@
     "theme-colors": "^0.1.0",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
-    "tsdown": "^0.13.1",
+    "tsdown": "^0.13.2",
     "typescript": "^5.9.2"
   },
   "config": {
