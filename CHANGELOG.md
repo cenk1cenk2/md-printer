@@ -1,3 +1,10 @@
+## [2.5.7](https://gitlab.kilic.dev/utils/md-printer/compare/v2.5.6...v2.5.7) (2025-08-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @cenk1cenk2/oclif-common to ^6.4.9 ([e618cae](https://gitlab.kilic.dev/utils/md-printer/commit/e618cae0bff26ca4a9b63491b4a106fc5ce94ad0))
+
 ## [2.5.6](https://gitlab.kilic.dev/utils/md-printer/compare/v2.5.5...v2.5.6) (2025-08-14)
 
 
