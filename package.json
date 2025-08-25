@@ -17,7 +17,7 @@
     "dev": "./bin/dev.js",
     "start": "./bin/run.js",
     "build": "tsdown",
-    "dev:start": "tsdown --watch",
+    "dev:start": "tsdown --watch src/",
     "clean": "rimraf oclif.manifset.json",
     "format": "prettier --write src/ --log-level warn && eslint --fix",
     "lint": "eslint",

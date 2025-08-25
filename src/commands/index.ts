@@ -10,6 +10,7 @@ import type { AddressInfo } from 'net'
 import Nunjucks from 'nunjucks'
 import { basename, dirname, extname, join } from 'path'
 import postcss from 'postcss'
+import type { Browser } from 'puppeteer'
 import puppeteer from 'puppeteer'
 import showdown from 'showdown'
 
@@ -234,6 +235,14 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
       devtools: this.flags.dev
     })
 
+    // if (this.browser) {
+    //   await Promise.all( pages.map(async(page) => {
+    //       return page.close().catch((err) => {
+    //         this.logger.error('Can not close page: %o', err)
+    //       })
+    //     })
+    //   )
+    // }
     this.browser ??= await puppeteer.launch({ devtools: options.devtools, ...options.launch_options })
 
     const server = await serveDirectory(ctx.options as MdToPdfConfig)
