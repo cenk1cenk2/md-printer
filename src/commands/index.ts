@@ -216,7 +216,6 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
 
         return this.runMd2Pdf(ctx).catch((err) => {
           this.logger.error(err)
-          throw err
         })
       })
 
@@ -242,9 +241,6 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
     options.port = (server.address() as AddressInfo).port
 
     let output: PdfOutput | HtmlOutput
-
-    // have no idea why?
-    // ctx.options.marked_extensions = []
 
     if (ctx.template) {
       this.logger.info('Rendering as template.')
