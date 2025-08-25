@@ -1,3 +1,15 @@
+# [2.6.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.5.8...v2.6.0) (2025-08-25)
+
+
+### Bug Fixes
+
+* issue with build ([78856b3](https://gitlab.kilic.dev/utils/md-printer/commit/78856b3415f37ddfd7f0fc15db19eba52db12cde))
+
+
+### Features
+
+* update how the watch mode is handled ([d3956f7](https://gitlab.kilic.dev/utils/md-printer/commit/d3956f7fc6b03e2a25a0be2cb7b1be4a1033659a))
+
 ## [2.5.8](https://gitlab.kilic.dev/utils/md-printer/compare/v2.5.7...v2.5.8) (2025-08-21)
 
 
