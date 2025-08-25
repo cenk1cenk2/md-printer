@@ -1,16 +1,22 @@
 import tailwind from '@tailwindcss/postcss'
 import { watch } from 'chokidar'
 import { default as graymatter } from 'gray-matter'
-import { mdToPdf } from 'md-to-pdf'
-import type { PdfConfig } from 'md-to-pdf/dist/lib/config.js'
-import type { PdfOutput } from 'md-to-pdf/dist/lib/generate-output.js'
+import type { Config as MdToPdfConfig } from 'md-to-pdf/dist/lib/config.js'
+import { defaultConfig as MdToPdfDefaultConfig } from 'md-to-pdf/dist/lib/config.js'
+import type { HtmlOutput, PdfOutput } from 'md-to-pdf/dist/lib/generate-output.js'
+import { convertMdToPdf } from 'md-to-pdf/dist/lib/md-to-pdf.js'
+import { serveDirectory } from 'md-to-pdf/dist/lib/serve-dir.js'
+import type { AddressInfo } from 'net'
 import Nunjucks from 'nunjucks'
 import { basename, dirname, extname, join } from 'path'
 import postcss from 'postcss'
+import puppeteer from 'puppeteer'
 import showdown from 'showdown'
 
 import type { ShouldRunAfterHook, ShouldRunBeforeHook } from '@cenk1cenk2/oclif-common'
-import { Args, Flags, Command, ConfigService, FileSystemService, ParserService, JsonParser, YamlParser } from '@cenk1cenk2/oclif-common'
+import {
+  Args, Flags, Command, ConfigService, FileSystemService, ParserService, JsonParser, YamlParser, merge, MergeStrategy
+} from '@cenk1cenk2/oclif-common'
 import { OUTPUT_FILE_ACCEPTED_TYPES, RequiredTemplateFiles, TEMPLATE_DIRECTORY, TemplateFiles } from '@constants'
 import type { MdPrinterCtx } from '@interfaces'
 
@@ -61,6 +67,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
   })
   private cs: ConfigService
   private fs: FileSystemService
+  private browser: Browser
 
   public async shouldRunBefore(): Promise<void> {
     this.cs = this.app.get(ConfigService)
@@ -140,7 +147,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
             [TemplateFiles.TEMPLATE]: join(ctx.templates, TemplateFiles.TEMPLATE)
           }
 
-          ctx.options = await this.cs.extend<PdfConfig>([
+          ctx.options = await this.cs.extend<MdToPdfConfig>([
             paths[TemplateFiles.SETTINGS],
             {
               dest: this.args?.output ?? ctx.metadata?.dest ?? `${basename(this.args.file, extname(this.args.file))}.pdf`,
@@ -193,16 +200,6 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
               .then((result) => result.css)
           }
         }
-      },
-
-      {
-        task: async(ctx): Promise<void> => {
-          if (this.flags.dev) {
-            ctx.options.devtools = true
-
-            this.logger.info('Running in dev mode.')
-          }
-        }
       }
     ])
   }
@@ -213,44 +210,76 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
 
       watch([TEMPLATE_DIRECTORY, this.args.file, join(ctx.templates, '**/*')]).on('change', async() => {
         await this.run()
-        await this.runTasks()
+        const ctx = await this.runTasks()
 
         this.logger.info('Waiting for the next change.')
 
-        return this.runMd2Pdf(ctx)
+        return this.runMd2Pdf(ctx).catch((err) => {
+          this.logger.error(err)
+          throw err
+        })
       })
+
+      return this.runMd2Pdf(ctx)
     }
 
-    return this.runMd2Pdf(ctx)
+    await this.runMd2Pdf(ctx)
+
+    if (this.browser) {
+      await this.browser.close()
+    }
   }
 
   private async runMd2Pdf(ctx: MdPrinterCtx): Promise<void> {
-    let pdf: PdfOutput
+    const options = merge<MdToPdfConfig>(MergeStrategy.EXTEND, { basedir: process.cwd() }, MdToPdfDefaultConfig, ctx.options, {
+      devtools: this.flags.dev
+    })
+
+    this.browser ??= await puppeteer.launch({ devtools: options.devtools, ...options.launch_options })
+
+    const server = await serveDirectory(ctx.options as MdToPdfConfig)
+
+    options.port = (server.address() as AddressInfo).port
+
+    let output: PdfOutput | HtmlOutput
+
+    // have no idea why?
+    // ctx.options.marked_extensions = []
 
     if (ctx.template) {
       this.logger.info('Rendering as template.')
-      pdf = await mdToPdf({ content: this.nunjucks.renderString(ctx.template, { ...(ctx.metadata ?? {}), content: ctx.content }) }, ctx.options)
+      output = await convertMdToPdf({ content: this.nunjucks.renderString(ctx.template, { ...(ctx.metadata ?? {}), content: ctx.content }) }, options as MdToPdfConfig, {
+        browser: this.browser
+      })
     } else {
       this.logger.info('Rendering as plain file.')
-      pdf = await mdToPdf({ content: ctx.content }, ctx.options)
+      output = await convertMdToPdf({ content: ctx.content }, options as MdToPdfConfig, { browser: this.browser })
     }
 
-    const output = pdf.filename
+    await new Promise((resolve, reject) =>
+      server.close((err) => {
+        if (err) {
+          return reject(err)
+        }
 
-    await this.fs.mkdir(dirname(output))
+        resolve(null)
+      })
+    )
 
-    if (!output) {
-      throw new Error('Output should either be defined with the variable or front-matter.')
-    } else if (!OUTPUT_FILE_ACCEPTED_TYPES.includes(extname(output))) {
-      throw new Error(`Output file should be ending with the extension: ${OUTPUT_FILE_ACCEPTED_TYPES.join(', ')} -> current: ${extname(output)}`)
-    }
+    if (output) {
+      if (!output.filename) {
+        throw new Error('Output should either be defined with the variable or front-matter.')
+      } else if (!OUTPUT_FILE_ACCEPTED_TYPES.includes(extname(output.filename))) {
+        throw new Error(`Output file should be ending with the extension: ${OUTPUT_FILE_ACCEPTED_TYPES.join(', ')} -> current: ${extname(output.filename)}`)
+      }
 
-    this.logger.info('Output file will be: %s', output)
+      this.logger.info('Output file will be: %s', output.filename)
 
-    if (pdf) {
-      this.logger.info('Writing file to output: %s', output)
+      await this.fs.mkdir(dirname(output.filename))
 
-      await this.fs.write(output, pdf.content)
+      this.logger.info('Writing file to output: %s', output.filename)
+
+      await this.fs.write(output.filename, output.content)
     }
   }
 }
