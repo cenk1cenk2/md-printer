@@ -1,3 +1,11 @@
+## [2.6.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.6.0...v2.6.1) (2025-08-25)
+
+
+### Bug Fixes
+
+* jsut log the error ([63de364](https://gitlab.kilic.dev/utils/md-printer/commit/63de364bcec4a2f43820733e67e4027f10b69cc3))
+* update ([e312517](https://gitlab.kilic.dev/utils/md-printer/commit/e31251729afd0f821215ac0c8ae76edd31faa6fa))
+
 # [2.6.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.5.8...v2.6.0) (2025-08-25)
 
 
