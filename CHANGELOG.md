@@ -1,3 +1,10 @@
+## [2.9.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.9.0...v2.9.1) (2025-08-26)
+
+
+### Bug Fixes
+
+* finalize invoice template ([8208101](https://gitlab.kilic.dev/utils/md-printer/commit/82081019b14c5096923c7db435a73116deda1455))
+
 # [2.9.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.8.0...v2.9.0) (2025-08-26)
 
 
