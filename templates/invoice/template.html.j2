@@ -10,7 +10,7 @@
 
 <body>
   <img src="https://main.s3.kilic.dev/html/icon.png" alt="logo"
-    class="absolute h-40 top-3 left-1/2 transform -translate-x-1/2">
+    class="absolute h-40 top-3 left-1/2 transform -translate-x-1/2 drop-shadow-lg drop-shadow-gray-900">
   <div class="max-w-full leading-tight prose grid grid-rows">
     <section id="header" class="grid grid-cols-12">
       <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-gray-100">
@@ -49,11 +49,13 @@
       </div>
       <div class="col-span-6 flex justify-center text-xs text-center p-4">
         <div class="grid grid-rows-2 gap-4 w-full mr-12">
-          <div class="p-2 flex flex-row bg-gray-50 justify-between align-middle rounded-xl border border-gray-100!">
+          <div
+            class="p-2 flex flex-row bg-gray-50 justify-between align-middle rounded-xl border border-gray-50! inset-shadow-xs inset-shadow-gray-400">
             <p class="font-bold">Date</p>
             <p class="font-semibold">{{ date }}</p>
           </div>
-          <div class="p-2 flex flex-row bg-gray-50 justify-between align-middle rounded-xl border border-gray-100!">
+          <div
+            class="p-2 flex flex-row bg-gray-50 justify-between align-middle rounded-xl border border-gray-50! inset-shadow-xs inset-shadow-gray-400">
             <p class="font-bold">Invoice#</p>
             <p class="font-semibold">{{ id }}</p>
           </div>
@@ -63,7 +65,7 @@
     <section id="items" class="grid grid-cols-12">
       <div class="col-span-12 px-16 py-4">
         <table class="w-full table-auto border-y-2 shadow-md shadow-gray-300 border-gray-900! rounded-xl">
-          <thead class="border-b-2">
+          <thead class="border-b-1 border-b-gray-900! border-x-2 border-x-gray-900!">
             <tr>
               <th scope="col" class="w-md text-center">
                 Description
@@ -77,7 +79,7 @@
               <th scope="col" class="w-[10%] text-center">
                 Subtotal
               </th>
-              <th scope="col" class="w-[14%] text-center">
+              <th scope="col" class="w-[10%] text-center">
                 Tax
               </th>
               <th scope="col" class="w-[14%] font-semibold text-center">
@@ -85,7 +87,7 @@
               </th>
             </tr>
           </thead>
-          <tbody>
+          <tbody">
             {% set calculated_subtotal = 0 %}
             {% set calculated_tax = 0 %}
             {% for item in items %}
@@ -99,10 +101,12 @@
               {% set calculated_tax = calculated_tax + calculated_item_tax %}
               <td class="text-center align-middle">
                 {% if calculated_item_tax > 0 %}
-                {{ calculated_item_tax }}{{ currency }}
-                <sub class="text-xs">({{ item.tax }}%)</sub>
+                <div class="flex flex-row align-middle">
+                  <span class="text-[0.50rem] font-semibold mr-[2px] my-[4px]">({{ item.tax }}%)</span>
+                  <span>{{ calculated_item_tax }}{{ currency }}</span>
+                </div>
                 {% else %}
-                —
+                <span class="font-semibold">—</span>
                 {% endif %}
               </td>
               {% set calculated_item_total = calculated_item_subtotal + calculated_item_tax %}
@@ -110,7 +114,7 @@
             </tr>
             {% set calculated_subtotal = calculated_subtotal + calculated_item_subtotal %}
             {% endfor %}
-          </tbody>
+            </tbody>
         </table>
       </div>
     </section>
@@ -129,7 +133,7 @@
       </div>
       <div class="col-span-1"></div>
       <div
-        class="col-span-5 flex flex-col justify-between border-2 rounded-xl border-primary-500! m-8 mr-16 p-4 shadow-md shadow-gray-400">
+        class="col-span-5 flex flex-col justify-evenly border-2 rounded-xl border-primary-500! m-8 mr-16 p-4 shadow-md shadow-gray-300">
         <div class="flex flex-row justify-between font-semibold">
           <p>
             Subtotal
@@ -146,11 +150,11 @@
             {% if calculated_tax > 0 %}
             {{ calculated_tax }}{{currency}}
             {% else %}
-            —
+            <span class="font-semibold">—</span>
             {% endif %}
           </p>
         </div>
-        <div class="flex flex-row justify-between font-bold text-xl text-primary-500 pt-2 border-t-2 h-8">
+        <div class="flex flex-row justify-between font-bold text-lg text-primary-500 pt-1 border-t-2 h-8">
           <p>
             TOTAL
           </p>

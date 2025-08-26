@@ -132,4 +132,5 @@ table th,
 table td,
 table tr {
   border: 0;
+  padding: 0.5em 0.5em;
 }

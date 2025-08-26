@@ -1,6 +1,7 @@
 ---
 dest: ./test/test.pdf
 template: invoice
+document_title: Some MD.
 
 id: daeb87d4-a675-4867-9a95-c49b0b2aaf8a
 date: 26.04.2022
@@ -39,13 +40,13 @@ items:
     price: 10000
     tax: 20
   - description: Lorem ipsum dolor sit amet
-    quantity: 22
-    unit: day
+    quantity: 36
+    unit: days
     price: 1000
-    tax: 20
+    tax: 5
   - description: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
     quantity: 22
-    unit: ''
+    unit: items
     price: 30
     tax: 0
 ---
