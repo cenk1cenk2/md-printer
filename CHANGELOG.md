@@ -1,3 +1,10 @@
+## [2.9.3](https://gitlab.kilic.dev/utils/md-printer/compare/v2.9.2...v2.9.3) (2025-08-26)
+
+
+### Bug Fixes
+
+* finalize somethings ([a5edc15](https://gitlab.kilic.dev/utils/md-printer/commit/a5edc1538c35a79f5102aadfd042c4a3d07fc700))
+
 ## [2.9.2](https://gitlab.kilic.dev/utils/md-printer/compare/v2.9.1...v2.9.2) (2025-08-26)
 
 
