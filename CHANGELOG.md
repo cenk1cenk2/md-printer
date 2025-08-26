@@ -1,3 +1,15 @@
+# [2.7.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.6.1...v2.7.0) (2025-08-26)
+
+
+### Bug Fixes
+
+* smaller notes ([65b32df](https://gitlab.kilic.dev/utils/md-printer/commit/65b32df0e244964175ace93cfedd9d6fb3710ca5))
+
+
+### Features
+
+* invoice draft ([3acbdb5](https://gitlab.kilic.dev/utils/md-printer/commit/3acbdb5f67e5c90ec2a145c5641f249ba5189e90))
+
 ## [2.6.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.6.0...v2.6.1) (2025-08-25)
 
 
