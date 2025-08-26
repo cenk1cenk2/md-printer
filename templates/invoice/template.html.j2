@@ -50,12 +50,12 @@
       <div class="col-span-6 flex justify-center text-xs text-center p-4">
         <div class="grid grid-rows-2 gap-4 w-full mr-12">
           <div
-            class="p-2 flex flex-row bg-gray-50 justify-between align-middle rounded-xl border border-gray-50! inset-shadow-xs inset-shadow-gray-400">
+            class="p-2 flex flex-row justify-between align-middle rounded-xl bg-gray-50 border border-gray-50! inset-shadow-xs inset-shadow-gray-400">
             <p class="font-bold">Date</p>
             <p class="font-semibold">{{ date }}</p>
           </div>
           <div
-            class="p-2 flex flex-row bg-gray-50 justify-between align-middle rounded-xl border border-gray-50! inset-shadow-xs inset-shadow-gray-400">
+            class="p-2 flex flex-row justify-between align-middle rounded-xl bg-gray-50 border border-gray-50! inset-shadow-xs inset-shadow-gray-400">
             <p class="font-bold">Invoice#</p>
             <p class="font-semibold">{{ id }}</p>
           </div>
@@ -133,8 +133,9 @@
       </div>
       <div class="col-span-1"></div>
       <div
-        class="col-span-5 flex flex-col justify-evenly border-2 rounded-xl border-primary-500! m-8 mr-16 p-4 shadow-md shadow-gray-300">
-        <div class="flex flex-row justify-between font-semibold">
+        class="col-span-5 flex flex-col justify-evenly border-2 rounded-xl border-primary-500! m-8 mr-16 p-4 shadow-md shadow-gray-300 gap-1">
+        <div
+          class="flex flex-row justify-between font-semibold bg-gray-50 rounded-lg border border-gray-50! inset-shadow-xs inset-shadow-gray-400 py-1 px-2">
           <p>
             Subtotal
           </p>
@@ -142,7 +143,8 @@
             {{ calculated_subtotal }}{{ currency }}
           </p>
         </div>
-        <div class="flex flex-row justify-between font-semibold">
+        <div
+          class="flex flex-row justify-between font-semibold bg-gray-50 rounded-lg border border-gray-50! inset-shadow-xs inset-shadow-gray-400 py-1 px-2">
           <p>
             Tax
           </p>
@@ -154,14 +156,17 @@
             {% endif %}
           </p>
         </div>
-        <div class="flex flex-row justify-between font-bold text-lg text-primary-500 pt-1 border-t-2 h-8">
-          <p>
-            TOTAL
-          </p>
-          <p>
-            {% set calculated_total = calculated_subtotal + calculated_tax %}
-            {{ calculated_total }}{{ currency }}
-          </p>
+        <div class="pt-1 border-t-2 border-primary-500!">
+          <div
+            class="flex flex-row justify-between font-bold rounded-lg text-primary-500 bg-gray-50 border border-gray-50! inset-shadow-xs inset-shadow-gray-400 py-1 px-2">
+            <p>
+              Total
+            </p>
+            <p>
+              {% set calculated_total = calculated_subtotal + calculated_tax %}
+              {{ calculated_total }}{{ currency }}
+            </p>
+          </div>
         </div>
       </div>
     </section>
