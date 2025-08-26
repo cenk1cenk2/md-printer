@@ -21,9 +21,15 @@
         <h3>{{ company.tax_number }}</h3>
         <address>{{ company.address }}</address>
         <div class="flex flex-col text-sm">
+          {% if company.phone %}
           <a href="tel:{{ company.phone }}">{{ company.phone }}</a>
+          {% endif %}
+          {% if company.email %}
           <a href="mailto:{{ company.email }}">{{ company.email }}</a>
+          {% endif %}
+          {% if company.website %}
           <a href="{{ company.website }}">{{ company.website }}</a>
+          {% endif %}
         </div>
       </div>
       <div class="col-span-6 bg-gray-900 rounded-bl-4xl flex flex-col justify-center text-center">
@@ -36,8 +42,10 @@
       </div>
       <div class="col-span-5 flex flex-col justify-baseline p-4">
         <h2>{{ client.name }}</h2>
+        {% if client.tax_number %}
         <h3>{{ client.tax_number }}</h3>
-        <address>{{ company.address }}</address>
+        {% endif %}
+        <address>{{ client.address }}</address>
       </div>
       <div class="col-span-6 flex justify-center text-xs text-center p-4">
         <div class="grid grid-rows-2 gap-4 w-full mr-12">
@@ -53,9 +61,6 @@
       </div>
     </section>
     <section id="items" class="grid grid-cols-12">
-      <!-- <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-gray-100"> -->
-      <!--   <p class="text-vertical">ITEMS</p> -->
-      <!-- </div> -->
       <div class="col-span-12 px-16 py-4">
         <table class="w-full table-auto border-y-2 shadow-md shadow-gray-300 border-gray-900! rounded-xl">
           <thead class="border-b-2">
@@ -92,8 +97,14 @@
               <td class="text-center align-middle">{{ calculated_item_subtotal }}{{ currency }}</td>
               {% set calculated_item_tax = calculated_item_subtotal * item.tax / 100 %}
               {% set calculated_tax = calculated_tax + calculated_item_tax %}
-              <td class="text-center align-middle">{{ calculated_item_tax }}{{ currency }} <sup class="text-xs">({{
-                  item.tax }}%)</sup> </td>
+              <td class="text-center align-middle">
+                {% if calculated_item_tax > 0 %}
+                {{ calculated_item_tax }}{{ currency }}
+                <sub class="text-xs">({{ item.tax }}%)</sub>
+                {% else %}
+                —
+                {% endif %}
+              </td>
               {% set calculated_item_total = calculated_item_subtotal + calculated_item_tax %}
               <td class="font-semibold text-center align-middle">{{ calculated_item_total }}{{ currency }}</td>
             </tr>
