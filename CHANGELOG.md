@@ -1,3 +1,10 @@
+## [2.9.2](https://gitlab.kilic.dev/utils/md-printer/compare/v2.9.1...v2.9.2) (2025-08-26)
+
+
+### Bug Fixes
+
+* add yaml as dep ([7a31d76](https://gitlab.kilic.dev/utils/md-printer/commit/7a31d76b6ec8c4de937a220171f8faa5849e6e39))
+
 ## [2.9.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.9.0...v2.9.1) (2025-08-26)
 
 
