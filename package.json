@@ -89,7 +89,8 @@
     "puppeteer": "^24.17.0",
     "showdown": "^2.1.0",
     "source-map-support": "^0.5.21",
-    "tailwindcss": "^4.1.12"
+    "tailwindcss": "^4.1.12",
+    "yaml": "^2.8.1"
   },
   "devDependencies": {
     "@cenk1cenk2/cz-cc": "^2.1.3",
