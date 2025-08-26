@@ -9,15 +9,12 @@ currency: €
 company:
   tax_number: ATU12345678
   address: |
-    Straße 1
-    1234 Stadt
-    Wien/Österreich
+    Straße 12/64/22
+    1234 Wien
+    Österreich
   phone: '+43127368'
   email: 'cenk@kilic.dev'
   website: 'https://cenk.kilic.dev'
-
-tax:
-  rate: 0
 
 client:
   name: Company LTD GMBH
@@ -36,14 +33,21 @@ payment:
   name: Cenk Kılıç
 
 items:
-  - description: test
+  - description: Lorem ipsum dolor
     quantity: 1
-    type: day
-    price: 3
-  - description: test
-    quantity: 1
-    type: day
-    price: 3
+    unit: month
+    price: 10000
+    tax: 20
+  - description: Lorem ipsum dolor sit amet
+    quantity: 22
+    unit: day
+    price: 1000
+    tax: 20
+  - description: Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
+    quantity: 22
+    unit: ''
+    price: 30
+    tax: 0
 ---
 
 Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem ipsum dolor sit amet.

@@ -10,13 +10,13 @@
 
 <body>
   <img src="https://main.s3.kilic.dev/html/icon.png" alt="logo"
-    class="absolute h-48 top-0 left-1/2 transform -translate-x-1/2">
+    class="absolute h-36 top-0 left-1/2 transform -translate-x-1/2">
   <div class="max-w-full leading-tight prose grid grid-rows">
     <section id="header" class="grid grid-cols-12">
-      <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-gray-300">
+      <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-gray-100">
         <p class="text-vertical">FROM</p>
       </div>
-      <div class="col-start-2 col-span-5 flex flex-col justify-baseline p-4">
+      <div class="col-start-2 col-span-5 flex flex-col justify-baseline p-4 mr-12">
         <h1>Cenk Kılıç</h1>
         <h3>{{ company.tax_number }}</h3>
         <address>{{ company.address }}</address>
@@ -27,26 +27,25 @@
         </div>
       </div>
       <div class="col-span-6 bg-gray-900 rounded-bl-4xl flex flex-col justify-center text-center">
-        <p class="p-4 font-bold text-white shadow-2xl text-6xl">Invoice</p>
+        <p class="p-4 font-bold text-white text-6xl">Invoice</p>
       </div>
     </section>
     <section id="client" class="grid grid-cols-12">
-      <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-gray-300">
+      <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-gray-100">
         <p class="text-vertical">TO</p>
       </div>
-      <div class="col-span-7 flex flex-col justify-baseline p-4">
+      <div class="col-span-5 flex flex-col justify-baseline p-4">
         <h2>{{ client.name }}</h2>
         <h3>{{ client.tax_number }}</h3>
         <address>{{ company.address }}</address>
       </div>
-      <div
-        class="col-span-4 flex justify-center bg-gray-900 rounded-bl-4xl my-[-1px] py-1 text-white text-xs text-center">
-        <div class="col-span-3 grid grid-rows-2 p-4 gap-4">
-          <div class="p-2 flex flex-col bg-gray-700 rounded-xl">
-            <p class="font-bold">Invoice #</p>
+      <div class="col-span-6 flex justify-center text-xs text-center p-4">
+        <div class="grid grid-rows-2 gap-4 w-full px-12">
+          <div class="p-2 flex flex-row bg-gray-50 justify-between rounded-xl border border-gray-300">
+            <p class="font-bold">Invoice#</p>
             <p class="font-semibold">{{ id }}</p>
           </div>
-          <div class="p-2 flex flex-col bg-gray-700 rounded-xl">
+          <div class="p-2 flex flex-row bg-gray-50 justify-between rounded-xl border border-gray-300">
             <p class="font-bold">Date</p>
             <p class="font-semibold">{{ date }}</p>
           </div>
@@ -54,46 +53,58 @@
       </div>
     </section>
     <section id="items" class="grid grid-cols-12">
-      <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-gray-300">
-        <p class="text-vertical">ITEMS</p>
-      </div>
-      <div class="col-start-2 col-span-9 p-4 mt-1">
-        <table class="w-full table-auto border-2 rounded-xl">
-          <thead class="border-b-2 text-lg">
+      <!-- <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-gray-100"> -->
+      <!--   <p class="text-vertical">ITEMS</p> -->
+      <!-- </div> -->
+      <div class="col-span-12 px-16 py-4">
+        <table class="w-full table-auto border-y-2 shadow-md shadow-gray-300 border-gray-900! rounded-xl">
+          <thead class="border-b-2">
             <tr>
-              <th scope="col" class="w-full">
+              <th scope="col" class="w-md text-center">
                 Description
               </th>
-              <th scope="col" class="w-24">
-                Unit
+              <th scope="col" class="w-[10%] text-center">
+                Qty
               </th>
-              <th scope="col" class="w-24">
+              <th scope="col" class="w-[10%] text-center">
                 Price
               </th>
-              <th scope="col" class="w-24">
+              <th scope="col" class="w-[10%] text-center">
+                Subtotal
+              </th>
+              <th scope="col" class="w-[14%] text-center">
+                Tax
+              </th>
+              <th scope="col" class="w-[14%] font-semibold text-center">
                 Total
               </th>
             </tr>
           </thead>
           <tbody>
             {% set calculated_subtotal = 0 %}
+            {% set calculated_tax = 0 %}
             {% for item in items %}
             <tr>
-              <td class="text-left">{{ item.description }}</td>
-              <td class="text-center">{{ item.quantity }} {{ item.type }}</td>
-              <td class="text-center">{{ item.price }}{{ currency }}</td>
-              <td class="font-semibold text-center">{{ item.quantity * item.price }}{{ currency }}</td>
+              <td class="text-left align-middle">{{ item.description }}</td>
+              <td class="text-center align-middle">{{ item.quantity }} {{ item.unit }}</td>
+              <td class="text-center align-middle">{{ item.price }}{{ currency }}</td>
+              {% set calculated_item_subtotal = item.quantity * item.price %}
+              <td class="text-center align-middle">{{ calculated_item_subtotal }}{{ currency }}</td>
+              {% set calculated_item_tax = calculated_item_subtotal * item.tax / 100 %}
+              {% set calculated_tax = calculated_tax + calculated_item_tax %}
+              <td class="text-center align-middle">{{ calculated_item_tax }}{{ currency }} <sup class="text-xs">({{
+                  item.tax }}%)</sup> </td>
+              {% set calculated_item_total = calculated_item_subtotal + calculated_item_tax %}
+              <td class="font-semibold text-center align-middle">{{ calculated_item_total }}{{ currency }}</td>
             </tr>
-            {% set calculated_subtotal = calculated_subtotal + item.quantity * item.price %}
+            {% set calculated_subtotal = calculated_subtotal + calculated_item_subtotal %}
             {% endfor %}
           </tbody>
         </table>
       </div>
-      <div class="col-span-2 bg-gray-900 rounded-bl-4xl flex flex-row justify-center text-white">
-      </div>
     </section>
     <section id="payment" class="grid grid-cols-12">
-      <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-gray-300 bg-gray-900">
+      <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-gray-100 bg-gray-900">
         <p class="text-vertical">PAYMENT</p>
       </div>
       <div
@@ -102,14 +113,13 @@
         <address>{{ payment.address }}</address>
         <span>{{ payment.bic }}</span>
         <span>{{ payment.routing }}</span>
-        <span>{{ payment.name }}</span>
-        <span>{{ payment.iban }}</span>
+        <span class="mt-4 font-semibold">{{ payment.name }}</span>
+        <span class="font-semibold">{{ payment.iban }}</span>
       </div>
-      <!-- <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-primary-500 border-t-2"> -->
-      <!-- </div> -->
-      <div class="col-span-4 flex flex-col justify-between border-2 m-4 rounded-xl border-primary-500 p-4 mr-4">
-        <p class="font-extrabold text-primary-500 text-center">TOTAL</p>
-        <div class="flex flex-row justify-between">
+      <div class="col-span-1"></div>
+      <div
+        class="col-span-4 flex flex-col justify-between border-2 m-4 rounded-xl border-primary-500! p-4 mr-4 shadow-md shadow-gray-400">
+        <div class="flex flex-row justify-between font-semibold">
           <p>
             Subtotal
           </p>
@@ -117,18 +127,17 @@
             {{ calculated_subtotal }}{{ currency }}
           </p>
         </div>
-        <div class="flex flex-row justify-between">
+        <div class="flex flex-row justify-between font-semibold">
           <p>
-            Tax ({{ tax.rate }}%)
+            Tax
           </p>
           <p>
-            {% set calculated_tax = calculated_subtotal * tax.rate / 100 %}
             {{ calculated_tax }}{{currency}}
           </p>
         </div>
-        <div class="flex flex-row justify-between font-bold text-xl">
+        <div class="flex flex-row justify-between font-bold text-xl text-primary-500 pt-4 border-t-2">
           <p>
-            Total
+            TOTAL
           </p>
           <p>
             {% set calculated_total = calculated_subtotal + calculated_tax %}
@@ -136,16 +145,16 @@
           </p>
         </div>
       </div>
-      <div class="col-span-2"></div>
     </section>
     <section id="footer" class="grid grid-cols-12">
-      <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-gray-300">
+      <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-gray-100">
         <p class="text-vertical">NOTES</p>
       </div>
-      <div class="col-span-5 flex flex-col p-4 text-sm">
+      <div class="col-span-6 flex flex-col p-4 text-sm">
         <span>{{ content }}</span>
       </div>
-      <div class="col-span-4 flex flex-col justify-end text-center p-4 pb-0 border-b-2 text-xs text-gray-300">
+      <div
+        class="col-span-4 flex flex-col justify-end text-center m-4 p-4 pb-0 border-2 border-gray-50! rounded-xl text-xs text-gray-100">
         <p>SIGNATURE</p>
       </div>
     </section>
