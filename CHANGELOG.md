@@ -1,3 +1,15 @@
+# [2.11.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.10.1...v2.11.0) (2025-08-26)
+
+
+### Bug Fixes
+
+* update template once in for all ([e83b7a0](https://gitlab.kilic.dev/utils/md-printer/commit/e83b7a0c2cd30fe4aeb32d9c799bfbcbb412c994))
+
+
+### Features
+
+* finalize the invoice template once in for all ([4371016](https://gitlab.kilic.dev/utils/md-printer/commit/4371016f0eabdbb4e9be9e961b036eef6bb50dfd))
+
 ## [2.10.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.10.0...v2.10.1) (2025-08-26)
 
 
