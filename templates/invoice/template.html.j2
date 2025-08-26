@@ -143,7 +143,11 @@
             Tax
           </p>
           <p>
+            {% if calculated_tax > 0 %}
             {{ calculated_tax }}{{currency}}
+            {% else %}
+            —
+            {% endif %}
           </p>
         </div>
         <div class="flex flex-row justify-between font-bold text-xl text-primary-500 pt-2 border-t-2">
