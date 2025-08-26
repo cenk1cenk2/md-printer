@@ -1,3 +1,10 @@
+# [2.9.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.8.0...v2.9.0) (2025-08-26)
+
+
+### Features
+
+* update templating for invoice ([14acf17](https://gitlab.kilic.dev/utils/md-printer/commit/14acf172a331a080d1b7901d3ef263f2cf56f5d5))
+
 # [2.8.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.7.0...v2.8.0) (2025-08-26)
 
 
