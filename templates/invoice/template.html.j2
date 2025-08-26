@@ -27,7 +27,7 @@
         </div>
       </div>
       <div class="col-span-6 bg-gray-900 rounded-bl-4xl flex flex-col justify-center text-center">
-        <p class="p-4 font-bold text-white text-6xl">Invoice</p>
+        <p class="p-4 font-bold text-white text-6xl">INVOICE</p>
       </div>
     </section>
     <section id="client" class="grid grid-cols-12">
@@ -41,13 +41,13 @@
       </div>
       <div class="col-span-6 flex justify-center text-xs text-center p-4">
         <div class="grid grid-rows-2 gap-4 w-full px-12">
-          <div class="p-2 flex flex-row bg-gray-50 justify-between rounded-xl border border-gray-300">
-            <p class="font-bold">Invoice#</p>
-            <p class="font-semibold">{{ id }}</p>
-          </div>
-          <div class="p-2 flex flex-row bg-gray-50 justify-between rounded-xl border border-gray-300">
+          <div class="p-2 flex flex-row bg-gray-50 justify-between rounded-xl border border-gray-100!">
             <p class="font-bold">Date</p>
             <p class="font-semibold">{{ date }}</p>
+          </div>
+          <div class="p-2 flex flex-row bg-gray-50 justify-between rounded-xl border border-gray-100!">
+            <p class="font-bold">Invoice#</p>
+            <p class="font-semibold">{{ id }}</p>
           </div>
         </div>
       </div>
@@ -118,7 +118,7 @@
       </div>
       <div class="col-span-1"></div>
       <div
-        class="col-span-4 flex flex-col justify-between border-2 m-4 rounded-xl border-primary-500! p-4 mr-4 shadow-md shadow-gray-400">
+        class="col-span-5 flex flex-col justify-between border-2 rounded-xl border-primary-500! m-8 mr-16 p-4 shadow-md shadow-gray-400">
         <div class="flex flex-row justify-between font-semibold">
           <p>
             Subtotal
@@ -135,7 +135,7 @@
             {{ calculated_tax }}{{currency}}
           </p>
         </div>
-        <div class="flex flex-row justify-between font-bold text-xl text-primary-500 pt-4 border-t-2">
+        <div class="flex flex-row justify-between font-bold text-xl text-primary-500 pt-2 border-t-2">
           <p>
             TOTAL
           </p>
@@ -150,11 +150,12 @@
       <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-gray-100">
         <p class="text-vertical">NOTES</p>
       </div>
-      <div class="col-span-6 flex flex-col p-4 text-sm">
+      <div class="col-span-5 flex flex-col p-4 text-sm">
         <span>{{ content }}</span>
       </div>
+      <div class="col-span-1"></div>
       <div
-        class="col-span-4 flex flex-col justify-end text-center m-4 p-4 pb-0 border-2 border-gray-50! rounded-xl text-xs text-gray-100">
+        class="col-span-5 flex flex-col justify-end text-center m-8 mr-16 p-4 pb-0 border-2 border-gray-50!  rounded-xl text-xs text-gray-100">
         <p>SIGNATURE</p>
       </div>
     </section>
