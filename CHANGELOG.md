@@ -1,3 +1,10 @@
+## [2.11.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.11.0...v2.11.1) (2025-08-28)
+
+
+### Bug Fixes
+
+* **deps:** update dependency puppeteer to ^24.17.1 ([e4342a8](https://gitlab.kilic.dev/utils/md-printer/commit/e4342a8a82e4354898aad37c23d4dbc8e9634800))
+
 # [2.11.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.10.1...v2.11.0) (2025-08-26)
 
 
