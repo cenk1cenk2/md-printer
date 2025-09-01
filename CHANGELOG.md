@@ -1,3 +1,10 @@
+## [2.11.2](https://gitlab.kilic.dev/utils/md-printer/compare/v2.11.1...v2.11.2) (2025-09-01)
+
+
+### Bug Fixes
+
+* **deps:** update all minor dependency updates ([77c046c](https://gitlab.kilic.dev/utils/md-printer/commit/77c046c4567e568a3f21b82864aaf32d6cce9cd4))
+
 ## [2.11.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.11.0...v2.11.1) (2025-08-28)
 
 
