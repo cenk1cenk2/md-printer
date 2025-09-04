@@ -1,3 +1,11 @@
+## [2.11.3](https://gitlab.kilic.dev/utils/md-printer/compare/v2.11.2...v2.11.3) (2025-09-04)
+
+
+### Bug Fixes
+
+* **deps:** update all minor dependency updates ([0e85994](https://gitlab.kilic.dev/utils/md-printer/commit/0e85994ee75bb195072e6384b0247ee4efca0d1c))
+* **deps:** update dependency @cenk1cenk2/oclif-common to ^6.4.12 ([60ed17e](https://gitlab.kilic.dev/utils/md-printer/commit/60ed17e74ce3261fb181bd20edb432252ac42eb0))
+
 ## [2.11.2](https://gitlab.kilic.dev/utils/md-printer/compare/v2.11.1...v2.11.2) (2025-09-01)
 
 
