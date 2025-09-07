@@ -8,23 +8,74 @@ import { convertMdToPdf } from 'md-to-pdf/dist/lib/md-to-pdf.js'
 import { serveDirectory } from 'md-to-pdf/dist/lib/serve-dir.js'
 import type { AddressInfo } from 'net'
 import Nunjucks from 'nunjucks'
-import { basename, dirname, extname, join } from 'path'
+import { EOL } from 'os'
+import { basename, dirname, extname, isAbsolute, join } from 'path'
 import postcss from 'postcss'
 import type { Browser } from 'puppeteer'
 import puppeteer from 'puppeteer'
+import { createInterface } from 'readline'
 import showdown from 'showdown'
 
 import type { ShouldRunAfterHook, ShouldRunBeforeHook } from '@cenk1cenk2/oclif-common'
 import {
   Args, Flags, Command, ConfigService, FileSystemService, ParserService, JsonParser, YamlParser, merge, MergeStrategy
 } from '@cenk1cenk2/oclif-common'
-import { OUTPUT_FILE_ACCEPTED_TYPES, RequiredTemplateFiles, TEMPLATE_DIRECTORY, TemplateFiles } from '@constants'
+import { InputFileType, OutputFileType, RequiredTemplateFiles, TEMPLATE_DIRECTORY, TemplateFiles } from '@constants'
 import type { MdPrinterCtx } from '@interfaces'
+
+const content = new Promise<string>((resolve) => {
+  const lines: string[] = []
+
+  const rl = createInterface({
+    input: process.stdin,
+    output: process.stderr,
+    terminal: false
+  })
+
+  rl.on('line', (line) => {
+    lines.push(line)
+  })
+
+  rl.once('close', () => {
+    resolve(lines.join(EOL))
+  })
+})
 
 export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> implements ShouldRunBeforeHook, ShouldRunAfterHook {
   static description = 'Generates a PDF from the given markdown file with the selected HTML template.'
 
   static flags = {
+    // stdin: Flags.string({
+    //   char: 'i',
+    //   description: 'Read the input from stdin.',
+    //   required: false,
+    //   exclusive: ['file'],
+    //   aliases: ['-i'],
+    //   allowStdin: 'only',
+    // }),
+    stdin: Flags.boolean({
+      char: 'i',
+      description: 'Read the input from stdin.',
+      required: false,
+      aliases: ['-i'],
+      default: false
+    }),
+    ['input-filetype']: Flags.string({
+      char: 'f',
+      options: Object.values(InputFileType),
+      description: 'File type to be processed. By default it is detected by the file extension.',
+      default: InputFileType.MARKDOWN
+    }),
+    ['output-filetype']: Flags.string({
+      char: 'F',
+      options: Object.values(OutputFileType),
+      description: 'File type to be processed. By default it is detected by the file extension.',
+      default: OutputFileType.PDF
+    }),
+    stdout: Flags.boolean({
+      char: 'O',
+      description: 'Write to stdout instead of a file.'
+    }),
     template: Flags.string({
       char: 't',
       default: 'default',
@@ -51,8 +102,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
 
   static args = {
     file: Args.string({
-      description: 'File to be processed.',
-      required: true
+      description: 'File to be processed.'
     }),
     output: Args.string({
       description: 'Output file that will be generated. Overwrites the one define in front-matter.',
@@ -85,21 +135,40 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
   public async run(): Promise<void> {
     this.tasks.add([
       {
+        enabled: this.flags.stdin,
         task: async(ctx): Promise<void> => {
-          const file = join(process.cwd(), this.args.file)
+          this.logger.debug('Reading file through stdin...')
 
-          if (!this.fs.exists(file)) {
-            throw new Error(`File does not exists: ${file}`)
+          if (process.stdin.isTTY) {
+            this.logger.error('stdin stream is not TTY!')
+
+            return
           }
 
-          this.logger.info('Loading file: %s', file)
+          ctx.content = await content
 
-          ctx.file = file
-          switch (extname(ctx.file)) {
-            case '.md': {
-              const data = graymatter.read(ctx.file)
+          this.logger.debug('File read through stdin: %s%s', EOL, ctx.content)
+        }
+      },
 
-              ctx.content = await this.fs.read(file)
+      {
+        task: async(ctx): Promise<void> => {
+          if (!this.flags.stout && this.args.file) {
+            ctx.file = isAbsolute(this.args.file) ? this.args.file : join(process.cwd(), this.args.file)
+
+            if (!this.fs.exists(ctx.file)) {
+              throw new Error(`File does not exists: ${ctx.file}`)
+            }
+
+            this.logger.info('Loading file: %s', ctx.file)
+
+            ctx.content = await this.fs.read(ctx.file)
+          }
+
+          switch (this.flags['input-filetype'] ? this.flags['input-filetype'] : extname(ctx.file).replace(/^\./, '')) {
+            case InputFileType.MARKDOWN: {
+              const data = graymatter(ctx.content)
+
               ctx.content = data.content
 
               ctx.metadata = data.data
@@ -107,9 +176,10 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
               break
             }
 
-            case '.yml': {
-              ctx.content = await this.fs.read(file)
+            case InputFileType.YAML:
 
+            // eslint-disable-next-line no-fallthrough
+            case InputFileType.YAML_SHORT: {
               ctx.metadata = await this.app.get(ParserService).parse(ctx.file, ctx.content)
 
               break
@@ -151,7 +221,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
           ctx.options = await this.cs.extend<MdToPdfConfig>([
             paths[TemplateFiles.SETTINGS],
             {
-              dest: this.args?.output ?? ctx.metadata?.dest ?? `${basename(this.args.file, extname(this.args.file))}.pdf`,
+              dest: this.args?.output ?? ctx.metadata?.dest ?? `${basename(this.args.file, extname(this.args.file))}.${this.flags['output-filetype']}`,
               document_title: ctx.metadata?.document_title ?? this.flags.title ?? this.args.file,
               // https://github.com/simonhaenisch/md-to-pdf/issues/247
               launch_options: {
@@ -160,6 +230,16 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
               }
             }
           ])
+
+          this.flags.stdout ??= ctx.metadata.stdout
+
+          if (this.flags.stdout) {
+            ctx.options.dest = 'stdout'
+          }
+
+          if (this.flags['output-filetype'] === OutputFileType.HTML || ctx.metadata['output-filetype'] === OutputFileType.HTML) {
+            ctx.options.as_html = true
+          }
 
           this.logger.debug('Options: %o', ctx.options)
 
@@ -228,6 +308,9 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
     if (this.browser) {
       await this.browser.close()
     }
+
+    // TODO: why something is getting stuck now?
+    process.exit(0)
   }
 
   private async runMd2Pdf(ctx: MdPrinterCtx): Promise<void> {
@@ -272,10 +355,14 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
     )
 
     if (output) {
+      if (this.flags.stdout) {
+        process.stdout.write(output.content)
+
+        return
+      }
+
       if (!output.filename) {
         throw new Error('Output should either be defined with the variable or front-matter.')
-      } else if (!OUTPUT_FILE_ACCEPTED_TYPES.includes(extname(output.filename))) {
-        throw new Error(`Output file should be ending with the extension: ${OUTPUT_FILE_ACCEPTED_TYPES.join(', ')} -> current: ${extname(output.filename)}`)
       }
 
       this.logger.info('Output file will be: %s', output.filename)

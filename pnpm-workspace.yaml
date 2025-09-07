@@ -1,0 +1,7 @@
+ignoredBuiltDependencies:
+  - '@nestjs/core'
+  - puppeteer
+
+onlyBuiltDependencies:
+  - '@tailwindcss/oxide'
+  - simple-git-hooks
