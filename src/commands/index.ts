@@ -130,7 +130,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
 
       {
         task: async(ctx): Promise<void> => {
-          if (!this.flags.stdout && this.args.file) {
+          if (this.args.file) {
             ctx.file = isAbsolute(this.args.file) ? this.args.file : join(process.cwd(), this.args.file)
 
             if (!this.fs.exists(ctx.file)) {
