@@ -8,12 +8,10 @@ import { convertMdToPdf } from 'md-to-pdf/dist/lib/md-to-pdf.js'
 import { serveDirectory } from 'md-to-pdf/dist/lib/serve-dir.js'
 import type { AddressInfo } from 'net'
 import Nunjucks from 'nunjucks'
-import { EOL } from 'os'
 import { basename, dirname, extname, isAbsolute, join } from 'path'
 import postcss from 'postcss'
 import type { Browser } from 'puppeteer'
 import puppeteer from 'puppeteer'
-import { createInterface } from 'readline'
 import showdown from 'showdown'
 
 import type { ShouldRunAfterHook, ShouldRunBeforeHook } from '@cenk1cenk2/oclif-common'
@@ -23,43 +21,23 @@ import {
 import { InputFileType, OutputFileType, RequiredTemplateFiles, TEMPLATE_DIRECTORY, TemplateFiles } from '@constants'
 import type { MdPrinterCtx } from '@interfaces'
 
-const content = new Promise<string>((resolve) => {
-  const lines: string[] = []
-
-  const rl = createInterface({
-    input: process.stdin,
-    output: process.stderr,
-    terminal: false
-  })
-
-  rl.on('line', (line) => {
-    lines.push(line)
-  })
-
-  rl.once('close', () => {
-    resolve(lines.join(EOL))
-  })
-})
-
 export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> implements ShouldRunBeforeHook, ShouldRunAfterHook {
   static description = 'Generates a PDF from the given markdown file with the selected HTML template.'
 
   static flags = {
-    // stdin: Flags.string({
-    //   char: 'i',
-    //   description: 'Read the input from stdin.',
-    //   required: false,
-    //   exclusive: ['file'],
-    //   aliases: ['-i'],
-    //   allowStdin: 'only',
-    // }),
-    stdin: Flags.boolean({
-      char: 'i',
+    stdin: Flags.string({
+      char: 'I',
       description: 'Read the input from stdin.',
       required: false,
-      aliases: ['-i'],
-      default: false
+      exclusive: ['file'],
+      allowStdin: 'only'
     }),
+    // stdin: Flags.boolean({
+    //   char: 'I',
+    //   description: 'Read the input from stdin.',
+    //   required: false,
+    //   default: false
+    // }),
     ['input-filetype']: Flags.string({
       char: 'f',
       options: Object.values(InputFileType),
@@ -134,26 +112,25 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
 
   public async run(): Promise<void> {
     this.tasks.add([
+      // {
+      //   enabled: this.flags.stdin,
+      //   task: async (ctx): Promise<void> => {
+      //     this.logger.debug('Reading file through stdin...')
+      //
+      //     if (process.stdin.isTTY) {
+      //       this.logger.error('stdin stream is not TTY!')
+      //
+      //       return
+      //     }
+      //     // BUG: readline was acting weird
+      //     ctx.content = await stdin()
+      //     this.logger.debug('File read through stdin: %s%s', EOL, ctx.content)
+      //   }
+      // },
+
       {
-        enabled: this.flags.stdin,
         task: async(ctx): Promise<void> => {
-          this.logger.debug('Reading file through stdin...')
-
-          if (process.stdin.isTTY) {
-            this.logger.error('stdin stream is not TTY!')
-
-            return
-          }
-
-          ctx.content = await content
-
-          this.logger.debug('File read through stdin: %s%s', EOL, ctx.content)
-        }
-      },
-
-      {
-        task: async(ctx): Promise<void> => {
-          if (!this.flags.stout && this.args.file) {
+          if (!this.flags.stdout && this.args.file) {
             ctx.file = isAbsolute(this.args.file) ? this.args.file : join(process.cwd(), this.args.file)
 
             if (!this.fs.exists(ctx.file)) {
@@ -163,6 +140,8 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
             this.logger.info('Loading file: %s', ctx.file)
 
             ctx.content = await this.fs.read(ctx.file)
+          } else {
+            ctx.content = this.flags.stdin
           }
 
           switch (this.flags['input-filetype'] ? this.flags['input-filetype'] : extname(ctx.file).replace(/^\./, '')) {
@@ -308,9 +287,6 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
     if (this.browser) {
       await this.browser.close()
     }
-
-    // TODO: why something is getting stuck now?
-    process.exit(0)
   }
 
   private async runMd2Pdf(ctx: MdPrinterCtx): Promise<void> {

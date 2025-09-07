@@ -21,8 +21,8 @@
     "rootDir": "./src/",
     "baseUrl": "./src/",
     "paths": {
-      "@interfaces": ["interfaces/index.js"],
-      "@constants": ["constants/index.js"]
+      "@interfaces": ["./interfaces/index.js"],
+      "@constants": ["./constants/index.js"]
     }
   },
   "exclude": ["node_modules"],
