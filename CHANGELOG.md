@@ -1,3 +1,15 @@
+# [2.12.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.11.3...v2.12.0) (2025-09-07)
+
+
+### Bug Fixes
+
+* publish with the current format ([d15bbea](https://gitlab.kilic.dev/utils/md-printer/commit/d15bbea10951473b0aa0effb6edfdfcb708276bf))
+
+
+### Features
+
+* add stdin parsing and mail template ([0cf80be](https://gitlab.kilic.dev/utils/md-printer/commit/0cf80bec32e2e612ce6e006c86524c2a4f1853c6))
+
 ## [2.11.3](https://gitlab.kilic.dev/utils/md-printer/compare/v2.11.2...v2.11.3) (2025-09-04)
 
 
