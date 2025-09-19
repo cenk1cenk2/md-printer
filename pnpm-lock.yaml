@@ -28,7 +28,7 @@ importers:
         version: 4.1.13
       '@tailwindcss/typography':
         specifier: ^0.5.16
-        version: 0.5.16(tailwindcss@4.1.13)
+        version: 0.5.18(tailwindcss@4.1.13)
       '@tsconfig/node20':
         specifier: ^20.1.6
         version: 20.1.6
@@ -1200,8 +1200,8 @@ packages:
   '@tailwindcss/postcss@4.1.13':
     resolution: {integrity: sha512-HLgx6YSFKJT7rJqh9oJs/TkBFhxuMOfUKSBEPYwV+t78POOBsdQ7crhZLzwcH3T0UyUuOzU/GK5pk5eKr3wCiQ==}
 
-  '@tailwindcss/typography@0.5.16':
-    resolution: {integrity: sha512-0wDLwCVF5V3x3b1SGXPCDcdsbDHMBe+lkFzBRaHeLvNi+nrrnZ1lA18u+OTWO8iSWU2GxUOCvlXtDuqftc1oiA==}
+  '@tailwindcss/typography@0.5.18':
+    resolution: {integrity: sha512-dDIgwZOlf+tVkZ7A029VvQ1+ngKATENDjMEx2N35s2yPjfTS05RWSM8ilhEWSa5DMJ6ci2Ha9WNZEd2GQjrdQg==}
     peerDependencies:
       tailwindcss: '>=3.0.0 || insiders || >=4.0.0-alpha.20 || >=4.0.0-beta.1'
 
@@ -3824,9 +3824,6 @@ packages:
 
   lodash._shimkeys@2.4.1:
     resolution: {integrity: sha512-lBrglYxLD/6KAJ8IEa5Lg+YHgNAL7FyKqXg4XOUI+Du/vtniLs1ZqS+yHNKPkK54waAgkdUnDOYaWf+rv4B+AA==}
-
-  lodash.castarray@4.4.0:
-    resolution: {integrity: sha512-aVx8ztPv7/2ULbArGJ2Y42bG1mEQ5mGjpdvrbJcJFU3TbYybe+QlLS4pst9zV52ymy2in1KpFPiZnAOATxD4+Q==}
 
   lodash.defaults@2.4.1:
     resolution: {integrity: sha512-5wTIPWwGGr07JFysAZB8+7JB2NjJKXDIwogSaRX5zED85zyUAQwtOqUk8AsJkkigUcL3akbHYXd5+BPtTGQPZw==}
@@ -7502,11 +7499,8 @@ snapshots:
       postcss: 8.5.6
       tailwindcss: 4.1.13
 
-  '@tailwindcss/typography@0.5.16(tailwindcss@4.1.13)':
+  '@tailwindcss/typography@0.5.18(tailwindcss@4.1.13)':
     dependencies:
-      lodash.castarray: 4.4.0
-      lodash.isplainobject: 4.0.6
-      lodash.merge: 4.6.2
       postcss-selector-parser: 6.0.10
       tailwindcss: 4.1.13
 
@@ -10424,8 +10418,6 @@ snapshots:
     dependencies:
       lodash._objecttypes: 2.4.1
 
-  lodash.castarray@4.4.0: {}
-
   lodash.defaults@2.4.1:
     dependencies:
       lodash._objecttypes: 2.4.1
@@ -10455,7 +10447,8 @@ snapshots:
     dependencies:
       lodash._objecttypes: 2.4.1
 
-  lodash.isplainobject@4.0.6: {}
+  lodash.isplainobject@4.0.6:
+    optional: true
 
   lodash.keys@2.4.1:
     dependencies:
