@@ -58,7 +58,7 @@ importers:
         version: 8.5.6
       puppeteer:
         specifier: ^24.19.0
-        version: 24.22.0(typescript@5.9.2)
+        version: 24.22.2(typescript@5.9.2)
       showdown:
         specifier: ^2.1.0
         version: 2.1.0
@@ -1620,8 +1620,8 @@ packages:
     resolution: {integrity: sha512-wvUjBtSGN7+7SjNpq/9M2Tg350UZD3q62IFZLbRAR1bSMlCo1ZaeW+BJ+D090e4hIIZLBcTDWe4Mh4jvUDajzQ==}
     engines: {node: '>= 0.4'}
 
-  b4a@1.7.1:
-    resolution: {integrity: sha512-ZovbrBV0g6JxK5cGUF1Suby1vLfKjv4RWi8IxoaO/Mon8BDD9I21RxjHFtgQ+kskJqLAVyQZly3uMBui+vhc8Q==}
+  b4a@1.7.2:
+    resolution: {integrity: sha512-DyUOdz+E8R6+sruDpQNOaV0y/dBbV6X/8ZkxrDcR0Ifc3BgKlpgG0VAtfOozA0eMtJO5GGe9FsZhueLs00pTww==}
     peerDependencies:
       react-native-b4a: '*'
     peerDependenciesMeta:
@@ -2491,8 +2491,8 @@ packages:
   eventemitter3@5.0.1:
     resolution: {integrity: sha512-GWkBvjiSZK87ELrYOSESUYeVIc9mvLLf/nXalMOS5dYrgZq9o5OVkbZAVM06CVxYsCwH9BDZFPlQTlPA1j4ahA==}
 
-  events-universal@1.0.0:
-    resolution: {integrity: sha512-1KVXP1Oq8SiC0HsRraCryA4XGrZ2uJgIt/h4X+mB/8pzMKE7L8yBDN2lBlqJZeUwLAt7kf80m/5GX3HvoCrSGA==}
+  events-universal@1.0.1:
+    resolution: {integrity: sha512-LUd5euvbMLpwOF8m6ivPCbhQeSiYVNb8Vs0fQ8QjXo0JTkEHpz8pxdQf0gStltaPpw0Cca8b39KxvK9cfKRiAw==}
 
   execa@9.6.0:
     resolution: {integrity: sha512-jpWzZ1ZhwUmeWRhS7Qv3mhpOhLfwI+uAX4e5fOcXqwMR7EcJ0pj2kV1CVzHVMX/LphnKWD3LObjZCoJ71lKpHw==}
@@ -3637,8 +3637,8 @@ packages:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
 
-  libphonenumber-js@1.12.18:
-    resolution: {integrity: sha512-k0pdkX8DXHqVrby7yJ23WBcHMCX1lhwvX/Uazh0vf3wfGQa0qDIyRB2Z2C01JREGGt8Assfwl1yZduq59OjXXQ==}
+  libphonenumber-js@1.12.21:
+    resolution: {integrity: sha512-z/o0jBYS3d8js1QBksrHxZUARjmM0S6uvpINkyJ9IcPkXIoUh5l4S3rTbGAlq9ThbCExdSV0wWp8gw7729A/ww==}
 
   liftoff@2.5.0:
     resolution: {integrity: sha512-01zfGFqfORP1CGmZZP2Zn51zsqz4RltDi0RDOhbGoLYdUT5Lw+I2gX6QdwXhPITF6hPOHEOp+At6/L24hIg9WQ==}
@@ -4721,12 +4721,12 @@ packages:
     resolution: {integrity: sha512-vYt7UD1U9Wg6138shLtLOvdAu+8DsC/ilFtEVHcH+wydcSpNE20AfSOduf6MkRFahL5FY7X1oU7nKVZFtfq8Fg==}
     engines: {node: '>=6'}
 
-  puppeteer-core@24.22.0:
-    resolution: {integrity: sha512-oUeWlIg0pMz8YM5pu0uqakM+cCyYyXkHBxx9di9OUELu9X9+AYrNGGRLK9tNME3WfN3JGGqQIH3b4/E9LGek/w==}
+  puppeteer-core@24.22.2:
+    resolution: {integrity: sha512-J1WBOWE2AU57ntwH8EJe10xlpfdimMjmYDDVHna2iiBn85FemU7H6s46Thn+wb7VKqN+YeyYhSjDNE0+R8phoQ==}
     engines: {node: '>=18'}
 
-  puppeteer@24.22.0:
-    resolution: {integrity: sha512-QabGIvu7F0hAMiKGHZCIRHMb6UoH0QAJA2OaqxEU2tL5noXPrxUcotg2l3ttOA4p1PFnVIGkr6PXRAWlM2evVQ==}
+  puppeteer@24.22.2:
+    resolution: {integrity: sha512-tsjIR24nAp/LfEhnBLw11yc0LxzwmB67obPrgqpDZxhub4i5nHxn9pKezcm46d583gdhotSETSA3q3Hbj+ZdNQ==}
     engines: {node: '>=18'}
     hasBin: true
 
@@ -7907,7 +7907,7 @@ snapshots:
     dependencies:
       possible-typed-array-names: 1.1.0
 
-  b4a@1.7.1: {}
+  b4a@1.7.2: {}
 
   balanced-match@0.1.0: {}
 
@@ -8225,7 +8225,7 @@ snapshots:
   class-validator@0.14.2:
     dependencies:
       '@types/validator': 13.15.3
-      libphonenumber-js: 1.12.18
+      libphonenumber-js: 1.12.21
       validator: 13.15.15
 
   clean-css@0.9.1:
@@ -8974,7 +8974,7 @@ snapshots:
 
   eventemitter3@5.0.1: {}
 
-  events-universal@1.0.0:
+  events-universal@1.0.1:
     dependencies:
       bare-events: 2.7.0
 
@@ -10214,7 +10214,7 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
 
-  libphonenumber-js@1.12.18: {}
+  libphonenumber-js@1.12.21: {}
 
   liftoff@2.5.0:
     dependencies:
@@ -10601,7 +10601,7 @@ snapshots:
       iconv-lite: 0.6.3
       listr: 0.14.3
       marked: 4.3.0
-      puppeteer: 24.22.0(typescript@5.9.2)
+      puppeteer: 24.22.2(typescript@5.9.2)
       semver: 7.7.2
       serve-handler: 6.1.6
     transitivePeerDependencies:
@@ -11474,7 +11474,7 @@ snapshots:
 
   punycode@2.3.1: {}
 
-  puppeteer-core@24.22.0:
+  puppeteer-core@24.22.2:
     dependencies:
       '@puppeteer/browsers': 2.10.10
       chromium-bidi: 8.0.0(devtools-protocol@0.0.1495869)
@@ -11490,13 +11490,13 @@ snapshots:
       - supports-color
       - utf-8-validate
 
-  puppeteer@24.22.0(typescript@5.9.2):
+  puppeteer@24.22.2(typescript@5.9.2):
     dependencies:
       '@puppeteer/browsers': 2.10.10
       chromium-bidi: 8.0.0(devtools-protocol@0.0.1495869)
       cosmiconfig: 9.0.0(typescript@5.9.2)
       devtools-protocol: 0.0.1495869
-      puppeteer-core: 24.22.0
+      puppeteer-core: 24.22.2
       typed-query-selector: 2.12.0
     transitivePeerDependencies:
       - bare-buffer
@@ -12099,7 +12099,7 @@ snapshots:
 
   streamx@2.23.0:
     dependencies:
-      events-universal: 1.0.0
+      events-universal: 1.0.1
       fast-fifo: 1.3.2
       text-decoder: 1.2.3
     transitivePeerDependencies:
@@ -12284,7 +12284,7 @@ snapshots:
 
   tar-stream@3.1.7:
     dependencies:
-      b4a: 1.7.1
+      b4a: 1.7.2
       fast-fifo: 1.3.2
       streamx: 2.23.0
     transitivePeerDependencies:
@@ -12300,7 +12300,7 @@ snapshots:
 
   text-decoder@1.2.3:
     dependencies:
-      b4a: 1.7.1
+      b4a: 1.7.2
     transitivePeerDependencies:
       - react-native-b4a
 
