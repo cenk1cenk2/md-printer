@@ -383,24 +383,24 @@ packages:
     resolution: {integrity: sha512-Ir+AOibqzrIsL6ajt3Rz3LskB7OiMVHqltZmspbW/TJuTVuyOMirVqAkjfY6JISiLHgyNqicAC8AyHHGzNd/dA==}
     engines: {node: '>=0.1.90'}
 
-  '@commitlint/config-validator@19.8.1':
-    resolution: {integrity: sha512-0jvJ4u+eqGPBIzzSdqKNX1rvdbSU1lPNYlfQQRIFnBgLy26BtC0cFnr7c/AyuzExMxWsMOte6MkTi9I3SQ3iGQ==}
+  '@commitlint/config-validator@20.0.0':
+    resolution: {integrity: sha512-BeyLMaRIJDdroJuYM2EGhDMGwVBMZna9UiIqV9hxj+J551Ctc6yoGuGSmghOy/qPhBSuhA6oMtbEiTmxECafsg==}
     engines: {node: '>=v18'}
 
-  '@commitlint/execute-rule@19.8.1':
-    resolution: {integrity: sha512-YfJyIqIKWI64Mgvn/sE7FXvVMQER/Cd+s3hZke6cI1xgNT/f6ZAz5heND0QtffH+KbcqAwXDEE1/5niYayYaQA==}
+  '@commitlint/execute-rule@20.0.0':
+    resolution: {integrity: sha512-xyCoOShoPuPL44gVa+5EdZsBVao/pNzpQhkzq3RdtlFdKZtjWcLlUFQHSWBuhk5utKYykeJPSz2i8ABHQA+ZZw==}
     engines: {node: '>=v18'}
 
-  '@commitlint/load@19.8.1':
-    resolution: {integrity: sha512-9V99EKG3u7z+FEoe4ikgq7YGRCSukAcvmKQuTtUyiYPnOd9a2/H9Ak1J9nJA1HChRQp9OA/sIKPugGS+FK/k1A==}
+  '@commitlint/load@20.0.0':
+    resolution: {integrity: sha512-WiNKO9fDPlLY90Rruw2HqHKcghrmj5+kMDJ4GcTlX1weL8K07Q6b27C179DxnsrjGCRAKVwFKyzxV4x+xDY28Q==}
     engines: {node: '>=v18'}
 
-  '@commitlint/resolve-extends@19.8.1':
-    resolution: {integrity: sha512-GM0mAhFk49I+T/5UCYns5ayGStkTt4XFFrjjf0L4S26xoMTSkdCf9ZRO8en1kuopC4isDFuEm7ZOm/WRVeElVg==}
+  '@commitlint/resolve-extends@20.0.0':
+    resolution: {integrity: sha512-BA4vva1hY8y0/Hl80YDhe9TJZpRFMsUYzVxvwTLPTEBotbGx/gS49JlVvtF1tOCKODQp7pS7CbxCpiceBgp3Dg==}
     engines: {node: '>=v18'}
 
-  '@commitlint/types@19.8.1':
-    resolution: {integrity: sha512-/yCrWGCoA1SVKOks25EGadP9Pnj0oAIHGpl2wH2M2Y46dPM2ueb8wyCVOD7O3WCTkaJ0IkKvzhl1JY7+uCT2Dw==}
+  '@commitlint/types@20.0.0':
+    resolution: {integrity: sha512-bVUNBqG6aznYcYjTjnc3+Cat/iBgbgpflxbIBTnsHTX0YVpnmINPEkSRWymT2Q8aSH3Y7aKnEbunilkYe8TybA==}
     engines: {node: '>=v18'}
 
   '@cspotcode/source-map-support@0.8.1':
@@ -1810,8 +1810,8 @@ packages:
   caniuse-api@1.6.1:
     resolution: {integrity: sha512-SBTl70K0PkDUIebbkXrxWqZlHNs0wRgRD6QZ8guctShjbh63gEPfF+Wj0Yw+75f5Y8tSzqAI/NcisYv/cCah2Q==}
 
-  caniuse-db@1.0.30001743:
-    resolution: {integrity: sha512-wPPAlwMe3d7uRv81Rt+Y+sRLEvE3eEYG/xQqFUk/o1M9X9yj+xj8jUmnBLXRLwG3ca1MaiNMzeNRlt2uxHpdRw==}
+  caniuse-db@1.0.30001745:
+    resolution: {integrity: sha512-LPHQXSwbBg+UkAaDWP+n3zgVi9kCAUN/EhHZNeY9asVwn5C4Dy94PCpQ7eByz4rZJFsS5Xqbm17S8uLycGVFfQ==}
 
   capital-case@1.0.4:
     resolution: {integrity: sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A==}
@@ -2300,8 +2300,8 @@ packages:
     engines: {node: '>=0.10.0'}
     hasBin: true
 
-  electron-to-chromium@1.5.223:
-    resolution: {integrity: sha512-qKm55ic6nbEmagFlTFczML33rF90aU+WtrJ9MdTCThrcvDNdUHN4p6QfVN78U06ZmguqXIyMPyYhw2TrbDUwPQ==}
+  electron-to-chromium@1.5.224:
+    resolution: {integrity: sha512-kWAoUu/bwzvnhpdZSIc6KUyvkI1rbRXMT0Eq8pKReyOyaPZcctMli+EgvcN1PAvwVc7Tdo4Fxi2PsLNDU05mdg==}
 
   elegant-spinner@1.0.1:
     resolution: {integrity: sha512-B+ZM+RXvRqQaAmkMlO/oSe5nMUOaUnyfGYCEHoR8wrXsZR2mA0XVibsxV1bvTwxdRWah1PkQqso2EzhILGHtEQ==}
@@ -6535,21 +6535,21 @@ snapshots:
 
   '@colors/colors@1.6.0': {}
 
-  '@commitlint/config-validator@19.8.1':
+  '@commitlint/config-validator@20.0.0':
     dependencies:
-      '@commitlint/types': 19.8.1
+      '@commitlint/types': 20.0.0
       ajv: 8.17.1
     optional: true
 
-  '@commitlint/execute-rule@19.8.1':
+  '@commitlint/execute-rule@20.0.0':
     optional: true
 
-  '@commitlint/load@19.8.1(@types/node@24.5.2)(typescript@5.9.2)':
+  '@commitlint/load@20.0.0(@types/node@24.5.2)(typescript@5.9.2)':
     dependencies:
-      '@commitlint/config-validator': 19.8.1
-      '@commitlint/execute-rule': 19.8.1
-      '@commitlint/resolve-extends': 19.8.1
-      '@commitlint/types': 19.8.1
+      '@commitlint/config-validator': 20.0.0
+      '@commitlint/execute-rule': 20.0.0
+      '@commitlint/resolve-extends': 20.0.0
+      '@commitlint/types': 20.0.0
       chalk: 5.6.2
       cosmiconfig: 9.0.0(typescript@5.9.2)
       cosmiconfig-typescript-loader: 6.1.0(@types/node@24.5.2)(cosmiconfig@9.0.0(typescript@5.9.2))(typescript@5.9.2)
@@ -6561,17 +6561,17 @@ snapshots:
       - typescript
     optional: true
 
-  '@commitlint/resolve-extends@19.8.1':
+  '@commitlint/resolve-extends@20.0.0':
     dependencies:
-      '@commitlint/config-validator': 19.8.1
-      '@commitlint/types': 19.8.1
+      '@commitlint/config-validator': 20.0.0
+      '@commitlint/types': 20.0.0
       global-directory: 4.0.1
       import-meta-resolve: 4.2.0
       lodash.mergewith: 4.6.2
       resolve-from: 5.0.0
     optional: true
 
-  '@commitlint/types@19.8.1':
+  '@commitlint/types@20.0.0':
     dependencies:
       '@types/conventional-commits-parser': 5.0.1
       chalk: 5.6.2
@@ -7888,7 +7888,7 @@ snapshots:
   autoprefixer-core@5.2.1:
     dependencies:
       browserslist: 0.4.0
-      caniuse-db: 1.0.30001743
+      caniuse-db: 1.0.30001745
       num2fraction: 1.2.2
       postcss: 4.1.16
 
@@ -8020,16 +8020,16 @@ snapshots:
 
   browserslist@0.4.0:
     dependencies:
-      caniuse-db: 1.0.30001743
+      caniuse-db: 1.0.30001745
 
   browserslist@0.5.0:
     dependencies:
-      caniuse-db: 1.0.30001743
+      caniuse-db: 1.0.30001745
 
   browserslist@1.7.7:
     dependencies:
-      caniuse-db: 1.0.30001743
-      electron-to-chromium: 1.5.223
+      caniuse-db: 1.0.30001745
+      electron-to-chromium: 1.5.224
 
   buffer-crc32@0.2.13: {}
 
@@ -8108,11 +8108,11 @@ snapshots:
   caniuse-api@1.6.1:
     dependencies:
       browserslist: 1.7.7
-      caniuse-db: 1.0.30001743
+      caniuse-db: 1.0.30001745
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
 
-  caniuse-db@1.0.30001743: {}
+  caniuse-db@1.0.30001745: {}
 
   capital-case@1.0.4:
     dependencies:
@@ -8549,7 +8549,7 @@ snapshots:
       longest: 2.0.1
       word-wrap: 1.2.5
     optionalDependencies:
-      '@commitlint/load': 19.8.1(@types/node@24.5.2)(typescript@5.9.2)
+      '@commitlint/load': 20.0.0(@types/node@24.5.2)(typescript@5.9.2)
     transitivePeerDependencies:
       - '@types/node'
       - typescript
@@ -8707,7 +8707,7 @@ snapshots:
     dependencies:
       jake: 10.9.4
 
-  electron-to-chromium@1.5.223: {}
+  electron-to-chromium@1.5.224: {}
 
   elegant-spinner@1.0.1: {}
 
