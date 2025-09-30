@@ -1,6 +1,6 @@
 {
   "name": "@cenk1cenk2/md-printer",
-  "version": "2.12.3",
+  "version": "2.13.0",
   "description": "A markdown printer.",
   "main": "dist/index.js",
   "type": "module",

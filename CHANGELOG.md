@@ -1,3 +1,10 @@
+# [2.13.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.12.3...v2.13.0) (2025-09-30)
+
+
+### Features
+
+* update template for content ([0948b31](https://gitlab.kilic.dev/utils/md-printer/commit/0948b3131a8d6c84e3157d7e2dc1c046f01e709e))
+
 ## [2.12.3](https://gitlab.kilic.dev/utils/md-printer/compare/v2.12.2...v2.12.3) (2025-09-10)
 
 
