@@ -445,10 +445,6 @@ packages:
     resolution: {integrity: sha512-gtF186CXhIl1p4pJNGZw8Yc6RlshoePRvE0X91oPGb3vZ8pM3qOS9W9NGPat9LziaBV7XrJWGylNQXkGcnM3IQ==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
 
-  '@eslint/js@9.36.0':
-    resolution: {integrity: sha512-uhCbYtYynH30iZErszX78U+nR3pJU3RHGQ57NXy5QupD4SBVwDeU8TNBy+MjMngc1UyIW9noKqsRqfjQTBU2dw==}
-    engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
-
   '@eslint/js@9.37.0':
     resolution: {integrity: sha512-jaS+NJ+hximswBG6pjNX0uEJZkrT0zwpVi3BA3vX22aFGjJjmgSTSmPpZCRKmoBL5VY/M6p0xsSJx7rk7sy5gg==}
     engines: {node: ^18.18.0 || ^20.9.0 || >=21.1.0}
@@ -1813,8 +1809,8 @@ packages:
   caniuse-api@1.6.1:
     resolution: {integrity: sha512-SBTl70K0PkDUIebbkXrxWqZlHNs0wRgRD6QZ8guctShjbh63gEPfF+Wj0Yw+75f5Y8tSzqAI/NcisYv/cCah2Q==}
 
-  caniuse-db@1.0.30001746:
-    resolution: {integrity: sha512-yglkT3HjfDx4LLOeOR0mm9o0dWvkxEYdC2y2a2Qrg+xfmmd5Z5s8IgXstIEPyOShj/ofJvfNCOz0rGLleSesCA==}
+  caniuse-db@1.0.30001747:
+    resolution: {integrity: sha512-ECxa859Rl79zlz95RasvFc+9BZAnOVFMQxb13u6WxjrNL6Cfeyz42L9NyAuoGG3cyxPluetJv6T4nhxubNQGJw==}
 
   capital-case@1.0.4:
     resolution: {integrity: sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A==}
@@ -2310,8 +2306,8 @@ packages:
     engines: {node: '>=0.10.0'}
     hasBin: true
 
-  electron-to-chromium@1.5.229:
-    resolution: {integrity: sha512-cwhDcZKGcT/rEthLRJ9eBlMDkh1sorgsuk+6dpsehV0g9CABsIqBxU4rLRjG+d/U6pYU1s37A4lSKrVc5lSQYg==}
+  electron-to-chromium@1.5.230:
+    resolution: {integrity: sha512-A6A6Fd3+gMdaed9wX83CvHYJb4UuapPD5X5SLq72VZJzxHSY0/LUweGXRWmQlh2ln7KV7iw7jnwXK7dlPoOnHQ==}
 
   elegant-spinner@1.0.1:
     resolution: {integrity: sha512-B+ZM+RXvRqQaAmkMlO/oSe5nMUOaUnyfGYCEHoR8wrXsZR2mA0XVibsxV1bvTwxdRWah1PkQqso2EzhILGHtEQ==}
@@ -6500,7 +6496,7 @@ snapshots:
 
   '@cenk1cenk2/eslint-config@3.1.69(eslint@9.37.0(jiti@2.6.1))(typescript@5.9.3)':
     dependencies:
-      '@eslint/js': 9.36.0
+      '@eslint/js': 9.37.0
       '@stylistic/eslint-plugin': 5.4.0(eslint@9.37.0(jiti@2.6.1))
       '@typescript-eslint/eslint-plugin': 8.45.0(@typescript-eslint/parser@8.45.0(eslint@9.37.0(jiti@2.6.1))(typescript@5.9.3))(eslint@9.37.0(jiti@2.6.1))(typescript@5.9.3)
       '@typescript-eslint/parser': 8.45.0(eslint@9.37.0(jiti@2.6.1))(typescript@5.9.3)
@@ -6647,8 +6643,6 @@ snapshots:
       strip-json-comments: 3.1.1
     transitivePeerDependencies:
       - supports-color
-
-  '@eslint/js@9.36.0': {}
 
   '@eslint/js@9.37.0': {}
 
@@ -7903,7 +7897,7 @@ snapshots:
   autoprefixer-core@5.2.1:
     dependencies:
       browserslist: 0.4.0
-      caniuse-db: 1.0.30001746
+      caniuse-db: 1.0.30001747
       num2fraction: 1.2.2
       postcss: 4.1.16
 
@@ -8035,16 +8029,16 @@ snapshots:
 
   browserslist@0.4.0:
     dependencies:
-      caniuse-db: 1.0.30001746
+      caniuse-db: 1.0.30001747
 
   browserslist@0.5.0:
     dependencies:
-      caniuse-db: 1.0.30001746
+      caniuse-db: 1.0.30001747
 
   browserslist@1.7.7:
     dependencies:
-      caniuse-db: 1.0.30001746
-      electron-to-chromium: 1.5.229
+      caniuse-db: 1.0.30001747
+      electron-to-chromium: 1.5.230
 
   buffer-crc32@0.2.13: {}
 
@@ -8123,11 +8117,11 @@ snapshots:
   caniuse-api@1.6.1:
     dependencies:
       browserslist: 1.7.7
-      caniuse-db: 1.0.30001746
+      caniuse-db: 1.0.30001747
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
 
-  caniuse-db@1.0.30001746: {}
+  caniuse-db@1.0.30001747: {}
 
   capital-case@1.0.4:
     dependencies:
@@ -8722,7 +8716,7 @@ snapshots:
     dependencies:
       jake: 10.9.4
 
-  electron-to-chromium@1.5.229: {}
+  electron-to-chromium@1.5.230: {}
 
   elegant-spinner@1.0.1: {}
 
