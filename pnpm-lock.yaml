@@ -1809,8 +1809,8 @@ packages:
   caniuse-api@1.6.1:
     resolution: {integrity: sha512-SBTl70K0PkDUIebbkXrxWqZlHNs0wRgRD6QZ8guctShjbh63gEPfF+Wj0Yw+75f5Y8tSzqAI/NcisYv/cCah2Q==}
 
-  caniuse-db@1.0.30001747:
-    resolution: {integrity: sha512-ECxa859Rl79zlz95RasvFc+9BZAnOVFMQxb13u6WxjrNL6Cfeyz42L9NyAuoGG3cyxPluetJv6T4nhxubNQGJw==}
+  caniuse-db@1.0.30001748:
+    resolution: {integrity: sha512-spnbVONAiR0iNxro6+sLOBm7FtkpxoZqmHw6onn8EO/eUjzc5dcXuDGNW74ZMWrSVaI77L6qvx4rRdj2D35rFQ==}
 
   capital-case@1.0.4:
     resolution: {integrity: sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A==}
@@ -2252,8 +2252,8 @@ packages:
     resolution: {integrity: sha512-y+8xyqdGLL+6sh0tVeHcfP/QDd8gUgbasolJJpY7NgeQGSZ739bDtSiaiDgtoicy+mtYB81dKLxO9xRhCyIB3A==}
     engines: {node: '>=12.20'}
 
-  detect-libc@2.1.1:
-    resolution: {integrity: sha512-ecqj/sy1jcK1uWrwpR67UhYrIFQ+5WlGxth34WquCbamhFA6hkkwiu37o6J5xCHdo1oixJRfVRw+ywV+Hq/0Aw==}
+  detect-libc@2.1.2:
+    resolution: {integrity: sha512-Btj2BOOO83o3WyH59e8MgXsxEQVcarkUOpEYrubB0urwnN10yQ364rsiByU11nZlqWYZm05i/of7io4mzihBtQ==}
     engines: {node: '>=8'}
 
   detect-newline@4.0.1:
@@ -7473,7 +7473,7 @@ snapshots:
 
   '@tailwindcss/oxide@4.1.14':
     dependencies:
-      detect-libc: 2.1.1
+      detect-libc: 2.1.2
       tar: 7.5.1
     optionalDependencies:
       '@tailwindcss/oxide-android-arm64': 4.1.14
@@ -7897,7 +7897,7 @@ snapshots:
   autoprefixer-core@5.2.1:
     dependencies:
       browserslist: 0.4.0
-      caniuse-db: 1.0.30001747
+      caniuse-db: 1.0.30001748
       num2fraction: 1.2.2
       postcss: 4.1.16
 
@@ -8029,15 +8029,15 @@ snapshots:
 
   browserslist@0.4.0:
     dependencies:
-      caniuse-db: 1.0.30001747
+      caniuse-db: 1.0.30001748
 
   browserslist@0.5.0:
     dependencies:
-      caniuse-db: 1.0.30001747
+      caniuse-db: 1.0.30001748
 
   browserslist@1.7.7:
     dependencies:
-      caniuse-db: 1.0.30001747
+      caniuse-db: 1.0.30001748
       electron-to-chromium: 1.5.230
 
   buffer-crc32@0.2.13: {}
@@ -8117,11 +8117,11 @@ snapshots:
   caniuse-api@1.6.1:
     dependencies:
       browserslist: 1.7.7
-      caniuse-db: 1.0.30001747
+      caniuse-db: 1.0.30001748
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
 
-  caniuse-db@1.0.30001747: {}
+  caniuse-db@1.0.30001748: {}
 
   capital-case@1.0.4:
     dependencies:
@@ -8669,7 +8669,7 @@ snapshots:
 
   detect-indent@7.0.2: {}
 
-  detect-libc@2.1.1: {}
+  detect-libc@2.1.2: {}
 
   detect-newline@4.0.1: {}
 
@@ -10266,7 +10266,7 @@ snapshots:
 
   lightningcss@1.30.1:
     dependencies:
-      detect-libc: 2.1.1
+      detect-libc: 2.1.2
     optionalDependencies:
       lightningcss-darwin-arm64: 1.30.1
       lightningcss-darwin-x64: 1.30.1
