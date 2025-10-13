@@ -1,3 +1,10 @@
+# [2.14.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.13.1...v2.14.0) (2025-10-13)
+
+
+### Features
+
+* update template for invocing ([c842ff9](https://gitlab.kilic.dev/utils/md-printer/commit/c842ff91fece10a4bf0fe06250b50727b5c343f9))
+
 ## [2.13.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.13.0...v2.13.1) (2025-09-30)
 
 
