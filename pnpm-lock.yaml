@@ -107,7 +107,7 @@ importers:
         version: 16.2.6
       oclif:
         specifier: ^4.22.18
-        version: 4.22.42(@types/node@24.10.0)
+        version: 4.22.43(@types/node@24.10.0)
       prettier:
         specifier: ^3.6.2
         version: 3.6.2
@@ -4285,8 +4285,8 @@ packages:
     resolution: {integrity: sha512-gXah6aZrcUxjWg2zR2MwouP2eHlCBzdV4pygudehaKXSGW4v2AsRQUK+lwwXhii6KFZcunEnmSUoYp5CXibxtA==}
     engines: {node: '>= 0.4'}
 
-  oclif@4.22.42:
-    resolution: {integrity: sha512-QF1/bxLEALSkRJRhGA/ivWDa9sF+wsCbC10tBgCnC+5KRFYCqlTlBJjJA0w+f0AOIIVSd1ORVnJtwjuuwkwiqQ==}
+  oclif@4.22.43:
+    resolution: {integrity: sha512-8HG5/PJ9DmlncHMEgQcy2nEGDB3VIMcjrbf5IkDupOwJ4Z7sYl9lkczVw9m6dt3/HE5vwM5lY4/eomqfwMU7oA==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -10913,7 +10913,7 @@ snapshots:
       define-properties: 1.2.1
       es-object-atoms: 1.1.1
 
-  oclif@4.22.42(@types/node@24.10.0):
+  oclif@4.22.43(@types/node@24.10.0):
     dependencies:
       '@aws-sdk/client-cloudfront': 3.927.0
       '@aws-sdk/client-s3': 3.927.0
