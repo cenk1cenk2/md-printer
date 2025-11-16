@@ -726,8 +726,8 @@ packages:
     resolution: {integrity: sha512-NBQIg5hEMhvdbi4mSrdqRGl5XJ0bqTAHq6vDCCCDXUcfVtdk3ZJbSxtRVWyVvo9E28vwqu6MZyHOJylevqcHbA==}
     engines: {node: '>=18.0.0'}
 
-  '@oclif/plugin-not-found@3.2.72':
-    resolution: {integrity: sha512-CRcqHGdcEL4l5cls5F9FvwKt04LkdG7WyFozOu2vP1/3w34S29zbw8Tx1gAzfBZDDme5ChSaqFXU5qbTLx5yYQ==}
+  '@oclif/plugin-not-found@3.2.73':
+    resolution: {integrity: sha512-2bQieTGI9XNFe9hKmXQjJmHV5rZw+yn7Rud1+C5uLEo8GaT89KZbiLTJgL35tGILahy/cB6+WAs812wjw7TK6w==}
     engines: {node: '>=18.0.0'}
 
   '@oclif/plugin-warn-if-update-available@3.1.53':
@@ -1814,8 +1814,8 @@ packages:
   caniuse-api@1.6.1:
     resolution: {integrity: sha512-SBTl70K0PkDUIebbkXrxWqZlHNs0wRgRD6QZ8guctShjbh63gEPfF+Wj0Yw+75f5Y8tSzqAI/NcisYv/cCah2Q==}
 
-  caniuse-db@1.0.30001754:
-    resolution: {integrity: sha512-xiQRtIvVj33+nRR+rMUaDS+GTbU2J47APUoxmlTXimjJ0f20AY2dszjjo6eBli96r68al3d9OUnztZJmFIhN6w==}
+  caniuse-db@1.0.30001755:
+    resolution: {integrity: sha512-R8xk0HVpfPgDIp4rpbHNYMZY3Bnr5XgEvQ54sbPQwIL2rBruVQNipYcGKlve7txXcgoD7ihoQDLU020hFysTLw==}
 
   capital-case@1.0.4:
     resolution: {integrity: sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A==}
@@ -5717,8 +5717,8 @@ packages:
     resolution: {integrity: sha512-gptHNQghINnc/vTGIk0SOFGFNXw7JVrlRUtConJRlvaw6DuX0wO5Jeko9sWrMBhh+PsYAZ7oXAiOnf/UKogyiw==}
     engines: {node: '>= 10.0.0'}
 
-  unrun@0.2.9:
-    resolution: {integrity: sha512-Cta7uGK/08OqH2O0HLYXs1AfIBp2+2v11ZoeAIqJLUCb9CN+7uxj+CldHCzqAw30b8MJEmWe+BFgK2sl4lJXlw==}
+  unrun@0.2.10:
+    resolution: {integrity: sha512-IcQCpGp3oawzr2ANNmMCh2XNssrDueQvoOfC/ranG4Enq0vVCCLfen+sJTaLYKR22vxZttF2KvvaubgbUadTqA==}
     engines: {node: '>=20.19.0'}
     hasBin: true
     peerDependencies:
@@ -6948,7 +6948,7 @@ snapshots:
     dependencies:
       '@oclif/core': 4.8.0
 
-  '@oclif/plugin-not-found@3.2.72(@types/node@24.10.1)':
+  '@oclif/plugin-not-found@3.2.73(@types/node@24.10.1)':
     dependencies:
       '@inquirer/prompts': 7.10.1(@types/node@24.10.1)
       '@oclif/core': 4.8.0
@@ -7898,7 +7898,7 @@ snapshots:
   autoprefixer-core@5.2.1:
     dependencies:
       browserslist: 0.4.0
-      caniuse-db: 1.0.30001754
+      caniuse-db: 1.0.30001755
       num2fraction: 1.2.2
       postcss: 4.1.16
 
@@ -8032,15 +8032,15 @@ snapshots:
 
   browserslist@0.4.0:
     dependencies:
-      caniuse-db: 1.0.30001754
+      caniuse-db: 1.0.30001755
 
   browserslist@0.5.0:
     dependencies:
-      caniuse-db: 1.0.30001754
+      caniuse-db: 1.0.30001755
 
   browserslist@1.7.7:
     dependencies:
-      caniuse-db: 1.0.30001754
+      caniuse-db: 1.0.30001755
       electron-to-chromium: 1.5.254
 
   buffer-crc32@0.2.13: {}
@@ -8120,11 +8120,11 @@ snapshots:
   caniuse-api@1.6.1:
     dependencies:
       browserslist: 1.7.7
-      caniuse-db: 1.0.30001754
+      caniuse-db: 1.0.30001755
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
 
-  caniuse-db@1.0.30001754: {}
+  caniuse-db@1.0.30001755: {}
 
   capital-case@1.0.4:
     dependencies:
@@ -10937,7 +10937,7 @@ snapshots:
       '@inquirer/select': 2.5.0
       '@oclif/core': 4.8.0
       '@oclif/plugin-help': 6.2.36
-      '@oclif/plugin-not-found': 3.2.72(@types/node@24.10.1)
+      '@oclif/plugin-not-found': 3.2.73(@types/node@24.10.1)
       '@oclif/plugin-warn-if-update-available': 3.1.53
       ansis: 3.17.0
       async-retry: 1.3.3
@@ -12466,7 +12466,7 @@ snapshots:
       tinyglobby: 0.2.15
       tree-kill: 1.2.2
       unconfig-core: 7.4.1
-      unrun: 0.2.9
+      unrun: 0.2.10
     optionalDependencies:
       typescript: 5.9.3
     transitivePeerDependencies:
@@ -12605,7 +12605,7 @@ snapshots:
 
   universalify@2.0.1: {}
 
-  unrun@0.2.9:
+  unrun@0.2.10:
     dependencies:
       '@oxc-project/runtime': 0.97.0
       rolldown: 1.0.0-beta.50
