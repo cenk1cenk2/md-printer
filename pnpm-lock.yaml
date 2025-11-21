@@ -3643,8 +3643,8 @@ packages:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
 
-  libphonenumber-js@1.12.28:
-    resolution: {integrity: sha512-sDB+nY8l1d2SHC0TnBat4uovsx1EjrkesK9U8Arl2/LQluXn3OQczwqr2M/1V2Lo0ajnaY/nZjvacg6vmbqWUQ==}
+  libphonenumber-js@1.12.29:
+    resolution: {integrity: sha512-P2aLrbeqHbmh8+9P35LXQfXOKc7XJ0ymUKl7tyeyQjdRNfzunXWxQXGc4yl3fUf28fqLRfPY+vIVvFXK7KEBTw==}
 
   liftoff@2.5.0:
     resolution: {integrity: sha512-01zfGFqfORP1CGmZZP2Zn51zsqz4RltDi0RDOhbGoLYdUT5Lw+I2gX6QdwXhPITF6hPOHEOp+At6/L24hIg9WQ==}
@@ -8237,7 +8237,7 @@ snapshots:
   class-validator@0.14.2:
     dependencies:
       '@types/validator': 13.15.10
-      libphonenumber-js: 1.12.28
+      libphonenumber-js: 1.12.29
       validator: 13.15.23
 
   clean-css@0.9.1:
@@ -10226,7 +10226,7 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
 
-  libphonenumber-js@1.12.28: {}
+  libphonenumber-js@1.12.29: {}
 
   liftoff@2.5.0:
     dependencies:
