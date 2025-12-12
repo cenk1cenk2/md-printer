@@ -107,7 +107,7 @@ importers:
         version: 16.2.7
       oclif:
         specifier: ^4.22.18
-        version: 4.22.54(@types/node@24.10.3)
+        version: 4.22.55(@types/node@24.10.3)
       prettier:
         specifier: ^3.6.2
         version: 3.7.4
@@ -4283,8 +4283,8 @@ packages:
   obug@2.1.1:
     resolution: {integrity: sha512-uTqF9MuPraAQ+IsnPf366RG4cP9RtUi7MLO1N3KEc+wb0a6yKpeL0lmk2IB1jY5KHPAlTc6T/JRdC/YqxHNwkQ==}
 
-  oclif@4.22.54:
-    resolution: {integrity: sha512-+LWHTxh8Xi7BVp/eyrsOOutunwBOYpzq6HQ+vu3xEZgST/aqrvHqGFgLOwglEobf5oUqkbuH2LmVzweXCUBu8Q==}
+  oclif@4.22.55:
+    resolution: {integrity: sha512-yBObiRYe0taTJ7apBop0YkAZ7Ruul/TkgXhJ2Pc2srEtvIfg1CuNXB8RP9TlMkR6CjbYqdHuji4befZzrUoXNw==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -5363,8 +5363,8 @@ packages:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
 
-  strnum@2.1.1:
-    resolution: {integrity: sha512-7ZvoFTiCnGxBtDqJ//Cu6fWtZtc7Y3x+QOirG15wztbdngGSkht27o2pyGWrVy0b4WAy3jbKmnoK6g5VlVNUUw==}
+  strnum@2.1.2:
+    resolution: {integrity: sha512-l63NF9y/cLROq/yqKXSLtcMeeyOfnSQlfMSlzFt/K73oIaD8DGaQWd7Z34X9GPiKqP5rbSh84Hl4bOlLcjiSrQ==}
 
   strtok3@10.3.4:
     resolution: {integrity: sha512-KIy5nylvC5le1OdaaoCJ07L+8iQzJHGH6pWDuzS+d07Cu7n1MZ2x26P8ZKIWfbK02+XIL8Mp4RkWeqdUCrDMfg==}
@@ -9092,7 +9092,7 @@ snapshots:
 
   fast-xml-parser@5.2.5:
     dependencies:
-      strnum: 2.1.1
+      strnum: 2.1.2
 
   fastest-levenshtein@1.0.16: {}
 
@@ -10917,7 +10917,7 @@ snapshots:
 
   obug@2.1.1: {}
 
-  oclif@4.22.54(@types/node@24.10.3):
+  oclif@4.22.55(@types/node@24.10.3):
     dependencies:
       '@aws-sdk/client-cloudfront': 3.948.0
       '@aws-sdk/client-s3': 3.948.0
@@ -12206,7 +12206,7 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  strnum@2.1.1: {}
+  strnum@2.1.2: {}
 
   strtok3@10.3.4:
     dependencies:
