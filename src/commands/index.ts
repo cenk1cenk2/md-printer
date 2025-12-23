@@ -108,6 +108,10 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
       return new showdown.Converter().makeHtml(markdown)
     })
     this.tasks.options = { silentRendererCondition: true }
+
+    if (!this.args.file && !this.flags.stdin) {
+      throw new Error('Either --stdin or file argument must be provided.')
+    }
   }
 
   public async run(): Promise<void> {
