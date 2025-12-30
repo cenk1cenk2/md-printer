@@ -1,3 +1,10 @@
+# [2.15.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.14.0...v2.15.0) (2025-12-30)
+
+
+### Features
+
+* update node version and some build hickups ([7355029](https://gitlab.kilic.dev/utils/md-printer/commit/73550294f908ea145791b431fc72967299bd7ffd))
+
 # [2.14.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.13.1...v2.14.0) (2025-10-13)
 
 
