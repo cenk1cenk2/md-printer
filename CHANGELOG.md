@@ -1,3 +1,10 @@
+## [2.15.3](https://gitlab.kilic.dev/utils/md-printer/compare/v2.15.2...v2.15.3) (2026-01-18)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @listr2/manager to v4 ([7786179](https://gitlab.kilic.dev/utils/md-printer/commit/778617917587aedff5bac2a7d151fd88c3748c9f))
+
 ## [2.15.2](https://gitlab.kilic.dev/utils/md-printer/compare/v2.15.1...v2.15.2) (2026-01-18)
 
 
