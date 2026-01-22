@@ -107,7 +107,7 @@ importers:
         version: 16.2.7
       oclif:
         specifier: ^4.22.18
-        version: 4.22.67(@types/node@24.10.9)
+        version: 4.22.68(@types/node@24.10.9)
       prettier:
         specifier: ^3.6.2
         version: 3.8.1
@@ -3867,8 +3867,8 @@ packages:
     resolution: {integrity: sha512-+bT2uH4E5LGE7h/n3evcS/sQlJXCpIp6ym8OWJ5eV6+67Dsql/LaaT7qJBAt2rzfoa/5QBGBhxDix1dMt2kQKQ==}
     engines: {node: '>= 0.8.0'}
 
-  libphonenumber-js@1.12.34:
-    resolution: {integrity: sha512-v/Ip8k8eYdp7bINpzqDh46V/PaQ8sK+qi97nMQgjZzFlb166YFqlR/HVI+MzsI9JqcyyVWCOipmmretiaSyQyw==}
+  libphonenumber-js@1.12.35:
+    resolution: {integrity: sha512-T/Cz6iLcsZdb5jDncDcUNhSAJ0VlSC9TnsqtBNdpkaAmy24/R1RhErtNWVWBrcUZKs9hSgaVsBkc7HxYnazIfw==}
 
   liftoff@2.5.0:
     resolution: {integrity: sha512-01zfGFqfORP1CGmZZP2Zn51zsqz4RltDi0RDOhbGoLYdUT5Lw+I2gX6QdwXhPITF6hPOHEOp+At6/L24hIg9WQ==}
@@ -4531,8 +4531,8 @@ packages:
   obug@2.1.1:
     resolution: {integrity: sha512-uTqF9MuPraAQ+IsnPf366RG4cP9RtUi7MLO1N3KEc+wb0a6yKpeL0lmk2IB1jY5KHPAlTc6T/JRdC/YqxHNwkQ==}
 
-  oclif@4.22.67:
-    resolution: {integrity: sha512-7r5jNcJRvrlnHmIlXIHoiUILKtxxrcDXkdYGXseexjJrJsywdTjhDspx0D/IshJ9cZyKHF9J3mxpILjvZ/7a3g==}
+  oclif@4.22.68:
+    resolution: {integrity: sha512-XYAhVTgnomHmvaOe1upNI8rTV4dNmkCF4T9onhVVUiEF4Z8M8rNJXuW8Ba5+BFLyfRIL+Rp/sFZU6EYWbZ7DEg==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -8645,7 +8645,7 @@ snapshots:
   class-validator@0.14.3:
     dependencies:
       '@types/validator': 13.15.10
-      libphonenumber-js: 1.12.34
+      libphonenumber-js: 1.12.35
       validator: 13.15.26
 
   clean-css@0.9.1:
@@ -10642,7 +10642,7 @@ snapshots:
       prelude-ls: 1.2.1
       type-check: 0.4.0
 
-  libphonenumber-js@1.12.34: {}
+  libphonenumber-js@1.12.35: {}
 
   liftoff@2.5.0:
     dependencies:
@@ -11370,7 +11370,7 @@ snapshots:
 
   obug@2.1.1: {}
 
-  oclif@4.22.67(@types/node@24.10.9):
+  oclif@4.22.68(@types/node@24.10.9):
     dependencies:
       '@aws-sdk/client-cloudfront': 3.972.0
       '@aws-sdk/client-s3': 3.972.0
