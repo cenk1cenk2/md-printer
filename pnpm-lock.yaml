@@ -5137,8 +5137,8 @@ packages:
     deprecated: Rimraf versions prior to v4 are no longer supported
     hasBin: true
 
-  rolldown-plugin-dts@0.21.5:
-    resolution: {integrity: sha512-tS3jz7Fq1FWx5Jqih7pZ3zH4Bsnu+VYH5aY7e9o7Joxu5hi9ApMULmM+LVIGxoGVjjMjZGFMEcbdiZ17j/5eNA==}
+  rolldown-plugin-dts@0.21.6:
+    resolution: {integrity: sha512-gePhzvZJRB0JIb/NyngEsMt3FPQtM4BXCLkxz7u1ggge2PmlZ7uOwmHjeBEsBiBRjOY12SdtEl7BmI3T1779ZA==}
     engines: {node: '>=20.19.0'}
     peerDependencies:
       '@ts-macro/tsc': ^0.3.6
@@ -12128,7 +12128,7 @@ snapshots:
     dependencies:
       glob: 7.2.3
 
-  rolldown-plugin-dts@0.21.5(rolldown@1.0.0-rc.1)(typescript@5.9.3):
+  rolldown-plugin-dts@0.21.6(rolldown@1.0.0-rc.1)(typescript@5.9.3):
     dependencies:
       '@babel/generator': 8.0.0-beta.4
       '@babel/parser': 8.0.0-beta.4
@@ -12837,7 +12837,7 @@ snapshots:
       obug: 2.1.1
       picomatch: 4.0.3
       rolldown: 1.0.0-rc.1
-      rolldown-plugin-dts: 0.21.5(rolldown@1.0.0-rc.1)(typescript@5.9.3)
+      rolldown-plugin-dts: 0.21.6(rolldown@1.0.0-rc.1)(typescript@5.9.3)
       semver: 7.7.3
       tinyexec: 1.0.2
       tinyglobby: 0.2.15
