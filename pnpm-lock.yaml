@@ -70,8 +70,8 @@ importers:
         version: 2.8.2
     devDependencies:
       '@cenk1cenk2/cz-cc':
-        specifier: ^2.2.2
-        version: 2.2.2(@types/node@24.10.11)(typescript@5.9.3)
+        specifier: ^2.2.3
+        version: 2.2.3(@types/node@24.10.11)(typescript@5.9.3)
       '@cenk1cenk2/eslint-config':
         specifier: ^3.1.72
         version: 3.1.72(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
@@ -341,8 +341,8 @@ packages:
   '@borewit/text-codec@0.2.1':
     resolution: {integrity: sha512-k7vvKPbf7J2fZ5klGRD9AeKfUvojuZIQ3BT5u7Jfv+puwXkUBUT5PVyMDfJZpy30CBDXGMgw7fguK/lpOMBvgw==}
 
-  '@cenk1cenk2/cz-cc@2.2.2':
-    resolution: {integrity: sha512-Q5NDYoSv9zSxeFnJITM7xfAPHIPNP+9NFz4+ynS/rTmKFM5N5VhlrCu2w3rsTrChzjeKnumDIOcisH3mx937pw==}
+  '@cenk1cenk2/cz-cc@2.2.3':
+    resolution: {integrity: sha512-5haKAyT7xPogxIHuJXt9xSNxunidDlq4y/ZYZjxwaQHr+8p3EOrJQNAaFm07tG6cpl3mlJxMK07tPMBRAQ51Eg==}
     engines: {node: '>= 22'}
 
   '@cenk1cenk2/eslint-config@3.1.72':
@@ -6674,7 +6674,7 @@ snapshots:
 
   '@borewit/text-codec@0.2.1': {}
 
-  '@cenk1cenk2/cz-cc@2.2.2(@types/node@24.10.11)(typescript@5.9.3)':
+  '@cenk1cenk2/cz-cc@2.2.3(@types/node@24.10.11)(typescript@5.9.3)':
     dependencies:
       '@inquirer/prompts': 8.2.0(@types/node@24.10.11)
       '@listr2/prompt-adapter-inquirer': 4.1.0(@inquirer/prompts@8.2.0(@types/node@24.10.11))(@types/node@24.10.11)(listr2@10.1.0)
@@ -10134,7 +10134,7 @@ snapshots:
       cli-width: 3.0.0
       external-editor: 3.1.0
       figures: 3.2.0
-      lodash: 4.17.21
+      lodash: 4.17.23
       mute-stream: 0.0.8
       ora: 5.4.1
       run-async: 2.4.1
