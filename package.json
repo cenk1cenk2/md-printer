@@ -92,7 +92,7 @@
     "yaml": "^2.8.1"
   },
   "devDependencies": {
-    "@cenk1cenk2/cz-cc": "^2.2.2",
+    "@cenk1cenk2/cz-cc": "^2.2.3",
     "@cenk1cenk2/eslint-config": "^3.1.72",
     "@tsconfig/node24": "^24.0.4",
     "@types/config": "^3.3.5",
