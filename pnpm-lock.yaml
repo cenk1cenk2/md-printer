@@ -70,13 +70,13 @@ importers:
         version: 2.8.2
     devDependencies:
       '@cenk1cenk2/cz-cc':
-        specifier: ^2.1.5
+        specifier: ^2.2.2
         version: 2.2.2(@types/node@24.10.11)(typescript@5.9.3)
       '@cenk1cenk2/eslint-config':
         specifier: ^3.1.71
         version: 3.1.71(eslint@9.39.2(jiti@2.6.1))(typescript@5.9.3)
       '@tsconfig/node24':
-        specifier: ^24.0.3
+        specifier: ^24.0.4
         version: 24.0.4
       '@types/config':
         specifier: ^3.3.5
@@ -85,7 +85,7 @@ importers:
         specifier: ^11.0.4
         version: 11.0.4
       '@types/node':
-        specifier: ^24.3.1
+        specifier: ^24.10.11
         version: 24.10.11
       '@types/nunjucks':
         specifier: ^3.2.6
@@ -97,16 +97,16 @@ importers:
         specifier: ^9.39.2
         version: 9.39.2(jiti@2.6.1)
       execa:
-        specifier: ^9.6.0
+        specifier: ^9.6.1
         version: 9.6.1
       globby:
         specifier: ^16.1.0
         version: 16.1.0
       lint-staged:
-        specifier: ^16.1.6
+        specifier: ^16.2.7
         version: 16.2.7
       oclif:
-        specifier: ^4.22.18
+        specifier: ^4.22.73
         version: 4.22.73(@types/node@24.10.11)
       prettier:
         specifier: ^3.8.1
@@ -10134,7 +10134,7 @@ snapshots:
       cli-width: 3.0.0
       external-editor: 3.1.0
       figures: 3.2.0
-      lodash: 4.17.21
+      lodash: 4.17.23
       mute-stream: 0.0.8
       ora: 5.4.1
       run-async: 2.4.1
