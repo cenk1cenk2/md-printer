@@ -317,8 +317,8 @@ packages:
     resolution: {integrity: sha512-3ypWOOiC4AYHKr8vYRVtWtWmyvcoItHtVqF8paFax+ydpmUdPsJpLBkBBs5ItmhdrwC3a0ZSqqFAdzls4ODP3w==}
     engines: {node: ^20.19.0 || >=22.12.0}
 
-  '@babel/helper-string-parser@8.0.0-rc.1':
-    resolution: {integrity: sha512-vi/pfmbrOtQmqgfboaBhaCU50G7mcySVu69VU8z+lYoPPB6WzI9VgV7WQfL908M4oeSH5fDkmoupIqoE0SdApw==}
+  '@babel/helper-string-parser@8.0.0-rc.2':
+    resolution: {integrity: sha512-noLx87RwlBEMrTzncWd/FvTxoJ9+ycHNg0n8yyYydIoDsLZuxknKgWRJUqcrVkNrJ74uGyhWQzQaS3q8xfGAhQ==}
     engines: {node: ^20.19.0 || >=22.12.0}
 
   '@babel/helper-validator-identifier@7.28.5':
@@ -1967,8 +1967,8 @@ packages:
   caniuse-api@1.6.1:
     resolution: {integrity: sha512-SBTl70K0PkDUIebbkXrxWqZlHNs0wRgRD6QZ8guctShjbh63gEPfF+Wj0Yw+75f5Y8tSzqAI/NcisYv/cCah2Q==}
 
-  caniuse-db@1.0.30001769:
-    resolution: {integrity: sha512-YUJlOqWziYAdXSnL60FU2Won9HqW/IY77M8xgDFMRj5+StEnycCnlKvORrMPAevdyfYd8W6pjQ2XaEiMyDocWA==}
+  caniuse-db@1.0.30001770:
+    resolution: {integrity: sha512-i1X+jYz8PDS/HHEaTN8YgX1G5yw2sPFVl00AlWnpz0lX3MLnXtowKCIOBZIQ05p24tLG6WUCP7ygi3TTXRuJ/g==}
 
   capital-case@1.0.4:
     resolution: {integrity: sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A==}
@@ -6675,7 +6675,7 @@ snapshots:
       '@types/jsesc': 2.5.1
       jsesc: 3.1.0
 
-  '@babel/helper-string-parser@8.0.0-rc.1': {}
+  '@babel/helper-string-parser@8.0.0-rc.2': {}
 
   '@babel/helper-validator-identifier@7.28.5': {}
 
@@ -6687,7 +6687,7 @@ snapshots:
 
   '@babel/types@8.0.0-rc.1':
     dependencies:
-      '@babel/helper-string-parser': 8.0.0-rc.1
+      '@babel/helper-string-parser': 8.0.0-rc.2
       '@babel/helper-validator-identifier': 8.0.0-rc.1
 
   '@borewit/text-codec@0.2.1': {}
@@ -8215,7 +8215,7 @@ snapshots:
   autoprefixer-core@5.2.1:
     dependencies:
       browserslist: 0.4.0
-      caniuse-db: 1.0.30001769
+      caniuse-db: 1.0.30001770
       num2fraction: 1.2.2
       postcss: 4.1.16
 
@@ -8349,15 +8349,15 @@ snapshots:
 
   browserslist@0.4.0:
     dependencies:
-      caniuse-db: 1.0.30001769
+      caniuse-db: 1.0.30001770
 
   browserslist@0.5.0:
     dependencies:
-      caniuse-db: 1.0.30001769
+      caniuse-db: 1.0.30001770
 
   browserslist@1.7.7:
     dependencies:
-      caniuse-db: 1.0.30001769
+      caniuse-db: 1.0.30001770
       electron-to-chromium: 1.5.286
 
   buffer-crc32@0.2.13: {}
@@ -8437,11 +8437,11 @@ snapshots:
   caniuse-api@1.6.1:
     dependencies:
       browserslist: 1.7.7
-      caniuse-db: 1.0.30001769
+      caniuse-db: 1.0.30001770
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
 
-  caniuse-db@1.0.30001769: {}
+  caniuse-db@1.0.30001770: {}
 
   capital-case@1.0.4:
     dependencies:
@@ -10166,7 +10166,7 @@ snapshots:
       cli-width: 3.0.0
       external-editor: 3.1.0
       figures: 3.2.0
-      lodash: 4.17.23
+      lodash: 4.17.21
       mute-stream: 0.0.8
       ora: 5.4.1
       run-async: 2.4.1
