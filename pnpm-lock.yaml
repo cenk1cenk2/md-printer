@@ -73,7 +73,7 @@ importers:
         specifier: ^2.2.4
         version: 2.2.4(@types/node@24.10.13)(typescript@5.9.3)
       '@cenk1cenk2/eslint-config':
-        specifier: ^3.1.74
+        specifier: ^3.1.75
         version: 3.1.75(eslint@10.0.0(jiti@2.6.1))(typescript@5.9.3)
       '@tsconfig/node24':
         specifier: ^24.0.4
