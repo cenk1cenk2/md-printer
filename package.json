@@ -72,7 +72,7 @@
   "dependencies": {
     "@cenk1cenk2/oclif-common": "^7.0.7",
     "@listr2/manager": "^4.1.0",
-    "@oclif/core": "^4.8.0",
+    "@oclif/core": "^4.8.1",
     "@oclif/plugin-help": "^6.2.37",
     "@tailwindcss/forms": "^0.5.11",
     "@tailwindcss/postcss": "^4.2.0",
