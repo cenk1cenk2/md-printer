@@ -15,7 +15,7 @@ importers:
         specifier: ^4.1.0
         version: 4.1.0(listr2@10.1.0)
       '@oclif/core':
-        specifier: ^4.8.0
+        specifier: ^4.8.1
         version: 4.8.1
       '@oclif/plugin-help':
         specifier: ^6.2.37
