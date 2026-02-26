@@ -97,7 +97,7 @@
     "@tsconfig/node24": "^24.0.4",
     "@types/config": "^3.3.5",
     "@types/fs-extra": "^11.0.4",
-    "@types/node": "^24.10.13",
+    "@types/node": "^24.10.14",
     "@types/nunjucks": "^3.2.6",
     "@types/showdown": "^2.0.6",
     "eslint": "^10.0.2",
