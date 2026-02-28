@@ -2053,8 +2053,8 @@ packages:
   caniuse-api@1.6.1:
     resolution: {integrity: sha512-SBTl70K0PkDUIebbkXrxWqZlHNs0wRgRD6QZ8guctShjbh63gEPfF+Wj0Yw+75f5Y8tSzqAI/NcisYv/cCah2Q==}
 
-  caniuse-db@1.0.30001774:
-    resolution: {integrity: sha512-rhOtVTEXt2sDQVG2pAZn6mZjnwGL59DWVCVFnfsgnTtuX9GV4zdCFAQKNN5ma8/LBuphwu7bHq2UnxkQtQi0qA==}
+  caniuse-db@1.0.30001775:
+    resolution: {integrity: sha512-vgQ9xD54EYA5k7pdbGl//54ztrHfmylqMKX5W3X5JxNm7r9XywEOKH3sUdeq4XSMJwcrDF7AQ7QsNxGaoQIPlw==}
 
   capital-case@1.0.4:
     resolution: {integrity: sha512-ds37W8CytHgwnhGGTi88pcPyR15qoNkOpYwmMMfnWqqWgESapLqvDx6huFjQ5vqWSn2Z06173XNA7LtMOeUh1A==}
@@ -8304,7 +8304,7 @@ snapshots:
   autoprefixer-core@5.2.1:
     dependencies:
       browserslist: 0.4.0
-      caniuse-db: 1.0.30001774
+      caniuse-db: 1.0.30001775
       num2fraction: 1.2.2
       postcss: 4.1.16
 
@@ -8440,15 +8440,15 @@ snapshots:
 
   browserslist@0.4.0:
     dependencies:
-      caniuse-db: 1.0.30001774
+      caniuse-db: 1.0.30001775
 
   browserslist@0.5.0:
     dependencies:
-      caniuse-db: 1.0.30001774
+      caniuse-db: 1.0.30001775
 
   browserslist@1.7.7:
     dependencies:
-      caniuse-db: 1.0.30001774
+      caniuse-db: 1.0.30001775
       electron-to-chromium: 1.5.302
 
   buffer-crc32@0.2.13: {}
@@ -8528,11 +8528,11 @@ snapshots:
   caniuse-api@1.6.1:
     dependencies:
       browserslist: 1.7.7
-      caniuse-db: 1.0.30001774
+      caniuse-db: 1.0.30001775
       lodash.memoize: 4.1.2
       lodash.uniq: 4.5.0
 
-  caniuse-db@1.0.30001774: {}
+  caniuse-db@1.0.30001775: {}
 
   capital-case@1.0.4:
     dependencies:
