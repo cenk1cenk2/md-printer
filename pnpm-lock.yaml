@@ -70,7 +70,7 @@ importers:
         version: 2.8.2
     devDependencies:
       '@cenk1cenk2/cz-cc':
-        specifier: ^2.2.6
+        specifier: ^2.2.7
         version: 2.2.7(@types/node@24.11.0)(typescript@5.9.3)
       '@cenk1cenk2/eslint-config':
         specifier: ^3.2.1
@@ -10261,7 +10261,7 @@ snapshots:
       cli-width: 3.0.0
       external-editor: 3.1.0
       figures: 3.2.0
-      lodash: 4.17.21
+      lodash: 4.17.23
       mute-stream: 0.0.8
       ora: 5.4.1
       run-async: 2.4.1
