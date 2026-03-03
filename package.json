@@ -78,7 +78,7 @@
     "@tailwindcss/postcss": "^4.2.1",
     "@tailwindcss/typography": "^0.5.19",
     "chokidar": "^5.0.0",
-    "fs-extra": "^11.3.3",
+    "fs-extra": "^11.3.4",
     "get-port": "^7.1.0",
     "gray-matter": "^4.0.3",
     "listr2": "^10.2.1",
