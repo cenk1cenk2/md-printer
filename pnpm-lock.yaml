@@ -1421,8 +1421,8 @@ packages:
   '@types/mute-stream@0.0.4':
     resolution: {integrity: sha512-CPM9nzrCPPJHQNA9keH9CVkVI+WR5kMa+7XEs5jcGQ0VoAGnLv242w8lIVgwAEfmE4oufJRaTc9PNLQl0ioAow==}
 
-  '@types/node@22.19.13':
-    resolution: {integrity: sha512-akNQMv0wW5uyRpD2v2IEyRSZiR+BeGuoB6L310EgGObO44HSMNT8z1xzio28V8qOrgYaopIDNA18YgdXd+qTiw==}
+  '@types/node@22.19.14':
+    resolution: {integrity: sha512-a39m4Z/qy3oYWP8Fc5RO674p/ENAB88JbwnmNwu6+hlfDTbqwE649936RqKNAXAOUwfggSVg6y2KwQcYBYaTsA==}
 
   '@types/node@24.11.1':
     resolution: {integrity: sha512-MOw3rIVR4djfMH7ft9ZJLPViaJwkZvMfrzumElas79IwMUEl8ykkuQmgL9MAMz7vO8G3vuz9b7Gu+keYZx7Xrw==}
@@ -6912,7 +6912,7 @@ snapshots:
       '@inquirer/figures': 1.0.15
       '@inquirer/type': 2.0.0
       '@types/mute-stream': 0.0.4
-      '@types/node': 22.19.13
+      '@types/node': 22.19.14
       '@types/wrap-ansi': 3.0.0
       ansi-escapes: 4.3.2
       cli-width: 4.1.0
@@ -7850,7 +7850,7 @@ snapshots:
     dependencies:
       '@types/node': 24.11.1
 
-  '@types/node@22.19.13':
+  '@types/node@22.19.14':
     dependencies:
       undici-types: 6.21.0
 
