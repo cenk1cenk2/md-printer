@@ -54,7 +54,7 @@ importers:
         specifier: ^8.5.8
         version: 8.5.8
       puppeteer:
-        specifier: ^24.38.0
+        specifier: ^24.39.0
         version: 24.39.0(typescript@5.9.3)
       showdown:
         specifier: ^2.1.0
