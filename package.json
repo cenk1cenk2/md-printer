@@ -102,7 +102,7 @@
     "@types/showdown": "^2.0.6",
     "eslint": "^10.1.0",
     "execa": "^9.6.1",
-    "globby": "^16.1.1",
+    "globby": "^16.2.0",
     "lint-staged": "^16.4.0",
     "oclif": "^4.22.96",
     "prettier": "^3.8.1",
