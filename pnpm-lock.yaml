@@ -100,8 +100,8 @@ importers:
         specifier: ^9.6.1
         version: 9.6.1
       globby:
-        specifier: ^16.1.1
-        version: 16.1.1
+        specifier: ^16.2.0
+        version: 16.2.0
       lint-staged:
         specifier: ^16.4.0
         version: 16.4.0
@@ -3250,8 +3250,8 @@ packages:
     resolution: {integrity: sha512-DpLKbNU4WylpxJykQujfCcwYWiV/Jhm50Goo0wrVILAv5jOr9d+H+UR3PhSCD2rCCEIg0uc+G+muBTwD54JhDQ==}
     engines: {node: '>= 0.4'}
 
-  globby@16.1.1:
-    resolution: {integrity: sha512-dW7vl+yiAJSp6aCekaVnVJxurRv7DCOLyXqEG3RYMYUg7AuJ2jCqPkZTA8ooqC2vtnkaMcV5WfFBMuEnTu1OQg==}
+  globby@16.2.0:
+    resolution: {integrity: sha512-QrJia2qDf5BB/V6HYlDTs0I0lBahyjLzpGQg3KT7FnCdTonAyPy2RtY802m2k4ALx6Dp752f82WsOczEVr3l6Q==}
     engines: {node: '>=20'}
 
   globule@0.1.0:
@@ -10322,7 +10322,7 @@ snapshots:
       define-properties: 1.2.1
       gopd: 1.2.0
 
-  globby@16.1.1:
+  globby@16.2.0:
     dependencies:
       '@sindresorhus/merge-streams': 4.0.0
       fast-glob: 3.3.3
