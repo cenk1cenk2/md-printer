@@ -1,3 +1,10 @@
+## [2.15.20](https://gitlab.kilic.dev/utils/md-printer/compare/v2.15.19...v2.15.20) (2026-04-05)
+
+
+### Bug Fixes
+
+* update dependencies ([ba9f5db](https://gitlab.kilic.dev/utils/md-printer/commit/ba9f5dbe585d74bde912af3b88892b10014a1a98))
+
 ## [2.15.19](https://gitlab.kilic.dev/utils/md-printer/compare/v2.15.18...v2.15.19) (2026-03-10)
 
 
