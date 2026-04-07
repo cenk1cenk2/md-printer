@@ -103,8 +103,8 @@ importers:
         specifier: ^16.4.0
         version: 16.4.0
       oclif:
-        specifier: ^4.22.97
-        version: 4.22.97(@types/node@24.12.2)
+        specifier: ^4.22.98
+        version: 4.22.98(@types/node@24.12.2)
       prettier:
         specifier: ^3.8.1
         version: 3.8.1
@@ -4122,6 +4122,9 @@ packages:
   lodash@4.17.23:
     resolution: {integrity: sha512-LgVTMpQtIopCi79SJeDiP0TfWi5CNEc/L/aRdTh3yIvmZXTnheWpKjSZhnvMl8iXbC1tFg9gdHHDMLoV7CnG+w==}
 
+  lodash@4.18.1:
+    resolution: {integrity: sha512-dMInicTPVE8d1e5otfwmmjlxkZoUpiVLwyeTdUsi/Caj/gfzzblBcCE5sRHV/AsjuCmxWrte2TNGSYuCeCq+0Q==}
+
   log-symbols@1.0.2:
     resolution: {integrity: sha512-mmPrW0Fh2fxOzdBbFv4g1m6pR72haFLPJ2G5SJEELf1y+iaQrDG6cWCPjy54RHYbZAt7X+ls690Kw62AdWXBzQ==}
     engines: {node: '>=0.10.0'}
@@ -4498,8 +4501,8 @@ packages:
   obug@2.1.1:
     resolution: {integrity: sha512-uTqF9MuPraAQ+IsnPf366RG4cP9RtUi7MLO1N3KEc+wb0a6yKpeL0lmk2IB1jY5KHPAlTc6T/JRdC/YqxHNwkQ==}
 
-  oclif@4.22.97:
-    resolution: {integrity: sha512-Z/ItrZquYfheBgvpiP3AQHYufjz5El+YGYRrPP/LkDuFzH+yj8V8LtVUuTKPlXx5xAF7YUZS6z9u7/R++Wyrdg==}
+  oclif@4.22.98:
+    resolution: {integrity: sha512-oaKgE8okvFYb5C+S97Hu4w8NJWa43Q1hHRsOSRjUbl/kIH1td3xMy8wacWk97O28hojtIoX7t99mznuV7K8EJw==}
     engines: {node: '>=18.0.0'}
     hasBin: true
 
@@ -7315,7 +7318,7 @@ snapshots:
       ansis: 3.17.0
       debug: 4.4.3(supports-color@8.1.1)
       http-call: 5.3.0
-      lodash: 4.17.23
+      lodash: 4.18.1
       registry-auth-token: 5.1.1
     transitivePeerDependencies:
       - supports-color
@@ -10906,6 +10909,8 @@ snapshots:
 
   lodash@4.17.23: {}
 
+  lodash@4.18.1: {}
+
   log-symbols@1.0.2:
     dependencies:
       chalk: 1.1.3
@@ -11314,7 +11319,7 @@ snapshots:
 
   obug@2.1.1: {}
 
-  oclif@4.22.97(@types/node@24.12.2):
+  oclif@4.22.98(@types/node@24.12.2):
     dependencies:
       '@aws-sdk/client-cloudfront': 3.1009.0
       '@aws-sdk/client-s3': 3.1014.0
@@ -11334,7 +11339,7 @@ snapshots:
       fs-extra: 8.1.0
       github-slugger: 2.0.0
       got: 13.0.0
-      lodash: 4.17.23
+      lodash: 4.18.1
       normalize-package-data: 6.0.2
       semver: 7.7.4
       sort-package-json: 2.15.1
