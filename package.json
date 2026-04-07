@@ -92,7 +92,7 @@
     "yaml": "^2.8.2"
   },
   "devDependencies": {
-    "@cenk1cenk2/cz-cc": "^2.2.11",
+    "@cenk1cenk2/cz-cc": "^2.2.12",
     "@cenk1cenk2/eslint-config": "^3.2.2",
     "@tsconfig/node24": "^24.0.4",
     "@types/fs-extra": "^11.0.4",
@@ -103,7 +103,7 @@
     "execa": "^9.6.1",
     "globby": "^16.2.0",
     "lint-staged": "^16.4.0",
-    "oclif": "^4.22.96",
+    "oclif": "^4.22.97",
     "prettier": "^3.8.1",
     "prettier-plugin-jinja-template": "^2.1.0",
     "simple-git-hooks": "^2.13.1",
