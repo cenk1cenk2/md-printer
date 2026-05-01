@@ -1,11 +1,14 @@
+@import url('https://fonts.bunny.net/css?family=montserrat:100,200,300,400,500,600,700,800,900&display=swap');
+
 @import 'tailwindcss';
 @plugin '@tailwindcss/typography';
 
-@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@400) layer(utilities);
-
 @theme {
-  --font-family-sans: Montserrat;
-  --font-family-serif: Montserrat;
+  --font-sans: 'Montserrat';
+  --font-serif: 'Montserrat';
+  --font-weight-semibold: 700;
+  --font-weight-bold: 800;
+  --font-weight-extrabold: 900;
   --color-primary-500: #cd0043;
   --color-gray-50: oklch(98.5% 0.002 247.839);
   --color-gray-100: #abb2bf;
@@ -28,6 +31,10 @@
   border-color: var(--color-gray-200, currentcolor);
 }
 
+body {
+  font-family: var(--font-sans);
+}
+
 address {
   @apply text-sm;
 }
@@ -38,7 +45,7 @@ address {
 }
 
 .prose h1 {
-  font-weight: 700;
+  font-weight: 800;
   padding-top: 0.1875rem;
   /* 0.75 * 0.25rem */
   padding-bottom: 0.1875rem;
@@ -48,6 +55,7 @@ address {
 }
 
 .prose h2 {
+  font-weight: 800;
   padding-top: 0.125rem;
   /* 0.5 * 0.25rem */
   padding-bottom: 0.125rem;
@@ -57,6 +65,7 @@ address {
 }
 
 .prose h3 {
+  font-weight: 700;
   padding-top: 0.0625rem;
   /* 0.25 * 0.25rem */
   padding-bottom: 0.0625rem;

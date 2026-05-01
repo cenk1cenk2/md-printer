@@ -1,8 +1,18 @@
+@import url('https://fonts.bunny.net/css?family=montserrat:100,200,300,400,500,600,700,800,900&display=swap');
+
 @import 'tailwindcss';
 
-@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@400) layer(utilities);
-
 @config './tailwind.config.cjs';
+
+@theme {
+  --font-weight-semibold: 700;
+  --font-weight-bold: 800;
+  --font-weight-extrabold: 900;
+}
+
+body {
+  font-family: 'Montserrat';
+}
 
 /*
   The default border color has changed to `currentcolor` in Tailwind CSS v4,

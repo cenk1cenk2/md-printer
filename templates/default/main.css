@@ -1,10 +1,24 @@
 @import url(https://unpkg.com/github-markdown-css/github-markdown-light.css);
-@import url(https://fonts.googleapis.com/css2?family=Montserrat:wght@400);
+@import url('https://fonts.bunny.net/css?family=montserrat:100,200,300,400,500,600,700,800,900&display=swap');
 @import url(https://fonts.googleapis.com/css2?family=Roboto+Mono);
 
 .markdown-body {
   font-size: 11px;
   font-family: 'Montserrat', sans-serif;
+}
+
+.markdown-body h1,
+.markdown-body h2 {
+  font-weight: 800;
+}
+
+.markdown-body h3,
+.markdown-body h4,
+.markdown-body h5,
+.markdown-body h6,
+.markdown-body strong,
+.markdown-body b {
+  font-weight: 700;
 }
 
 .page-break {

@@ -19,7 +19,7 @@ module.exports = {
             textDecoration: 'none'
           },
           h1: {
-            fontWeight: 700,
+            fontWeight: 800,
             paddingTop: theme('padding.0.75'),
             paddingBottom: theme('padding.0.75'),
             marginBottom: 0,
