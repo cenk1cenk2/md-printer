@@ -1,3 +1,10 @@
+# [2.16.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.15.20...v2.16.0) (2026-05-01)
+
+
+### Features
+
+* update templates for fonts ([6937811](https://gitlab.kilic.dev/utils/md-printer/commit/693781148e1daf4ffd9379ee20ee68094ba8d45b))
+
 ## [2.15.20](https://gitlab.kilic.dev/utils/md-printer/compare/v2.15.19...v2.15.20) (2026-04-05)
 
 
