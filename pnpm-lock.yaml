@@ -109,8 +109,8 @@ importers:
         specifier: ^3.8.3
         version: 3.8.3
       prettier-plugin-jinja-template:
-        specifier: ^2.1.0
-        version: 2.1.0(prettier@3.8.3)
+        specifier: ^2.2.0
+        version: 2.2.0(prettier@3.8.3)
       simple-git-hooks:
         specifier: ^2.13.1
         version: 2.13.1
@@ -4890,8 +4890,8 @@ packages:
     resolution: {integrity: sha512-s/46sYeylUfHNjI+sA/78FAHlmIuKqI9wNnzEOGehAlUUYeObv5C2mOinXBjyUyWmJ2SfcS2/ydApH4hTF4WXQ==}
     engines: {node: '>=0.10.0'}
 
-  prettier-plugin-jinja-template@2.1.0:
-    resolution: {integrity: sha512-mzoCp2Oy9BDSug80fw3B3J4n4KQj1hRvoQOL1akqcDKBb5nvYxrik9zUEDs4AEJ6nK7QDTGoH0y9rx7AlnQ78Q==}
+  prettier-plugin-jinja-template@2.2.0:
+    resolution: {integrity: sha512-FVZtWvSW8RKvHToWHgI9j1eau7t2mekYoVKg7GdDS16QVOYM8f08yzVptBUvSXKQR2xJAXCLi0rGGvJGFtCUrA==}
     peerDependencies:
       prettier: ^3.0.0
 
@@ -11840,7 +11840,7 @@ snapshots:
 
   preserve@0.2.0: {}
 
-  prettier-plugin-jinja-template@2.1.0(prettier@3.8.3):
+  prettier-plugin-jinja-template@2.2.0(prettier@3.8.3):
     dependencies:
       prettier: 3.8.3
 
