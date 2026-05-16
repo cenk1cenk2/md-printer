@@ -1,3 +1,10 @@
+## [2.16.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.16.0...v2.16.1) (2026-05-16)
+
+
+### Bug Fixes
+
+* **deps:** update dependency puppeteer to v25 ([612f2bb](https://gitlab.kilic.dev/utils/md-printer/commit/612f2bb00a69456bdea2462692cde0577eb9fdd8))
+
 # [2.16.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.15.20...v2.16.0) (2026-05-01)
 
 
