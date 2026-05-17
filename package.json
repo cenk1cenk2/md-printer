@@ -103,7 +103,7 @@
     "execa": "^9.6.1",
     "globby": "^16.2.0",
     "lint-staged": "^16.4.0",
-    "oclif": "^4.23.5",
+    "oclif": "^4.23.6",
     "prettier": "^3.8.3",
     "prettier-plugin-jinja-template": "^2.2.0",
     "simple-git-hooks": "^2.13.1",
