@@ -1,7 +1,12 @@
-ignoredBuiltDependencies:
-  - '@nestjs/core'
-  - puppeteer
+packages: []
 
-onlyBuiltDependencies:
-  - '@tailwindcss/oxide'
-  - simple-git-hooks
+minimumReleaseAge: 1440
+
+minimumReleaseAgeExclude:
+  - '@cenk1cenk2/*'
+
+allowBuilds:
+  '@nestjs/core': false
+  '@tailwindcss/oxide': true
+  puppeteer: false
+  simple-git-hooks: true
