@@ -70,8 +70,8 @@ importers:
         version: 2.8.2
     devDependencies:
       '@cenk1cenk2/cz-cc':
-        specifier: ^2.2.17
-        version: 2.2.17(@types/node@24.12.4)(typescript@6.0.3)
+        specifier: ^2.2.18
+        version: 2.2.18(@types/node@24.12.4)(typescript@6.0.3)
       '@cenk1cenk2/eslint-config':
         specifier: ^3.2.6
         version: 3.2.6(@typescript-eslint/utils@8.57.0(eslint@10.4.1(jiti@2.6.1))(typescript@6.0.3))(eslint@10.4.1(jiti@2.6.1))(typescript@6.0.3)
@@ -347,8 +347,8 @@ packages:
   '@borewit/text-codec@0.2.2':
     resolution: {integrity: sha512-DDaRehssg1aNrH4+2hnj1B7vnUGEjU6OIlyRdkMd0aUdIUvKXrJfXsy8LVtXAy7DRvYVluWbMspsRhz2lcW0mQ==}
 
-  '@cenk1cenk2/cz-cc@2.2.17':
-    resolution: {integrity: sha512-HTcP6Y2pZ7iaiw8FRU2/f/5nTANCr3GVbiuW3PGVOxR+NHtUzADCDpmo2epsul1cimLzqffcYUWgh/d1akQvZg==}
+  '@cenk1cenk2/cz-cc@2.2.18':
+    resolution: {integrity: sha512-M4guva+IzFcli5Hvd5DvsJwjiaF0AiMUG3VAynReg0utLlODXsm21rRuL5/0iJsLuf9WMk5iqx1yP4DcmoR/Ow==}
     engines: {node: '>= 24'}
 
   '@cenk1cenk2/eslint-config@3.2.6':
@@ -769,15 +769,6 @@ packages:
   '@inquirer/type@3.0.10':
     resolution: {integrity: sha512-BvziSRxfz5Ov8ch0z/n3oijRSEcEsHnhggm4xFZe93DHcUCTlutlq9Ox4SVENAfcRD22UQq7T/atg9Wr3k09eA==}
     engines: {node: '>=18'}
-    peerDependencies:
-      '@types/node': '>=18'
-    peerDependenciesMeta:
-      '@types/node':
-        optional: true
-
-  '@inquirer/type@4.0.6':
-    resolution: {integrity: sha512-J+9tdxOskuYuGjsvGaq00AamhDgjR7anhEW2dP4QdQpFCMPngCeC/bCYWQ5NsMWZRdsy53is7kAHb/+7cwDk2g==}
-    engines: {node: '>=23.5.0 || ^22.13.0 || ^21.7.0 || ^20.12.0'}
     peerDependencies:
       '@types/node': '>=18'
     peerDependenciesMeta:
@@ -6220,7 +6211,7 @@ snapshots:
 
   '@borewit/text-codec@0.2.2': {}
 
-  '@cenk1cenk2/cz-cc@2.2.17(@types/node@24.12.4)(typescript@6.0.3)':
+  '@cenk1cenk2/cz-cc@2.2.18(@types/node@24.12.4)(typescript@6.0.3)':
     dependencies:
       '@inquirer/prompts': 8.5.2(@types/node@24.12.4)
       '@listr2/prompt-adapter-inquirer': 4.2.4(@inquirer/prompts@8.5.2(@types/node@24.12.4))(@types/node@24.12.4)(listr2@10.2.1)
@@ -6670,10 +6661,6 @@ snapshots:
     optionalDependencies:
       '@types/node': 24.12.4
 
-  '@inquirer/type@4.0.6(@types/node@24.12.4)':
-    optionalDependencies:
-      '@types/node': 24.12.4
-
   '@inquirer/type@4.0.7(@types/node@24.12.4)':
     optionalDependencies:
       '@types/node': 24.12.4
@@ -6709,7 +6696,7 @@ snapshots:
   '@listr2/prompt-adapter-inquirer@4.2.4(@inquirer/prompts@8.5.2(@types/node@24.12.4))(@types/node@24.12.4)(listr2@10.2.1)':
     dependencies:
       '@inquirer/prompts': 8.5.2(@types/node@24.12.4)
-      '@inquirer/type': 4.0.6(@types/node@24.12.4)
+      '@inquirer/type': 4.0.7(@types/node@24.12.4)
       listr2: 10.2.1
     transitivePeerDependencies:
       - '@types/node'
