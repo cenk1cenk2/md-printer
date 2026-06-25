@@ -10,8 +10,8 @@ import type { AddressInfo } from 'net'
 import Nunjucks from 'nunjucks'
 import { basename, dirname, extname, isAbsolute, join } from 'path'
 import postcss from 'postcss'
-import type { Browser } from 'puppeteer'
-import puppeteer from 'puppeteer'
+import type { Browser, Page, PDFOptions } from 'puppeteer'
+import puppeteer, * as Puppeteer from 'puppeteer'
 import showdown from 'showdown'
 
 import type { ShouldRunAfterHook, ShouldRunBeforeHook } from '@cenk1cenk2/oclif-common'
@@ -19,7 +19,9 @@ import {
   Args, Flags, Command, ConfigService, FileSystemService, ParserService, JsonParser, YamlParser, merge, MergeStrategy
 } from '@cenk1cenk2/oclif-common'
 import { InputFileType, OutputFileType, RequiredTemplateFiles, TEMPLATE_DIRECTORY, TemplateFiles } from '@constants'
-import type { MdPrinterCtx } from '@interfaces'
+import type { MdPrinterCtx, MdPrinterOptions, PuppeteerPdfHelpers } from '@interfaces'
+
+const { parsePDFOptions, unitToPixels } = Puppeteer as PuppeteerPdfHelpers
 
 export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> implements ShouldRunBeforeHook, ShouldRunAfterHook {
   static description = 'Generates a PDF from the given markdown file with the selected HTML template.'
@@ -75,6 +77,9 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
     dev: Flags.boolean({
       char: 'd',
       description: 'Run with Chrome browser instead of publishing the file.'
+    }),
+    continuous: Flags.boolean({
+      description: 'Render PDF as a single continuous page without page breaks.'
     })
   }
 
@@ -201,7 +206,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
             [TemplateFiles.TEMPLATE]: join(ctx.templates, TemplateFiles.TEMPLATE)
           }
 
-          ctx.options = await this.cs.extend<MdToPdfConfig>([
+          ctx.options = await this.cs.extend<MdPrinterOptions>([
             paths[TemplateFiles.SETTINGS],
             {
               dest: this.args?.output ?? ctx.metadata?.dest ?? `${basename(this.args.file, extname(this.args.file))}.${this.flags['output-filetype']}`,
@@ -213,6 +218,8 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
               }
             }
           ])
+
+          ctx.renderContinuous = this.flags.continuous || ctx.metadata?.continuous === true || ctx.options.continuous === true
 
           this.flags.stdout ??= ctx.metadata.stdout
 
@@ -293,6 +300,82 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
     }
   }
 
+  private continuousBrowser(browser: Browser): Browser {
+    return new Proxy(browser, {
+      get: (target, property, receiver): unknown => {
+        if (property !== 'newPage') {
+          const value = Reflect.get(target, property, receiver)
+
+          return typeof value === 'function' ? value.bind(target) : value
+        }
+
+        return async(): Promise<Page> => {
+          const page = await browser.newPage()
+          const pdf = page.pdf.bind(page)
+
+          page.pdf = async(pdfOptions: PDFOptions = {}): ReturnType<Page['pdf']> => {
+            const parsed = parsePDFOptions(pdfOptions, 'cm')
+            const width = parsed.landscape ? parsed.height : parsed.width
+            const margin = parsed.margin
+            const viewport = page.viewport()
+
+            await page.setViewport({
+              width: Math.ceil(Math.max(width - margin.left - margin.right, 1) * unitToPixels.cm),
+              height: viewport?.height ?? 800,
+              deviceScaleFactor: viewport?.deviceScaleFactor ?? 1
+            })
+
+            const contentHeight = await page.evaluate(async() => {
+              if ('fonts' in document) {
+                await document.fonts.ready
+              }
+
+              await Promise.all(
+                Array.from(document.images).map((image) => {
+                  if (image.complete) {
+                    return undefined
+                  }
+
+                  return new Promise((resolve) => {
+                    image.addEventListener('load', resolve, { once: true })
+                    image.addEventListener('error', resolve, { once: true })
+                  })
+                })
+              )
+
+              const bodyTop = document.body.getBoundingClientRect().top
+              const bottom = Math.max(
+                document.body.getBoundingClientRect().bottom,
+                ...Array.from(document.body.querySelectorAll('*')).map((element) => element.getBoundingClientRect().bottom)
+              )
+
+              return Math.max(
+                document.body.scrollHeight,
+                document.documentElement.scrollHeight,
+                document.body.getBoundingClientRect().height,
+                document.documentElement.getBoundingClientRect().height,
+                bottom - bodyTop
+              )
+            })
+            const height = parsePDFOptions({ height: Math.ceil(contentHeight + unitToPixels.cm) }, 'cm').height + margin.top + margin.bottom
+            const options: PDFOptions = {
+              ...pdfOptions,
+              width: `${width}cm`,
+              height: `${height}cm`,
+              landscape: false
+            }
+
+            delete options.format
+
+            return pdf(options)
+          }
+
+          return page
+        }
+      }
+    })
+  }
+
   private async runMd2Pdf(ctx: MdPrinterCtx): Promise<void> {
     const options = merge<MdToPdfConfig>(MergeStrategy.EXTEND, { basedir: process.cwd() }, MdToPdfDefaultConfig, ctx.options, {
       devtools: this.flags.dev
@@ -306,7 +389,11 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
     //     })
     //   )
     // }
-    this.browser ??= await puppeteer.launch({ devtools: options.devtools, ...options.launch_options })
+    if (!this.browser) {
+      const browser = await puppeteer.launch({ devtools: options.devtools, ...options.launch_options })
+
+      this.browser = ctx.renderContinuous ? this.continuousBrowser(browser) : browser
+    }
 
     const server = await serveDirectory(ctx.options as MdToPdfConfig)
 
@@ -321,7 +408,9 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
       })
     } else {
       this.logger.info('Rendering as plain file.')
-      output = await convertMdToPdf({ content: ctx.content }, options as MdToPdfConfig, { browser: this.browser })
+      output = await convertMdToPdf({ content: ctx.content }, options as MdToPdfConfig, {
+        browser: this.browser
+      })
     }
 
     await new Promise((resolve, reject) =>
