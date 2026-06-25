@@ -1,3 +1,10 @@
+# [2.17.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.16.1...v2.17.0) (2026-06-25)
+
+
+### Features
+
+* **pdf:** add continuous render mode ([7215bee](https://gitlab.kilic.dev/utils/md-printer/commit/7215beeea7e1ebbcbf9c5dc398f934b1f67f881d))
+
 ## [2.16.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.16.0...v2.16.1) (2026-05-16)
 
 
