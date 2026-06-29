@@ -103,7 +103,7 @@ importers:
         specifier: ^16.4.0
         version: 16.4.0
       oclif:
-        specifier: ^4.23.18
+        specifier: ^4.23.20
         version: 4.23.21(@types/node@24.13.2)
       prettier:
         specifier: ^3.8.4
