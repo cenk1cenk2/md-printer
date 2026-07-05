@@ -106,7 +106,7 @@ importers:
         specifier: ^4.23.21
         version: 4.23.21(@types/node@24.13.2)(supports-color@8.1.1)
       prettier:
-        specifier: ^3.9.0
+        specifier: ^3.9.1
         version: 3.9.4
       prettier-plugin-jinja-template:
         specifier: ^2.2.0
