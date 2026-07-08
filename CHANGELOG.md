@@ -1,3 +1,10 @@
+## [2.17.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.17.0...v2.17.1) (2026-07-08)
+
+
+### Bug Fixes
+
+* **ci:** change when:always to when:on_success for stage gating (K-661) ([f2a0284](https://gitlab.kilic.dev/utils/md-printer/commit/f2a028444bc839ab9598113202e4f83c55c27d5a))
+
 # [2.17.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.16.1...v2.17.0) (2026-06-25)
 
 
