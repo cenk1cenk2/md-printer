@@ -1,3 +1,10 @@
+## [2.17.2](https://gitlab.kilic.dev/utils/md-printer/compare/v2.17.1...v2.17.2) (2026-07-09)
+
+
+### Bug Fixes
+
+* **ci:** remove unnecessary rules overrides, use template defaults ([5f39129](https://gitlab.kilic.dev/utils/md-printer/commit/5f391291cc4c6a22dceb783a3a29a6296fec59d5))
+
 ## [2.17.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.17.0...v2.17.1) (2026-07-08)
 
 
