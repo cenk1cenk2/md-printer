@@ -70,8 +70,8 @@ importers:
         version: 2.8.2
     devDependencies:
       '@cenk1cenk2/cz-cc':
-        specifier: ^2.2.20
-        version: 2.2.20(@types/node@24.13.2)(typescript@6.0.3)
+        specifier: ^2.2.22
+        version: 2.2.22(@types/node@24.13.2)(typescript@6.0.3)
       '@cenk1cenk2/eslint-config':
         specifier: ^3.2.6
         version: 3.2.6(@typescript-eslint/utils@8.57.0(eslint@10.6.0(jiti@2.6.1)(supports-color@8.1.1))(typescript@6.0.3))(eslint@10.6.0(jiti@2.6.1)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
@@ -278,8 +278,8 @@ packages:
   '@borewit/text-codec@0.2.2':
     resolution: {integrity: sha512-DDaRehssg1aNrH4+2hnj1B7vnUGEjU6OIlyRdkMd0aUdIUvKXrJfXsy8LVtXAy7DRvYVluWbMspsRhz2lcW0mQ==}
 
-  '@cenk1cenk2/cz-cc@2.2.20':
-    resolution: {integrity: sha512-1E5WLBAQMdb1+0V6/Rc99+5jAcwjJH3830ReM1+s97KH5ZsiqT3l5LofNKU7C0hfNCtk4CKRox1+i0mQjVzSOw==}
+  '@cenk1cenk2/cz-cc@2.2.22':
+    resolution: {integrity: sha512-aVemGPSOCskBQaneJARcRGUuvqMabAbCGHTpqIPXYkUXy8Ofpy+b337YS3zr0aTfyqR/gf2fTd8VtS+ncWW37w==}
     engines: {node: '>= 24'}
 
   '@cenk1cenk2/eslint-config@3.2.6':
@@ -5816,7 +5816,7 @@ snapshots:
 
   '@borewit/text-codec@0.2.2': {}
 
-  '@cenk1cenk2/cz-cc@2.2.20(@types/node@24.13.2)(typescript@6.0.3)':
+  '@cenk1cenk2/cz-cc@2.2.22(@types/node@24.13.2)(typescript@6.0.3)':
     dependencies:
       '@inquirer/prompts': 8.5.2(@types/node@24.13.2)
       '@listr2/prompt-adapter-inquirer': 4.2.4(@inquirer/prompts@8.5.2(@types/node@24.13.2))(@types/node@24.13.2)(listr2@10.2.2)
