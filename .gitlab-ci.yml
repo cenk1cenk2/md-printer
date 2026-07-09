@@ -24,15 +24,11 @@ install:
   stage: install
   extends:
     - .node-install
-  rules:
-    - when: on_success
 
 lint:
   stage: build
   extends:
     - .node-lint
-  rules:
-    - when: on_success
 
 build:
   stage: build
@@ -43,8 +39,6 @@ build:
       - dist/
       - oclif.manifest.json
       - templates/*/main.css
-  rules:
-    - when: on_success
 
 semantic-release:
   stage: publish
