@@ -37,6 +37,7 @@ body {
 
 address {
   @apply text-sm;
+  white-space: pre-line;
 }
 
 /* Typography styles converted from config */
@@ -134,6 +135,7 @@ table th {
 
 table tr {
   border-top: 0;
+  break-inside: avoid;
   @apply even:bg-gray-50;
 }
 
