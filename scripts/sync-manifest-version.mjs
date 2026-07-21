@@ -7,9 +7,7 @@ import { parseArgs } from 'node:util'
 // The publish image has no oclif to regenerate it, so patch the version
 // field directly (invoked from release.config.cjs `prepareCmd`).
 
-const {
-  positionals: [version]
-} = parseArgs({ allowPositionals: true })
+const { positionals: [version] } = parseArgs({ allowPositionals: true })
 
 if (!version) {
   throw new Error('usage: sync-manifest-version.mjs <version>')
@@ -19,6 +17,7 @@ const file = 'oclif.manifest.json'
 
 if (existsSync(file)) {
   const manifest = JSON.parse(readFileSync(file, 'utf8'))
+
   manifest.version = version
   writeFileSync(file, `${JSON.stringify(manifest, null, 2)}\n`)
 }
