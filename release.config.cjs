@@ -25,6 +25,12 @@ module.exports = {
     '@semantic-release/commit-analyzer',
     '@semantic-release/release-notes-generator',
     '@semantic-release/npm',
+    [
+      '@semantic-release/exec',
+      {
+        prepareCmd: 'node scripts/sync-manifest-version.mjs ${nextRelease.version}'
+      }
+    ],
     '@semantic-release/changelog',
     [
       '@semantic-release/git',
