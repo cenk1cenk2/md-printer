@@ -1,3 +1,12 @@
+## [2.17.4](https://gitlab.kilic.dev/utils/md-printer/compare/v2.17.3...v2.17.4) (2026-07-21)
+
+
+### Bug Fixes
+
+* **build:** sync oclif manifest version during release ([c53187f](https://gitlab.kilic.dev/utils/md-printer/commit/c53187fea86e9ae2029dd0edba118f3b5d51824a))
+* **invoice:** correct box stretching, money rounding and addresses ([402dd30](https://gitlab.kilic.dev/utils/md-printer/commit/402dd30ae8c106091cdd20c85fed7cf5584cff09))
+* update configuration for linting ([5fc4d37](https://gitlab.kilic.dev/utils/md-printer/commit/5fc4d37d818ab110e3da4cd1f5214604c571816d))
+
 ## [2.17.3](https://gitlab.kilic.dev/utils/md-printer/compare/v2.17.2...v2.17.3) (2026-07-21)
 
 
