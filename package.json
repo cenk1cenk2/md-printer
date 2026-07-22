@@ -83,7 +83,7 @@
     "get-port": "^7.1.0",
     "gray-matter": "^4.0.3",
     "i18next": "^26.3.6",
-    "listr2": "^10.2.1",
+    "listr2": "^11.0.0",
     "md-to-pdf": "^5.2.5",
     "nunjucks": "^3.2.4",
     "postcss": "^8.5.8",
