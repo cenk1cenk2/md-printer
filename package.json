@@ -72,6 +72,7 @@
   "dependencies": {
     "@cenk1cenk2/oclif-common": "^7.0.12",
     "@listr2/manager": "^4.2.1",
+    "@nestjs/common": "11.1.16",
     "@oclif/core": "^4.8.4",
     "@oclif/plugin-help": "^6.2.37",
     "@tailwindcss/forms": "^0.5.11",
@@ -81,6 +82,7 @@
     "fs-extra": "^11.3.4",
     "get-port": "^7.1.0",
     "gray-matter": "^4.0.3",
+    "i18next": "^26.3.6",
     "listr2": "^10.2.1",
     "md-to-pdf": "^5.2.5",
     "nunjucks": "^3.2.4",

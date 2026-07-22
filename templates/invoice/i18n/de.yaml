@@ -1,0 +1,24 @@
+---
+meta:
+  title: Rechnung
+sections:
+  from: VON
+  to: AN
+  payment: ZAHLUNG
+  notes: NOTIZEN
+invoice: RECHNUNG
+signature: UNTERSCHRIFT
+fields:
+  date: Datum
+  id: Rechnungsnr.
+table:
+  description: Beschreibung
+  quantity: Menge
+  price: Preis
+  subtotal: Zwischensumme
+  tax: MwSt.
+  total: Gesamt
+summary:
+  subtotal: Zwischensumme
+  tax: MwSt.
+  total: Gesamt

@@ -10,3 +10,9 @@ export enum TemplateFiles {
 export const RequiredTemplateFiles = [TemplateFiles.SETTINGS]
 
 export const TEMPLATE_DIRECTORY = 'templates'
+
+export const I18N_DIRECTORY = 'i18n'
+
+export const I18N_ACCEPTED_TYPES = ['.yaml', '.yml', '.json']
+
+export const DEFAULT_LANGUAGE = 'en'

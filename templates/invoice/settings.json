@@ -1,6 +1,10 @@
 {
   "body_class": [],
   "highlight_style": "atom-one-dark",
+  "i18n": {
+    "language": "en",
+    "fallback": "en"
+  },
   "pdf_options": {
     "format": "A4",
     "margin": "0mm 0mm 12mm 0mm",
