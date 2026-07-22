@@ -1,3 +1,10 @@
+## [2.18.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.18.0...v2.18.1) (2026-07-22)
+
+
+### Bug Fixes
+
+* **deps:** bump listr2 to v11.0.0 and @listr2/manager to v4.2.3 ([32424fc](https://gitlab.kilic.dev/utils/md-printer/commit/32424fcff0d3c4a57e7bc5af5a7e6e9b09c1acd4))
+
 # [2.18.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.17.4...v2.18.0) (2026-07-22)
 
 
