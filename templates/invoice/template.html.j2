@@ -2,13 +2,13 @@
   vim: ft=htmldjango
 -->
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{ language }}">
 
 <head>
   <meta charset="UTF-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Invoice</title>
+  <title>{{ t('meta.title') }}</title>
 </head>
 
 <body>
@@ -17,7 +17,7 @@
       <img src="https://main.s3.kilic.dev/html/icon.png" alt="logo"
         class="absolute h-40 top-1/2 left-1/2 -translate-x-1/2 -translate-y-[62%] drop-shadow-lg drop-shadow-gray-900 z-10">
       <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-gray-100">
-        <p class="text-vertical">FROM</p>
+        <p class="text-vertical">{{ t('sections.from') }}</p>
       </div>
       <div class="col-start-2 col-span-5 flex flex-col justify-start p-4 pt-10 mr-12">
         <h1>Cenk Kılıç</h1>
@@ -36,12 +36,12 @@
         </div>
       </div>
       <div class="col-span-6 bg-gray-900 rounded-bl-4xl flex flex-col justify-center text-center">
-        <p class="p-4 font-bold text-white text-6xl">INVOICE</p>
+        <p class="p-4 font-bold text-white text-6xl">{{ t('invoice') }}</p>
       </div>
     </section>
     <section id="client" class="grid grid-cols-12">
       <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-gray-100">
-        <p class="text-vertical">TO</p>
+        <p class="text-vertical">{{ t('sections.to') }}</p>
       </div>
       <div class="col-span-5 flex flex-col justify-start p-4">
         <h2>{{ client.name }}</h2>
@@ -54,12 +54,12 @@
         <div class="grid grid-rows-2 gap-4 w-full mr-12">
           <div
             class="p-2 flex flex-row justify-between items-center rounded-xl bg-gray-50 border border-gray-50! inset-shadow-xs inset-shadow-gray-400">
-            <p class="font-bold">Date</p>
+            <p class="font-bold">{{ t('fields.date') }}</p>
             <p class="font-semibold">{{ date }}</p>
           </div>
           <div
             class="p-2 flex flex-row justify-between items-center rounded-xl bg-gray-50 border border-gray-50! inset-shadow-xs inset-shadow-gray-400">
-            <p class="font-bold">Invoice#</p>
+            <p class="font-bold">{{ t('fields.id') }}</p>
             <p class="font-semibold">{{ id }}</p>
           </div>
         </div>
@@ -71,22 +71,22 @@
           <thead class="border-b-1 border-b-gray-900! border-x-2 border-x-gray-900!">
             <tr>
               <th scope="col" class="w-md text-center">
-                Description
+                {{ t('table.description') }}
               </th>
               <th scope="col" class="w-[10%] text-center">
-                Qty
+                {{ t('table.quantity') }}
               </th>
               <th scope="col" class="w-[10%] text-center">
-                Price
+                {{ t('table.price') }}
               </th>
               <th scope="col" class="w-[10%] text-center">
-                Subtotal
+                {{ t('table.subtotal') }}
               </th>
               <th scope="col" class="w-[10%] text-center">
-                Tax
+                {{ t('table.tax') }}
               </th>
               <th scope="col" class="w-[14%] font-semibold text-center">
-                Total
+                {{ t('table.total') }}
               </th>
             </tr>
           </thead>
@@ -123,7 +123,7 @@
     </section>
     <section id="payment" class="grid grid-cols-12">
       <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-gray-100 bg-gray-900">
-        <p class="text-vertical">PAYMENT</p>
+        <p class="text-vertical">{{ t('sections.payment') }}</p>
       </div>
       <div
         class="col-span-5 flex flex-col p-4 ml-[-1px] pl-5 justify-center font-semibold bg-gray-700 rounded-r-4xl text-white">
@@ -140,7 +140,7 @@
         <div
           class="flex flex-row justify-between font-semibold bg-gray-50 rounded-lg border border-gray-50! inset-shadow-xs inset-shadow-gray-400 py-1 px-2">
           <p>
-            Subtotal
+            {{ t('summary.subtotal') }}
           </p>
           <p>
             {{ calculated_subtotal | round(2) }}{{ currency }}
@@ -149,7 +149,7 @@
         <div
           class="flex flex-row justify-between font-semibold bg-gray-50 rounded-lg border border-gray-50! inset-shadow-xs inset-shadow-gray-400 py-1 px-2">
           <p>
-            Tax
+            {{ t('summary.tax') }}
           </p>
           <p>
             {% if calculated_tax > 0 %}
@@ -163,7 +163,7 @@
           <div
             class="flex flex-row justify-between font-bold rounded-lg text-primary-500 bg-gray-50 border border-gray-50! inset-shadow-xs inset-shadow-gray-400 py-1 px-2">
             <p>
-              Total
+              {{ t('summary.total') }}
             </p>
             <p>
               {% set calculated_total = calculated_subtotal + calculated_tax %}
@@ -175,7 +175,7 @@
     </section>
     <section id="footer" class="grid grid-cols-12">
       <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-gray-100">
-        <p class="text-vertical">NOTES</p>
+        <p class="text-vertical">{{ t('sections.notes') }}</p>
       </div>
       <div class="col-span-5 flex flex-col p-4 text-sm leading-tight prose">
         {{ content | safe }}<br />
@@ -183,7 +183,7 @@
       <div class="col-span-1"></div>
       <div
         class="col-span-5 flex flex-col justify-end text-center m-8 mr-16 p-4 pb-0 border-2 border-gray-50! rounded-xl text-xs text-gray-100 h-36">
-        <p>SIGNATURE</p>
+        <p>{{ t('signature') }}</p>
       </div>
     </section>
   </div>

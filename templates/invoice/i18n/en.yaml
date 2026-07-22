@@ -1,0 +1,24 @@
+---
+meta:
+  title: Invoice
+sections:
+  from: FROM
+  to: TO
+  payment: PAYMENT
+  notes: NOTES
+invoice: INVOICE
+signature: SIGNATURE
+fields:
+  date: Date
+  id: Invoice#
+table:
+  description: Description
+  quantity: Qty
+  price: Price
+  subtotal: Subtotal
+  tax: Tax
+  total: Total
+summary:
+  subtotal: Subtotal
+  tax: Tax
+  total: Total

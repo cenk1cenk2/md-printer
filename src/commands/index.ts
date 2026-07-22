@@ -14,16 +14,17 @@ import type { Browser, Page, PDFOptions } from 'puppeteer'
 import puppeteer, * as Puppeteer from 'puppeteer'
 import showdown from 'showdown'
 
-import type { ShouldRunAfterHook, ShouldRunBeforeHook } from '@cenk1cenk2/oclif-common'
+import type { DynamicModule, RegisterHook, ShouldRunAfterHook, ShouldRunBeforeHook } from '@cenk1cenk2/oclif-common'
 import {
   Args, Flags, Command, ConfigService, FileSystemService, ParserService, JsonParser, YamlParser, merge, MergeStrategy
 } from '@cenk1cenk2/oclif-common'
-import { InputFileType, OutputFileType, RequiredTemplateFiles, TEMPLATE_DIRECTORY, TemplateFiles } from '@constants'
+import { DEFAULT_LANGUAGE, I18N_DIRECTORY, InputFileType, OutputFileType, RequiredTemplateFiles, TEMPLATE_DIRECTORY, TemplateFiles } from '@constants'
 import type { MdPrinterCtx, MdPrinterOptions, PuppeteerPdfHelpers } from '@interfaces'
+import { I18nService } from '@services'
 
 const { parsePDFOptions, unitToPixels } = Puppeteer as PuppeteerPdfHelpers
 
-export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> implements ShouldRunBeforeHook, ShouldRunAfterHook {
+export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> implements RegisterHook, ShouldRunBeforeHook, ShouldRunAfterHook {
   static description = 'Generates a PDF from the given markdown file with the selected HTML template.'
 
   static flags = {
@@ -65,6 +66,10 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
       char: 'T',
       description: 'Overwrite document title.'
     }),
+    language: Flags.string({
+      char: 'l',
+      description: 'Language code for template translations. Overwrites the one defined in front-matter and template settings.'
+    }),
     browser: Flags.string({
       char: 'b',
       description: 'Browser path that is going to be used for the PDF generation.',
@@ -101,11 +106,20 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
   })
   private cs: ConfigService
   private fs: FileSystemService
+  private i18n: I18nService
   private browser: Browser
+
+  public register(cli: DynamicModule): DynamicModule {
+    return {
+      ...cli,
+      providers: [...(cli.providers ?? []), I18nService]
+    }
+  }
 
   public async shouldRunBefore(): Promise<void> {
     this.cs = this.app.get(ConfigService)
     this.fs = this.app.get(FileSystemService)
+    this.i18n = this.app.get(I18nService)
 
     await this.app.get(ParserService).register(JsonParser, YamlParser)
 
@@ -270,6 +284,8 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
               .process(await this.fs.read(paths[TemplateFiles.TAILWIND_CSS]), { from: paths[TemplateFiles.TAILWIND_CSS] })
               .then((result) => result.css)
           }
+
+          await this.applyTranslations(ctx)
         }
       }
     ])
@@ -297,6 +313,19 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
 
     if (this.browser) {
       await this.browser.close()
+    }
+  }
+
+  private async applyTranslations(ctx: MdPrinterCtx): Promise<void> {
+    ctx.language = this.flags.language ?? ctx.metadata?.language ?? ctx.options.i18n?.language ?? DEFAULT_LANGUAGE
+
+    ctx.t = await this.i18n.load(join(ctx.templates, I18N_DIRECTORY), {
+      language: ctx.language,
+      fallback: ctx.options.i18n?.fallback
+    })
+
+    if (ctx.t) {
+      this.logger.info('Rendering with language: %s', ctx.language)
     }
   }
 
@@ -403,7 +432,15 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
 
     if (ctx.template) {
       this.logger.info('Rendering as template.')
-      output = await convertMdToPdf({ content: this.nunjucks.renderString(ctx.template, { ...(ctx.metadata ?? {}), content: ctx.content }) }, options as MdToPdfConfig, {
+
+      const context: Record<PropertyKey, any> = { ...(ctx.metadata ?? {}), content: ctx.content }
+
+      if (ctx.t) {
+        context.t = ctx.t
+        context.language = ctx.language
+      }
+
+      output = await convertMdToPdf({ content: this.nunjucks.renderString(ctx.template, context) }, options as MdToPdfConfig, {
         browser: this.browser
       })
     } else {
