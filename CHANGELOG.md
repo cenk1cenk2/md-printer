@@ -1,3 +1,10 @@
+# [2.18.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.17.4...v2.18.0) (2026-07-22)
+
+
+### Features
+
+* **i18n:** add template localization support ([5718990](https://gitlab.kilic.dev/utils/md-printer/commit/5718990c46f6094cf2c84a0c87f51c1915482ab8))
+
 ## [2.17.4](https://gitlab.kilic.dev/utils/md-printer/compare/v2.17.3...v2.17.4) (2026-07-21)
 
 
