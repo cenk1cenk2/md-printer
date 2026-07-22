@@ -71,7 +71,7 @@
   ],
   "dependencies": {
     "@cenk1cenk2/oclif-common": "^7.0.12",
-    "@listr2/manager": "^4.2.1",
+    "@listr2/manager": "^4.2.3",
     "@nestjs/common": "11.1.16",
     "@oclif/core": "^4.8.4",
     "@oclif/plugin-help": "^6.2.37",
@@ -83,7 +83,7 @@
     "get-port": "^7.1.0",
     "gray-matter": "^4.0.3",
     "i18next": "^26.3.6",
-    "listr2": "^10.2.1",
+    "listr2": "^11.0.0",
     "md-to-pdf": "^5.2.5",
     "nunjucks": "^3.2.4",
     "postcss": "^8.5.8",
