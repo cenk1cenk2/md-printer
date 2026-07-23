@@ -80,3 +80,4 @@ _See code: [@oclif/plugin-help](https://github.com/oclif/plugin-help/blob/v5.1.1
 
 <!-- commandsstop -->
 <!-- hyprpilot v3 e2e test -->
+<!-- hyprpilot v3 opencode e2e test -->
