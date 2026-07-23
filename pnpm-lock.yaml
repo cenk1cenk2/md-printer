@@ -76,8 +76,8 @@ importers:
         version: 2.8.2
     devDependencies:
       '@cenk1cenk2/cz-cc':
-        specifier: ^2.2.22
-        version: 2.2.22(@types/node@24.13.3)(typescript@6.0.3)
+        specifier: ^2.2.23
+        version: 2.2.23(@types/node@24.13.3)(typescript@6.0.3)
       '@cenk1cenk2/eslint-config':
         specifier: ^3.2.6
         version: 3.2.6(@typescript-eslint/utils@8.57.0(eslint@10.7.0(jiti@2.6.1)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3))(eslint@10.7.0(jiti@2.6.1)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
@@ -103,8 +103,8 @@ importers:
         specifier: ^9.6.1
         version: 9.6.1
       globby:
-        specifier: ^16.2.1
-        version: 16.2.1
+        specifier: ^16.2.2
+        version: 16.2.2
       lint-staged:
         specifier: ^16.4.0
         version: 16.4.0
@@ -232,8 +232,8 @@ packages:
   '@borewit/text-codec@0.2.2':
     resolution: {integrity: sha512-DDaRehssg1aNrH4+2hnj1B7vnUGEjU6OIlyRdkMd0aUdIUvKXrJfXsy8LVtXAy7DRvYVluWbMspsRhz2lcW0mQ==}
 
-  '@cenk1cenk2/cz-cc@2.2.22':
-    resolution: {integrity: sha512-aVemGPSOCskBQaneJARcRGUuvqMabAbCGHTpqIPXYkUXy8Ofpy+b337YS3zr0aTfyqR/gf2fTd8VtS+ncWW37w==}
+  '@cenk1cenk2/cz-cc@2.2.23':
+    resolution: {integrity: sha512-DeH1Xtx3+yjKFzlxEzP/vahAodheEXrfxT6BpQ1KyYYX7W1wBverEHo2A+N3SPGK4//TqEvVUu9642VQsgEEkg==}
     engines: {node: '>= 24'}
 
   '@cenk1cenk2/eslint-config@3.2.6':
@@ -703,12 +703,12 @@ packages:
     peerDependencies:
       listr2: 11.0.0
 
-  '@listr2/prompt-adapter-inquirer@4.2.4':
-    resolution: {integrity: sha512-/KRI2DMD7JGSYaREF0Ygl7AefJ/2ase4Gc5cBiKqT5l4tFjsSJfhFGcc5nSkgl0Sp9LkCQNzl/cqbVJYP2L3dw==}
+  '@listr2/prompt-adapter-inquirer@4.2.5':
+    resolution: {integrity: sha512-pYGy9dTdTwXdasPgyohkr0HoQ4FrkAzFnsUZl/gcnadDArbpZ8e+fgr+F9WBdNEl2y00mb9bCM4WgmoBkZJ27A==}
     engines: {node: '>=22.13.0'}
     peerDependencies:
       '@inquirer/prompts': '>= 3 < 9'
-      listr2: 10.2.1
+      listr2: 11.0.0
 
   '@lukeed/csprng@1.1.0':
     resolution: {integrity: sha512-Z7C/xXCiGWsg0KuKsHTKJxbWhpI3Vs5GwLfOean7MGyVFGqdRgBbAjOCh6u4bbjPc/8MJ2pZmK/0DLdCbivLDA==}
@@ -2871,8 +2871,8 @@ packages:
     resolution: {integrity: sha512-hjrNztw/VajQwOLsMNT1cbJiH2muO3OROCHnbehc8eY5JyD2gqz4AcMHPqgaOR59DjgUjYAYLeH699g/eWi2jw==}
     engines: {node: '>=18'}
 
-  globby@16.2.1:
-    resolution: {integrity: sha512-JmsqJalahxxgW8V2ecSQ2G7UjPlI9cpKdrkG9KoNiXhd/YslXOTEB0cViENWUznuovIuNT+FkMbraDGjr4FCUg==}
+  globby@16.2.2:
+    resolution: {integrity: sha512-NLvV9ubZ6NDsJaOpKPy3cQeJpKi9DcWiyCiFUpJPA0YihRqiE6RWaLUmgNNPr8MgPpLZjnBjSmou7uZBRJv9wA==}
     engines: {node: '>=20'}
 
   globule@0.1.0:
@@ -3558,10 +3558,6 @@ packages:
   listr-verbose-renderer@0.5.0:
     resolution: {integrity: sha512-04PDPqSlsqIOaaaGZ+41vq5FejI9auqTInicFRndCBgE3bXG8D6W1I+mWhk+1nqbHmyhla/6BUrd5OSiHwKRXw==}
     engines: {node: '>=4'}
-
-  listr2@10.2.2:
-    resolution: {integrity: sha512-JtNtbZj8q5BnDMR7trpwvwk3RIrANtIVzEUm8w7amp6xelLgyuq+4WZoTH913XaQAoH/cNdYhaNzBPA2U3xbDw==}
-    engines: {node: '>=22.13.0'}
 
   listr2@11.0.0:
     resolution: {integrity: sha512-8K88S0aSrcSXdJfiZtEy5BQMnR+TyjrCGLcgAvQs6ta0NEnIm0RJ72/Pv67Jvg07cfBhDbuN74V81lSSVYEFEw==}
@@ -5807,14 +5803,14 @@ snapshots:
 
   '@borewit/text-codec@0.2.2': {}
 
-  '@cenk1cenk2/cz-cc@2.2.22(@types/node@24.13.3)(typescript@6.0.3)':
+  '@cenk1cenk2/cz-cc@2.2.23(@types/node@24.13.3)(typescript@6.0.3)':
     dependencies:
       '@inquirer/prompts': 8.5.2(@types/node@24.13.3)
-      '@listr2/prompt-adapter-inquirer': 4.2.4(@inquirer/prompts@8.5.2(@types/node@24.13.3))(@types/node@24.13.3)(listr2@10.2.2)
+      '@listr2/prompt-adapter-inquirer': 4.2.5(@inquirer/prompts@8.5.2(@types/node@24.13.3))(@types/node@24.13.3)(listr2@11.0.0)
       commitizen: 4.3.2(@types/node@24.13.3)(typescript@6.0.3)
       conventional-commit-types: 3.0.0
       find-git-root: 1.1.0
-      listr2: 10.2.2
+      listr2: 11.0.0
     transitivePeerDependencies:
       - '@types/node'
       - typescript
@@ -6305,11 +6301,11 @@ snapshots:
     dependencies:
       listr2: 11.0.0
 
-  '@listr2/prompt-adapter-inquirer@4.2.4(@inquirer/prompts@8.5.2(@types/node@24.13.3))(@types/node@24.13.3)(listr2@10.2.2)':
+  '@listr2/prompt-adapter-inquirer@4.2.5(@inquirer/prompts@8.5.2(@types/node@24.13.3))(@types/node@24.13.3)(listr2@11.0.0)':
     dependencies:
       '@inquirer/prompts': 8.5.2(@types/node@24.13.3)
       '@inquirer/type': 4.0.7(@types/node@24.13.3)
-      listr2: 10.2.2
+      listr2: 11.0.0
     transitivePeerDependencies:
       - '@types/node'
 
@@ -8491,7 +8487,7 @@ snapshots:
 
   globals@17.4.0: {}
 
-  globby@16.2.1:
+  globby@16.2.2:
     dependencies:
       '@sindresorhus/merge-streams': 4.0.0
       fast-glob: 3.3.3
@@ -9168,14 +9164,6 @@ snapshots:
       cli-cursor: 2.1.0
       date-fns: 1.30.1
       figures: 2.0.0
-
-  listr2@10.2.2:
-    dependencies:
-      cli-truncate: 5.2.0
-      eventemitter3: 5.0.4
-      log-update: 6.1.0
-      rfdc: 1.4.1
-      wrap-ansi: 10.0.0
 
   listr2@11.0.0:
     dependencies:
