@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { execaCommand as command } from 'execa'
+import { execa as command } from 'execa'
 import { defineConfig } from 'tsdown'
 
 export default defineConfig((options) => ({
@@ -20,6 +20,6 @@ export default defineConfig((options) => ({
   keepNames: true,
 
   onSuccess: async (): Promise<void> => {
-    await Promise.all([command('pnpm run manifest', { stdout: process.stdout, stderr: process.stderr })])
+    await Promise.all([command('pnpm', ['run', 'manifest'], { stdout: process.stdout, stderr: process.stderr })])
   }
 }))
