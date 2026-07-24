@@ -1,3 +1,10 @@
+## [2.18.2](https://gitlab.kilic.dev/utils/md-printer/compare/v2.18.1...v2.18.2) (2026-07-24)
+
+
+### Bug Fixes
+
+* **deps:** update execa to v10 and migrate from execaCommand to execa ([6f32461](https://gitlab.kilic.dev/utils/md-printer/commit/6f32461ca6e1b212cdd6c89c8f6a47b329144cd7))
+
 ## [2.18.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.18.0...v2.18.1) (2026-07-22)
 
 
