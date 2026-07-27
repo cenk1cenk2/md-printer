@@ -1,3 +1,10 @@
+## [2.18.3](https://gitlab.kilic.dev/utils/md-printer/compare/v2.18.2...v2.18.3) (2026-07-27)
+
+
+### Bug Fixes
+
+* **invoice:** restore payment block font weight ([2543855](https://gitlab.kilic.dev/utils/md-printer/commit/25438550fb534fec01f087dc76464827d264acdd))
+
 ## [2.18.2](https://gitlab.kilic.dev/utils/md-printer/compare/v2.18.1...v2.18.2) (2026-07-24)
 
 
