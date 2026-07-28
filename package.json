@@ -106,7 +106,7 @@
     "globby": "^16.2.2",
     "lint-staged": "^16.4.0",
     "oclif": "^4.23.28",
-    "prettier": "^3.9.5",
+    "prettier": "^3.9.6",
     "prettier-plugin-jinja-template": "^2.2.0",
     "simple-git-hooks": "^2.13.1",
     "theme-colors": "^0.1.0",
