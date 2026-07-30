@@ -1,5 +1,6 @@
 {
   "body_class": [],
+  "document_title": "{{ date }} - Invoice from {{ company.name }}{% if company.tax_number %} ({{ company.tax_number }}){% endif %} to {{ client.name }}{% if client.tax_number %} ({{ client.tax_number }}){% endif %} - #{{ id }}",
   "highlight_style": "atom-one-dark",
   "i18n": {
     "language": "en",

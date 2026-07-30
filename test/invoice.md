@@ -1,13 +1,13 @@
 ---
-dest: ./test/test.pdf
+dest: ./test/invoice-output.pdf
 template: invoice
-document_title: Some MD.
 
 id: daeb87d4-a675-4867-9a95-c49b0b2aaf8a
 date: 26.04.2022
 currency: €
 
 company:
+  name: Cenk Kılıç
   tax_number: ATU12345678
   address: |
     Straße 12/64/22

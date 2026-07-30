@@ -129,6 +129,13 @@ html {
   @apply p-4;
 }
 
+/* md-to-pdf ships github-markdown-css, which sets `table { display: block }` for horizontal
+ * scrolling. That collapses rows into an anonymous max-content box, so column widths are ignored. */
+table {
+  display: table;
+  width: 100%;
+}
+
 table th {
   @apply bg-gray-700 text-white;
 }
@@ -136,7 +143,17 @@ table th {
 table tr {
   border-top: 0;
   break-inside: avoid;
-  @apply even:bg-gray-50;
+}
+
+/* zebra rows only pay off over many rows, so striping is opt-in; the short key/value
+ * tables use hairline row dividers instead and stay quieter beside the items table.
+ * The reset is needed because md-to-pdf's markdown.css stripes every table itself. */
+table tr:nth-child(even) {
+  background-color: transparent;
+}
+
+table.striped tr:nth-child(even) {
+  @apply bg-gray-50;
 }
 
 table th,

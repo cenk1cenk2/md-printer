@@ -220,11 +220,14 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
             [TemplateFiles.TEMPLATE]: join(ctx.templates, TemplateFiles.TEMPLATE)
           }
 
+          const title = ctx.metadata?.document_title ?? this.flags.title
+
           ctx.options = await this.cs.extend<MdPrinterOptions>([
             paths[TemplateFiles.SETTINGS],
             {
               dest: this.args?.output ?? ctx.metadata?.dest ?? `${basename(this.args.file, extname(this.args.file))}.${this.flags['output-filetype']}`,
-              document_title: ctx.metadata?.document_title ?? this.flags.title ?? this.args.file,
+              // omitted rather than set to undefined, since deepmerge would clobber the template default
+              ...(title ? { document_title: title } : {}),
               // https://github.com/simonhaenisch/md-to-pdf/issues/247
               launch_options: {
                 executablePath: this.flags.browser
@@ -286,6 +289,8 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
           }
 
           await this.applyTranslations(ctx)
+
+          await this.applyDocumentTitle(ctx)
         }
       }
     ])
@@ -314,6 +319,29 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
     if (this.browser) {
       await this.browser.close()
     }
+  }
+
+  private context(ctx: MdPrinterCtx): Record<PropertyKey, any> {
+    const context: Record<PropertyKey, any> = { ...(ctx.metadata ?? {}), content: ctx.content }
+
+    if (ctx.t) {
+      context.t = ctx.t
+      context.language = ctx.language
+    }
+
+    return context
+  }
+
+  private async applyDocumentTitle(ctx: MdPrinterCtx): Promise<void> {
+    const title = ctx.options.document_title ?? this.args.file
+
+    if (!title) {
+      return
+    }
+
+    ctx.options.document_title = this.nunjucks.renderString(title, this.context(ctx))
+
+    this.logger.info('Document title will be: %s', ctx.options.document_title)
   }
 
   private async applyTranslations(ctx: MdPrinterCtx): Promise<void> {
@@ -433,14 +461,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
     if (ctx.template) {
       this.logger.info('Rendering as template.')
 
-      const context: Record<PropertyKey, any> = { ...(ctx.metadata ?? {}), content: ctx.content }
-
-      if (ctx.t) {
-        context.t = ctx.t
-        context.language = ctx.language
-      }
-
-      output = await convertMdToPdf({ content: this.nunjucks.renderString(ctx.template, context) }, options as MdToPdfConfig, {
+      output = await convertMdToPdf({ content: this.nunjucks.renderString(ctx.template, this.context(ctx)) }, options as MdToPdfConfig, {
         browser: this.browser
       })
     } else {
