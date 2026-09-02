@@ -1,3 +1,10 @@
+# [2.20.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.19.1...v2.20.0) (2026-09-02)
+
+
+### Features
+
+* **ci:** publish packages via npm staged publishing ([8883c01](https://gitlab.kilic.dev/utils/md-printer/commit/8883c015aa58251d6a01af27edac20df1e2e2df7))
+
 ## [2.19.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.19.0...v2.19.1) (2026-09-02)
 
 
