@@ -1,3 +1,10 @@
+## [2.19.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.19.0...v2.19.1) (2026-09-02)
+
+
+### Bug Fixes
+
+* **deps:** unpin @nestjs/common to match @nestjs/core ([294bf1c](https://gitlab.kilic.dev/utils/md-printer/commit/294bf1c12c69883d321a9a6a11c905c1bc0ed653))
+
 # [2.19.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.18.3...v2.19.0) (2026-07-30)
 
 
