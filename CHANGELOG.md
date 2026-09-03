@@ -1,3 +1,10 @@
+## [2.20.1](https://gitlab.kilic.dev/utils/md-printer/compare/v2.20.0...v2.20.1) (2026-09-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @nestjs/common to v12 ([a01a64f](https://gitlab.kilic.dev/utils/md-printer/commit/a01a64f333b389bc9869a94ba19d16e5aacfb5b5))
+
 # [2.20.0](https://gitlab.kilic.dev/utils/md-printer/compare/v2.19.1...v2.20.0) (2026-09-02)
 
 
