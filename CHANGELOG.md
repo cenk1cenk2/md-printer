@@ -1,3 +1,10 @@
+## [2.20.3](https://gitlab.kilic.dev/utils/md-printer/compare/v2.20.2...v2.20.3) (2026-09-04)
+
+
+### Bug Fixes
+
+* **deps:** declare rxjs as direct dependency ([8a597df](https://gitlab.kilic.dev/utils/md-printer/commit/8a597dfafea05b9ddb8ab9cf5df1b40fd98333aa))
+
 ## [2.20.2](https://gitlab.kilic.dev/utils/md-printer/compare/v2.20.1...v2.20.2) (2026-09-04)
 
 
