@@ -1,5 +1,0 @@
-services:
-  monorepo:
-    image: cenk1cenk2/node-fnm:latest
-    volumes:
-      - .:/data
