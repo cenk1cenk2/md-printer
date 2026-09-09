@@ -83,7 +83,7 @@ importers:
         version: 2.3.2(@types/node@24.13.3)(typescript@6.0.3)
       '@cenk1cenk2/eslint-config':
         specifier: ^3.3.1
-        version: 3.3.1(@typescript-eslint/utils@8.70.0(eslint@10.10.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3))(eslint@10.10.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
+        version: 3.3.2(@typescript-eslint/utils@8.70.0(eslint@10.10.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3))(eslint@10.10.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)
       '@tsconfig/node24':
         specifier: ^24.0.5
         version: 24.0.5
@@ -245,8 +245,8 @@ packages:
     resolution: {integrity: sha512-UDYbCM5FCMTnIVzkIP6kiVNr/TiyIHzaoSL8050UvaFOGKd21dbhN6xUJnpsfzmauO3YCQiuOJwAXQO6owDKJw==}
     engines: {node: '>= 24'}
 
-  '@cenk1cenk2/eslint-config@3.3.1':
-    resolution: {integrity: sha512-6dMJPOzBC/8Sav+em2/HFELBGfS0B3Hsd+NP3Y9K0mENNPhAEXjXHkQr84mUGBhi/yVLwbY7+AZJn5EDJyVZmQ==}
+  '@cenk1cenk2/eslint-config@3.3.2':
+    resolution: {integrity: sha512-JXSNZAwXcrX12OpnAGa4Y6LsbhQPYjZLlJQ8x33eGpMyg/Xwd2nGxtUFljzm1KWaP+UPE6fAY3ZMfe/58WVM9g==}
     peerDependencies:
       '@vue/eslint-config-typescript': '>= 14.1.1'
       eslint: '>= 9'
@@ -2292,8 +2292,8 @@ packages:
     engines: {node: '>=0.12.18'}
     hasBin: true
 
-  electron-to-chromium@1.5.422:
-    resolution: {integrity: sha512-UvA/32XqrLDdZSn7Jllo1AYNcWji/G0d5M0GTViE7KoGBiMunw3a34Sb2KO4ZZyrSEhqsxFoVhWWJshdyfKqJA==}
+  electron-to-chromium@1.5.423:
+    resolution: {integrity: sha512-rRZfTSY8ptHYMQxa+uIycJMFKmY1T0GIApNMXJYGehguTZa56TEEl19pKPCoBqk5Gpf7QizZn/jt7xur+DYxag==}
 
   elegant-spinner@1.0.1:
     resolution: {integrity: sha512-B+ZM+RXvRqQaAmkMlO/oSe5nMUOaUnyfGYCEHoR8wrXsZR2mA0XVibsxV1bvTwxdRWah1PkQqso2EzhILGHtEQ==}
@@ -5745,7 +5745,7 @@ snapshots:
       - '@types/node'
       - typescript
 
-  '@cenk1cenk2/eslint-config@3.3.1(@typescript-eslint/utils@8.70.0(eslint@10.10.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3))(eslint@10.10.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)':
+  '@cenk1cenk2/eslint-config@3.3.2(@typescript-eslint/utils@8.70.0(eslint@10.10.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3))(eslint@10.10.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3)':
     dependencies:
       '@eslint/js': 10.0.1(eslint@10.10.0(jiti@2.7.0)(supports-color@8.1.1))
       '@stylistic/eslint-plugin': 5.10.0(eslint@10.10.0(jiti@2.7.0)(supports-color@8.1.1))
@@ -7105,7 +7105,7 @@ snapshots:
   browserslist@1.7.7:
     dependencies:
       caniuse-db: 1.0.30001810
-      electron-to-chromium: 1.5.422
+      electron-to-chromium: 1.5.423
 
   buffer-from@1.1.2: {}
 
@@ -7721,7 +7721,7 @@ snapshots:
 
   ejs@6.0.1: {}
 
-  electron-to-chromium@1.5.422: {}
+  electron-to-chromium@1.5.423: {}
 
   elegant-spinner@1.0.1: {}
 
