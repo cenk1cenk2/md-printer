@@ -95,7 +95,7 @@
     "yaml": "^2.9.0"
   },
   "devDependencies": {
-    "@cenk1cenk2/cz-cc": "^2.3.3",
+    "@cenk1cenk2/cz-cc": "^3.0.0",
     "@cenk1cenk2/eslint-config": "^3.3.2",
     "@tsconfig/node24": "^24.0.5",
     "@types/fs-extra": "^11.0.4",
