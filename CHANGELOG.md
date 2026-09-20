@@ -1,3 +1,9 @@
+## [2.20.5](https://gitlab.kilic.dev/utils/md-printer/compare/v2.20.4...v2.20.5) (2026-09-20)
+
+### Bug Fixes
+
+* **deps:** update dependency yaml to ^2.9.1 ([684b1d7](https://gitlab.kilic.dev/utils/md-printer/commit/684b1d766e9ba882a7ef80e570bfbb0db10dbf2e))
+
 ## [2.20.4](https://gitlab.kilic.dev/utils/md-printer/compare/v2.20.3...v2.20.4) (2026-09-05)
 
 
