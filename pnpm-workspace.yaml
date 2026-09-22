@@ -11,5 +11,4 @@ allowBuilds:
   '@nestjs/core': false
   '@tailwindcss/oxide': true
   puppeteer: false
-  simple-git-hooks: true
   unrs-resolver: true
