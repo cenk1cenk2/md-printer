@@ -59,7 +59,7 @@
   "dependencies": {
     "@cenk1cenk2/oclif-common": "^7.1.0",
     "@listr2/manager": "^4.2.5",
-    "@nestjs/common": "^12.0.2",
+    "@nestjs/common": "^12.0.3",
     "@oclif/core": "^5.0.0",
     "@oclif/plugin-help": "^7.0.0",
     "@tailwindcss/forms": "^0.5.11",
