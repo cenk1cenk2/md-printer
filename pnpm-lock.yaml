@@ -91,7 +91,7 @@ importers:
         specifier: ^11.0.4
         version: 11.0.4
       '@types/node':
-        specifier: ^24.13.4
+        specifier: ^24.13.6
         version: 24.19.0
       '@types/nunjucks':
         specifier: ^3.2.6
@@ -100,7 +100,7 @@ importers:
         specifier: ^2.0.6
         version: 2.0.6
       eslint:
-        specifier: ^10.10.0
+        specifier: ^10.11.0
         version: 10.11.0(jiti@2.7.0)(supports-color@8.1.1)
       execa:
         specifier: ^10.0.1
@@ -112,7 +112,7 @@ importers:
         specifier: ^6.0.0
         version: 6.0.2(@types/node@24.19.0)(supports-color@8.1.1)
       prettier:
-        specifier: ^3.9.6
+        specifier: ^3.9.8
         version: 3.9.9
       prettier-plugin-jinja-template:
         specifier: ^2.2.0
