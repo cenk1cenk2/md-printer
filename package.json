@@ -92,7 +92,7 @@
     "eslint": "^10.11.0",
     "execa": "^10.0.1",
     "globby": "^16.2.4",
-    "oclif": "^6.0.0",
+    "oclif": "^6.0.1",
     "prettier": "^3.9.8",
     "prettier-plugin-jinja-template": "^2.2.0",
     "theme-colors": "^0.1.0",
