@@ -15,7 +15,7 @@ importers:
         specifier: ^4.2.6
         version: 4.2.6(listr2@11.1.1)
       '@nestjs/common':
-        specifier: ^12.1.1
+        specifier: ^12.1.2
         version: 12.1.2(class-transformer@0.5.1)(class-validator@0.15.1)(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1)
       '@oclif/core':
         specifier: ^5.1.2
