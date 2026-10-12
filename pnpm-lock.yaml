@@ -57,7 +57,7 @@ importers:
         specifier: ^3.2.4
         version: 3.2.4(chokidar@5.0.0)
       postcss:
-        specifier: ^8.5.28
+        specifier: ^8.5.29
         version: 8.5.29
       puppeteer:
         specifier: ^25.12.0
