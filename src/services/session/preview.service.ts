@@ -1,27 +1,31 @@
+import type { OnModuleDestroy } from '@nestjs/common'
 import { Injectable } from '@nestjs/common'
+import type { ChildProcess } from 'child_process'
 import { spawn } from 'child_process'
-import { mkdtemp, readFile, rm } from 'fs/promises'
+import { once } from 'events'
+import { mkdtemp, rm } from 'fs/promises'
 import type { IncomingMessage, Server, ServerResponse } from 'http'
 import { createServer } from 'http'
 import type { AddressInfo } from 'net'
 import { tmpdir } from 'os'
-import { join, relative, resolve } from 'path'
+import { join } from 'path'
+import serveStatic from 'serve-static'
 import { fileURLToPath } from 'url'
 
 import { isLoopbackRequest } from '../loopback.js'
-import { mimeType } from '../template/assets.js'
 import { TemplateService } from '../template/template.service.js'
 import { LoggerService } from '@cenk1cenk2/oclif-common'
 import { OutputFileType } from '@constants'
-import type { CompileError, PreviewError, PreviewOptions, SessionBuild } from '@interfaces'
+import type { CompileError, PreviewError, PreviewOptions, PreviewSummary, SessionBuild } from '@interfaces'
 
 @Injectable()
-export class PreviewService {
+export class PreviewService implements OnModuleDestroy {
   private server?: Server
   private clients = new Set<ServerResponse>()
   private build?: SessionBuild
   private error?: PreviewError
   private profile?: string
+  private window?: ChildProcess
 
   constructor(
     private readonly logger: LoggerService,
@@ -42,7 +46,9 @@ export class PreviewService {
       })
     })
 
-    await new Promise<void>((done) => this.server.listen(options.port, options.host, done))
+    this.server.listen(options.port, options.host)
+
+    await once(this.server, 'listening')
 
     const { port } = this.server.address() as AddressInfo
 
@@ -72,26 +78,46 @@ export class PreviewService {
 
   public async open(executable: string, url: string): Promise<void> {
     this.profile = await mkdtemp(join(tmpdir(), 'md-printer-preview-'))
-
-    const browser = spawn(executable, [`--app=${url}`, `--user-data-dir=${this.profile}`, '--no-first-run', '--no-default-browser-check'], { stdio: 'ignore' })
+    this.window = spawn(executable, [`--app=${url}`, `--user-data-dir=${this.profile}`, '--no-first-run', '--no-default-browser-check'], { stdio: 'ignore' })
 
     await new Promise<void>((done) => {
-      browser.on('exit', () => done())
-      browser.on('error', (err) => {
+      this.window.on('exit', () => done())
+      this.window.on('error', (err) => {
         this.logger.warn('Can not open the preview window, open it manually: %s (%s)', url, err.message)
       })
     })
   }
 
+  public async onModuleDestroy(): Promise<void> {
+    await this.close()
+  }
+
   public async close(): Promise<void> {
+    const { server, window, profile } = this
+
+    this.server = undefined
+    this.window = undefined
+    this.profile = undefined
+
     for (const client of this.clients) {
       client.end()
     }
 
-    await new Promise<void>((done) => (this.server ? this.server.close(() => done()) : done()))
+    this.clients.clear()
 
-    if (this.profile) {
-      await rm(this.profile, { recursive: true, force: true })
+    // the browser holds its profile open until it exits
+    if (window && window.exitCode === null && window.signalCode === null && window.kill()) {
+      await once(window, 'exit')
+    }
+
+    if (server?.listening) {
+      server.close()
+
+      await once(server, 'close')
+    }
+
+    if (profile) {
+      await rm(profile, { recursive: true, force: true })
     }
   }
 
@@ -152,40 +178,30 @@ export class PreviewService {
         return void res.end(this.build.output)
 
       default:
-        return this.asset(url.pathname, res)
+        return this.asset(req, res)
     }
   }
 
-  private async asset(pathname: string, res: ServerResponse): Promise<void> {
-    const base = this.build?.ctx.input.directory
-
-    if (!base) {
-      res.writeHead(404)
-
-      return void res.end()
+  private asset(req: IncomingMessage, res: ServerResponse): void {
+    const reject = (status = 404): void => {
+      res.writeHead(status)
+      res.end()
     }
 
-    const path = resolve(base, decodeURIComponent(pathname.slice(1)))
-
-    if (relative(base, path).startsWith('..')) {
-      res.writeHead(403)
-
-      return void res.end()
+    if (!this.build) {
+      return reject()
     }
 
-    const body = await readFile(path).catch((): undefined => undefined)
-
-    if (!body) {
-      res.writeHead(404)
-
-      return void res.end()
-    }
-
-    res.writeHead(200, { ['content-type']: mimeType(path), ['cache-control']: 'no-store' })
-    res.end(body)
+    serveStatic(this.build.ctx.input.directory, {
+      dotfiles: 'ignore',
+      index: false,
+      fallthrough: false,
+      cacheControl: false,
+      setHeaders: (response) => response.setHeader('cache-control', 'no-store')
+    })(req, res, (err?: { status?: number }) => reject(err?.status))
   }
 
-  private summary(build: SessionBuild): Record<string, unknown> {
+  private summary(build: SessionBuild): PreviewSummary {
     const pdf = build.ctx.options.output === OutputFileType.PDF
 
     return {
