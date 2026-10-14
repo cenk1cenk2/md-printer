@@ -1,0 +1,195 @@
+import { Injectable } from '@nestjs/common'
+import { default as graymatter } from 'gray-matter'
+import { basename, dirname, extname, join, resolve } from 'path'
+import { parse as parseYaml } from 'yaml'
+
+import { I18nService } from './i18n.service.js'
+import { MarkdownService } from './markdown.service.js'
+import { RendererService } from './renderer/renderer.service.js'
+import { normalizeMargin } from './renderer/units.js'
+import { SignatureService } from './signature/signature.service.js'
+import { inlineAssets } from './template/assets.js'
+import { TemplateService } from './template/template.service.js'
+import { FileSystemService, LoggerService, merge, MergeStrategy } from '@cenk1cenk2/oclif-common'
+import { DEFAULT_HIGHLIGHT_STYLE, DEFAULT_LANGUAGE, DEFAULT_PDF_OPTIONS, DEFAULT_TEMPLATE, I18N_DIRECTORY, InputFileType, MediaType, OutputFileType } from '@constants'
+import type { MdPrinterCtx, MdPrinterFlags, MdPrinterInput, MdPrinterOptions, MdPrinterSignOptions, RenderedDocument, TemplateBundle } from '@interfaces'
+
+/**
+ * The document pipeline shared by single runs, watch and preview sessions: input, options, template bundle, document, output.
+ */
+@Injectable()
+export class PrinterService {
+  constructor(
+    private readonly fs: FileSystemService,
+    private readonly logger: LoggerService,
+    private readonly i18n: I18nService,
+    private readonly markdown: MarkdownService,
+    private readonly template: TemplateService,
+    private readonly renderer: RendererService,
+    private readonly signature: SignatureService
+  ) {
+    this.logger.setup(this.constructor.name)
+  }
+
+  public async input(flags: MdPrinterFlags): Promise<MdPrinterInput> {
+    let file: string | undefined
+    let source: string
+
+    if (flags.file) {
+      file = resolve(flags.file)
+
+      if (!this.fs.exists(file)) {
+        throw new Error(`File does not exist: ${file}`)
+      }
+
+      source = await this.fs.read(file)
+    } else if (flags.stdin !== undefined) {
+      source = flags.stdin
+    } else {
+      throw new Error('Either --stdin or file argument must be provided.')
+    }
+
+    const type = flags.inputFiletype ?? (file ? extname(file).replace(/^\./, '') : InputFileType.MARKDOWN)
+
+    switch (type) {
+      case InputFileType.MARKDOWN: {
+        const { content, data } = graymatter(source)
+
+        return {
+          file,
+          directory: file ? dirname(file) : process.cwd(),
+          content,
+          data: data ?? {}
+        }
+      }
+
+      case InputFileType.YAML:
+
+      // eslint-disable-next-line no-fallthrough
+      case InputFileType.YAML_SHORT:
+        return {
+          file,
+          directory: file ? dirname(file) : process.cwd(),
+          content: '',
+          data: parseYaml(source) ?? {}
+        }
+
+      default:
+        throw new Error(`Input file type is not supported: ${type}, use one of ${Object.values(InputFileType).join(', ')} or pass --input-filetype.`)
+    }
+  }
+
+  public async options(flags: MdPrinterFlags, input: MdPrinterInput): Promise<MdPrinterOptions> {
+    const { data } = input
+    const template = this.template.resolve(flags.template ?? data.template ?? DEFAULT_TEMPLATE)
+    const settings = await this.template.settings(template)
+    const output = (flags.outputFiletype ?? data['output-filetype'] ?? OutputFileType.PDF) as OutputFileType
+
+    if (!Object.values(OutputFileType).includes(output)) {
+      throw new Error(`Output file type is not supported: ${output}, use one of ${Object.values(OutputFileType).join(', ')}.`)
+    }
+
+    const pdf = merge(MergeStrategy.EXTEND, {}, DEFAULT_PDF_OPTIONS, settings.pdf_options ?? {}, data.pdf_options ?? {})
+
+    pdf.margin = normalizeMargin(pdf.margin)
+
+    const dest = flags.stdout ? undefined : (flags.output ?? data.dest ?? (input.file ? `${basename(input.file, extname(input.file))}.${output}` : undefined))
+
+    return {
+      template,
+      output,
+      dest: dest && resolve(dest),
+      title: flags.title ?? data.document_title,
+      language: flags.language ?? data.language ?? settings.i18n?.language ?? DEFAULT_LANGUAGE,
+      continuous: flags.continuous || data.continuous === true || settings.continuous === true,
+      media: (settings.media ?? MediaType.SCREEN) as MediaType,
+      highlight: settings.highlight_style ?? DEFAULT_HIGHLIGHT_STYLE,
+      pdf,
+      i18n: settings.i18n ?? {},
+      sign: this.signOptions(flags, settings.sign, data.sign)
+    }
+  }
+
+  public bundle(options: MdPrinterOptions): Promise<TemplateBundle> {
+    return this.template.bundle(options.template)
+  }
+
+  /**
+   * Resolves the signing time and the visible signature description, which the template renders before the document is signed.
+   */
+  public async prepare(ctx: MdPrinterCtx): Promise<void> {
+    if (!ctx.options.sign.enabled) {
+      return
+    }
+
+    if (ctx.options.output !== OutputFileType.PDF) {
+      throw new Error('Signing is only supported for PDF output.')
+    }
+
+    this.signature.adapter(ctx.options.sign.provider)
+
+    ctx.signingTime = new Date()
+    ctx.certificate = ctx.options.sign.certificate ? await this.signature.certificate(ctx.options.sign.certificate, ctx.signingTime) : undefined
+    ctx.signature = this.signature.describe(ctx.signingTime, ctx.certificate)
+  }
+
+  public async document(ctx: MdPrinterCtx, bundle: TemplateBundle): Promise<RenderedDocument> {
+    const { input, options } = ctx
+    const t = await this.i18n.load(join(options.template, I18N_DIRECTORY), { ...options.i18n, language: options.language })
+
+    const document = await this.template.render(
+      options.template,
+      bundle,
+      {
+        data: input.data,
+        content: this.markdown.render(input.content),
+        t,
+        language: options.language,
+        signature: ctx.signature
+      },
+      { markdown: (markdown) => this.markdown.render(markdown) },
+      {
+        language: options.language,
+        title: options.title,
+        fallbackTitle: input.file && basename(input.file, extname(input.file)),
+        highlight: options.highlight
+      }
+    )
+
+    this.logger.debug('Rendered document: %d bytes, header: %d bytes, footer: %d bytes', document.html.length, document.header?.length ?? 0, document.footer?.length ?? 0)
+
+    return document
+  }
+
+  public async output(ctx: MdPrinterCtx, document: RenderedDocument): Promise<{ content: Buffer; assets: string[] }> {
+    if (ctx.options.output === OutputFileType.HTML) {
+      return { content: Buffer.from(await inlineAssets(document.html, ctx.input.directory)), assets: [] }
+    }
+
+    const { pdf, assets } = await this.renderer.render(document, {
+      directory: ctx.input.directory,
+      pdf: ctx.options.pdf,
+      media: ctx.options.media,
+      continuous: ctx.options.continuous
+    })
+
+    return { content: pdf, assets }
+  }
+
+  public sign(ctx: MdPrinterCtx, pdf: Buffer): Promise<Buffer> {
+    return this.signature.sign(pdf, {
+      ...ctx.options.sign,
+      date: ctx.signingTime,
+      certificate: ctx.certificate
+    })
+  }
+
+  private signOptions(flags: MdPrinterFlags, ...sources: MdPrinterSignOptions[]): MdPrinterSignOptions {
+    return {
+      ...Object.assign({}, ...sources),
+      ...(flags.sign ? { enabled: true } : {}),
+      ...(flags.signProvider ? { provider: flags.signProvider } : {}),
+      ...(flags.signCertificate ? { certificate: flags.signCertificate } : {})
+    }
+  }
+}

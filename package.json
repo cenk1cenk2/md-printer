@@ -1,10 +1,12 @@
 {
   "name": "@cenk1cenk2/md-printer",
   "version": "2.20.5",
-  "description": "A markdown printer.",
-  "module": "dist/index.mjs",
+  "description": "Render markdown or yaml through Svelte templates into PDF or HTML with Puppeteer.",
   "type": "module",
-  "repository": "https://gitlab.kilic.dev/utils/md-printer",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.kilic.dev/utils/md-printer.git"
+  },
   "author": "Cenk Kilic",
   "license": "MIT",
   "bin": {
@@ -18,14 +20,14 @@
     "start": "./bin/run.js",
     "build": "tsdown",
     "dev:start": "tsdown --watch src/",
-    "clean": "rimraf oclif.manifest.json",
     "format": "prettier --write src/ --log-level warn && eslint --fix",
     "lint": "eslint",
     "manifest": "oclif manifest",
-    "docs:toc": "oclif readme"
+    "docs:toc": "oclif readme",
+    "typecheck": "tsc --noEmit",
+    "test": "node --test \"test/**/*.test.mjs\""
   },
   "files": [
-    "/config",
     "/bin",
     "/dist",
     "/oclif.manifest.json",
@@ -43,9 +45,8 @@
     ],
     "hooks": {
       "init": [
-        "./dist/hooks/update-notifier.hook"
-      ],
-      "command_not_found": "./dist/hooks/not-found.hook"
+        "./dist/hooks/stdout.hook"
+      ]
     },
     "topicSeparator": " "
   },
@@ -53,33 +54,43 @@
     "node": ">=24.0.0"
   },
   "keywords": [
+    "markdown",
+    "pdf",
+    "svelte",
+    "tailwind",
+    "puppeteer",
+    "invoice",
+    "cli",
     "oclif",
     "cenk1cenk2"
   ],
   "dependencies": {
     "@cenk1cenk2/oclif-common": "^7.1.0",
+    "@fontsource/montserrat": "^5.3.0",
     "@listr2/manager": "^4.3.1",
     "@nestjs/common": "^12.1.2",
     "@oclif/core": "^5.1.2",
     "@oclif/plugin-help": "^7.0.2",
     "@signpdf/placeholder-plain": "^3.3.0",
     "@signpdf/utils": "^3.3.0",
-    "@tailwindcss/forms": "^0.5.11",
-    "@tailwindcss/postcss": "^4.3.3",
+    "@tailwindcss/node": "^4.3.3",
+    "@tailwindcss/oxide": "^4.3.3",
     "@tailwindcss/typography": "^0.5.20",
     "chokidar": "^5.0.0",
     "fs-extra": "^11.4.1",
-    "get-port": "^7.2.0",
+    "github-markdown-css": "^5.9.0",
     "gray-matter": "^4.0.3",
+    "highlight.js": "^11.12.0",
     "i18next": "^26.4.2",
     "listr2": "^11.2.0",
-    "md-to-pdf": "^5.2.5",
-    "nunjucks": "^3.2.4",
-    "postcss": "^8.5.29",
-    "puppeteer": "^25.12.0",
+    "marked": "^18.1.1",
+    "marked-gfm-heading-id": "^4.1.4",
+    "marked-highlight": "^2.2.4",
+    "puppeteer-core": "^25.13.0",
+    "rolldown": "^1.2.13",
     "rxjs": "^7.8.2",
-    "showdown": "^2.1.0",
     "source-map-support": "^0.5.21",
+    "svelte": "^5.57.2",
     "tailwindcss": "^4.3.3",
     "yaml": "^2.9.1"
   },
@@ -89,15 +100,14 @@
     "@tsconfig/node24": "^24.0.5",
     "@types/fs-extra": "^11.0.4",
     "@types/node": "^24.19.1",
-    "@types/nunjucks": "^3.2.6",
-    "@types/showdown": "^2.0.6",
     "eslint": "^10.12.0",
+    "eslint-plugin-svelte": "^3.23.1",
     "execa": "^10.1.0",
     "globby": "^16.2.4",
     "oclif": "^6.0.2",
     "prettier": "^3.9.9",
-    "prettier-plugin-jinja-template": "^2.2.0",
-    "theme-colors": "^0.1.0",
+    "prettier-plugin-svelte": "^4.1.1",
+    "svelte-eslint-parser": "^1.9.0",
     "tpm": "^1.4.14",
     "ts-node": "^10.9.2",
     "tsconfig-paths": "^4.2.0",
@@ -109,5 +119,9 @@
       "path": "./node_modules/@cenk1cenk2/cz-cc"
     }
   },
-  "packageManager": "pnpm@12.10.1"
+  "packageManager": "pnpm@12.10.1",
+  "bugs": {
+    "url": "https://gitlab.kilic.dev/utils/md-printer/-/issues"
+  },
+  "homepage": "https://gitlab.kilic.dev/utils/md-printer"
 }

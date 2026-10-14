@@ -14,17 +14,13 @@ export class I18nService {
     private readonly cs: ConfigService
   ) {}
 
-  public async load(directory: string, options: MdPrinterI18nOptions & { language: string }): Promise<TFunction | undefined> {
-    if (!this.fs.exists(directory)) {
-      return undefined
-    }
-
+  public async load(directory: string, options: MdPrinterI18nOptions & { language: string }): Promise<TFunction> {
     const instance = i18next.createInstance()
 
     await instance.init({
       lng: options.language,
       fallbackLng: options.fallback ?? options.language ?? DEFAULT_LANGUAGE,
-      resources: await this.resources(directory),
+      resources: this.fs.exists(directory) ? await this.resources(directory) : {},
       interpolation: { escapeValue: false }
     })
 

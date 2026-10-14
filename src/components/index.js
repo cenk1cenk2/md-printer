@@ -1,0 +1,7 @@
+export { default as Date } from './Date.svelte'
+export { default as Markdown } from './Markdown.svelte'
+export { default as Page } from './Page.svelte'
+export { default as PageNumber } from './PageNumber.svelte'
+export { default as SignatureBlock } from './SignatureBlock.svelte'
+export { default as Title } from './Title.svelte'
+export { default as TotalPages } from './TotalPages.svelte'

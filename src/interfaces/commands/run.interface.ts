@@ -1,44 +1,63 @@
 import type { X509Certificate } from 'crypto'
-import type { TFunction } from 'i18next'
-import type { Config as MdToPdfConfig } from 'md-to-pdf/dist/lib/config.js'
+import type { PDFOptions } from 'puppeteer-core'
+
+import type { MdPrinterSignature, MdPrinterSignOptions } from '../signature.interface.js'
+import type { MediaType, OutputFileType } from '@constants'
 
 export interface MdPrinterI18nOptions {
   language?: string
   fallback?: string
 }
 
-export interface MdPrinterSignOptions {
-  enabled?: boolean
-  provider?: string
-  certificate?: string
-  reason?: string
-  location?: string
-  contact?: string
-}
-
-export interface MdPrinterSignature {
-  date: string
-  name?: string
-  issuer?: string
-  serial?: string
-}
-
-export interface MdPrinterOptions extends Partial<MdToPdfConfig> {
-  continuous?: boolean
+export interface MdPrinterSettings {
+  pdf_options?: PDFOptions
   i18n?: MdPrinterI18nOptions
   sign?: MdPrinterSignOptions
+  continuous?: boolean
+  media?: MediaType
+  highlight_style?: string
+}
+
+export interface MdPrinterOptions {
+  template: string
+  output: OutputFileType
+  dest?: string
+  title?: string
+  language: string
+  continuous: boolean
+  media: MediaType
+  highlight: string
+  pdf: PDFOptions
+  i18n: MdPrinterI18nOptions
+  sign: MdPrinterSignOptions
+}
+
+export interface MdPrinterFlags {
+  file?: string
+  output?: string
+  stdin?: string
+  inputFiletype?: string
+  outputFiletype?: string
+  stdout?: boolean
+  template?: string
+  title?: string
+  language?: string
+  continuous?: boolean
+  sign?: boolean
+  signProvider?: string
+  signCertificate?: string
+}
+
+export interface MdPrinterInput {
+  file?: string
+  directory: string
+  content: string
+  data: Record<string, any>
 }
 
 export interface MdPrinterCtx {
-  file: string
-  content: string
-  template?: string
-  templates?: string
-  metadata: Record<PropertyKey, any>
-  renderContinuous?: boolean
+  input: MdPrinterInput
   options: MdPrinterOptions
-  language?: string
-  t?: TFunction
   signingTime?: Date
   certificate?: X509Certificate
   signature?: MdPrinterSignature

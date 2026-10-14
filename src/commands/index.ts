@@ -1,90 +1,77 @@
-import tailwind from '@tailwindcss/postcss'
-import { watch } from 'chokidar'
-import { default as graymatter } from 'gray-matter'
-import type { Config as MdToPdfConfig } from 'md-to-pdf/dist/lib/config.js'
-import { defaultConfig as MdToPdfDefaultConfig } from 'md-to-pdf/dist/lib/config.js'
-import type { HtmlOutput, PdfOutput } from 'md-to-pdf/dist/lib/generate-output.js'
-import { convertMdToPdf } from 'md-to-pdf/dist/lib/md-to-pdf.js'
-import { serveDirectory } from 'md-to-pdf/dist/lib/serve-dir.js'
-import type { AddressInfo } from 'net'
-import Nunjucks from 'nunjucks'
-import { basename, dirname, extname, isAbsolute, join } from 'path'
-import postcss from 'postcss'
-import type { Browser, Page, PDFOptions } from 'puppeteer'
-import puppeteer, * as Puppeteer from 'puppeteer'
-import showdown from 'showdown'
+import { mkdir, rename, writeFile } from 'fs/promises'
+import { dirname } from 'path'
+import { text } from 'stream/consumers'
 
-import type { DynamicModule, RegisterHook, ShouldRunAfterHook, ShouldRunBeforeHook } from '@cenk1cenk2/oclif-common'
-import {
-  Args, Flags, Command, ConfigService, FileSystemService, ParserService, JsonParser, YamlParser, merge, MergeStrategy
-} from '@cenk1cenk2/oclif-common'
-import { DEFAULT_LANGUAGE, I18N_DIRECTORY, InputFileType, OutputFileType, RequiredTemplateFiles, TEMPLATE_DIRECTORY, TemplateFiles } from '@constants'
-import type { MdPrinterCtx, MdPrinterOptions, PuppeteerPdfHelpers } from '@interfaces'
-import { ATrustAdapter, I18nService, SignatureService } from '@services'
+import type { DynamicModule, RegisterHook, ShouldRunBeforeHook } from '@cenk1cenk2/oclif-common'
+import { Args, Command, Flags, JsonParser, ParserService, YamlParser } from '@cenk1cenk2/oclif-common'
+import { InputFileType, OutputFileType } from '@constants'
+import type { MdPrinterCtx, MdPrinterFlags } from '@interfaces'
+import { ATrustAdapter, I18nService, MarkdownService, PreviewService, PrinterService, RendererService, SessionService, SignatureService, TemplateService } from '@services'
 
-const { parsePDFOptions, unitToPixels } = Puppeteer as PuppeteerPdfHelpers
-
-export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> implements RegisterHook, ShouldRunBeforeHook, ShouldRunAfterHook {
-  static description = 'Generates a PDF from the given markdown file with the selected HTML template.'
+export default class MDPrinter extends Command<typeof MDPrinter> implements RegisterHook, ShouldRunBeforeHook {
+  static description = 'Renders a markdown or yaml file through a Svelte template into a PDF or HTML document.'
 
   static flags = {
-    stdin: Flags.string({
+    stdin: Flags.boolean({
       char: 'I',
-      description: 'Read the input from stdin.',
-      required: false,
-      exclusive: ['file'],
-      allowStdin: 'only'
+      description: 'Read the input from stdin.'
     }),
-    // stdin: Flags.boolean({
-    //   char: 'I',
-    //   description: 'Read the input from stdin.',
-    //   required: false,
-    //   default: false
-    // }),
     ['input-filetype']: Flags.string({
       char: 'f',
       options: Object.values(InputFileType),
-      description: 'File type to be processed. By default it is detected by the file extension.',
-      default: InputFileType.MARKDOWN
+      description: 'Input file type. Detected from the file extension, markdown for stdin.'
     }),
     ['output-filetype']: Flags.string({
       char: 'F',
       options: Object.values(OutputFileType),
-      description: 'File type to be processed. By default it is detected by the file extension.',
-      default: OutputFileType.PDF
+      description: 'Output file type, defaults to pdf. Overwrites the one defined in front-matter.'
     }),
     stdout: Flags.boolean({
       char: 'O',
-      description: 'Write to stdout instead of a file.'
+      description: 'Write the output to stdout instead of a file.'
     }),
     template: Flags.string({
       char: 't',
-      default: 'default',
-      description: 'HTML template for the generated PDF file.'
+      description: 'Built-in template name or path to a template directory, defaults to "default". Overwrites the one defined in front-matter.'
     }),
     title: Flags.string({
       char: 'T',
-      description: 'Overwrite document title.'
+      description: 'Document title. Overwrites the one defined in front-matter or the template.'
     }),
     language: Flags.string({
       char: 'l',
-      description: 'Language code for template translations. Overwrites the one defined in front-matter and template settings.'
+      description: 'Language for template translations. Overwrites the one defined in front-matter and template settings.'
     }),
     browser: Flags.string({
       char: 'b',
-      description: 'Browser path that is going to be used for the PDF generation.',
-      default: '/usr/bin/brave'
+      description: 'Browser executable used for printing. Discovered automatically when omitted (Brave, Chrome, Chromium, Edge).'
+    }),
+    continuous: Flags.boolean({
+      description: 'Render the PDF as a single continuous page without page breaks.'
     }),
     watch: Flags.boolean({
       char: 'w',
-      description: 'Watch the changes on the given file.'
+      description: 'Rebuild and write the output whenever the input, the template or its assets change.'
     }),
-    dev: Flags.boolean({
-      char: 'd',
-      description: 'Run with Chrome browser instead of publishing the file.'
+    preview: Flags.boolean({
+      char: 'p',
+      aliases: ['dev'],
+      charAliases: ['d'],
+      deprecateAliases: true,
+      description: 'Open a live preview of the HTML and the PDF in the browser. Combine with --watch to also write the output.'
     }),
-    continuous: Flags.boolean({
-      description: 'Render PDF as a single continuous page without page breaks.'
+    host: Flags.string({
+      description: 'Host for the preview server.',
+      default: '127.0.0.1'
+    }),
+    port: Flags.integer({
+      description: 'Port for the preview server, random when 0.',
+      default: 0
+    }),
+    open: Flags.boolean({
+      description: 'Open the preview window.',
+      default: true,
+      allowNo: true
     }),
     sign: Flags.boolean({
       description: 'Sign the PDF with a qualified electronic signature through ID Austria (A-Trust).'
@@ -99,467 +86,176 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
 
   static args = {
     file: Args.string({
-      description: 'File to be processed.'
+      description: 'Markdown or yaml file to render.',
+      ignoreStdin: true
     }),
     output: Args.string({
-      description: 'Output file that will be generated. Overwrites the one define in front-matter.',
-      required: false
+      description: 'Output file. Overwrites the one defined in front-matter.',
+      required: false,
+      ignoreStdin: true
     })
   }
 
-  private nunjucks = Nunjucks.configure({
-    autoescape: false,
-    throwOnUndefined: true,
-    trimBlocks: true,
-    lstripBlocks: false
-  })
-  private cs: ConfigService
-  private fs: FileSystemService
-  private i18n: I18nService
-  private signature: SignatureService
-  private browser: Browser
+  private printer: PrinterService
+  private renderer: RendererService
 
   public register(cli: DynamicModule): DynamicModule {
     return {
       ...cli,
-      providers: [...(cli.providers ?? []), I18nService, ATrustAdapter, SignatureService]
+      providers: [
+        ...(cli.providers ?? []),
+        I18nService,
+        MarkdownService,
+        TemplateService,
+        RendererService,
+        ATrustAdapter,
+        SignatureService,
+        PrinterService,
+        SessionService,
+        PreviewService
+      ]
     }
   }
 
   public async shouldRunBefore(): Promise<void> {
-    this.cs = this.app.get(ConfigService)
-    this.fs = this.app.get(FileSystemService)
-    this.i18n = this.app.get(I18nService)
-    this.signature = this.app.get(SignatureService)
-
     await this.app.get(ParserService).register(JsonParser, YamlParser)
 
-    this.nunjucks.addFilter('markdown_to_html', (markdown: string) => {
-      return new showdown.Converter().makeHtml(markdown)
-    })
-    this.tasks.options = { silentRendererCondition: true }
-
-    if (!this.args.file && !this.flags.stdin) {
-      throw new Error('Either --stdin or file argument must be provided.')
-    }
+    this.printer = this.app.get(PrinterService)
+    this.renderer = this.app.get(RendererService)
+    this.renderer.use(this.flags.browser)
   }
 
   public async run(): Promise<void> {
-    this.tasks.add([
-      // {
-      //   enabled: this.flags.stdin,
-      //   task: async (ctx): Promise<void> => {
-      //     this.logger.debug('Reading file through stdin...')
-      //
-      //     if (process.stdin.isTTY) {
-      //       this.logger.error('stdin stream is not TTY!')
-      //
-      //       return
-      //     }
-      //     // BUG: readline was acting weird
-      //     ctx.content = await stdin()
-      //     this.logger.debug('File read through stdin: %s%s', EOL, ctx.content)
-      //   }
-      // },
+    const flags: MdPrinterFlags = {
+      file: this.flags.stdin ? undefined : this.args.file,
+      // with stdin there is no input file, so the only argument is the output
+      output: this.flags.stdin ? (this.args.output ?? this.args.file) : this.args.output,
+      stdin: this.flags.stdin ? await text(process.stdin) : undefined,
+      inputFiletype: this.flags['input-filetype'],
+      outputFiletype: this.flags['output-filetype'],
+      stdout: this.flags.stdout,
+      template: this.flags.template,
+      title: this.flags.title,
+      language: this.flags.language,
+      continuous: this.flags.continuous,
+      sign: this.flags.sign,
+      signProvider: this.flags['sign-provider'],
+      signCertificate: this.flags['sign-certificate']
+    }
 
-      {
-        task: async(ctx): Promise<void> => {
-          if (this.args.file) {
-            ctx.file = isAbsolute(this.args.file) ? this.args.file : join(process.cwd(), this.args.file)
-
-            if (!this.fs.exists(ctx.file)) {
-              throw new Error(`File does not exists: ${ctx.file}`)
-            }
-
-            this.logger.info('Loading file: %s', ctx.file)
-
-            ctx.content = await this.fs.read(ctx.file)
-          } else {
-            ctx.content = this.flags.stdin
-          }
-
-          switch (this.flags['input-filetype'] ? this.flags['input-filetype'] : extname(ctx.file).replace(/^\./, '')) {
-            case InputFileType.MARKDOWN: {
-              const data = graymatter(ctx.content)
-
-              ctx.content = data.content
-
-              ctx.metadata = data.data
-
-              break
-            }
-
-            case InputFileType.YAML:
-
-            // eslint-disable-next-line no-fallthrough
-            case InputFileType.YAML_SHORT: {
-              ctx.metadata = await this.app.get(ParserService).parse(ctx.file, ctx.content)
-
-              break
-            }
-
-            default:
-              throw new Error('File type is not accepted.')
-          }
-        }
-      },
-
-      {
-        task: async(ctx): Promise<void> => {
-          const template = ctx.metadata?.template ?? this.flags.template
-
-          ctx.templates = new RegExp(/\.\.?\//).test(template) ? join(process.cwd(), template) : join(this.config.root, TEMPLATE_DIRECTORY, template)
-
-          this.logger.info('Loading template: %s from %s', template, ctx.templates)
-
-          await Promise.all(
-            RequiredTemplateFiles.map(async(file) => {
-              const current = join(ctx.templates, file)
-
-              if (!this.fs.exists(current)) {
-                throw new Error(`Template does not exists: ${current}`)
-              }
-            })
-          )
-
-          const paths: Record<TemplateFiles, string> = {
-            [TemplateFiles.SETTINGS]: join(ctx.templates, TemplateFiles.SETTINGS),
-            [TemplateFiles.CSS]: join(ctx.templates, TemplateFiles.CSS),
-            [TemplateFiles.TAILWIND_CSS]: join(ctx.templates, TemplateFiles.TAILWIND_CSS),
-            [TemplateFiles.HEADER]: join(ctx.templates, TemplateFiles.HEADER),
-            [TemplateFiles.FOOTER]: join(ctx.templates, TemplateFiles.FOOTER),
-            [TemplateFiles.TEMPLATE]: join(ctx.templates, TemplateFiles.TEMPLATE)
-          }
-
-          const title = ctx.metadata?.document_title ?? this.flags.title
-
-          ctx.options = await this.cs.extend<MdPrinterOptions>([
-            paths[TemplateFiles.SETTINGS],
-            {
-              dest: this.args?.output ?? ctx.metadata?.dest ?? `${basename(this.args.file, extname(this.args.file))}.${this.flags['output-filetype']}`,
-              // omitted rather than set to undefined, since deepmerge would clobber the template default
-              ...(title ? { document_title: title } : {}),
-              ...(ctx.metadata?.sign ? { sign: ctx.metadata.sign } : {}),
-              // https://github.com/simonhaenisch/md-to-pdf/issues/247
-              launch_options: {
-                executablePath: this.flags.browser
-                // headless: true
-              }
-            }
-          ])
-
-          ctx.renderContinuous = this.flags.continuous || ctx.metadata?.continuous === true || ctx.options.continuous === true
-
-          this.flags.stdout ??= ctx.metadata.stdout
-
-          if (this.flags.stdout) {
-            ctx.options.dest = 'stdout'
-          }
-
-          if (this.flags['output-filetype'] === OutputFileType.HTML || ctx.metadata['output-filetype'] === OutputFileType.HTML) {
-            ctx.options.as_html = true
-          }
-
-          this.logger.debug('Options: %o', ctx.options)
-
-          if (this.fs.exists(paths[TemplateFiles.HEADER])) {
-            this.logger.debug('Header exists for template.')
-
-            ctx.options.pdf_options.headerTemplate = await this.fs.read(paths[TemplateFiles.HEADER])
-          }
-
-          if (this.fs.exists(paths[TemplateFiles.FOOTER])) {
-            this.logger.debug('Footer exists for template.')
-
-            ctx.options.pdf_options.footerTemplate = await this.fs.read(paths[TemplateFiles.FOOTER])
-          }
-
-          if (this.fs.exists(paths[TemplateFiles.TEMPLATE])) {
-            this.logger.debug('Design template exists for template.')
-
-            ctx.template = await this.fs.read(paths[TemplateFiles.TEMPLATE])
-
-            this.logger.debug('Metadata: %o', ctx.metadata)
-          }
-
-          if (this.fs.exists(paths[TemplateFiles.CSS])) {
-            this.logger.debug('CSS exists for template.')
-            ctx.options.css = await this.fs.read(paths[TemplateFiles.CSS])
-          }
-
-          if (this.fs.exists(paths[TemplateFiles.TAILWIND_CSS])) {
-            this.logger.debug('Tailwind CSS exists for template: %s -> %s', paths[TemplateFiles.TAILWIND_CSS])
-
-            ctx.options.css = await postcss([
-              tailwind({
-                // content: [{ raw: ctx.template, extension: 'html' }],
-                base: ctx.templates
-              })
-            ])
-              .process(await this.fs.read(paths[TemplateFiles.TAILWIND_CSS]), { from: paths[TemplateFiles.TAILWIND_CSS] })
-              .then((result) => result.css)
-          }
-
-          await this.applyTranslations(ctx)
-
-          await this.applySignature(ctx)
-
-          await this.applyDocumentTitle(ctx)
-        }
+    try {
+      if (this.flags.watch || this.flags.preview) {
+        await this.session(flags)
+      } else {
+        await this.print(flags)
       }
-    ])
-  }
-
-  public async shouldRunAfter(ctx: MdPrinterCtx): Promise<void> {
-    if (this.flags.watch) {
-      this.logger.info('Running in watch mode.')
-
-      watch([TEMPLATE_DIRECTORY, this.args.file, join(ctx.templates, '**/*')]).on('change', async() => {
-        await this.run()
-        const ctx = await this.runTasks()
-
-        this.logger.info('Waiting for the next change.')
-
-        return this.runMd2Pdf(ctx).catch((err) => {
-          this.logger.error(err)
-        })
-      })
-
-      return this.runMd2Pdf(ctx)
-    }
-
-    await this.runMd2Pdf(ctx)
-
-    if (this.browser) {
-      await this.browser.close()
+    } finally {
+      await this.renderer.close()
     }
   }
 
-  private context(ctx: MdPrinterCtx): Record<PropertyKey, any> {
-    const context: Record<PropertyKey, any> = {
-      ...(ctx.metadata ?? {}),
-      content: ctx.content,
-      signature: ctx.signature ?? null
+  private async print(flags: MdPrinterFlags): Promise<void> {
+    const input = await this.printer.input(flags)
+    const ctx: MdPrinterCtx = { input, options: await this.printer.options(flags, input) }
+
+    this.logger.debug('Options: %o', ctx.options)
+
+    await this.printer.prepare(ctx)
+
+    const document = await this.printer.document(ctx, await this.printer.bundle(ctx.options))
+    let { content } = await this.printer.output(ctx, document)
+
+    if (ctx.signature) {
+      content = await this.printer.sign(ctx, content)
+
+      this.logger.info('Document is signed.')
     }
 
-    if (ctx.t) {
-      context.t = ctx.t
-      context.language = ctx.language
-    }
-
-    return context
+    await this.write(ctx, content)
   }
 
-  private async applyDocumentTitle(ctx: MdPrinterCtx): Promise<void> {
-    const title = ctx.options.document_title ?? this.args.file
-
-    if (!title) {
-      return
+  private async session(flags: MdPrinterFlags): Promise<void> {
+    if (flags.stdout) {
+      throw new Error('Writing to stdout is not supported with --watch or --preview.')
     }
 
-    ctx.options.document_title = this.nunjucks.renderString(title, this.context(ctx))
+    const session = this.app.get(SessionService)
+    const preview = this.flags.preview ? this.app.get(PreviewService) : undefined
 
-    this.logger.info('Document title will be: %s', ctx.options.document_title)
-  }
+    session.on('building', () => preview?.building())
+    session.on('failed', (err) => {
+      this.logger.error(err.message)
 
-  private async applySignature(ctx: MdPrinterCtx): Promise<void> {
-    ctx.options.sign = {
-      ...ctx.options.sign,
-      ...(this.flags.sign ? { enabled: true } : {}),
-      ...(this.flags['sign-provider'] ? { provider: this.flags['sign-provider'] } : {}),
-      ...(this.flags['sign-certificate'] ? { certificate: this.flags['sign-certificate'] } : {})
-    }
-
-    if (!ctx.options.sign.enabled) {
-      return
-    }
-
-    if (ctx.options.as_html) {
-      throw new Error('Signing is only supported for PDF output.')
-    }
-
-    this.signature.adapter(ctx.options.sign.provider)
-
-    ctx.signingTime = new Date()
-
-    if (ctx.options.sign.certificate) {
-      ctx.certificate = await this.signature.certificate(ctx.options.sign.certificate, ctx.signingTime)
-    }
-
-    ctx.signature = this.signature.describe(ctx.signingTime, ctx.certificate)
-
-    this.logger.info('Document will be signed: %o', ctx.signature)
-  }
-
-  private async applyTranslations(ctx: MdPrinterCtx): Promise<void> {
-    ctx.language = this.flags.language ?? ctx.metadata?.language ?? ctx.options.i18n?.language ?? DEFAULT_LANGUAGE
-
-    ctx.t = await this.i18n.load(join(ctx.templates, I18N_DIRECTORY), {
-      language: ctx.language,
-      fallback: ctx.options.i18n?.fallback
+      preview?.failed(err)
     })
+    session.on('ready', async(build) => {
+      preview?.ready(build)
 
-    if (ctx.t) {
-      this.logger.info('Rendering with language: %s', ctx.language)
-    }
-  }
-
-  private continuousBrowser(browser: Browser): Browser {
-    return new Proxy(browser, {
-      get: (target, property, receiver): unknown => {
-        if (property !== 'newPage') {
-          const value = Reflect.get(target, property, receiver)
-
-          return typeof value === 'function' ? value.bind(target) : value
-        }
-
-        return async(): Promise<Page> => {
-          const page = await browser.newPage()
-          const pdf = page.pdf.bind(page)
-
-          page.pdf = async(pdfOptions: PDFOptions = {}): ReturnType<Page['pdf']> => {
-            const parsed = parsePDFOptions(pdfOptions, 'cm')
-            const width = parsed.landscape ? parsed.height : parsed.width
-            const margin = parsed.margin
-            const viewport = page.viewport()
-
-            await page.setViewport({
-              width: Math.ceil(Math.max(width - margin.left - margin.right, 1) * unitToPixels.cm),
-              height: viewport?.height ?? 800,
-              deviceScaleFactor: viewport?.deviceScaleFactor ?? 1
-            })
-
-            const contentHeight = await page.evaluate(async() => {
-              if ('fonts' in document) {
-                await document.fonts.ready
-              }
-
-              await Promise.all(
-                Array.from(document.images).map((image) => {
-                  if (image.complete) {
-                    return undefined
-                  }
-
-                  return new Promise((resolve) => {
-                    image.addEventListener('load', resolve, { once: true })
-                    image.addEventListener('error', resolve, { once: true })
-                  })
-                })
-              )
-
-              const bodyTop = document.body.getBoundingClientRect().top
-              const bottom = Math.max(
-                document.body.getBoundingClientRect().bottom,
-                ...Array.from(document.body.querySelectorAll('*')).map((element) => element.getBoundingClientRect().bottom)
-              )
-
-              return Math.max(
-                document.body.scrollHeight,
-                document.documentElement.scrollHeight,
-                document.body.getBoundingClientRect().height,
-                document.documentElement.getBoundingClientRect().height,
-                bottom - bodyTop
-              )
-            })
-            const height = parsePDFOptions({ height: Math.ceil(contentHeight + unitToPixels.cm) }, 'cm').height + margin.top + margin.bottom
-            const options: PDFOptions = {
-              ...pdfOptions,
-              width: `${width}cm`,
-              height: `${height}cm`,
-              landscape: false
-            }
-
-            delete options.format
-
-            return pdf(options)
-          }
-
-          return page
-        }
-      }
-    })
-  }
-
-  private async runMd2Pdf(ctx: MdPrinterCtx): Promise<void> {
-    const options = merge<MdToPdfConfig>(MergeStrategy.EXTEND, { basedir: process.cwd() }, MdToPdfDefaultConfig, ctx.options, {
-      devtools: this.flags.dev
-    })
-
-    // if (this.browser) {
-    //   await Promise.all( pages.map(async(page) => {
-    //       return page.close().catch((err) => {
-    //         this.logger.error('Can not close page: %o', err)
-    //       })
-    //     })
-    //   )
-    // }
-    if (!this.browser) {
-      const browser = await puppeteer.launch({ devtools: options.devtools, ...options.launch_options })
-
-      this.browser = ctx.renderContinuous ? this.continuousBrowser(browser) : browser
-    }
-
-    const server = await serveDirectory(ctx.options as MdToPdfConfig)
-
-    options.port = (server.address() as AddressInfo).port
-
-    let output: PdfOutput | HtmlOutput
-
-    if (ctx.template) {
-      this.logger.info('Rendering as template.')
-
-      output = await convertMdToPdf({ content: this.nunjucks.renderString(ctx.template, this.context(ctx)) }, options as MdToPdfConfig, {
-        browser: this.browser
-      })
-    } else {
-      this.logger.info('Rendering as plain file.')
-      output = await convertMdToPdf({ content: ctx.content }, options as MdToPdfConfig, {
-        browser: this.browser
-      })
-    }
-
-    await new Promise((resolve, reject) =>
-      server.close((err) => {
-        if (err) {
-          return reject(err)
-        }
-
-        resolve(null)
-      })
-    )
-
-    if (output) {
-      if (ctx.signature) {
-        if (this.flags.watch) {
-          this.logger.warn('Skipping the signature in watch mode, run without --watch to sign the document.')
-        } else {
-          output.content = await this.signature.sign(Buffer.from(output.content), {
-            ...ctx.options.sign,
-            date: ctx.signingTime,
-            certificate: ctx.certificate
-          })
-
-          this.logger.info('Document is signed.')
-        }
-      }
-
-      if (this.flags.stdout) {
-        process.stdout.write(output.content)
+      if (!this.flags.watch) {
+        this.logger.info('Rebuilt in %dms.', build.ms)
 
         return
       }
 
-      if (!output.filename) {
-        throw new Error('Output should either be defined with the variable or front-matter.')
+      if (!build.ctx.options.dest) {
+        this.logger.warn('No output file to write, pass an output argument or set dest in front-matter.')
+
+        return
       }
 
-      this.logger.info('Output file will be: %s', output.filename)
+      session.ignore(build.ctx.options.dest)
 
-      await this.fs.mkdir(dirname(output.filename))
+      await this.write(build.ctx, build.output).catch((err) => this.logger.error(err.message))
+    })
 
-      this.logger.info('Writing file to output: %s', output.filename)
-
-      await this.fs.write(output.filename, output.content)
+    if (flags.sign) {
+      this.logger.warn('Signing is skipped while watching or previewing, run without --watch and --preview to sign the document.')
     }
+
+    const stopped = new Promise<void>((done) => {
+      // replace the default handler, which exits before the browser, the server and the watcher are closed
+      process.removeAllListeners('SIGINT')
+      process.removeAllListeners('SIGTERM')
+      process.once('SIGINT', () => done())
+      process.once('SIGTERM', () => done())
+    })
+
+    await session.start(flags)
+
+    if (preview) {
+      const url = await preview.listen({ host: this.flags.host, port: this.flags.port })
+
+      this.logger.info('Preview is running at: %s', url)
+
+      await Promise.race([stopped, this.flags.open ? preview.open(this.renderer.executable(), url) : new Promise<never>(() => undefined)])
+
+      await preview.close()
+    } else {
+      this.logger.info('Watching for changes, press Ctrl+C to stop.')
+
+      await stopped
+    }
+
+    await session.stop()
+  }
+
+  private async write(ctx: MdPrinterCtx, content: Buffer): Promise<void> {
+    const { dest } = ctx.options
+
+    if (!dest) {
+      process.stdout.write(content)
+
+      return
+    }
+
+    await mkdir(dirname(dest), { recursive: true })
+
+    // rename into place so PDF viewers reloading on change never read a half-written file
+    const temporary = `${dest}.${process.pid}.tmp`
+
+    await writeFile(temporary, content)
+    await rename(temporary, dest)
+
+    this.logger.info('Written: %s', dest)
   }
 }

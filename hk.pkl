@@ -7,11 +7,15 @@ hooks {
     stash = "git"
     steps {
       ["prettier"] = (Builtins.prettier) {
-        glob = List("*.ts", "*.js", "*.json", "*.md")
+        glob = List("*.ts", "*.js", "*.json", "*.svelte")
       }
       ["eslint"] = (Builtins.eslint) {
-        glob = List("*.ts", "*.js")
+        glob = List("*.ts", "*.js", "*.svelte")
         depends = List("prettier")
+      }
+      ["typecheck"] {
+        check = "pnpm run typecheck"
+        depends = List("eslint")
       }
     }
   }
