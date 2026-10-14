@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { compile as compileTailwind } from '@tailwindcss/node'
 import { Scanner } from '@tailwindcss/oxide'
+import { decodeHTML } from 'entities'
 import { readFileSync } from 'fs'
 import { createRequire } from 'module'
 import { homedir } from 'os'
@@ -13,7 +14,17 @@ import { inlineAssets } from './assets.js'
 import { sveltePlugin } from './svelte.plugin.js'
 import { FileSystemService } from '@cenk1cenk2/oclif-common'
 import { ContextKey, Directory, RenderMode, TemplateFiles } from '@constants'
-import type { MdPrinterSettings, RenderedDocument, RenderedPart, TemplateBundle, TemplateContext, TemplateProps, TemplateRenderOptions, TemplateStylesheet } from '@interfaces'
+import type {
+  AssetCache,
+  CompiledModule,
+  MdPrinterSettings,
+  RenderedDocument,
+  RenderedPart,
+  TemplateBundle,
+  TemplateProps,
+  TemplateRenderOptions,
+  TemplateStylesheet
+} from '@interfaces'
 
 @Injectable()
 export class TemplateService {
@@ -57,46 +68,41 @@ export class TemplateService {
     }
   }
 
-  /**
-   * Renders a standalone Svelte page that takes no props, such as the preview shell.
-   */
   public async page(file: string): Promise<string> {
     const { module } = await this.compile(file, file, [])
 
     return `<!doctype html>${render(module.default).body}`
   }
 
-  public async render(directory: string, bundle: TemplateBundle, props: TemplateProps, context: TemplateContext, options: TemplateRenderOptions): Promise<RenderedDocument> {
+  public async render(directory: string, bundle: TemplateBundle, props: TemplateProps, options: TemplateRenderOptions): Promise<RenderedDocument> {
     const [body, header, footer] = await Promise.all(
-      [RenderMode.BODY, RenderMode.HEADER, RenderMode.FOOTER].map((mode) =>
-        bundle.entry.part(props, [
-          [ContextKey.RENDER_MODE, mode],
-          [ContextKey.MARKDOWN, context.markdown]
-        ])
-      )
+      [RenderMode.BODY, RenderMode.HEADER, RenderMode.FOOTER].map((mode) => bundle.entry.part(props, [[ContextKey.RENDER_MODE, mode]]))
     )
 
     const dependencies: string[] = []
+    // shared by the header and the footer, so a remote logo is fetched once per build
+    const cache: AssetCache = new Map()
     const css = `<style>${await this.css(directory, bundle, [body, header, footer].map((part) => part.body).join(''), options.highlight, dependencies)}</style>`
-    const title = options.title ?? body.head.match(/<title>([\s\S]*?)<\/title>/)?.[1] ?? options.fallbackTitle
+    // svelte already escaped the template's title, and the document shell escapes it again
+    const extracted = body.head.match(/<title>([\s\S]*?)<\/title>/)?.[1]
+    const title = options.title ?? (extracted && decodeHTML(extracted)) ?? options.fallbackTitle
     const head = body.head.replace(/<title>[\s\S]*?<\/title>/, '')
     const styles = [...head.matchAll(/<style[^>]*>[\s\S]*?<\/style>/g)].map(([style]) => style).join('') + css
 
     return {
-      title,
       html: bundle.entry.document({
         lang: options.language,
         title,
         head: head + css,
         body: body.body
       }),
-      header: await this.margin(bundle, header, styles, directory),
-      footer: await this.margin(bundle, footer, styles, directory),
+      header: await this.margin(bundle, header, styles, directory, cache),
+      footer: await this.margin(bundle, footer, styles, directory, cache),
       dependencies
     }
   }
 
-  private async compile(input: string, template: string, stylesheets: TemplateStylesheet[]): Promise<{ module: any; modules: string[] }> {
+  private async compile(input: string, template: string, stylesheets: TemplateStylesheet[]): Promise<CompiledModule> {
     const build = await rolldown({
       input,
       platform: 'node',
@@ -123,12 +129,12 @@ export class TemplateService {
     }
   }
 
-  private async margin(bundle: TemplateBundle, part: RenderedPart, styles: string, directory: string): Promise<string | undefined> {
+  private async margin(bundle: TemplateBundle, part: RenderedPart, styles: string, directory: string, cache: AssetCache): Promise<string | undefined> {
     if (!part.body.replace(/<!--[\s\S]*?-->/g, '').trim()) {
       return undefined
     }
 
-    return inlineAssets(bundle.entry.margin({ styles, body: part.body }), directory, true)
+    return inlineAssets(bundle.entry.margin({ styles, body: part.body }), directory, { remote: true, cache })
   }
 
   private async css(directory: string, bundle: TemplateBundle, html: string, highlight: string, dependencies: string[]): Promise<string> {

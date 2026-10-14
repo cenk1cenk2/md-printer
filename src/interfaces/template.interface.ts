@@ -10,10 +10,6 @@ export interface TemplateProps {
   signature?: MdPrinterSignature
 }
 
-export interface TemplateContext {
-  markdown: (markdown: string) => string
-}
-
 export interface RenderedPart {
   head: string
   body: string
@@ -63,9 +59,21 @@ export interface SveltePluginOptions {
 }
 
 export interface RenderedDocument {
-  title?: string
   html: string
   header?: string
   footer?: string
   dependencies: string[]
+}
+
+export type AssetCache = Map<string, Promise<string | undefined>>
+
+export interface InlineAssetsOptions {
+  remote?: boolean
+  confined?: boolean
+  cache?: AssetCache
+}
+
+export interface CompiledModule {
+  module: any
+  modules: string[]
 }

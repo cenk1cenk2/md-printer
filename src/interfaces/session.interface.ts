@@ -20,6 +20,11 @@ export interface PreviewOptions {
   port: number
 }
 
+export interface CompileError extends Error {
+  frame?: string
+  filename?: string
+}
+
 export interface PreviewError {
   message: string
   frame?: string

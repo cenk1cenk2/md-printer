@@ -10,8 +10,7 @@ import { Directory, TemplateFiles } from '@constants'
 import type { MdPrinterCtx, MdPrinterFlags, SessionEvents, TemplateBundle } from '@interfaces'
 
 /**
- * Rebuilds the document whenever one of its inputs changes: the input file, template settings, translations, every module of the template bundle,
- * the stylesheets Tailwind read and the local assets the page loaded. Builds never overlap; a change during a build triggers exactly one more.
+ * Builds never overlap, so a slow build is not raced by the next one; a change during a build triggers exactly one more.
  */
 @Injectable()
 export class SessionService extends EventEmitter<SessionEvents> {
@@ -19,6 +18,8 @@ export class SessionService extends EventEmitter<SessionEvents> {
 
   private watcher?: FSWatcher
   private bundle?: TemplateBundle
+  private template?: string
+  private stopped = false
   private modules = new Set<string>()
   private watched = new Set<string>()
   private version = 0
@@ -52,6 +53,7 @@ export class SessionService extends EventEmitter<SessionEvents> {
   }
 
   public async stop(): Promise<void> {
+    this.stopped = true
     clearTimeout(this.timer)
 
     await this.building
@@ -76,6 +78,10 @@ export class SessionService extends EventEmitter<SessionEvents> {
   }
 
   private build(): Promise<void> {
+    if (this.stopped) {
+      return Promise.resolve()
+    }
+
     if (this.building) {
       this.dirty = true
 
@@ -111,17 +117,22 @@ export class SessionService extends EventEmitter<SessionEvents> {
         options.sign.certificate && resolve(options.sign.certificate)
       ])
 
-      if (!this.bundle) {
-        this.bundle = await this.printer.bundle(options)
-        this.modules = new Set(this.bundle.modules)
-        this.watch(this.bundle.modules)
+      // held locally, since a template change during this build clears the shared one
+      let bundle = this.template === options.template ? this.bundle : undefined
+
+      if (!bundle) {
+        bundle = await this.printer.bundle(options)
+        this.bundle = bundle
+        this.template = options.template
+        this.modules = new Set(bundle.modules)
+        this.watch(bundle.modules)
       }
 
       const ctx: MdPrinterCtx = { input, options }
 
       await this.printer.prepare(ctx)
 
-      const document = await this.printer.document(ctx, this.bundle)
+      const document = await this.printer.document(ctx, bundle)
 
       this.watch(document.dependencies)
 

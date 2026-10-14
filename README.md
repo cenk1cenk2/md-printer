@@ -2,18 +2,6 @@
 
 Renders a Markdown or YAML file through a Svelte template into a PDF or HTML document. The PDF is printed by a locally installed Chromium-based browser, so there is no bundled Chrome download.
 
-<!-- toc -->
-* [md-printer](#md-printer)
-* [render to document.pdf in the current directory](#render-to-documentpdf-in-the-current-directory)
-* [choose the output file](#choose-the-output-file)
-* [write to stdout, logs are silenced](#write-to-stdout-logs-are-silenced)
-* [read from stdin, the only argument is then the output](#read-from-stdin-the-only-argument-is-then-the-output)
-* [template by built-in name or by path to a template directory](#template-by-built-in-name-or-by-path-to-a-template-directory)
-* [language for template translations](#language-for-template-translations)
-* [one single page without page breaks](#one-single-page-without-page-breaks)
-* [HTML output instead of PDF](#html-output-instead-of-pdf)
-<!-- tocstop -->
-
 ## Install
 
 ```sh
@@ -43,7 +31,7 @@ md-printer document.md
 # choose the output file
 md-printer document.md out/document.pdf
 
-# write to stdout, logs are silenced
+# write to stdout, logs go to stderr
 md-printer document.md -O > document.pdf
 
 # read from stdin, the only argument is then the output
@@ -67,7 +55,7 @@ md-printer document.md -F html
 - YAML input has no body, the whole document is the `data` of the template. Invoices use this.
 - The output defaults to `<input name>.<pdf|html>` in the current directory. Without an input file (stdin) there is no default, pass an output argument, `dest` in front-matter or `-O`.
 - Output is written atomically (a temporary file is renamed into place).
-- Local assets such as images referenced from the document resolve relative to the directory of the input file, or the current directory for stdin.
+- Local assets such as images referenced from the document resolve relative to the directory of the input file, or the current directory for stdin. Only files inside that directory are loaded, for PDF and HTML alike. Remote images are loaded as they are.
 - `-T, --title` sets the document title, see [precedence](#precedence).
 
 ## Front-matter and settings
@@ -247,43 +235,76 @@ md-printer invoice.yaml -t invoice --sign --sign-certificate ~/id-austria.pem
 - `puppeteer` is replaced by `puppeteer-core`, there is no bundled Chrome, a local Chromium-based browser is required.
 - `--dev` is replaced by `--preview`.
 - The default highlight theme is `atom-one-dark`.
+- Files with an unknown extension are read as markdown, as before; `-f` still forces a type.
+- The update notifier and the did-you-mean suggestion for mistyped commands are removed, md-printer is a single command.
 
 ## Command reference
 
-<!-- usage -->
-```sh-session
-$ npm install -g @cenk1cenk2/md-printer
-$ md-printer COMMAND
-running command...
-$ md-printer (--version)
-@cenk1cenk2/md-printer/2.20.5 linux-x64 node-v24.22.0
-$ md-printer --help [COMMAND]
-USAGE
-  $ md-printer COMMAND
-...
 ```
-<!-- usagestop -->
+Renders a markdown or yaml file through a Svelte template into a PDF or HTML document.
 
-## Commands
-
-<!-- commands -->
-* [`md-printer [COMMAND]`](#md-printer-command)
-
-## `md-printer [COMMAND]`
-
-Display help for md-printer.
-
-```
 USAGE
-  $ md-printer  [COMMAND...] [-n]
+  $ md-printer  [FILE] [OUTPUT] [--log-level
+    silent|direct|fatal|error|warn|info|verbose|debug|trace] [-I] [-f
+    md|yaml|yml] [-F pdf|html] [-O] [-t <value>] [-T <value>] [-l <value>] [-b
+    <value>] [--continuous] [-w] [-p] [--host 127.0.0.1|localhost|::1] [--port
+    <value>] [--open] [--sign] [--sign-provider <value>] [--sign-certificate
+    <value>]
 
 ARGUMENTS
-  [COMMAND...]  Command to show help for.
+  [FILE]    Markdown or yaml file to render.
+  [OUTPUT]  Output file. Overwrites the one defined in front-matter.
 
 FLAGS
-  -n, --nested-commands  Include all nested commands in the output.
+  -F, --output-filetype=<option>  Output file type, defaults to pdf. Overwrites
+                                  the one defined in front-matter.
+                                  <options: pdf|html>
+  -I, --stdin                     Read the input from stdin.
+  -O, --stdout                    Write the output to stdout instead of a file.
+  -T, --title=<value>             Document title. Overwrites the one defined in
+                                  front-matter or the template.
+  -b, --browser=<value>           Browser executable used for printing.
+                                  Discovered automatically when omitted (Brave,
+                                  Chrome, Chromium, Edge).
+  -f, --input-filetype=<option>   Input file type. Detected from the file
+                                  extension, markdown for stdin and unknown
+                                  extensions.
+                                  <options: md|yaml|yml>
+  -l, --language=<value>          Language for template translations. Overwrites
+                                  the one defined in front-matter and template
+                                  settings.
+  -p, --preview                   Open a live preview of the HTML and the PDF in
+                                  the browser. Combine with --watch to also
+                                  write the output.
+  -t, --template=<value>          Built-in template name or path to a template
+                                  directory, defaults to "default". Overwrites
+                                  the one defined in front-matter.
+  -w, --watch                     Rebuild and write the output whenever the
+                                  input, the template or its assets change.
+      --continuous                Render the PDF as a single continuous page
+                                  without page breaks.
+      --host=<option>             [default: 127.0.0.1] Loopback host for the
+                                  preview server, it serves the files next to
+                                  the input and is never exposed to the network.
+                                  <options: 127.0.0.1|localhost|::1>
+      --[no-]open                 Open the preview window.
+      --port=<value>              Port for the preview server, random when 0.
+      --sign                      Sign the PDF with a qualified electronic
+                                  signature through ID Austria (A-Trust).
+      --sign-certificate=<value>  Signer certificate (DER or PEM) used for the
+                                  visible signature block and to verify the
+                                  returned signature.
+      --sign-provider=<value>     Signature provider, defaults to a-trust.
+                                  Overwrites the one defined in front-matter and
+                                  template settings.
+
+CLI FLAGS
+  --log-level=<option>  [default: INFO, env: LOG_LEVEL] Set the log level of the
+                        application.
+                        <options:
+                        silent|direct|fatal|error|warn|info|verbose|debug|trace>
 
 DESCRIPTION
-  Display help for md-printer.
+  Renders a markdown or yaml file through a Svelte template into a PDF or HTML
+  document.
 ```
-<!-- commandsstop -->

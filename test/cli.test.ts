@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process'
-import { mkdtemp, readFile, rm } from 'node:fs/promises'
+import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -98,5 +98,28 @@ describe('md-printer', () => {
 
   it('fails on a directory without a template', async() => {
     await expect(run([join('test', 'default.md'), '-O', '-t', 'test'])).rejects.toThrow(/Template does not exist/)
+  })
+
+  it('fails instead of writing to the terminal when there is no output', async() => {
+    await expect(run(['--stdin'], '# No output\n')).rejects.toThrow(/No output file to write/)
+  })
+
+  it('reads files with an unknown extension as markdown', async() => {
+    const input = join(directory, 'notes.txt')
+
+    await writeFile(input, '# Notes\n')
+
+    expect((await run([input, '-O'])).subarray(0, 5).toString()).toBe('%PDF-')
+  })
+
+  it('escapes a template title once', async() => {
+    const template = join(directory, 'title-template')
+
+    await mkdir(template, { recursive: true })
+    await writeFile(join(template, 'Template.svelte'), '<svelte:head><title>{"R&D <1>"}</title></svelte:head>\n<p>body</p>\n')
+
+    const html = (await run(['--stdin', '-O', '-F', 'html', '-t', template], '# Title\n')).toString()
+
+    expect(html).toContain('<title>R&amp;D &lt;1></title>')
   })
 })

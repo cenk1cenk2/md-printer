@@ -13,6 +13,11 @@ export interface RendererOptions {
   continuous: boolean
 }
 
+export interface PrinterOutput {
+  content: Buffer
+  assets: string[]
+}
+
 export interface RendererResult {
   pdf: Buffer
   assets: string[]

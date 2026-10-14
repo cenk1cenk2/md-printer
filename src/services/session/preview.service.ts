@@ -8,14 +8,13 @@ import { tmpdir } from 'os'
 import { join, relative, resolve } from 'path'
 import { fileURLToPath } from 'url'
 
+import { isLoopbackRequest } from '../loopback.js'
 import { mimeType } from '../template/assets.js'
 import { TemplateService } from '../template/template.service.js'
 import { LoggerService } from '@cenk1cenk2/oclif-common'
-import type { PreviewError, PreviewOptions, SessionBuild } from '@interfaces'
+import { OutputFileType } from '@constants'
+import type { CompileError, PreviewError, PreviewOptions, SessionBuild } from '@interfaces'
 
-/**
- * Serves the live preview: a shell page with the HTML and the printed PDF side by side, updated over server-sent events after every build.
- */
 @Injectable()
 export class PreviewService {
   private server?: Server
@@ -35,7 +34,7 @@ export class PreviewService {
     const shell = await this.template.page(fileURLToPath(new URL('./Preview.svelte', import.meta.url)))
 
     this.server = createServer((req, res) => {
-      this.handle(req, res, shell, options).catch((err) => {
+      this.handle(req, res, shell).catch((err) => {
         this.logger.debug('Preview request failed: %s', err)
 
         res.writeHead(500)
@@ -47,7 +46,7 @@ export class PreviewService {
 
     const { port } = this.server.address() as AddressInfo
 
-    return `http://${options.host}:${port}/`
+    return `http://${options.host.includes(':') ? `[${options.host}]` : options.host}:${port}/`
   }
 
   public building(): void {
@@ -61,7 +60,7 @@ export class PreviewService {
     this.send('ready', this.summary(build))
   }
 
-  public failed(err: Error & { frame?: string; filename?: string }): void {
+  public failed(err: CompileError): void {
     this.error = {
       message: err.message,
       frame: err.frame,
@@ -71,9 +70,6 @@ export class PreviewService {
     this.send('failed', this.error)
   }
 
-  /**
-   * Opens the preview in an app window of the given browser with a throwaway profile, resolving once the window is closed.
-   */
   public async open(executable: string, url: string): Promise<void> {
     this.profile = await mkdtemp(join(tmpdir(), 'md-printer-preview-'))
 
@@ -99,8 +95,8 @@ export class PreviewService {
     }
   }
 
-  private async handle(req: IncomingMessage, res: ServerResponse, shell: string, options: PreviewOptions): Promise<void> {
-    if (!this.trusted(req, options)) {
+  private async handle(req: IncomingMessage, res: ServerResponse, shell: string): Promise<void> {
+    if (!isLoopbackRequest(req)) {
       res.writeHead(403)
 
       return void res.end()
@@ -145,7 +141,7 @@ export class PreviewService {
         return void res.end(this.build.document.html)
 
       case '/document.pdf':
-        if (this.build?.ctx.options.output !== 'pdf') {
+        if (this.build?.ctx.options.output !== OutputFileType.PDF) {
           res.writeHead(404)
 
           return void res.end()
@@ -189,17 +185,8 @@ export class PreviewService {
     res.end(body)
   }
 
-  /**
-   * Only answers requests addressed to the preview host, so a page on another site can not reach it through DNS rebinding.
-   */
-  private trusted(req: IncomingMessage, options: PreviewOptions): boolean {
-    const host = req.headers.host?.replace(/:\d+$/, '')
-
-    return [options.host, 'localhost', '127.0.0.1', '[::1]'].includes(host)
-  }
-
   private summary(build: SessionBuild): Record<string, unknown> {
-    const pdf = build.ctx.options.output === 'pdf'
+    const pdf = build.ctx.options.output === OutputFileType.PDF
 
     return {
       version: build.version,

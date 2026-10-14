@@ -19,7 +19,7 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
     ['input-filetype']: Flags.string({
       char: 'f',
       options: Object.values(InputFileType),
-      description: 'Input file type. Detected from the file extension, markdown for stdin.'
+      description: 'Input file type. Detected from the file extension, markdown for stdin and unknown extensions.'
     }),
     ['output-filetype']: Flags.string({
       char: 'F',
@@ -58,7 +58,8 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
       description: 'Open a live preview of the HTML and the PDF in the browser. Combine with --watch to also write the output.'
     }),
     host: Flags.string({
-      description: 'Host for the preview server.',
+      description: 'Loopback host for the preview server, it serves the files next to the input and is never exposed to the network.',
+      options: ['127.0.0.1', 'localhost', '::1'],
       default: '127.0.0.1'
     }),
     port: Flags.integer({
@@ -164,6 +165,7 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
 
     const session = this.app.get(SessionService)
     const preview = this.flags.preview ? this.app.get(PreviewService) : undefined
+    let writes = Promise.resolve()
 
     session.on('building', () => preview?.building())
     session.on('failed', (err) => {
@@ -188,7 +190,10 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
 
       session.ignore(build.ctx.options.dest)
 
-      await this.write(build.ctx, build.output).catch((err) => this.logger.error(err.message))
+      // queued, so a slow write never lands after the one of a newer build
+      writes = writes.then(() => this.write(build.ctx, build.output)).catch((err) => this.logger.error(err.message))
+
+      await writes
     })
 
     if (flags.sign) {
@@ -227,6 +232,10 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
     const { dest } = ctx.options
 
     if (!dest) {
+      if (!this.flags.stdout) {
+        throw new Error('No output file to write, pass an output argument, set dest in front-matter or use --stdout.')
+      }
+
       process.stdout.write(content)
 
       return

@@ -28,8 +28,7 @@ export enum ModuleSpecifier {
 }
 
 export enum ContextKey {
-  RENDER_MODE = 'md-printer:mode',
-  MARKDOWN = 'md-printer:markdown'
+  RENDER_MODE = 'md-printer:mode'
 }
 
 export const TAILWIND_STYLE_LANG = 'postcss'

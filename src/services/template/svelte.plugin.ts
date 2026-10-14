@@ -1,7 +1,8 @@
 import { readFile } from 'fs/promises'
 import { createRequire } from 'module'
 import { extname } from 'path'
-import type { Plugin } from 'rolldown'
+import type { Plugin, TransformResult } from 'rolldown'
+import type { Processed } from 'svelte/compiler'
 import { compile, preprocess } from 'svelte/compiler'
 import { pathToFileURL } from 'url'
 
@@ -10,9 +11,8 @@ import { ModuleSpecifier, TAILWIND_STYLE_LANG } from '@constants'
 import type { SveltePluginOptions } from '@interfaces'
 
 /**
- * Compiles Svelte components for server-side rendering and resolves md-printer's own modules: the template entry, the shipped components and
- * `svelte` itself, which points at md-printer's copy since templates can live outside any `node_modules`. `<style lang="postcss">` blocks are taken
- * out of the components and collected, so the template's stylesheet is compiled once by Tailwind. Imported images become data URIs.
+ * `svelte` resolves to md-printer's copy, since templates can live outside any `node_modules`. `<style lang="postcss">` blocks are collected
+ * instead of compiled per component, so the template's stylesheet goes through Tailwind once.
  */
 export function sveltePlugin({ template, components, root, stylesheets }: SveltePluginOptions): Plugin {
   const require = createRequire(root)
@@ -45,7 +45,7 @@ export function sveltePlugin({ template, components, root, stylesheets }: Svelte
       return `export default ${JSON.stringify(dataUri(id, await readFile(id)))}`
     },
 
-    async transform(code: string, id: string): Promise<{ code: string; map: ReturnType<typeof compile>['js']['map'] } | null> {
+    async transform(code: string, id: string): Promise<TransformResult> {
       if (extname(id) !== '.svelte') {
         return null
       }
@@ -53,7 +53,7 @@ export function sveltePlugin({ template, components, root, stylesheets }: Svelte
       const { code: source } = await preprocess(
         code,
         {
-          style: ({ content, attributes }): { code: string } | undefined => {
+          style: ({ content, attributes }): Processed | undefined => {
             if (attributes.lang !== TAILWIND_STYLE_LANG) {
               return undefined
             }

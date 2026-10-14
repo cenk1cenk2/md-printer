@@ -62,9 +62,6 @@ export class RendererService {
     return [...assets]
   }
 
-  /**
-   * Answers every request of the page: the document itself, local files under the base directory, and lets every other origin through.
-   */
   private async intercept(request: HTTPRequest, rendered: RenderedDocument, base: string, assets: Set<string>): Promise<void> {
     const url = new URL(request.url())
 

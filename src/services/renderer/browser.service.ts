@@ -8,9 +8,6 @@ import { LoggerService } from '@cenk1cenk2/oclif-common'
 import { PRINTER_MODULE_OPTIONS } from '@constants'
 import type { PrinterModuleOptions } from '@interfaces'
 
-/**
- * Owns the browser: discovers the executable, launches one shared instance on first use and closes it when the application shuts down.
- */
 @Injectable()
 export class BrowserService implements OnModuleDestroy {
   private browser?: Promise<Browser>
@@ -51,6 +48,10 @@ export class BrowserService implements OnModuleDestroy {
 
     const browser = await puppeteer.launch({
       executablePath,
+      // puppeteer's own handlers exit the process right away, which skips closing the session, the preview server and the profile
+      handleSIGINT: false,
+      handleSIGTERM: false,
+      handleSIGHUP: false,
       // Chromium refuses to start its sandbox as root, which is the default in CI containers
       args: process.getuid?.() === 0 || process.env.CI ? ['--no-sandbox'] : []
     })

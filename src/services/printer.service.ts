@@ -12,11 +12,8 @@ import { inlineAssets } from './template/assets.js'
 import { TemplateService } from './template/template.service.js'
 import { FileSystemService, LoggerService, merge, MergeStrategy } from '@cenk1cenk2/oclif-common'
 import { DEFAULT_HIGHLIGHT_STYLE, DEFAULT_LANGUAGE, DEFAULT_PDF_OPTIONS, DEFAULT_TEMPLATE, Directory, InputFileType, MediaType, OutputFileType } from '@constants'
-import type { MdPrinterCtx, MdPrinterFlags, MdPrinterInput, MdPrinterOptions, MdPrinterSignOptions, RenderedDocument, TemplateBundle } from '@interfaces'
+import type { MdPrinterCtx, MdPrinterFlags, MdPrinterInput, MdPrinterOptions, MdPrinterSignOptions, PrinterOutput, RenderedDocument, TemplateBundle } from '@interfaces'
 
-/**
- * The document pipeline shared by single runs, watch and preview sessions: input, options, template bundle, document, output.
- */
 @Injectable()
 export class PrinterService {
   constructor(
@@ -52,17 +49,6 @@ export class PrinterService {
     const type = flags.inputFiletype ?? (file ? extname(file).replace(/^\./, '') : InputFileType.MARKDOWN)
 
     switch (type) {
-      case InputFileType.MARKDOWN: {
-        const { content, data } = graymatter(source)
-
-        return {
-          file,
-          directory: file ? dirname(file) : process.cwd(),
-          content,
-          data: data ?? {}
-        }
-      }
-
       case InputFileType.YAML:
 
       // eslint-disable-next-line no-fallthrough
@@ -74,8 +60,17 @@ export class PrinterService {
           data: parseYaml(source) ?? {}
         }
 
-      default:
-        throw new Error(`Input file type is not supported: ${type}, use one of ${Object.values(InputFileType).join(', ')} or pass --input-filetype.`)
+      // any other extension is read as markdown, like .markdown, .txt or none at all
+      default: {
+        const { content, data } = graymatter(source)
+
+        return {
+          file,
+          directory: file ? dirname(file) : process.cwd(),
+          content,
+          data: data ?? {}
+        }
+      }
     }
   }
 
@@ -141,7 +136,6 @@ export class PrinterService {
         language: options.language,
         signature: ctx.signature
       },
-      { markdown: (markdown) => this.markdown.render(markdown) },
       {
         language: options.language,
         title: options.title,
@@ -155,9 +149,9 @@ export class PrinterService {
     return document
   }
 
-  public async output(ctx: MdPrinterCtx, document: RenderedDocument): Promise<{ content: Buffer; assets: string[] }> {
+  public async output(ctx: MdPrinterCtx, document: RenderedDocument): Promise<PrinterOutput> {
     if (ctx.options.output === OutputFileType.HTML) {
-      return { content: Buffer.from(await inlineAssets(document.html, ctx.input.directory)), assets: [] }
+      return { content: Buffer.from(await inlineAssets(document.html, ctx.input.directory, { confined: true })), assets: [] }
     }
 
     const { pdf, assets } = await this.renderer.render(document, {

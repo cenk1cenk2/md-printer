@@ -4,6 +4,7 @@ import { readFile } from 'fs/promises'
 import { createServer } from 'http'
 import type { AddressInfo } from 'net'
 
+import { isLoopbackRequest } from '../../loopback.js'
 import { SignatureAdapter } from '../signature.adapter.js'
 import { LoggerService } from '@cenk1cenk2/oclif-common'
 import type { SignatureRequest } from '@interfaces'
@@ -80,6 +81,12 @@ export class ATrustAdapter extends SignatureAdapter {
     const page = await readFile(new URL(ATrustAdapter.PAGE, import.meta.url))
 
     const server = createServer(async(req, res) => {
+      if (!isLoopbackRequest(req)) {
+        res.writeHead(403)
+
+        return res.end()
+      }
+
       if (req.method === 'GET' && req.url === '/session') {
         res.setHeader('content-type', 'application/json')
         res.writeHead(200)
