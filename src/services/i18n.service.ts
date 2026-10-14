@@ -5,7 +5,7 @@ import { basename, extname, join } from 'path'
 
 import { ConfigService, FileSystemService } from '@cenk1cenk2/oclif-common'
 import { DEFAULT_LANGUAGE, I18N_ACCEPTED_TYPES } from '@constants'
-import type { MdPrinterI18nOptions } from '@interfaces'
+import type { I18nLoadOptions } from '@interfaces'
 
 @Injectable()
 export class I18nService {
@@ -14,7 +14,7 @@ export class I18nService {
     private readonly cs: ConfigService
   ) {}
 
-  public async load(directory: string, options: MdPrinterI18nOptions & { language: string }): Promise<TFunction> {
+  public async load(directory: string, options: I18nLoadOptions): Promise<TFunction> {
     const instance = i18next.createInstance()
 
     await instance.init({

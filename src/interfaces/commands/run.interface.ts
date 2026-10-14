@@ -9,6 +9,10 @@ export interface MdPrinterI18nOptions {
   fallback?: string
 }
 
+export interface I18nLoadOptions extends MdPrinterI18nOptions {
+  language: string
+}
+
 export interface MdPrinterSettings {
   pdfOptions?: PDFOptions
   i18n?: MdPrinterI18nOptions
