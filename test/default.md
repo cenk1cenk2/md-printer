@@ -1,7 +1,13 @@
 ---
-dest: ./test/test.pdf
+dest: ./test/default.pdf
 template: default
-document_title: Some MD.
+documentTitle: Some MD.
 ---
 
 Some random data.
+
+```typescript
+if (true) {
+  console.log('Hello, World!')
+}
+```

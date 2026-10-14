@@ -1,0 +1,1 @@
+<span class="totalPages"></span>

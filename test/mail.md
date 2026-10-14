@@ -1,7 +1,6 @@
 ---
 template: mail
-stdout: true
-output-filetype: html
+outputFiletype: html
 ---
 
 Hello,

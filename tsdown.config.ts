@@ -5,7 +5,7 @@ import { defineConfig } from 'tsdown'
 export default defineConfig((options) => ({
   name: !options.watch ? 'production' : undefined,
 
-  entry: ['src/**/*.{js,ts}'],
+  entry: ['src/**/*.ts', '!src/**/*.entry.ts', '!src/components/**', '!src/types/**'],
   tsconfig: options.watch ? 'tsconfig.json' : 'tsconfig.build.json',
 
   dts: options.watch ? true : false,
@@ -15,13 +15,12 @@ export default defineConfig((options) => ({
   sourcemap: options.watch ? true : false,
 
   unbundle: true,
-  splitting: false,
-  minify: false,
   keepNames: true,
 
-  copy: [{ from: 'src/**/*.html', to: 'dist', flatten: false }],
+  // template bundles are compiled at runtime, so their entry, shells and the shared components ship as source
+  copy: [{ from: ['src/**/*.html', 'src/**/*.svelte', 'src/**/*.entry.ts', 'src/components/**/*'], to: 'dist', flatten: false }],
 
   onSuccess: async (): Promise<void> => {
-    await Promise.all([command('pnpm', ['run', 'manifest'], { stdout: process.stdout, stderr: process.stderr })])
+    await command('pnpm', ['run', 'manifest'], { stdout: process.stdout, stderr: process.stderr })
   }
 }))

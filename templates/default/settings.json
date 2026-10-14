@@ -1,7 +1,5 @@
 {
-  "body_class": ["markdown-body"],
-  "highlight_style": "atom-one-dark",
-  "pdf_options": {
+  "pdfOptions": {
     "format": "A4",
     "margin": "18mm 12mm",
     "printBackground": true

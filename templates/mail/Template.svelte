@@ -1,0 +1,166 @@
+<script>
+  import { Page } from '@cenk1cenk2/md-printer/components'
+
+  let { content } = $props()
+</script>
+
+<svelte:head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  <meta charset="UTF-8" />
+</svelte:head>
+
+<Page>
+  <!-- eslint-disable-next-line svelte/no-at-html-tags -- markdown input is trusted, same as the document itself -->
+  <div class="leading-tight prose">{@html content}</div>
+</Page>
+
+<style lang="postcss">
+  @import '@fontsource/montserrat/latin-400.css';
+  @import '@fontsource/montserrat/latin-ext-400.css';
+  @import '@fontsource/montserrat/latin-700.css';
+  @import '@fontsource/montserrat/latin-ext-700.css';
+
+  @import 'tailwindcss';
+  @plugin '@tailwindcss/typography';
+
+  @theme {
+    --font-sans: 'Montserrat';
+    --font-serif: 'Montserrat';
+    --font-weight-semibold: 700;
+    --font-weight-bold: 800;
+    --font-weight-extrabold: 900;
+    --color-primary-500: #cd0043;
+    --color-gray-50: oklch(98.5% 0.002 247.839);
+    --color-gray-100: #abb2bf;
+    --color-gray-200: #979eab;
+    --color-gray-300: #7c8a9d;
+    --color-gray-400: #5c6370;
+    --color-gray-500: #4b5263;
+    --color-gray-600: #2c333d;
+    --color-gray-700: #22282f;
+    --color-gray-800: #1e2127;
+    --color-gray-900: #17191e;
+    --color-gray-950: oklch(13% 0.028 261.692);
+  }
+
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
+
+  body {
+    font-family: var(--font-sans);
+  }
+
+  address {
+    @apply text-sm;
+  }
+
+  /* Typography styles converted from config */
+  .prose a {
+    text-decoration: none;
+  }
+
+  .prose h1 {
+    font-weight: 800;
+    padding-top: 0.1875rem;
+    /* 0.75 * 0.25rem */
+    padding-bottom: 0.1875rem;
+    margin-bottom: 0;
+    margin-top: 0;
+    border-width: 0;
+  }
+
+  .prose h2 {
+    font-weight: 800;
+    padding-top: 0.125rem;
+    /* 0.5 * 0.25rem */
+    padding-bottom: 0.125rem;
+    margin-bottom: 0;
+    margin-top: 0;
+    border-width: 0;
+  }
+
+  .prose h3 {
+    font-weight: 700;
+    padding-top: 0.0625rem;
+    /* 0.25 * 0.25rem */
+    padding-bottom: 0.0625rem;
+    margin-bottom: 0;
+    margin-top: 0;
+    border-width: 0;
+  }
+
+  p {
+    margin: 0.1em 0em;
+  }
+
+  .prose blockquote {
+    font-weight: 400;
+    color: var(--color-gray-600);
+    font-style: normal;
+    quotes: '\201C' '\201D' '\2018' '\2019';
+  }
+
+  .prose blockquote p:first-of-type::before {
+    content: '';
+  }
+
+  .prose blockquote p:last-of-type::after {
+    content: '';
+  }
+
+  .prose ul > li {
+    padding-left: 1em;
+    text-align: left;
+  }
+
+  .prose ol > li {
+    padding-left: 1em;
+    text-align: left;
+  }
+
+  .prose ol > li::before {
+    top: calc(0.875em - 0.1em);
+  }
+
+  .prose ul > li::before {
+    top: calc(0.875em - 0.1em);
+  }
+
+  html {
+    font-size: 12px;
+  }
+
+  .page-break {
+    page-break-after: always;
+  }
+
+  .text-vertical {
+    text-orientation: upright;
+    writing-mode: vertical-lr;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    @apply p-4;
+  }
+
+  table th {
+    @apply bg-gray-700 text-white;
+  }
+
+  table tr {
+    border-top: 0;
+    @apply even:bg-gray-50;
+  }
+
+  table th,
+  table td,
+  table tr {
+    border: 0;
+    padding: 0.5em 0.5em;
+  }
+</style>
