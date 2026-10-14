@@ -303,7 +303,7 @@ USAGE
     silent|direct|fatal|error|warn|info|verbose|debug|trace] [-I] [-f
     md|yaml|yml] [-F pdf|html] [-O] [-t <value>] [-T <value>] [-l <value>] [-b
     <value>] [--continuous] [-p] [--host 127.0.0.1|localhost|::1] [--port
-    <value>] [--open] [--sign] [--sign-provider <value>] [--sign-certificate
+    <value>] [--open] [--sign] [--sign-provider a-trust] [--sign-certificate
     <value>]
 
 ARGUMENTS
@@ -349,9 +349,10 @@ FLAGS
       --sign-certificate=<value>  Signer certificate (DER or PEM) used for the
                                   visible signature block and to verify the
                                   returned signature.
-      --sign-provider=<value>     Signature provider, defaults to a-trust.
+      --sign-provider=<option>    Signature provider, defaults to a-trust.
                                   Overwrites the one defined in front-matter and
                                   template settings.
+                                  <options: a-trust>
 
 CLI FLAGS
   --log-level=<option>  [default: INFO, env: LOG_LEVEL] Set the log level of the

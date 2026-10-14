@@ -32,7 +32,7 @@ export class PrinterService {
     let file: string | undefined
     let source: string
 
-    if (flags.file) {
+    if (flags.file !== undefined) {
       file = resolve(flags.file)
 
       if (!this.fs.exists(file)) {
@@ -40,10 +40,8 @@ export class PrinterService {
       }
 
       source = await this.fs.read(file)
-    } else if (flags.stdin !== undefined) {
-      source = flags.stdin
     } else {
-      throw new Error('Either --stdin or file argument must be provided.')
+      source = flags.stdin
     }
 
     const type = flags.inputFiletype ?? (file ? extname(file).replace(/^\./, '') : InputFileType.MARKDOWN)

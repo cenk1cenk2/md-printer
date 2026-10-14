@@ -110,7 +110,8 @@
     "vfile-matter": "^5.0.1",
     "which": "^7.0.0",
     "write-file-atomic": "^8.0.0",
-    "yaml": "^2.9.1"
+    "yaml": "^2.9.1",
+    "zod": "^4.6.7"
   },
   "devDependencies": {
     "@cenk1cenk2/cz-cc": "^3.0.6",

@@ -4,14 +4,14 @@ import { dirname } from 'path'
 import { text } from 'stream/consumers'
 import writeFileAtomic from 'write-file-atomic'
 
-import type MDPrinter from '../../commands/index.js'
+import type { MdPrinterSchema } from './md-printer.schema.js'
 import type { CommandContext, CommandHandler } from '@cenk1cenk2/oclif-common'
 import { LoggerService } from '@cenk1cenk2/oclif-common'
 import type { MdPrinterCtx, MdPrinterFlags } from '@interfaces'
 import { BrowserService, PreviewService, PrinterService, SessionService } from '@services'
 
 @Injectable()
-export class MdPrinterHandler implements CommandHandler<typeof MDPrinter> {
+export class MdPrinterHandler implements CommandHandler<typeof MdPrinterSchema> {
   constructor(
     private readonly logger: LoggerService,
     private readonly printer: PrinterService,
@@ -20,13 +20,11 @@ export class MdPrinterHandler implements CommandHandler<typeof MDPrinter> {
     private readonly preview: PreviewService
   ) {}
 
-  public async run(context: CommandContext<typeof MDPrinter>): Promise<void> {
+  public async run(context: CommandContext<typeof MdPrinterSchema>): Promise<void> {
     const { flags, args } = context
     const options: MdPrinterFlags = {
-      file: flags.stdin ? undefined : args.file,
-      // with stdin there is no input file, so the only argument is the output
-      output: flags.stdin ? (args.output ?? args.file) : args.output,
-      stdin: flags.stdin ? await text(process.stdin) : undefined,
+      ...(args.file !== undefined ? { file: args.file } : { stdin: await text(process.stdin) }),
+      output: args.output,
       inputFiletype: flags['input-filetype'],
       outputFiletype: flags['output-filetype'],
       stdout: flags.stdout,
@@ -66,11 +64,7 @@ export class MdPrinterHandler implements CommandHandler<typeof MDPrinter> {
     await this.write(ctx, content, flags.stdout)
   }
 
-  private async watch({ flags, signal }: CommandContext<typeof MDPrinter>, options: MdPrinterFlags): Promise<void> {
-    if (options.stdout) {
-      throw new Error('Writing to stdout is not supported with --preview.')
-    }
-
+  private async watch({ flags, signal }: CommandContext<typeof MdPrinterSchema>, options: MdPrinterFlags): Promise<void> {
     let writes = Promise.resolve()
 
     this.session.on('building', () => this.preview.building())

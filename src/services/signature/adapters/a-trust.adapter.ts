@@ -7,9 +7,11 @@ import type { AddressInfo } from 'net'
 import type { RawBodyError } from 'raw-body'
 import getRawBody from 'raw-body'
 
+import type { MdPrinterSchema } from '../../../modules/md-printer/md-printer.schema.js'
 import { isLoopbackRequest } from '../../loopback.js'
 import { SignatureAdapter } from '../signature.adapter.js'
 import { CommandContext, LoggerService } from '@cenk1cenk2/oclif-common'
+import { SignatureProvider } from '@constants'
 import type { SignatureRequest } from '@interfaces'
 
 /**
@@ -20,11 +22,11 @@ import type { SignatureRequest } from '@interfaces'
  */
 @Injectable()
 export class ATrustAdapter extends SignatureAdapter {
-  public readonly name = 'a-trust'
+  public readonly name = SignatureProvider.A_TRUST
 
   constructor(
     private readonly logger: LoggerService,
-    private readonly context: CommandContext
+    private readonly context: CommandContext<typeof MdPrinterSchema>
   ) {
     super()
 

@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common'
 
 import { MdPrinterHandler } from './md-printer.handler.js'
-import type MDPrinter from '../../commands/index.js'
+import type { MdPrinterSchema } from './md-printer.schema.js'
 import { CommandContext, LoggerModule, LogLevels, LogoModule } from '@cenk1cenk2/oclif-common'
 import { PrinterModule } from '@services'
 
@@ -12,7 +12,7 @@ import { PrinterModule } from '@services'
     LogoModule.forRoot(),
     PrinterModule.forRootAsync({
       inject: [CommandContext],
-      useFactory: ({ flags }: CommandContext<typeof MDPrinter>) => ({ browser: flags.browser })
+      useFactory: ({ flags }: CommandContext<typeof MdPrinterSchema>) => ({ browser: flags.browser })
     })
   ],
   providers: [MdPrinterHandler]
