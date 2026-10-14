@@ -1,33 +1,32 @@
+import type { OnModuleDestroy } from '@nestjs/common'
 import { Injectable } from '@nestjs/common'
 import type { FSWatcher } from 'chokidar'
 import { watch } from 'chokidar'
 import { EventEmitter } from 'events'
 import { join, resolve } from 'path'
+import { debounce } from 'perfect-debounce'
 
 import { PrinterService } from '../printer.service.js'
 import { LoggerService } from '@cenk1cenk2/oclif-common'
 import { Directory, TemplateFiles } from '@constants'
-import type { MdPrinterCtx, MdPrinterFlags, SessionEvents, TemplateBundle } from '@interfaces'
+import type { MdPrinterCtx, MdPrinterFlags, SessionBundle, SessionEvents } from '@interfaces'
 
 /**
  * Builds never overlap, so a slow build is not raced by the next one; a change during a build triggers exactly one more.
  */
 @Injectable()
-export class SessionService extends EventEmitter<SessionEvents> {
-  private static readonly DEBOUNCE = 50
-
+export class SessionService extends EventEmitter<SessionEvents> implements OnModuleDestroy {
   private watcher?: FSWatcher
-  private bundle?: TemplateBundle
-  private template?: string
+  private bundle?: SessionBundle
   private stopped = false
   private modules = new Set<string>()
   private watched = new Set<string>()
   private version = 0
-  private timer?: NodeJS.Timeout
   private building?: Promise<void>
-  private dirty = false
   private flags: MdPrinterFlags
   private ignored = new Set<string>()
+  // perfect-debounce never overlaps two runs and queues exactly one more for the calls made during a run
+  private readonly build = debounce((): Promise<void> => (this.stopped ? Promise.resolve() : (this.building = this.run())), 50)
 
   constructor(
     private readonly logger: LoggerService,
@@ -48,16 +47,22 @@ export class SessionService extends EventEmitter<SessionEvents> {
     await this.build()
   }
 
+  public async onModuleDestroy(): Promise<void> {
+    await this.stop()
+  }
+
   public ignore(path: string): void {
     this.ignored.add(resolve(path))
   }
 
   public async stop(): Promise<void> {
     this.stopped = true
-    clearTimeout(this.timer)
+    this.build.cancel()
 
     await this.building
     await this.watcher?.close()
+
+    this.watcher = undefined
   }
 
   private changed(path: string): void {
@@ -73,32 +78,7 @@ export class SessionService extends EventEmitter<SessionEvents> {
       this.bundle = undefined
     }
 
-    clearTimeout(this.timer)
-    this.timer = setTimeout(() => void this.build(), SessionService.DEBOUNCE)
-  }
-
-  private build(): Promise<void> {
-    if (this.stopped) {
-      return Promise.resolve()
-    }
-
-    if (this.building) {
-      this.dirty = true
-
-      return this.building
-    }
-
-    this.building = this.run().finally(() => {
-      this.building = undefined
-
-      if (this.dirty) {
-        this.dirty = false
-
-        void this.build()
-      }
-    })
-
-    return this.building
+    void this.build()
   }
 
   private async run(): Promise<void> {
@@ -109,24 +89,38 @@ export class SessionService extends EventEmitter<SessionEvents> {
     try {
       const input = await this.printer.input(this.flags)
       const options = await this.printer.options(this.flags, input)
+      const template = join(options.template, TemplateFiles.TEMPLATE)
 
+      // the template itself is watched before its first bundle, so an edit made while it bundles is not lost
+      this.modules.add(template)
       this.watch([
         input.file,
+        template,
         join(options.template, TemplateFiles.SETTINGS),
         join(options.template, Directory.I18N),
         options.sign.certificate && resolve(options.sign.certificate)
       ])
 
-      // held locally, since a template change during this build clears the shared one
-      let bundle = this.template === options.template ? this.bundle : undefined
-
-      if (!bundle) {
-        bundle = await this.printer.bundle(options)
-        this.bundle = bundle
-        this.template = options.template
-        this.modules = new Set(bundle.modules)
-        this.watch(bundle.modules)
+      if (this.bundle?.template !== options.template) {
+        this.bundle = { template: options.template, bundle: this.printer.bundle(options) }
       }
+
+      const cached = this.bundle
+      const bundle = await cached.bundle.catch((err) => {
+        if (this.bundle === cached) {
+          this.bundle = undefined
+        }
+
+        throw err
+      })
+
+      // a module changed while bundling, the build that change queued bundles again
+      if (this.bundle !== cached) {
+        return
+      }
+
+      this.modules = new Set([template, ...bundle.modules])
+      this.watch(bundle.modules)
 
       const ctx: MdPrinterCtx = { input, options }
 

@@ -1,5 +1,5 @@
 import type { MdPrinterCtx } from './commands/run.interface.js'
-import type { RenderedDocument } from './template.interface.js'
+import type { RenderedDocument, TemplateBundle } from './template.interface.js'
 
 export interface SessionBuild {
   version: number
@@ -29,4 +29,17 @@ export interface PreviewError {
   message: string
   frame?: string
   file?: string
+}
+
+export interface PreviewSummary {
+  version: number
+  ms: number
+  pdf: boolean
+  pages: number
+  signed: boolean
+}
+
+export interface SessionBundle {
+  template: string
+  bundle: Promise<TemplateBundle>
 }
