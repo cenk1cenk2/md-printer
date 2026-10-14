@@ -1,8 +1,11 @@
 import { Injectable } from '@nestjs/common'
 import { spawn } from 'child_process'
+import { once } from 'events'
 import { readFile } from 'fs/promises'
 import { createServer } from 'http'
 import type { AddressInfo } from 'net'
+import type { RawBodyError } from 'raw-body'
+import getRawBody from 'raw-body'
 
 import { isLoopbackRequest } from '../../loopback.js'
 import { SignatureAdapter } from '../signature.adapter.js'
@@ -17,10 +20,6 @@ import type { SignatureRequest } from '@interfaces'
  */
 @Injectable()
 export class ATrustAdapter extends SignatureAdapter {
-  private static readonly ENDPOINT = 'https://service.a-trust.at/mobile/https-security-layer-request/default.aspx'
-  private static readonly NAMESPACE = 'http://www.buergerkarte.at/namespaces/securitylayer/1.2#'
-  private static readonly PAGE = './a-trust.html'
-
   public readonly name = 'a-trust'
 
   constructor(private readonly logger: LoggerService) {
@@ -37,7 +36,7 @@ export class ATrustAdapter extends SignatureAdapter {
     // A-Trust expects the whole document with the excluded range blacked out, same as PDF-AS sends it
     return [
       '<?xml version="1.0" encoding="UTF-8"?>',
-      `<sl:CreateCMSSignatureRequest xmlns:sl="${ATrustAdapter.NAMESPACE}" Structure="detached" PAdESCompatibility="true">`,
+      '<sl:CreateCMSSignatureRequest xmlns:sl="http://www.buergerkarte.at/namespaces/securitylayer/1.2#" Structure="detached" PAdESCompatibility="true">',
       '<sl:KeyboxIdentifier>SecureSignatureKeypair</sl:KeyboxIdentifier>',
       '<sl:DataObject>',
       '<sl:MetaInfo><sl:MimeType>application/pdf</sl:MimeType></sl:MetaInfo>',
@@ -51,7 +50,7 @@ export class ATrustAdapter extends SignatureAdapter {
   }
 
   private async session(request: string): Promise<string> {
-    let url = ATrustAdapter.ENDPOINT
+    let url = 'https://service.a-trust.at/mobile/https-security-layer-request/default.aspx'
     let response = await fetch(url, {
       method: 'POST',
       body: new URLSearchParams([['XMLRequest', request]]),
@@ -78,10 +77,10 @@ export class ATrustAdapter extends SignatureAdapter {
       resolve = done
     })
 
-    const page = await readFile(new URL(ATrustAdapter.PAGE, import.meta.url))
+    const page = await readFile(new URL('./a-trust.html', import.meta.url))
 
     const server = createServer(async(req, res) => {
-      if (!isLoopbackRequest(req)) {
+      if (!isLoopbackRequest(req, req.method === 'POST' ? `http://127.0.0.1:${(server.address() as AddressInfo).port}` : undefined)) {
         res.writeHead(403)
 
         return res.end()
@@ -101,10 +100,16 @@ export class ATrustAdapter extends SignatureAdapter {
         return res.end(page)
       }
 
-      let body = ''
+      // a CMS signature is a few hundred kilobytes at most, anything larger is not one
+      const body = await getRawBody(req, { limit: '1mb', encoding: true }).catch((err: RawBodyError): undefined => {
+        res.writeHead(err.status ?? 400)
+        res.end()
 
-      for await (const chunk of req) {
-        body += chunk
+        return undefined
+      })
+
+      if (body === undefined) {
+        return
       }
 
       const cms = (body.match(/<(?:\w+:)?CMSSignature>([^<]+)</)?.[1] ?? body).replace(/\s+/g, '')
@@ -121,7 +126,9 @@ export class ATrustAdapter extends SignatureAdapter {
       resolve(Buffer.from(cms, 'base64'))
     })
 
-    await new Promise<void>((done) => server.listen(0, '127.0.0.1', done))
+    server.listen(0, '127.0.0.1')
+
+    await once(server, 'listening')
 
     const url = `http://127.0.0.1:${(server.address() as AddressInfo).port}/`
 
