@@ -1,11 +1,12 @@
 /// <reference lib="dom" />
 import { Injectable } from '@nestjs/common'
 import { readFile } from 'fs/promises'
-import { relative, resolve } from 'path'
+import { resolve } from 'path'
 import type { HTTPRequest, Page } from 'puppeteer-core'
+import { fileURLToPath, pathToFileURL } from 'url'
 
 import { BrowserService } from './browser.service.js'
-import { mimeType } from '../template/assets.js'
+import { mimeType, resolveConfined } from '../template/assets.js'
 import { LoggerService } from '@cenk1cenk2/oclif-common'
 import { PAGE_BREAK_CLASS } from '@constants'
 import type { RenderedDocument, RendererOptions, RendererResult } from '@interfaces'
@@ -79,8 +80,9 @@ export class RendererService {
         body: rendered.html
       })
     } else {
-      const path = resolve(base, decodeURIComponent(url.pathname.slice(1)))
-      const body = relative(base, path).startsWith('..') ? undefined : await readFile(path).catch((): undefined => undefined)
+      const path = fileURLToPath(new URL(`.${url.pathname}`, pathToFileURL(`${base}/`)))
+      const confined = await resolveConfined(path, base)
+      const body = confined && (await readFile(confined).catch((): undefined => undefined))
 
       if (body) {
         assets.add(path)
@@ -190,7 +192,8 @@ export class RendererService {
 
         return resolved
       },
-      options.pdf.margin as Record<string, string>
+      // Puppeteer reads numbers as pixels, CSS would drop them as unitless lengths
+      Object.fromEntries(Object.entries(options.pdf.margin ?? {}).map(([side, length]) => [side, typeof length === 'number' ? `${length}px` : length]))
     )
 
     await page.setViewport({ width: Math.max(Math.round(width - margin.left - margin.right), 1), height: 800 })
