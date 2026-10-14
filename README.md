@@ -54,8 +54,10 @@ md-printer document.md -F html
 - The input type is detected from the extension (`.md`, `.yaml`, `.yml`) and is markdown for stdin. Override it with `-f, --input-filetype`.
 - YAML input has no body, the whole document is the `data` of the template. Invoices use this.
 - The output defaults to `<input name>.<pdf|html>` in the current directory. Without an input file (stdin) there is no default, pass an output argument, `dest` in front-matter or `-O`.
-- Output is written atomically (a temporary file is renamed into place).
-- Local assets such as images referenced from the document resolve relative to the directory of the input file, or the current directory for stdin. Only files inside that directory are loaded, for PDF and HTML alike. Remote images are loaded as they are.
+- Output is written atomically: a temporary file next to it is renamed into place, keeping the mode and owner of an existing file.
+- `dest` in front-matter and the output argument resolve against the current directory, while local assets resolve against the directory of the input file (the current directory for stdin).
+- Only files inside the input directory are loaded, for PDF and HTML alike. Symlinks are followed first, so a link pointing outside the directory is not loaded either. Remote images are loaded as they are.
+- HTML output inlines local images as data URIs: image attributes (`src`, `srcset`, `poster`), `style` attributes and `<style>` blocks. Text and code samples are never rewritten.
 - `-T, --title` sets the document title, see [precedence](#precedence).
 
 ## Markdown
@@ -71,7 +73,7 @@ Markdown files take YAML front-matter. For YAML input the same keys are top-leve
 | Key               | Description                                                                                   |
 | ----------------- | --------------------------------------------------------------------------------------------- |
 | `template`        | Built-in template name or path to a template directory.                                       |
-| `dest`            | Output file, relative to the current directory.                                               |
+| `dest`            | Output file, relative to the current directory, not to the input file.                        |
 | `outputFiletype` | `pdf` (default) or `html`.                                                                    |
 | `language`        | Language for template translations.                                                           |
 | `continuous`      | `true` renders one page per part, each as tall as its content, split only at page breaks.     |
@@ -90,7 +92,7 @@ A template may carry a `settings.json` with defaults for its documents:
 | `media`           | CSS media type used for printing, `screen` (default) or `print`.                         |
 | `highlightStyle` | highlight.js theme name from `highlight.js/styles`, defaults to `atom-one-dark`.         |
 
-The default `pdfOptions` are `format: A4`, `printBackground: true` and a margin of `30mm 40mm 30mm 20mm` (top, right, bottom, left). `pdfOptions` are merged recursively, so a document can override single keys. `margin` may be a CSS shorthand string such as `"18mm 12mm"`.
+The default `pdfOptions` are `format: A4`, `printBackground: true` and a margin of `30mm 40mm 30mm 20mm` (top, right, bottom, left). `pdfOptions` are merged recursively, so a document can override single keys. `margin` may be a CSS shorthand string such as `"18mm 12mm"`, and plain numbers are pixels, in continuous mode too.
 
 ```yaml
 ---
@@ -121,7 +123,8 @@ md-printer document.md out.pdf --preview --no-open
 - `-p, --preview` rebuilds when the input file, the template (components, imports, `settings.json`, translations) or a local asset used by the page changes. Every build rewrites the output file, the same one a normal run writes; reading from stdin without an output argument only previews. `-O` is not supported.
 - It starts a local preview server and opens it in an app window of the discovered browser, using a throwaway profile. The page has HTML, Split and PDF tabs. Build errors, such as Svelte compile errors, are shown in an overlay and cleared by the next successful build. Closing the window ends the session, as does Ctrl+C.
   - `--host` sets the loopback host, default `127.0.0.1`.
-  - `--port` sets the port, default `0` (random).
+  - `--port` sets the port, default `0` (random). A port in use fails the run with an error.
+  - It serves the files next to the input, except dotfiles such as `.env`.
   - `--no-open` does not open a window: md-printer keeps rebuilding and writing until Ctrl+C, and the printed URL can be opened by hand.
 - Signing is skipped while previewing. Run without `--preview` to sign.
 
