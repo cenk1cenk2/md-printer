@@ -65,6 +65,12 @@ test:
     # apk resolves a relative cache directory against the filesystem root, and an empty cache holds no package index
     - apk add --cache-dir "$CI_PROJECT_DIR/.apk-cache" --update-cache chromium font-noto
 
+test-node-24:
+  extends:
+    - test
+  variables:
+    NODE_VERSION: 24-alpine
+
 semantic-release:
   stage: publish
   extends:
