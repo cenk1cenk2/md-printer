@@ -141,7 +141,7 @@ md-printer document.md out.pdf --preview --no-open
 ```
 
 - `-p, --preview` rebuilds when the input file, the template (components, imports, `settings.json`, translations) or a local asset used by the page changes. Every build rewrites the output file, the same one a normal run writes; reading from stdin without an output argument only previews. `-O` is not supported.
-- It starts a local preview server and opens it in an app window of the discovered browser, using a throwaway profile. The page has HTML, Split and PDF tabs. Build errors, such as Svelte compile errors, are shown in an overlay and cleared by the next successful build. Closing the window ends the session, as does Ctrl+C.
+- It starts a local preview server and opens it in an app window of the discovered browser, using a throwaway profile. The page has HTML, Split and PDF tabs. Build errors, such as Svelte compile errors, are shown in an overlay and cleared by the next successful build. Closing the window ends the session. Ctrl+C ends it too, after closing the browser, the preview server and the watcher, and exits with 130; a second Ctrl+C exits at once.
   - `--host` sets the loopback host, default `127.0.0.1`.
   - `--port` sets the port, default `0` (random). A port in use fails the run with an error.
   - It serves the files next to the input, except dotfiles such as `.env`.

@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common'
+import { cloneDeep, mergeWith, uniq } from 'es-toolkit'
 import { basename, dirname, extname, join, resolve } from 'path'
 import type { PDFOptions } from 'puppeteer-core'
 import { parse as parseYaml } from 'yaml'
@@ -9,7 +10,7 @@ import { RendererService } from './renderer/renderer.service.js'
 import { SignatureService } from './signature/signature.service.js'
 import { inlineHtml } from './template/assets.js'
 import { TemplateService } from './template/template.service.js'
-import { FileSystemService, LoggerService, merge, MergeStrategy } from '@cenk1cenk2/oclif-common'
+import { FileSystemService, LoggerService } from '@cenk1cenk2/oclif-common'
 import { DEFAULT_HIGHLIGHT_STYLE, DEFAULT_LANGUAGE, DEFAULT_PDF_OPTIONS, DEFAULT_TEMPLATE, Directory, InputFileType, MediaType, OutputFileType } from '@constants'
 import type { MdPrinterCtx, MdPrinterFlags, MdPrinterInput, MdPrinterOptions, MdPrinterSignOptions, PrinterOutput, RenderedDocument, TemplateBundle } from '@interfaces'
 
@@ -174,7 +175,10 @@ export class PrinterService {
   }
 
   private pdfOptions(...sources: PDFOptions[]): PDFOptions {
-    const pdf = merge<PDFOptions>(MergeStrategy.EXTEND, {}, DEFAULT_PDF_OPTIONS, ...sources.map((source) => source ?? {}))
+    const pdf = sources.reduce<PDFOptions>(
+      (merged, source) => mergeWith(merged, source ?? {}, (current, value) => (Array.isArray(current) && Array.isArray(value) ? uniq([...current, ...value]) : undefined)),
+      cloneDeep(DEFAULT_PDF_OPTIONS)
+    )
 
     // Puppeteer only takes margin objects, settings and front-matter may use the CSS shorthand
     if (typeof pdf.margin === 'string') {
