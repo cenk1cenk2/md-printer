@@ -1,4 +1,5 @@
 import type { X509Certificate } from 'crypto'
+import type { Root } from 'hast'
 import type { PDFOptions } from 'puppeteer-core'
 
 import type { MdPrinterSignature, MdPrinterSignOptions } from '../signature.interface.js'
@@ -51,7 +52,7 @@ export interface MdPrinterFlags {
 export interface MdPrinterInput {
   file?: string
   directory: string
-  content: string
+  markdown: Root
   data: Record<string, any>
 }
 

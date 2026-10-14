@@ -55,7 +55,7 @@ export class PrinterService {
         return {
           file,
           directory: file ? dirname(file) : process.cwd(),
-          content: '',
+          markdown: { type: 'root', children: [] },
           data: parseYaml(source) ?? {}
         }
 
@@ -126,11 +126,11 @@ export class PrinterService {
       bundle,
       {
         data: input.data,
-        content: input.content,
         t: await this.i18n.load(join(options.template, Directory.I18N), { ...options.i18n, language: options.language }),
         language: options.language,
         signature: ctx.signature
       },
+      this.markdown.resolve(input.markdown, bundle.directives),
       {
         language: options.language,
         title: options.title,

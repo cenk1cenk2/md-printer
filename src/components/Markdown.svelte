@@ -1,14 +1,17 @@
 <!--
   @component
-  Rendered markdown content, styled by github-markdown-css when the template imports it.
+  The markdown document, with directives rendered as components. Styled by github-markdown-css when the template imports it.
 -->
 <script>
-  /** @type {{ content: string, class?: string }} */
-  let { content, class: className = '' } = $props()
+  import { getContext } from 'svelte'
+
+  import Nodes from './Nodes.svelte'
+
+  /** @type {{ class?: string }} */
+  let { class: className = '' } = $props()
 </script>
 
-<!-- eslint-disable-next-line svelte/no-at-html-tags -- markdown input is trusted, same as the document itself -->
-<article class="markdown-body {className}">{@html content}</article>
+<article class="markdown-body {className}"><Nodes nodes={getContext('md-printer:markdown')} /></article>
 
 <style>
   :global(.page-break) {

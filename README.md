@@ -62,7 +62,27 @@ md-printer document.md -F html
 
 Markdown is rendered with [unified](https://unifiedjs.com): GitHub flavoured markdown (tables, task lists, footnotes, autolinks), heading ids, syntax highlighting with the selected highlight.js theme, and raw HTML, which is parsed as well, so a heading or code block written in HTML gets its id and highlighting too.
 
-`::pagebreak` on its own line starts a new page. It works anywhere, also inside flex or grid layouts, and in continuous mode, where every part becomes a page of its own height. `<div class="page-break"></div>` in HTML and the `PageBreak` component do the same.
+`::pagebreak` on its own line starts a new page. It works anywhere, also inside flex or grid layouts, and in continuous mode, where every part becomes a page of its own height. `<div class="page-break"></div>` in HTML and the `PageBreak` component (`::page-break`) do the same.
+
+### Components
+
+Markdown places Svelte components with [directives](https://github.com/remarkjs/remark-directive). The template's components and the [shared components](#shared-components) are available by their file name in kebab case, `PaymentInfo.svelte` as `payment-info`:
+
+```md
+::payment-info{iban="AT00 0000" due="14"}
+
+:::callout{type="warning"}
+Inner markdown, **bold** included, is rendered and passed as `children`.
+:::
+
+Total :items[3 items]{count="3"} so far.
+```
+
+- `::name{...}` on its own line is a leaf component without children.
+- `:::name{...}` up to a closing `:::` is a container. Its content is rendered as markdown and passed as the `children` snippet.
+- `:name[label]{...}` inside text is inline. The label is passed as `children`.
+- Attributes are passed as props, always as strings: `{count="3"}` gives `count: '3'`. `{.note #intro flag}` gives `class`, `id` and `flag: ''`.
+- A name without a component stays the text it was written as, so `10:30am`, `note:here` or `::unknown` are printed unchanged.
 
 ## Front-matter and settings
 
@@ -145,6 +165,7 @@ my-template/
   Template.svelte   required
   settings.json     optional
   i18n/             optional, en.yaml, de.json, ...
+  components/       optional, *.svelte placed from markdown, see Markdown components
 ```
 
 `Template.svelte` is a Svelte 5 component receiving these props:
@@ -152,7 +173,7 @@ my-template/
 | Prop        | Description                                                                                  |
 | ----------- | -------------------------------------------------------------------------------------------- |
 | `data`      | Front-matter (or the YAML file) as an object.                                                |
-| `content`   | The Markdown body rendered to HTML. Empty for YAML input.                                    |
+| `content`   | The Markdown body rendered to HTML, with the components of directives rendered in place. Empty for YAML input. |
 | `t`         | i18next translate function, loaded from `i18n/<language>.(yaml\|yml\|json)`.                |
 | `language`  | The resolved language.                                                                       |
 | `signature` | `{ date, name?, issuer?, serial? }` while signing is enabled, otherwise `undefined`.         |
@@ -178,8 +199,8 @@ Import from `@cenk1cenk2/md-printer/components`:
 | Component        | Description                                                                                       |
 | ---------------- | ------------------------------------------------------------------------------------------------- |
 | `Page`           | Layout wrapper. Children are the body, the `header` and `footer` snippets are the print header and footer of every page. |
-| `Markdown`       | Renders `content` in an `<article class="markdown-body">`, styled by `github-markdown-css` if the template imports it. |
-| `PageBreak`      | Starts a new page anywhere, also in continuous mode. In markdown, `::pagebreak` does the same.     |
+| `Markdown`       | Renders the Markdown body in an `<article class="markdown-body">`, styled by `github-markdown-css` if the template imports it. Directives render as live components. |
+| `PageBreak`      | Starts a new page anywhere, also in continuous mode. In markdown, `::page-break` or `::pagebreak` does the same. |
 | `PageNumber`     | Current page number, filled by Chrome. Header and footer only.                                    |
 | `TotalPages`     | Total page count, filled by Chrome. Header and footer only.                                       |
 | `Title`          | Document title, filled by Chrome. Header and footer only.                                         |
@@ -190,7 +211,7 @@ Import from `@cenk1cenk2/md-printer/components`:
 <script>
   import { Markdown, Page, PageNumber, TotalPages, Title } from '@cenk1cenk2/md-printer/components'
 
-  let { data, content } = $props()
+  let { data } = $props()
 </script>
 
 <svelte:head>
@@ -204,9 +225,35 @@ Import from `@cenk1cenk2/md-printer/components`:
     </div>
   {/snippet}
 
-  <Markdown {content} />
+  <Markdown />
 </Page>
 ```
+
+#### Markdown components
+
+Every `*.svelte` file in the template's `components/` directory can be placed from markdown, see [Components](#components). The shared components can be placed the same way, for example `::page-break` or `::signature-block`, except `Markdown`. A template component with the same name as a shared one replaces it.
+
+```svelte
+<!-- components/Callout.svelte -->
+<script>
+  import { getContext } from 'svelte'
+
+  let { type = 'note', children } = $props()
+
+  const { data, t, language, signature } = getContext('md-printer:document')
+</script>
+
+<aside class="callout callout-{type}">
+  <strong>{t(type)}</strong>
+  {@render children?.()}
+</aside>
+```
+
+- Props are the directive's attributes, always strings, and `children` for containers and inline directives.
+- `getContext('md-printer:document')` gives `{ data, t, language, signature }`, the template's props, so a component needs nothing passed down.
+- `<Markdown />` renders the components in place. A template that places `{@html content}` gets their rendered markup instead, without their scoped `<style>` blocks, so style them with Tailwind classes or a `<style lang="postcss">` block.
+- A component can start new pages with `PageBreak` or an element with the `page-break` class.
+- `--preview` picks up added and removed component files.
 
 #### Header and footer
 
