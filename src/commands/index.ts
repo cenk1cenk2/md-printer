@@ -20,7 +20,7 @@ import {
 } from '@cenk1cenk2/oclif-common'
 import { DEFAULT_LANGUAGE, I18N_DIRECTORY, InputFileType, OutputFileType, RequiredTemplateFiles, TEMPLATE_DIRECTORY, TemplateFiles } from '@constants'
 import type { MdPrinterCtx, MdPrinterOptions, PuppeteerPdfHelpers } from '@interfaces'
-import { I18nService } from '@services'
+import { ATrustAdapter, I18nService, SignatureService } from '@services'
 
 const { parsePDFOptions, unitToPixels } = Puppeteer as PuppeteerPdfHelpers
 
@@ -85,6 +85,15 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
     }),
     continuous: Flags.boolean({
       description: 'Render PDF as a single continuous page without page breaks.'
+    }),
+    sign: Flags.boolean({
+      description: 'Sign the PDF with a qualified electronic signature through ID Austria (A-Trust).'
+    }),
+    ['sign-provider']: Flags.string({
+      description: 'Signature provider, defaults to a-trust. Overwrites the one defined in front-matter and template settings.'
+    }),
+    ['sign-certificate']: Flags.string({
+      description: 'Signer certificate (DER or PEM) used for the visible signature block and to verify the returned signature.'
     })
   }
 
@@ -107,12 +116,13 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
   private cs: ConfigService
   private fs: FileSystemService
   private i18n: I18nService
+  private signature: SignatureService
   private browser: Browser
 
   public register(cli: DynamicModule): DynamicModule {
     return {
       ...cli,
-      providers: [...(cli.providers ?? []), I18nService]
+      providers: [...(cli.providers ?? []), I18nService, ATrustAdapter, SignatureService]
     }
   }
 
@@ -120,6 +130,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
     this.cs = this.app.get(ConfigService)
     this.fs = this.app.get(FileSystemService)
     this.i18n = this.app.get(I18nService)
+    this.signature = this.app.get(SignatureService)
 
     await this.app.get(ParserService).register(JsonParser, YamlParser)
 
@@ -228,6 +239,7 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
               dest: this.args?.output ?? ctx.metadata?.dest ?? `${basename(this.args.file, extname(this.args.file))}.${this.flags['output-filetype']}`,
               // omitted rather than set to undefined, since deepmerge would clobber the template default
               ...(title ? { document_title: title } : {}),
+              ...(ctx.metadata?.sign ? { sign: ctx.metadata.sign } : {}),
               // https://github.com/simonhaenisch/md-to-pdf/issues/247
               launch_options: {
                 executablePath: this.flags.browser
@@ -290,6 +302,8 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
 
           await this.applyTranslations(ctx)
 
+          await this.applySignature(ctx)
+
           await this.applyDocumentTitle(ctx)
         }
       }
@@ -322,7 +336,11 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
   }
 
   private context(ctx: MdPrinterCtx): Record<PropertyKey, any> {
-    const context: Record<PropertyKey, any> = { ...(ctx.metadata ?? {}), content: ctx.content }
+    const context: Record<PropertyKey, any> = {
+      ...(ctx.metadata ?? {}),
+      content: ctx.content,
+      signature: ctx.signature ?? null
+    }
 
     if (ctx.t) {
       context.t = ctx.t
@@ -342,6 +360,35 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
     ctx.options.document_title = this.nunjucks.renderString(title, this.context(ctx))
 
     this.logger.info('Document title will be: %s', ctx.options.document_title)
+  }
+
+  private async applySignature(ctx: MdPrinterCtx): Promise<void> {
+    ctx.options.sign = {
+      ...ctx.options.sign,
+      ...(this.flags.sign ? { enabled: true } : {}),
+      ...(this.flags['sign-provider'] ? { provider: this.flags['sign-provider'] } : {}),
+      ...(this.flags['sign-certificate'] ? { certificate: this.flags['sign-certificate'] } : {})
+    }
+
+    if (!ctx.options.sign.enabled) {
+      return
+    }
+
+    if (ctx.options.as_html) {
+      throw new Error('Signing is only supported for PDF output.')
+    }
+
+    this.signature.adapter(ctx.options.sign.provider)
+
+    ctx.signingTime = new Date()
+
+    if (ctx.options.sign.certificate) {
+      ctx.certificate = await this.signature.certificate(ctx.options.sign.certificate, ctx.signingTime)
+    }
+
+    ctx.signature = this.signature.describe(ctx.signingTime, ctx.certificate)
+
+    this.logger.info('Document will be signed: %o', ctx.signature)
   }
 
   private async applyTranslations(ctx: MdPrinterCtx): Promise<void> {
@@ -482,6 +529,20 @@ export default class MDPrinter extends Command<typeof MDPrinter, MdPrinterCtx> i
     )
 
     if (output) {
+      if (ctx.signature) {
+        if (this.flags.watch) {
+          this.logger.warn('Skipping the signature in watch mode, run without --watch to sign the document.')
+        } else {
+          output.content = await this.signature.sign(Buffer.from(output.content), {
+            ...ctx.options.sign,
+            date: ctx.signingTime,
+            certificate: ctx.certificate
+          })
+
+          this.logger.info('Document is signed.')
+        }
+      }
+
       if (this.flags.stdout) {
         process.stdout.write(output.content)
 

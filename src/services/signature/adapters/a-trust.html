@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>md-printer signature</title>
+    <style>
+      body {
+        font-family: system-ui, sans-serif;
+        margin: 0;
+        padding: 16px;
+        background: #f4f4f5;
+        color: #18181b;
+      }
+      main {
+        max-width: 560px;
+        margin: 0 auto;
+        display: grid;
+        gap: 12px;
+      }
+      iframe {
+        width: 100%;
+        height: 600px;
+        border: 0;
+        border-radius: 12px;
+        background: #fff;
+      }
+      textarea {
+        width: 100%;
+        height: 96px;
+        box-sizing: border-box;
+        border-radius: 8px;
+        padding: 8px;
+        font: 12px ui-monospace, monospace;
+      }
+      button {
+        width: 100%;
+        padding: 10px;
+        border: 0;
+        border-radius: 8px;
+        background: #18181b;
+        color: #fff;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="main">
+      <iframe id="login"></iframe>
+      <p>Log in and approve the signature. When the signature starting with <code>MII</code> shows up above, paste it here.</p>
+      <form id="form">
+        <textarea name="signature" placeholder="MII..." required></textarea>
+        <button>Sign PDF</button>
+      </form>
+    </main>
+    <script>
+      fetch('/session')
+        .then((response) => response.json())
+        .then(({ login }) => (document.getElementById('login').src = login))
+
+      document.getElementById('form').addEventListener('submit', async (event) => {
+        event.preventDefault()
+
+        const response = await fetch('/signature', { method: 'POST', body: new FormData(event.target).get('signature') })
+        const message = document.createElement('p')
+
+        message.textContent = await response.text()
+
+        if (response.ok) {
+          document.getElementById('main').replaceChildren(message)
+        } else {
+          event.target.append(message)
+        }
+      })
+    </script>
+  </body>
+</html>

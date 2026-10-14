@@ -19,6 +19,8 @@ export default defineConfig((options) => ({
   minify: false,
   keepNames: true,
 
+  copy: [{ from: 'src/**/*.html', to: 'dist', flatten: false }],
+
   onSuccess: async (): Promise<void> => {
     await Promise.all([command('pnpm', ['run', 'manifest'], { stdout: process.stdout, stderr: process.stderr })])
   }
