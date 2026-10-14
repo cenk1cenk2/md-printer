@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { compile as compileTailwind } from '@tailwindcss/node'
 import { Scanner } from '@tailwindcss/oxide'
+import enhancedResolve from 'enhanced-resolve'
 import { decodeHTML } from 'entities'
 import { readFileSync } from 'fs'
 import { createRequire } from 'module'
@@ -10,7 +11,7 @@ import { rolldown } from 'rolldown'
 import { render } from 'svelte/server'
 import { fileURLToPath } from 'url'
 
-import { inlineAssets } from './assets.js'
+import { inlineCss, inlineHtml } from './assets.js'
 import { sveltePlugin } from './svelte.plugin.js'
 import { FileSystemService } from '@cenk1cenk2/oclif-common'
 import { ContextKey, Directory, RenderMode, TemplateFiles } from '@constants'
@@ -33,6 +34,16 @@ export class TemplateService {
   private static readonly ENTRY = fileURLToPath(new URL('./render.entry.ts', import.meta.url))
 
   private readonly require = createRequire(TemplateService.ROOT)
+  // the same resolvers Tailwind uses, so package `exports` and `style` entries resolve from md-printer's own dependencies too
+  private readonly stylesheets = enhancedResolve.create.sync({
+    extensions: ['.css'],
+    mainFields: ['style'],
+    conditionNames: ['style']
+  })
+  private readonly modules = enhancedResolve.create.sync({
+    extensions: ['.js', '.json', '.node', '.ts'],
+    conditionNames: ['node', 'import']
+  })
 
   constructor(private readonly fs: FileSystemService) {}
 
@@ -96,8 +107,8 @@ export class TemplateService {
         head: head + css,
         body: body.body
       }),
-      header: await this.margin(bundle, header, styles, directory, cache),
-      footer: await this.margin(bundle, footer, styles, directory, cache),
+      header: await this.margin(bundle, header, styles, directory, cache, dependencies),
+      footer: await this.margin(bundle, footer, styles, directory, cache, dependencies),
       dependencies
     }
   }
@@ -129,12 +140,16 @@ export class TemplateService {
     }
   }
 
-  private async margin(bundle: TemplateBundle, part: RenderedPart, styles: string, directory: string, cache: AssetCache): Promise<string | undefined> {
+  private async margin(bundle: TemplateBundle, part: RenderedPart, styles: string, directory: string, cache: AssetCache, dependencies: string[]): Promise<string | undefined> {
     if (!part.body.replace(/<!--[\s\S]*?-->/g, '').trim()) {
       return undefined
     }
 
-    return inlineAssets(bundle.entry.margin({ styles, body: part.body }), directory, { remote: true, cache })
+    const { content, assets } = await inlineHtml(bundle.entry.margin({ styles, body: part.body }), directory, { remote: true, cache })
+
+    dependencies.push(...assets)
+
+    return content
   }
 
   private async css(directory: string, bundle: TemplateBundle, html: string, highlight: string, dependencies: string[]): Promise<string> {
@@ -146,8 +161,8 @@ export class TemplateService {
       from: bundle.stylesheets[0]?.file ?? join(directory, TemplateFiles.TEMPLATE),
       shouldRewriteUrls: true,
       onDependency: (path) => dependencies.push(path),
-      customCssResolver: async(id, base) => this.resolveStylesheet(id, [base, directory, TemplateService.ROOT]),
-      customJsResolver: async(id, base) => this.resolveModule(id, [base, directory, TemplateService.ROOT])
+      customCssResolver: async(id, base) => this.resolveFrom(this.stylesheets, id, [base, directory, TemplateService.ROOT]),
+      customJsResolver: async(id, base) => this.resolveFrom(this.modules, id, [base, directory, TemplateService.ROOT])
     })
 
     const scanner = new Scanner({
@@ -170,47 +185,24 @@ export class TemplateService {
       ]
     })
 
-    return inlineAssets(compiler.build([...scanner.scan(), ...scanner.scanFiles([{ content: html, extension: 'html' }])]), directory)
+    const { content, assets } = await inlineCss(compiler.build([...scanner.scan(), ...scanner.scanFiles([{ content: html, extension: 'html' }])]), directory)
+
+    dependencies.push(...assets)
+
+    return content
   }
 
   /**
-   * Resolves bare stylesheet imports the way Tailwind does (the package's `style` entry or a subpath),
-   * but also from md-printer's own dependencies, since a template directory usually has no `node_modules`.
+   * Tries every base in turn, since a template directory usually has no `node_modules` and falls back to md-printer's own dependencies.
    */
-  private resolveStylesheet(id: string, bases: string[]): string | undefined {
-    if (id.startsWith('.') || isAbsolute(id)) {
-      return undefined
-    }
-
-    const [name, subpath] = id.match(/^((?:@[^/]+\/)?[^/]+)\/?(.*)$/).slice(1)
-
-    for (const base of bases) {
-      let manifest: string
-
-      try {
-        manifest = this.require.resolve(`${name}/package.json`, { paths: [base] })
-      } catch {
-        continue
-      }
-
-      const root = dirname(manifest)
-
-      if (subpath) {
-        return [join(root, subpath), join(root, `${subpath}.css`)].find((path) => this.fs.exists(path))
-      }
-
-      const { style } = JSON.parse(readFileSync(manifest, 'utf8'))
-
-      return style ? join(root, style) : undefined
-    }
-
-    return undefined
-  }
-
-  private resolveModule(id: string, bases: string[]): string | undefined {
+  private resolveFrom(resolver: ReturnType<typeof enhancedResolve.create.sync>, id: string, bases: string[]): string | undefined {
     for (const base of bases) {
       try {
-        return this.require.resolve(id, { paths: [base] })
+        const resolved = resolver(base, id)
+
+        if (resolved) {
+          return resolved
+        }
       } catch {
         continue
       }

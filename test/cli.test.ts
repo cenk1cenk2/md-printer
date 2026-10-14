@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process'
-import { mkdir, mkdtemp, readFile, rm, writeFile } from 'node:fs/promises'
+import { chmod, copyFile, mkdir, mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -146,5 +146,30 @@ describe('md-printer', () => {
     const html = (await run(['--stdin', '-O', '-F', 'html'], 'Meet at 10:30am, note:here.\n')).toString()
 
     expect(html).toContain('Meet at 10:30am, note:here.')
+  })
+
+  it('keeps code samples in HTML output untouched', async() => {
+    const input = join(directory, 'code', 'input.md')
+
+    await mkdir(join(directory, 'code'), { recursive: true })
+    await copyFile(join(root, 'test', 'assets', 'landscape.svg'), join(directory, 'code', 'x.svg'))
+    await writeFile(input, 'Inline `url(x.svg)` here.\n\n```\n<img src="x.svg">\n```\n\n![image](x.svg)\n')
+
+    const html = (await run([input, '-F', 'html', '-O'])).toString()
+
+    expect(html).toContain('<code>url(x.svg)</code>')
+    expect(html).toContain('&lt;img src="x.svg">')
+    expect(html).toMatch(/<img src="data:image\/svg\+xml;base64,[^"]+" alt="image">/)
+  })
+
+  it('keeps the file mode of an existing output', async() => {
+    const output = join(directory, 'private.html')
+
+    await writeFile(output, '')
+    await chmod(output, 0o600)
+    await run(['--stdin', '-F', 'html', output], '# Private\n')
+
+    expect(((await stat(output)).mode % 0o1000).toString(8)).toBe('600')
+    expect(await readFile(output, 'utf8')).toContain('Private')
   })
 })

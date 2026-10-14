@@ -7,7 +7,7 @@ import { I18nService } from './i18n.service.js'
 import { MarkdownService } from './markdown.service.js'
 import { RendererService } from './renderer/renderer.service.js'
 import { SignatureService } from './signature/signature.service.js'
-import { inlineAssets } from './template/assets.js'
+import { inlineHtml } from './template/assets.js'
 import { TemplateService } from './template/template.service.js'
 import { FileSystemService, LoggerService, merge, MergeStrategy } from '@cenk1cenk2/oclif-common'
 import { DEFAULT_HIGHLIGHT_STYLE, DEFAULT_LANGUAGE, DEFAULT_PDF_OPTIONS, DEFAULT_TEMPLATE, Directory, InputFileType, MediaType, OutputFileType } from '@constants'
@@ -47,25 +47,20 @@ export class PrinterService {
 
     const type = flags.inputFiletype ?? (file ? extname(file).replace(/^\./, '') : InputFileType.MARKDOWN)
 
-    switch (type) {
-      case InputFileType.YAML:
+    if (type === InputFileType.YAML || type === InputFileType.YAML_SHORT) {
+      return {
+        file,
+        directory: file ? dirname(file) : process.cwd(),
+        content: '',
+        data: parseYaml(source) ?? {}
+      }
+    }
 
-      // eslint-disable-next-line no-fallthrough
-      case InputFileType.YAML_SHORT:
-        return {
-          file,
-          directory: file ? dirname(file) : process.cwd(),
-          content: '',
-          data: parseYaml(source) ?? {}
-        }
-
-      // any other extension is read as markdown, like .markdown, .txt or none at all
-      default:
-        return {
-          file,
-          directory: file ? dirname(file) : process.cwd(),
-          ...this.markdown.parse(source)
-        }
+    // any other extension is read as markdown, like .markdown, .txt or none at all
+    return {
+      file,
+      directory: file ? dirname(file) : process.cwd(),
+      ...this.markdown.parse(source)
     }
   }
 
@@ -146,7 +141,9 @@ export class PrinterService {
 
   public async output(ctx: MdPrinterCtx, document: RenderedDocument): Promise<PrinterOutput> {
     if (ctx.options.output === OutputFileType.HTML) {
-      return { content: Buffer.from(await inlineAssets(document.html, ctx.input.directory, { confined: true })), assets: [] }
+      const { content, assets } = await inlineHtml(document.html, ctx.input.directory, { confined: true })
+
+      return { content: Buffer.from(content), assets }
     }
 
     const { pdf, assets } = await this.renderer.render(document, {

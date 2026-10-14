@@ -65,12 +65,24 @@ export interface RenderedDocument {
   dependencies: string[]
 }
 
-export type AssetCache = Map<string, Promise<string | undefined>>
+export interface InlinedAsset {
+  uri: string
+  path?: string
+}
+
+export type AssetInliner = (reference: string) => Promise<string | undefined>
+
+export type AssetCache = Map<string, Promise<InlinedAsset | undefined>>
 
 export interface InlineAssetsOptions {
   remote?: boolean
   confined?: boolean
   cache?: AssetCache
+}
+
+export interface InlinedAssets {
+  content: string
+  assets: string[]
 }
 
 export interface CompiledModule {
