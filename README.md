@@ -30,7 +30,7 @@ The browser executable is resolved in this order:
 1. `--browser <path>`. If this path is not executable, md-printer fails instead of falling back.
 2. `PUPPETEER_EXECUTABLE_PATH`
 3. `CHROME_PATH`
-4. Brave, Chrome, Chromium, Edge, in that order, looked up by name on `PATH` and then in the well-known install locations of the platform (Linux, macOS and Windows).
+4. Brave, Chrome, Chromium, Edge, in that order, looked up by name on `PATH` and then in their well-known Linux install locations. Only Linux is supported.
 
 When running as root or when the `CI` environment variable is set, the browser is started with `--no-sandbox`, because Chromium refuses to start its sandbox as root, which is the default in CI containers.
 
@@ -78,33 +78,33 @@ Markdown files take YAML front-matter. For YAML input the same keys are top-leve
 | ----------------- | --------------------------------------------------------------------------------------------- |
 | `template`        | Built-in template name or path to a template directory.                                       |
 | `dest`            | Output file, relative to the current directory.                                               |
-| `output-filetype` | `pdf` (default) or `html`.                                                                    |
+| `outputFiletype` | `pdf` (default) or `html`.                                                                    |
 | `language`        | Language for template translations.                                                           |
 | `continuous`      | `true` renders a single page without page breaks.                                             |
-| `document_title`  | Document title.                                                                               |
-| `pdf_options`     | Puppeteer [PDF options](https://pptr.dev/api/puppeteer.pdfoptions), merged over the defaults. |
+| `documentTitle`  | Document title.                                                                               |
+| `pdfOptions`     | Puppeteer [PDF options](https://pptr.dev/api/puppeteer.pdfoptions), merged over the defaults. |
 | `sign`            | Signing options, see [Signing](#signing).                                                     |
 
 A template may carry a `settings.json` with defaults for its documents:
 
 | Key               | Description                                                                              |
 | ----------------- | ---------------------------------------------------------------------------------------- |
-| `pdf_options`     | Puppeteer PDF options.                                                                   |
+| `pdfOptions`     | Puppeteer PDF options.                                                                   |
 | `i18n`            | `{ "language": "en", "fallback": "en" }`, default and fallback language of translations. |
 | `sign`            | Signing options.                                                                         |
 | `continuous`      | Render continuously by default.                                                          |
 | `media`           | CSS media type used for printing, `screen` (default) or `print`.                         |
-| `highlight_style` | highlight.js theme name from `highlight.js/styles`, defaults to `github`.                |
+| `highlightStyle` | highlight.js theme name from `highlight.js/styles`, defaults to `github`.                |
 
-The default `pdf_options` are `format: A4`, `printBackground: true` and a margin of `30mm 40mm 30mm 20mm` (top, right, bottom, left). `pdf_options` are merged recursively, so a document can override single keys. `margin` may be a CSS shorthand string such as `"18mm 12mm"`.
+The default `pdfOptions` are `format: A4`, `printBackground: true` and a margin of `30mm 40mm 30mm 20mm` (top, right, bottom, left). `pdfOptions` are merged recursively, so a document can override single keys. `margin` may be a CSS shorthand string such as `"18mm 12mm"`.
 
 ```yaml
 ---
 template: kilic.dev
 dest: ./out/report.pdf
 language: de
-document_title: Quarterly Report
-pdf_options:
+documentTitle: Quarterly Report
+pdfOptions:
   format: A4
   margin: 20mm
 ---
@@ -112,10 +112,10 @@ pdf_options:
 
 ### Precedence
 
-- General: flags > front-matter > template `settings.json` > defaults. `pdf_options` are merged key by key in the order defaults, `settings.json`, front-matter.
+- General: flags > front-matter > template `settings.json` > defaults. `pdfOptions` are merged key by key in the order defaults, `settings.json`, front-matter.
 - The language is `--language`, then `language`, then `settings.json` `i18n.language`, then `en`.
 - `continuous` is enabled when any of `--continuous`, front-matter or `settings.json` enables it.
-- The document title is `--title`, then `document_title`, then the `<title>` set by the template, then the input file name.
+- The document title is `--title`, then `documentTitle`, then the `<title>` set by the template, then the input file name.
 
 ## Development
 
@@ -129,10 +129,9 @@ md-printer document.md out.pdf --watch --preview
   - `--host` sets the host, default `127.0.0.1`.
   - `--port` sets the port, default `0` (random).
   - `--no-open` only prints the URL, so you can open it yourself.
-- `-w, --watch` rebuilds when the input file, the template (components, imports, `style.css`, `settings.json`, translations) or a local asset used by the page changes, and rewrites the output file. Without `--preview` it keeps running until Ctrl+C. An output file is required, so `-O` is not supported.
+- `-w, --watch` rebuilds when the input file, the template (components, imports, `settings.json`, translations) or a local asset used by the page changes, and rewrites the output file. Without `--preview` it keeps running until Ctrl+C. An output file is required, so `-O` is not supported.
 - `--preview` alone does not write any file.
 - Signing is skipped in both modes. Run without `--watch` and `--preview` to sign.
-- `-d, --dev` is a deprecated alias of `--preview`.
 
 ## Templates
 
@@ -152,7 +151,6 @@ A template is a directory. Pass it with `-t ./path` or `template: ./path`. A val
 ```
 my-template/
   Template.svelte   required
-  style.css         optional
   settings.json     optional
   i18n/             optional, en.yaml, de.json, ...
 ```
@@ -169,7 +167,7 @@ my-template/
 
 Set the document title with `<svelte:head><title>...</title></svelte:head>`.
 
-`style.css` is compiled with Tailwind CSS v4, so it can `@import 'tailwindcss'` and use `@plugin`, `@theme` and utility classes in the template. `@import` of packages (for example `@fontsource/*`, `github-markdown-css`) resolves from the template directory first and also from md-printer's own dependencies, so the template does not need a `node_modules`. The selected highlight.js theme is always included. Local `url()` and image references are inlined as data URIs.
+Styles that need Tailwind CSS v4 or package imports go into a `<style lang="postcss">` block in `Template.svelte` or any component it imports. These blocks are collected and compiled together, so they can `@import 'tailwindcss'` and use `@plugin`, `@theme` and utility classes. Plain `<style>` blocks stay scoped Svelte styles. `@import` of packages (for example `@fontsource/*`, `github-markdown-css`) resolves from the template directory first and also from md-printer's own dependencies, so the template does not need a `node_modules`. The selected highlight.js theme is always included. Local `url()` and image references are inlined as data URIs.
 
 Images are imported, which inlines them as data URIs:
 
@@ -193,7 +191,7 @@ Import from `@cenk1cenk2/md-printer/components`:
 | `TotalPages`     | Total page count, filled by Chrome. Header and footer only.                                       |
 | `Title`          | Document title, filled by Chrome. Header and footer only.                                         |
 | `Date`           | Print date, filled by Chrome. Header and footer only.                                             |
-| `SignatureBlock` | Visible signature block for the `signature` prop. Needs Tailwind in `style.css`. Optional `labels` prop overrides its texts. |
+| `SignatureBlock` | Visible signature block for the `signature` prop. Needs Tailwind in a `<style lang="postcss">` block. Optional `labels` prop overrides its texts. |
 
 ```svelte
 <script>
@@ -203,7 +201,7 @@ Import from `@cenk1cenk2/md-printer/components`:
 </script>
 
 <svelte:head>
-  <title>{data.document_title ?? 'Document'}</title>
+  <title>{data.documentTitle ?? 'Document'}</title>
 </svelte:head>
 
 <Page>
@@ -219,7 +217,7 @@ Import from `@cenk1cenk2/md-printer/components`:
 
 #### Header and footer
 
-The `header` and `footer` snippets are rendered into Chrome's print header and footer, which are isolated from the page. md-printer inlines the CSS and images for them automatically, including remote images, and the default font size is 10px. Chrome does not reserve space for them, so set `pdf_options.margin` in `settings.json` or the front-matter large enough for what you render. Both are omitted in continuous mode.
+The `header` and `footer` snippets are rendered into Chrome's print header and footer, which are isolated from the page. md-printer inlines the CSS and images for them automatically, including remote images, and the default font size is 10px. Chrome does not reserve space for them, so set `pdfOptions.margin` in `settings.json` or the front-matter large enough for what you render. Both are omitted in continuous mode.
 
 Templates are code: Svelte components run on your machine when a document is rendered. Only use templates you trust.
 
@@ -240,14 +238,14 @@ md-printer invoice.yaml -t invoice --sign --sign-certificate ~/id-austria.pem
 
 ## Migrating from 2.x
 
-- Nunjucks `template.html.j2`, `header.html`, `footer.html`, `main.css` and `tailwind.css` are replaced by `Template.svelte` and `style.css`. A directory with 2.x files fails with an error.
-- Removed from `settings.json` and front-matter: `body_class`, `css`, `stylesheet`, `script`, `marked_options`, `launch_options`, `gray_matter_options`. `document_title` in `settings.json` is removed too, set the title in the template.
+- Nunjucks `template.html.j2`, `header.html`, `footer.html`, `main.css` and `tailwind.css` are replaced by `Template.svelte`, with styles in a `<style lang="postcss">` block.
+- Removed from `settings.json` and front-matter: `body_class`, `css`, `stylesheet`, `script`, `marked_options`, `launch_options`, `gray_matter_options`. `documentTitle` in `settings.json` is removed too, set the title in the template.
 - Front-matter on stdout is gone, use `-O`.
 - `--title` now beats front-matter, and `--template` now beats front-matter.
 - Assets resolve relative to the input file directory instead of the current directory.
 - Continuous mode has no header and footer.
 - `puppeteer` is replaced by `puppeteer-core`, there is no bundled Chrome, a local Chromium-based browser is required.
-- `--dev` is renamed to `--preview`. The alias is kept but deprecated.
+- `--dev` is replaced by `--preview`.
 - The default highlight theme is `github`.
 
 ## Command reference

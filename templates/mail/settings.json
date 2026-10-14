@@ -1,5 +1,5 @@
 {
-  "pdf_options": {
+  "pdfOptions": {
     "format": "A4",
     "margin": "0",
     "printBackground": true

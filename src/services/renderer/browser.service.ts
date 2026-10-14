@@ -1,11 +1,12 @@
 import type { OnModuleDestroy } from '@nestjs/common'
-import { Injectable } from '@nestjs/common'
-import { homedir } from 'os'
+import { Inject, Injectable } from '@nestjs/common'
 import type { Browser } from 'puppeteer-core'
 import puppeteer from 'puppeteer-core'
 
 import { discoverBrowser, isExecutable } from './browser.js'
 import { LoggerService } from '@cenk1cenk2/oclif-common'
+import { PRINTER_MODULE_OPTIONS } from '@constants'
+import type { PrinterModuleOptions } from '@interfaces'
 
 /**
  * Owns the browser: discovers the executable, launches one shared instance on first use and closes it when the application shuts down.
@@ -13,23 +14,16 @@ import { LoggerService } from '@cenk1cenk2/oclif-common'
 @Injectable()
 export class BrowserService implements OnModuleDestroy {
   private browser?: Promise<Browser>
-  private explicit?: string
 
-  constructor(private readonly logger: LoggerService) {
+  constructor(
+    private readonly logger: LoggerService,
+    @Inject(PRINTER_MODULE_OPTIONS) private readonly options: PrinterModuleOptions
+  ) {
     this.logger.setup(this.constructor.name)
   }
 
-  public use(explicit?: string): void {
-    this.explicit = explicit
-  }
-
   public executable(): string {
-    return discoverBrowser(this.explicit, {
-      platform: process.platform,
-      env: process.env,
-      home: homedir(),
-      executable: isExecutable
-    })
+    return discoverBrowser(this.options.browser, { env: process.env, executable: isExecutable })
   }
 
   public get(): Promise<Browser> {
@@ -55,9 +49,11 @@ export class BrowserService implements OnModuleDestroy {
 
     this.logger.debug('Launching browser: %s', executablePath)
 
-    // Chromium refuses to start its sandbox as root, which is the default in CI containers
-    const args = process.getuid?.() === 0 || process.env.CI ? ['--no-sandbox'] : []
-    const browser = await puppeteer.launch({ executablePath, args })
+    const browser = await puppeteer.launch({
+      executablePath,
+      // Chromium refuses to start its sandbox as root, which is the default in CI containers
+      args: process.getuid?.() === 0 || process.env.CI ? ['--no-sandbox'] : []
+    })
 
     browser.on('disconnected', () => {
       this.browser = undefined

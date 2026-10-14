@@ -1,6 +1,6 @@
 ---
 template: mail
-output-filetype: html
+outputFiletype: html
 ---
 
 Hello,

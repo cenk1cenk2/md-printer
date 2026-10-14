@@ -19,7 +19,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "outDir": "./dist",
-    "rootDir": "./src/",
     "paths": {
       "@interfaces": ["./src/interfaces/index.js"],
       "@constants": ["./src/constants/index.js"],
@@ -27,5 +26,5 @@
     }
   },
   "exclude": ["node_modules"],
-  "include": ["src/**/*"]
+  "include": ["src/**/*", "test/**/*", "vitest.config.ts"]
 }

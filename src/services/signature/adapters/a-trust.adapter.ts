@@ -35,15 +35,15 @@ export class ATrustAdapter extends SignatureAdapter {
 
   private request({ pdf, excluded: [from, to] }: SignatureRequest): string {
     // A-Trust expects the whole document with the excluded range blacked out, same as PDF-AS sends it
-    const data = Buffer.from(pdf).fill(0, from, to + 1)
-
     return [
       '<?xml version="1.0" encoding="UTF-8"?>',
       `<sl:CreateCMSSignatureRequest xmlns:sl="${ATrustAdapter.NAMESPACE}" Structure="detached" PAdESCompatibility="true">`,
       '<sl:KeyboxIdentifier>SecureSignatureKeypair</sl:KeyboxIdentifier>',
       '<sl:DataObject>',
       '<sl:MetaInfo><sl:MimeType>application/pdf</sl:MimeType></sl:MetaInfo>',
-      `<sl:Content><sl:Base64Content>${data.toString('base64')}</sl:Base64Content></sl:Content>`,
+      `<sl:Content><sl:Base64Content>${Buffer.from(pdf)
+        .fill(0, from, to + 1)
+        .toString('base64')}</sl:Base64Content></sl:Content>`,
       `<sl:ExcludedByteRange><sl:From>${from}</sl:From><sl:To>${to}</sl:To></sl:ExcludedByteRange>`,
       '</sl:DataObject>',
       '</sl:CreateCMSSignatureRequest>'
@@ -133,9 +133,7 @@ export class ATrustAdapter extends SignatureAdapter {
   }
 
   private open(url: string): void {
-    const [command, ...args] = process.platform === 'darwin' ? ['open', url] : process.platform === 'win32' ? ['cmd', '/c', 'start', '', url] : ['xdg-open', url]
-
-    spawn(command, args, { stdio: 'ignore', detached: true })
+    spawn('xdg-open', [url], { stdio: 'ignore', detached: true })
       .on('error', (err) => this.logger.warn('Can not open the browser, open the link manually: %s', err.message))
       .unref()
   }

@@ -1,7 +1,7 @@
 <!--
   @component
   Visible block for a digitally signed document, filled from the `signature` prop md-printer passes to templates when signing is enabled.
-  Styled with Tailwind classes, so the template needs a `style.css` importing Tailwind.
+  Styled with Tailwind classes, so the template needs a `<style lang="postcss">` block importing Tailwind.
 -->
 <script>
   /**

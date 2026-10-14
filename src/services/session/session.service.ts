@@ -7,21 +7,7 @@ import { join, resolve } from 'path'
 import { PrinterService } from '../printer.service.js'
 import { LoggerService } from '@cenk1cenk2/oclif-common'
 import { I18N_DIRECTORY, TemplateFiles } from '@constants'
-import type { MdPrinterCtx, MdPrinterFlags, RenderedDocument, TemplateBundle } from '@interfaces'
-
-export interface SessionBuild {
-  version: number
-  ms: number
-  ctx: MdPrinterCtx
-  document: RenderedDocument
-  output: Buffer
-}
-
-export interface SessionEvents {
-  building: []
-  ready: [SessionBuild]
-  failed: [Error]
-}
+import type { MdPrinterCtx, MdPrinterFlags, SessionEvents, TemplateBundle } from '@interfaces'
 
 /**
  * Rebuilds the document whenever one of its inputs changes: the input file, template settings, translations, every module of the template bundle,

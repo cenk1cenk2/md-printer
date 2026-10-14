@@ -1,7 +1,7 @@
 ---
 dest: ./test/continuous.pdf
 template: default
-document_title: Continuous A4 Image Test
+documentTitle: Continuous A4 Image Test
 continuous: true
 ---
 

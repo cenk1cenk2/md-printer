@@ -7,20 +7,9 @@ import type { AddressInfo } from 'net'
 import { tmpdir } from 'os'
 import { join, relative, resolve } from 'path'
 
-import type { SessionBuild } from './session.service.js'
 import { mimeType } from '../template/assets.js'
 import { LoggerService } from '@cenk1cenk2/oclif-common'
-
-export interface PreviewOptions {
-  host: string
-  port: number
-}
-
-interface PreviewError {
-  message: string
-  frame?: string
-  file?: string
-}
+import type { PreviewError, PreviewOptions, SessionBuild } from '@interfaces'
 
 /**
  * Serves the live preview: a shell page with the HTML and the printed PDF side by side, updated over server-sent events after every build.

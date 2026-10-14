@@ -11,21 +11,14 @@ import { fileURLToPath } from 'url'
 import { inlineAssets } from './assets.js'
 import { sveltePlugin } from './svelte.plugin.js'
 import { FileSystemService } from '@cenk1cenk2/oclif-common'
-import { COMPONENTS_DIRECTORY, LEGACY_TEMPLATE_FILES, MARKDOWN_CONTEXT, RENDER_MODE_CONTEXT, RenderMode, TEMPLATE_DIRECTORY, TemplateFiles } from '@constants'
-import type { MdPrinterSettings, RenderedDocument, RenderedPart, TemplateBundle, TemplateContext, TemplateProps } from '@interfaces'
-
-export interface TemplateRenderOptions {
-  language: string
-  title?: string
-  fallbackTitle?: string
-  highlight: string
-}
+import { COMPONENTS_DIRECTORY, MARKDOWN_CONTEXT, RENDER_MODE_CONTEXT, RenderMode, TEMPLATE_DIRECTORY, TemplateFiles } from '@constants'
+import type { MdPrinterSettings, RenderedDocument, RenderedPart, TemplateBundle, TemplateContext, TemplateProps, TemplateRenderOptions, TemplateStylesheet } from '@interfaces'
 
 @Injectable()
 export class TemplateService {
   private static readonly ROOT = fileURLToPath(new URL('../../../', import.meta.url))
-  private static readonly COMPONENTS = fileURLToPath(new URL(`../../${COMPONENTS_DIRECTORY}/index.js`, import.meta.url))
-  private static readonly ENTRY = 'md-printer:entry'
+  private static readonly COMPONENTS = fileURLToPath(new URL(`../../${COMPONENTS_DIRECTORY}/index.ts`, import.meta.url))
+  private static readonly ENTRY = fileURLToPath(new URL('./render.entry.ts', import.meta.url))
 
   private readonly require = createRequire(TemplateService.ROOT)
 
@@ -36,12 +29,6 @@ export class TemplateService {
     const directory = isAbsolute(path) || path.startsWith('.') || /[\\/]/.test(path) ? resolve(path) : join(TemplateService.ROOT, TEMPLATE_DIRECTORY, path)
 
     if (!this.fs.exists(join(directory, TemplateFiles.TEMPLATE))) {
-      if (LEGACY_TEMPLATE_FILES.some((file) => this.fs.exists(join(directory, file)))) {
-        throw new Error(
-          `Template uses the md-printer 2.x format, which is no longer supported. Migrate it to ${TemplateFiles.TEMPLATE}, see the templates section of the README: ${directory}`
-        )
-      }
-
       throw new Error(`Template does not exist, expected ${TemplateFiles.TEMPLATE} in: ${directory}`)
     }
 
@@ -59,41 +46,28 @@ export class TemplateService {
   }
 
   public async bundle(directory: string): Promise<TemplateBundle> {
-    const entry = [
-      'import { render } from \'svelte/server\'',
-      `import Template from ${JSON.stringify(join(directory, TemplateFiles.TEMPLATE))}`,
-      'export default (props, mode, context) => render(Template, { props, context: new Map(context) })'
-    ].join('\n')
-
+    const stylesheets: TemplateStylesheet[] = []
     const build = await rolldown({
       input: TemplateService.ENTRY,
       platform: 'node',
       logLevel: 'silent',
       plugins: [
-        {
-          name: 'md-printer:entry',
-          resolveId: (id: string): string | null => (id === TemplateService.ENTRY ? id : null),
-          load: (id: string): string | null => (id === TemplateService.ENTRY ? entry : null)
-        },
-        sveltePlugin({ components: TemplateService.COMPONENTS, root: TemplateService.ROOT })
+        sveltePlugin({
+          template: join(directory, TemplateFiles.TEMPLATE),
+          components: TemplateService.COMPONENTS,
+          root: TemplateService.ROOT,
+          stylesheets
+        })
       ]
     })
 
     try {
-      const { output } = await build.generate({ format: 'esm', sourcemap: 'inline' })
-      const [chunk] = output
-      const { default: render } = await import(`data:text/javascript;base64,${Buffer.from(chunk.code).toString('base64')}`)
+      const { output: [chunk] } = await build.generate({ format: 'esm', sourcemap: 'inline' })
 
       return {
-        render: async(props: TemplateProps, mode: RenderMode, context: TemplateContext): Promise<RenderedPart> => {
-          const { head, body } = await render(props, mode, [
-            [RENDER_MODE_CONTEXT, mode],
-            [MARKDOWN_CONTEXT, context.markdown]
-          ])
-
-          return { head, body }
-        },
-        modules: chunk.moduleIds.filter((id) => isAbsolute(id))
+        entry: await import(`data:text/javascript;base64,${Buffer.from(chunk.code).toString('base64')}`),
+        modules: chunk.moduleIds.filter((id) => isAbsolute(id)),
+        stylesheets
       }
     } finally {
       await build.close()
@@ -101,53 +75,47 @@ export class TemplateService {
   }
 
   public async render(directory: string, bundle: TemplateBundle, props: TemplateProps, context: TemplateContext, options: TemplateRenderOptions): Promise<RenderedDocument> {
-    const [body, header, footer] = await Promise.all([RenderMode.BODY, RenderMode.HEADER, RenderMode.FOOTER].map((mode) => bundle.render(props, mode, context)))
+    const [body, header, footer] = await Promise.all(
+      [RenderMode.BODY, RenderMode.HEADER, RenderMode.FOOTER].map((mode) =>
+        bundle.entry.part(props, [
+          [RENDER_MODE_CONTEXT, mode],
+          [MARKDOWN_CONTEXT, context.markdown]
+        ])
+      )
+    )
 
     const dependencies: string[] = []
-    const css = await this.css(directory, [body, header, footer].map((part) => part.body).join(''), options.highlight, dependencies)
-    const styles = this.styles(body.head) + `<style>${css}</style>`
+    const css = `<style>${await this.css(directory, bundle, [body, header, footer].map((part) => part.body).join(''), options.highlight, dependencies)}</style>`
     const title = options.title ?? body.head.match(/<title>([\s\S]*?)<\/title>/)?.[1] ?? options.fallbackTitle
     const head = body.head.replace(/<title>[\s\S]*?<\/title>/, '')
+    const styles = [...head.matchAll(/<style[^>]*>[\s\S]*?<\/style>/g)].map(([style]) => style).join('') + css
 
     return {
       title,
-      html: [
-        '<!doctype html>',
-        `<html lang="${options.language}">`,
-        `<head><meta charset="utf-8">${title !== undefined ? `<title>${title}</title>` : ''}${head}<style>${css}</style></head>`,
-        `<body>${body.body}</body>`,
-        '</html>'
-      ].join(''),
-      header: await this.part(header, styles, directory),
-      footer: await this.part(footer, styles, directory),
+      html: bundle.entry.document({
+        lang: options.language,
+        title,
+        head: head + css,
+        body: body.body
+      }),
+      header: await this.margin(bundle, header, styles, directory),
+      footer: await this.margin(bundle, footer, styles, directory),
       dependencies
     }
   }
 
-  private async part(part: RenderedPart, styles: string, directory: string): Promise<string | undefined> {
+  private async margin(bundle: TemplateBundle, part: RenderedPart, styles: string, directory: string): Promise<string | undefined> {
     if (!part.body.replace(/<!--[\s\S]*?-->/g, '').trim()) {
       return undefined
     }
 
-    return inlineAssets(
-      `${styles}<div style="font-size: 10px; width: 100%; box-sizing: border-box; -webkit-print-color-adjust: exact; print-color-adjust: exact">${part.body}</div>`,
-      directory,
-      true
-    )
+    return inlineAssets(bundle.entry.margin({ styles, body: part.body }), directory, true)
   }
 
-  private styles(head: string): string {
-    return [...head.matchAll(/<style[^>]*>[\s\S]*?<\/style>/g)].map(([style]) => style).join('')
-  }
-
-  private async css(directory: string, html: string, highlight: string, dependencies: string[]): Promise<string> {
-    const file = join(directory, TemplateFiles.STYLE)
-    const theme = this.highlightTheme(highlight)
-    const source = `@import ${JSON.stringify(theme)};\n${this.fs.exists(file) ? await this.fs.read(file) : ''}`
-
-    const compiler = await compileTailwind(source, {
+  private async css(directory: string, bundle: TemplateBundle, html: string, highlight: string, dependencies: string[]): Promise<string> {
+    const compiler = await compileTailwind([`@import ${JSON.stringify(this.highlightTheme(highlight))};`, ...bundle.stylesheets.map(({ source }) => source)].join('\n'), {
       base: directory,
-      from: file,
+      from: bundle.stylesheets[0]?.file ?? join(directory, TemplateFiles.TEMPLATE),
       shouldRewriteUrls: true,
       onDependency: (path) => dependencies.push(path),
       customCssResolver: async(id, base) => this.resolveStylesheet(id, [base, directory, TemplateService.ROOT]),
@@ -174,9 +142,7 @@ export class TemplateService {
       ]
     })
 
-    const candidates = [...scanner.scan(), ...scanner.scanFiles([{ content: html, extension: 'html' }])]
-
-    return inlineAssets(compiler.build(candidates), directory)
+    return inlineAssets(compiler.build([...scanner.scan(), ...scanner.scanFiles([{ content: html, extension: 'html' }])]), directory)
   }
 
   /**
@@ -226,10 +192,8 @@ export class TemplateService {
   }
 
   private highlightTheme(name: string): string {
-    const theme = `highlight.js/styles/${name}.css`
-
     try {
-      return this.require.resolve(theme)
+      return this.require.resolve(`highlight.js/styles/${name}.css`)
     } catch {
       throw new Error(`Unknown highlight style "${name}", see the files in ${dirname(this.require.resolve('highlight.js/styles/github.css'))}.`)
     }

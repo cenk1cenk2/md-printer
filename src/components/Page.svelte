@@ -8,7 +8,7 @@
   /** @type {{ header?: import('svelte').Snippet, footer?: import('svelte').Snippet, children?: import('svelte').Snippet }} */
   let { header, footer, children } = $props()
 
-  const mode = getContext('md-printer:mode') ?? 'body'
+  const mode = getContext('md-printer:mode')
 </script>
 
 {#if mode === 'header'}

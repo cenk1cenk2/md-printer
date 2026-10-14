@@ -10,12 +10,12 @@ export interface MdPrinterI18nOptions {
 }
 
 export interface MdPrinterSettings {
-  pdf_options?: PDFOptions
+  pdfOptions?: PDFOptions
   i18n?: MdPrinterI18nOptions
   sign?: MdPrinterSignOptions
   continuous?: boolean
   media?: MediaType
-  highlight_style?: string
+  highlightStyle?: string
 }
 
 export interface MdPrinterOptions {

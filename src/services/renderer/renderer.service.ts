@@ -2,26 +2,12 @@
 import { Injectable } from '@nestjs/common'
 import { readFile } from 'fs/promises'
 import { relative, resolve } from 'path'
-import type { HTTPRequest, Page, PDFOptions } from 'puppeteer-core'
+import type { HTTPRequest, Page } from 'puppeteer-core'
 
 import { BrowserService } from './browser.service.js'
-import { pixels } from './units.js'
 import { mimeType } from '../template/assets.js'
 import { LoggerService } from '@cenk1cenk2/oclif-common'
-import type { MediaType } from '@constants'
-import type { RenderedDocument } from '@interfaces'
-
-export interface RendererOptions {
-  directory: string
-  pdf: PDFOptions
-  media: MediaType
-  continuous: boolean
-}
-
-export interface RendererResult {
-  pdf: Buffer
-  assets: string[]
-}
+import type { RenderedDocument, RendererOptions, RendererResult } from '@interfaces'
 
 @Injectable()
 export class RendererService {
@@ -114,20 +100,59 @@ export class RendererService {
   }
 
   private paginated(page: Page, rendered: RenderedDocument, options: RendererOptions): Promise<Uint8Array> {
-    const headerFooter = Boolean(rendered.header || rendered.footer)
-
     return page.pdf({
       ...options.pdf,
-      displayHeaderFooter: options.pdf.displayHeaderFooter ?? headerFooter,
+      displayHeaderFooter: options.pdf.displayHeaderFooter ?? Boolean(rendered.header || rendered.footer),
       headerTemplate: rendered.header ?? '<span></span>',
       footerTemplate: rendered.footer ?? '<span></span>'
     })
   }
 
+  /**
+   * Prints everything as one tall page. Chrome itself resolves the paper size (from a one page probe print) and the margins (as CSS lengths),
+   * so md-printer never has to know paper formats or length units.
+   */
   private async continuous(page: Page, options: RendererOptions): Promise<Uint8Array> {
-    const { width, margin } = pixels(options.pdf)
+    const [, points] = Buffer.from(
+      await page.pdf({
+        ...options.pdf,
+        displayHeaderFooter: false,
+        pageRanges: '1'
+      })
+    )
+      .toString('latin1')
+      .match(/\/MediaBox\s*\[\s*[\d.]+\s+[\d.]+\s+([\d.]+)/)
+    const width = Math.round((Number(points) * 96) / 72)
+    const margin = await page.evaluate(
+      (lengths) => {
+        const probe = document.createElement('div')
 
-    await page.setViewport({ width: Math.ceil(Math.max(width - margin.left - margin.right, 1)), height: 800 })
+        probe.style.position = 'absolute'
+        probe.style.visibility = 'hidden'
+        Object.assign(probe.style, {
+          marginTop: lengths?.top,
+          marginRight: lengths?.right,
+          marginBottom: lengths?.bottom,
+          marginLeft: lengths?.left
+        })
+        document.body.append(probe)
+
+        const style = getComputedStyle(probe)
+        const resolved = {
+          top: parseFloat(style.marginTop),
+          right: parseFloat(style.marginRight),
+          bottom: parseFloat(style.marginBottom),
+          left: parseFloat(style.marginLeft)
+        }
+
+        probe.remove()
+
+        return resolved
+      },
+      options.pdf.margin as Record<string, string>
+    )
+
+    await page.setViewport({ width: Math.max(Math.round(width - margin.left - margin.right), 1), height: 800 })
 
     const height = await page.evaluate(async() => {
       await document.fonts.ready
@@ -150,14 +175,13 @@ export class RendererService {
       return page.pdf({ ...options.pdf, displayHeaderFooter: false })
     }
 
-    const pdf = { ...options.pdf }
+    const pdf = { ...options.pdf, displayHeaderFooter: false }
 
     delete pdf.format
     delete pdf.landscape
 
     return page.pdf({
       ...pdf,
-      displayHeaderFooter: false,
       width: `${width}px`,
       height: `${total}px`,
       pageRanges: '1'

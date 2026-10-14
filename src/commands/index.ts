@@ -1,12 +1,12 @@
-import { mkdir, rename, writeFile } from 'fs/promises'
-import { dirname } from 'path'
+import { mkdir, mkdtemp, rename, rm, writeFile } from 'fs/promises'
+import { basename, dirname, join } from 'path'
 import { text } from 'stream/consumers'
 
-import type { DynamicModule, RegisterHook, ShouldRunBeforeHook } from '@cenk1cenk2/oclif-common'
-import { Args, Command, Flags, JsonParser, ParserService, YamlParser } from '@cenk1cenk2/oclif-common'
+import type { CliModuleOptions, DynamicModule, RegisterHook, ShouldRunBeforeHook } from '@cenk1cenk2/oclif-common'
+import { Args, CliModule, Command, Flags, JsonParser, ParserService, YamlParser } from '@cenk1cenk2/oclif-common'
 import { InputFileType, OutputFileType } from '@constants'
 import type { MdPrinterCtx, MdPrinterFlags } from '@interfaces'
-import { BrowserService, PreviewService, PrinterModule, PrinterService, SessionService } from '@services'
+import { BrowserService, PreviewService, PrinterModule, PrinterService, ProcessService, SessionService } from '@services'
 
 export default class MDPrinter extends Command<typeof MDPrinter> implements RegisterHook, ShouldRunBeforeHook {
   static description = 'Renders a markdown or yaml file through a Svelte template into a PDF or HTML document.'
@@ -55,9 +55,6 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
     }),
     preview: Flags.boolean({
       char: 'p',
-      aliases: ['dev'],
-      charAliases: ['d'],
-      deprecateAliases: true,
       description: 'Open a live preview of the HTML and the PDF in the browser. Combine with --watch to also write the output.'
     }),
     host: Flags.string({
@@ -99,11 +96,13 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
   private printer: PrinterService
   private browser: BrowserService
 
-  public register(cli: DynamicModule): DynamicModule {
-    return {
-      ...cli,
-      imports: [...(cli.imports ?? []), PrinterModule]
-    }
+  public register(_cli: DynamicModule, options: CliModuleOptions): DynamicModule {
+    // stdout carries the document with --stdout, so the logs and the logo go to stderr
+    const cli = CliModule.forRoot({ ...options, logger: { stderr: true } })
+
+    cli.imports.push(PrinterModule.forRoot({ browser: this.flags.browser }))
+
+    return cli
   }
 
   public async shouldRunBefore(): Promise<void> {
@@ -111,7 +110,6 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
 
     this.printer = this.app.get(PrinterService)
     this.browser = this.app.get(BrowserService)
-    this.browser.use(this.flags.browser)
   }
 
   public async run(): Promise<void> {
@@ -197,13 +195,7 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
       this.logger.warn('Signing is skipped while watching or previewing, run without --watch and --preview to sign the document.')
     }
 
-    const stopped = new Promise<void>((done) => {
-      // replace the default handler, which exits before the browser, the server and the watcher are closed
-      process.removeAllListeners('SIGINT')
-      process.removeAllListeners('SIGTERM')
-      process.once('SIGINT', () => done())
-      process.once('SIGTERM', () => done())
-    })
+    const stopped = this.app.get(ProcessService).terminated()
 
     await session.start(flags)
 
@@ -235,11 +227,16 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
 
     await mkdir(dirname(dest), { recursive: true })
 
-    // rename into place so PDF viewers reloading on change never read a half-written file
-    const temporary = `${dest}.${process.pid}.tmp`
+    // write next to the destination and rename into place, so PDF viewers reloading on change never read a half-written file;
+    // the temporary directory stays on the same filesystem, a rename from os.tmpdir() can cross mounts and fail
+    const temporary = await mkdtemp(join(dirname(dest), '.md-printer-'))
 
-    await writeFile(temporary, content)
-    await rename(temporary, dest)
+    try {
+      await writeFile(join(temporary, basename(dest)), content)
+      await rename(join(temporary, basename(dest)), dest)
+    } finally {
+      await rm(temporary, { recursive: true, force: true })
+    }
 
     this.logger.info('Written: %s', dest)
   }

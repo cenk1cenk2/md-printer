@@ -28,14 +28,14 @@ export class I18nService {
   }
 
   private async resources(directory: string): Promise<Resource> {
-    const files = (await this.fs.extra.readdir(directory)).filter((file) => I18N_ACCEPTED_TYPES.includes(extname(file)))
-
     const resources: Resource = {}
 
     await Promise.all(
-      files.map(async(file) => {
-        resources[basename(file, extname(file))] = { translation: await this.cs.read(join(directory, file)) }
-      })
+      (await this.fs.extra.readdir(directory))
+        .filter((file) => I18N_ACCEPTED_TYPES.includes(extname(file)))
+        .map(async(file) => {
+          resources[basename(file, extname(file))] = { translation: await this.cs.read(join(directory, file)) }
+        })
     )
 
     return resources

@@ -1,12 +1,12 @@
 import { Injectable } from '@nestjs/common'
 import { default as graymatter } from 'gray-matter'
 import { basename, dirname, extname, join, resolve } from 'path'
+import type { PDFOptions } from 'puppeteer-core'
 import { parse as parseYaml } from 'yaml'
 
 import { I18nService } from './i18n.service.js'
 import { MarkdownService } from './markdown.service.js'
 import { RendererService } from './renderer/renderer.service.js'
-import { normalizeMargin } from './renderer/units.js'
 import { SignatureService } from './signature/signature.service.js'
 import { inlineAssets } from './template/assets.js'
 import { TemplateService } from './template/template.service.js'
@@ -83,15 +83,11 @@ export class PrinterService {
     const { data } = input
     const template = this.template.resolve(flags.template ?? data.template ?? DEFAULT_TEMPLATE)
     const settings = await this.template.settings(template)
-    const output = (flags.outputFiletype ?? data['output-filetype'] ?? OutputFileType.PDF) as OutputFileType
+    const output = (flags.outputFiletype ?? data.outputFiletype ?? OutputFileType.PDF) as OutputFileType
 
     if (!Object.values(OutputFileType).includes(output)) {
       throw new Error(`Output file type is not supported: ${output}, use one of ${Object.values(OutputFileType).join(', ')}.`)
     }
-
-    const pdf = merge(MergeStrategy.EXTEND, {}, DEFAULT_PDF_OPTIONS, settings.pdf_options ?? {}, data.pdf_options ?? {})
-
-    pdf.margin = normalizeMargin(pdf.margin)
 
     const dest = flags.stdout ? undefined : (flags.output ?? data.dest ?? (input.file ? `${basename(input.file, extname(input.file))}.${output}` : undefined))
 
@@ -99,12 +95,12 @@ export class PrinterService {
       template,
       output,
       dest: dest && resolve(dest),
-      title: flags.title ?? data.document_title,
+      title: flags.title ?? data.documentTitle,
       language: flags.language ?? data.language ?? settings.i18n?.language ?? DEFAULT_LANGUAGE,
       continuous: flags.continuous || data.continuous === true || settings.continuous === true,
       media: (settings.media ?? MediaType.SCREEN) as MediaType,
-      highlight: settings.highlight_style ?? DEFAULT_HIGHLIGHT_STYLE,
-      pdf,
+      highlight: settings.highlightStyle ?? DEFAULT_HIGHLIGHT_STYLE,
+      pdf: this.pdfOptions(settings.pdfOptions, data.pdfOptions),
       i18n: settings.i18n ?? {},
       sign: this.signOptions(flags, settings.sign, data.sign)
     }
@@ -135,15 +131,13 @@ export class PrinterService {
 
   public async document(ctx: MdPrinterCtx, bundle: TemplateBundle): Promise<RenderedDocument> {
     const { input, options } = ctx
-    const t = await this.i18n.load(join(options.template, I18N_DIRECTORY), { ...options.i18n, language: options.language })
-
     const document = await this.template.render(
       options.template,
       bundle,
       {
         data: input.data,
         content: this.markdown.render(input.content),
-        t,
+        t: await this.i18n.load(join(options.template, I18N_DIRECTORY), { ...options.i18n, language: options.language }),
         language: options.language,
         signature: ctx.signature
       },
@@ -191,5 +185,23 @@ export class PrinterService {
       ...(flags.signProvider ? { provider: flags.signProvider } : {}),
       ...(flags.signCertificate ? { certificate: flags.signCertificate } : {})
     }
+  }
+
+  private pdfOptions(...sources: PDFOptions[]): PDFOptions {
+    const pdf = merge<PDFOptions>(MergeStrategy.EXTEND, {}, DEFAULT_PDF_OPTIONS, ...sources.map((source) => source ?? {}))
+
+    // Puppeteer only takes margin objects, settings and front-matter may use the CSS shorthand
+    if (typeof pdf.margin === 'string') {
+      const [top, right = top, bottom = top, left = right] = (pdf.margin as string).trim().split(/\s+/)
+
+      pdf.margin = {
+        top,
+        right,
+        bottom,
+        left
+      }
+    }
+
+    return pdf
   }
 }

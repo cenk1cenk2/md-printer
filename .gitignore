@@ -92,3 +92,4 @@ dist/
 oclif.manifest.json
 
 test/*.pdf
+.apk-cache/

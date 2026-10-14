@@ -2,7 +2,6 @@ import type { PDFOptions } from 'puppeteer-core'
 
 export enum TemplateFiles {
   TEMPLATE = 'Template.svelte',
-  STYLE = 'style.css',
   SETTINGS = 'settings.json'
 }
 
@@ -21,9 +20,13 @@ export const TEMPLATE_DIRECTORY = 'templates'
 
 export const COMPONENTS_DIRECTORY = 'components'
 
-export const COMPONENTS_SPECIFIERS = ['@cenk1cenk2/md-printer/components', 'md-printer/components']
+export const COMPONENTS_SPECIFIER = '@cenk1cenk2/md-printer/components'
 
-export const LEGACY_TEMPLATE_FILES = ['template.html.j2', 'main.css', 'header.html', 'footer.html', 'tailwind.css']
+export const TEMPLATE_SPECIFIER = 'md-printer:template'
+
+export const TAILWIND_STYLE_LANG = 'postcss'
+
+export const PRINTER_MODULE_OPTIONS = Symbol('md-printer:options')
 
 export const RENDER_MODE_CONTEXT = 'md-printer:mode'
 
