@@ -109,17 +109,15 @@ pdfOptions:
 
 ```sh
 md-printer document.md --preview
-md-printer document.md out.pdf --watch
-md-printer document.md out.pdf --watch --preview
+md-printer document.md out.pdf --preview --no-open
 ```
 
-- `-p, --preview` starts a local preview server and opens it in an app window of the discovered browser, using a throwaway profile. The page has HTML, Split and PDF tabs. Build errors, such as Svelte compile errors, are shown in an overlay and cleared by the next successful build. Closing the window ends the session, as does Ctrl+C.
-  - `--host` sets the host, default `127.0.0.1`.
+- `-p, --preview` rebuilds when the input file, the template (components, imports, `settings.json`, translations) or a local asset used by the page changes. Every build rewrites the output file, the same one a normal run writes; reading from stdin without an output argument only previews. `-O` is not supported.
+- It starts a local preview server and opens it in an app window of the discovered browser, using a throwaway profile. The page has HTML, Split and PDF tabs. Build errors, such as Svelte compile errors, are shown in an overlay and cleared by the next successful build. Closing the window ends the session, as does Ctrl+C.
+  - `--host` sets the loopback host, default `127.0.0.1`.
   - `--port` sets the port, default `0` (random).
-  - `--no-open` only prints the URL, so you can open it yourself.
-- `-w, --watch` rebuilds when the input file, the template (components, imports, `settings.json`, translations) or a local asset used by the page changes, and rewrites the output file. Without `--preview` it keeps running until Ctrl+C. An output file is required, so `-O` is not supported.
-- `--preview` alone does not write any file.
-- Signing is skipped in both modes. Run without `--watch` and `--preview` to sign.
+  - `--no-open` does not open a window: md-printer keeps rebuilding and writing until Ctrl+C, and the printed URL can be opened by hand.
+- Signing is skipped while previewing. Run without `--preview` to sign.
 
 ## Templates
 
@@ -220,7 +218,7 @@ md-printer invoice.yaml -t invoice --sign --sign-certificate ~/id-austria.pem
 
 - `--sign` enables signing. `--sign-provider` selects the provider, `a-trust` is the only one and the default. `--sign-certificate` is a DER or PEM file of your signer certificate.
 - The same keys can be set as `sign` in front-matter or `settings.json`: `enabled`, `provider`, `certificate`, `reason`, `location`, `contact`. Flags win. `reason`, `location` and `contact` are stored in the signature.
-- Signing only works for PDF output and is skipped with `--watch` and `--preview`.
+- Signing only works for PDF output and is skipped with `--preview`.
 - The signing session has to run in your browser. md-printer opens a link to a temporary local page, you log in with ID Austria in the A-Trust page, and paste the resulting signature (starts with `MII`) back into the local page. It waits until the signature arrives, press Ctrl+C to abort.
 - With a certificate, the signer name, issuer and serial are passed to the template as `signature`, so `SignatureBlock` can show who signed and when. The certificate must be valid at signing time, and the returned signature is rejected if it was not made with it. Without a certificate only the date is available.
 - Verify the result at https://www.signaturpruefung.gv.at.
@@ -234,7 +232,7 @@ md-printer invoice.yaml -t invoice --sign --sign-certificate ~/id-austria.pem
 - Assets resolve relative to the input file directory instead of the current directory.
 - Continuous mode has no header and footer.
 - `puppeteer` is replaced by `puppeteer-core`, there is no bundled Chrome, a local Chromium-based browser is required.
-- `--dev` is replaced by `--preview`.
+- `--dev` is replaced by `--preview`, which also rebuilds and rewrites the output on every change; there is no separate `--watch`.
 - The default highlight theme is `atom-one-dark`.
 - Files with an unknown extension are read as markdown, as before; `-f` still forces a type.
 - The update notifier and the did-you-mean suggestion for mistyped commands are removed, md-printer is a single command.
@@ -248,7 +246,7 @@ USAGE
   $ md-printer  [FILE] [OUTPUT] [--log-level
     silent|direct|fatal|error|warn|info|verbose|debug|trace] [-I] [-f
     md|yaml|yml] [-F pdf|html] [-O] [-t <value>] [-T <value>] [-l <value>] [-b
-    <value>] [--continuous] [-w] [-p] [--host 127.0.0.1|localhost|::1] [--port
+    <value>] [--continuous] [-p] [--host 127.0.0.1|localhost|::1] [--port
     <value>] [--open] [--sign] [--sign-provider <value>] [--sign-certificate
     <value>]
 
@@ -274,21 +272,21 @@ FLAGS
   -l, --language=<value>          Language for template translations. Overwrites
                                   the one defined in front-matter and template
                                   settings.
-  -p, --preview                   Open a live preview of the HTML and the PDF in
-                                  the browser. Combine with --watch to also
-                                  write the output.
+  -p, --preview                   Rebuild whenever the input, the template or
+                                  its assets change, show the HTML and the PDF
+                                  in a live preview and rewrite the output file
+                                  when there is one.
   -t, --template=<value>          Built-in template name or path to a template
                                   directory, defaults to "default". Overwrites
                                   the one defined in front-matter.
-  -w, --watch                     Rebuild and write the output whenever the
-                                  input, the template or its assets change.
       --continuous                Render the PDF as a single continuous page
                                   without page breaks.
       --host=<option>             [default: 127.0.0.1] Loopback host for the
                                   preview server, it serves the files next to
                                   the input and is never exposed to the network.
                                   <options: 127.0.0.1|localhost|::1>
-      --[no-]open                 Open the preview window.
+      --[no-]open                 Open the preview window, --no-open keeps
+                                  rebuilding and writing without one.
       --port=<value>              Port for the preview server, random when 0.
       --sign                      Sign the PDF with a qualified electronic
                                   signature through ID Austria (A-Trust).

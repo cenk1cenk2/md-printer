@@ -49,13 +49,9 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
     continuous: Flags.boolean({
       description: 'Render the PDF as a single continuous page without page breaks.'
     }),
-    watch: Flags.boolean({
-      char: 'w',
-      description: 'Rebuild and write the output whenever the input, the template or its assets change.'
-    }),
     preview: Flags.boolean({
       char: 'p',
-      description: 'Open a live preview of the HTML and the PDF in the browser. Combine with --watch to also write the output.'
+      description: 'Rebuild whenever the input, the template or its assets change, show the HTML and the PDF in a live preview and rewrite the output file when there is one.'
     }),
     host: Flags.string({
       description: 'Loopback host for the preview server, it serves the files next to the input and is never exposed to the network.',
@@ -67,7 +63,7 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
       default: 0
     }),
     open: Flags.boolean({
-      description: 'Open the preview window.',
+      description: 'Open the preview window, --no-open keeps rebuilding and writing without one.',
       default: true,
       allowNo: true
     }),
@@ -131,7 +127,7 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
       signCertificate: this.flags['sign-certificate']
     }
 
-    if (this.flags.watch || this.flags.preview) {
+    if (this.flags.preview) {
       await this.session(flags)
     } else {
       await this.print(flags)
@@ -160,30 +156,24 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
 
   private async session(flags: MdPrinterFlags): Promise<void> {
     if (flags.stdout) {
-      throw new Error('Writing to stdout is not supported with --watch or --preview.')
+      throw new Error('Writing to stdout is not supported with --preview.')
     }
 
     const session = this.app.get(SessionService)
-    const preview = this.flags.preview ? this.app.get(PreviewService) : undefined
+    const preview = this.app.get(PreviewService)
     let writes = Promise.resolve()
 
-    session.on('building', () => preview?.building())
+    session.on('building', () => preview.building())
     session.on('failed', (err) => {
       this.logger.error(err.message)
 
-      preview?.failed(err)
+      preview.failed(err)
     })
     session.on('ready', async(build) => {
-      preview?.ready(build)
-
-      if (!this.flags.watch) {
-        this.logger.info('Rebuilt in %dms.', build.ms)
-
-        return
-      }
+      preview.ready(build)
 
       if (!build.ctx.options.dest) {
-        this.logger.warn('No output file to write, pass an output argument or set dest in front-matter.')
+        this.logger.info('Rebuilt in %dms.', build.ms)
 
         return
       }
@@ -197,7 +187,7 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
     })
 
     if (flags.sign) {
-      this.logger.warn('Signing is skipped while watching or previewing, run without --watch and --preview to sign the document.')
+      this.logger.warn('Signing is skipped while previewing, run without --preview to sign the document.')
     }
 
     // the default handlers exit immediately, which would skip closing the browser, the preview server and the watcher
@@ -211,19 +201,13 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
 
     await session.start(flags)
 
-    if (preview) {
-      const url = await preview.listen({ host: this.flags.host, port: this.flags.port })
+    const url = await preview.listen({ host: this.flags.host, port: this.flags.port })
 
-      this.logger.info('Preview is running at: %s', url)
+    this.logger.info('Preview is running at %s, press Ctrl+C to stop.', url)
 
-      await Promise.race([stopped, this.flags.open ? preview.open(this.browser.executable(), url) : new Promise<never>(() => undefined)])
+    await Promise.race([stopped, this.flags.open ? preview.open(this.browser.executable(), url) : new Promise<never>(() => undefined)])
 
-      await preview.close()
-    } else {
-      this.logger.info('Watching for changes, press Ctrl+C to stop.')
-
-      await stopped
-    }
+    await preview.close()
 
     await session.stop()
   }
