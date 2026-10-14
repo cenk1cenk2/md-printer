@@ -2,6 +2,7 @@
 stages:
   - install
   - build
+  - test
   - publish
 
 variables:
@@ -30,6 +31,13 @@ lint:
   extends:
     - .node-lint
 
+typecheck:
+  stage: build
+  extends:
+    - .node-lint
+  variables:
+    NODE_LINT_COMMAND: typecheck
+
 build:
   stage: build
   extends:
@@ -38,7 +46,19 @@ build:
     paths:
       - dist/
       - oclif.manifest.json
-      - templates/*/main.css
+
+test:
+  stage: test
+  extends:
+    - .node-lint
+  needs:
+    - install
+    - build
+  variables:
+    NODE_LINT_COMMAND: test
+    CHROME_PATH: /usr/bin/chromium-browser
+  before_script:
+    - apk add --no-cache chromium font-noto
 
 semantic-release:
   stage: publish
