@@ -4,7 +4,6 @@ import { Module } from '@nestjs/common'
 import { I18nService } from './i18n.service.js'
 import { MarkdownService } from './markdown.service.js'
 import { PrinterService } from './printer.service.js'
-import { ProcessService } from './process.service.js'
 import { BrowserService } from './renderer/browser.service.js'
 import { RendererService } from './renderer/renderer.service.js'
 import { PreviewService } from './session/preview.service.js'
@@ -30,7 +29,6 @@ export class PrinterModule {
         ATrustAdapter,
         SignatureService,
         PrinterService,
-        ProcessService,
         SessionService,
         PreviewService
       ]

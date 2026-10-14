@@ -6,7 +6,7 @@ import type { CliModuleOptions, DynamicModule, RegisterHook, ShouldRunBeforeHook
 import { Args, CliModule, Command, Flags, JsonParser, ParserService, YamlParser } from '@cenk1cenk2/oclif-common'
 import { InputFileType, OutputFileType } from '@constants'
 import type { MdPrinterCtx, MdPrinterFlags } from '@interfaces'
-import { BrowserService, PreviewService, PrinterModule, PrinterService, ProcessService, SessionService } from '@services'
+import { BrowserService, PreviewService, PrinterModule, PrinterService, SessionService } from '@services'
 
 export default class MDPrinter extends Command<typeof MDPrinter> implements RegisterHook, ShouldRunBeforeHook {
   static description = 'Renders a markdown or yaml file through a Svelte template into a PDF or HTML document.'
@@ -195,7 +195,14 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
       this.logger.warn('Signing is skipped while watching or previewing, run without --watch and --preview to sign the document.')
     }
 
-    const stopped = this.app.get(ProcessService).terminated()
+    // the default handlers exit immediately, which would skip closing the browser, the preview server and the watcher
+    process.removeAllListeners('SIGINT')
+    process.removeAllListeners('SIGTERM')
+
+    const stopped = new Promise<void>((resolve) => {
+      process.once('SIGINT', () => resolve())
+      process.once('SIGTERM', () => resolve())
+    })
 
     await session.start(flags)
 
