@@ -1,12 +1,10 @@
 /// <reference lib="dom" />
 import { Injectable } from '@nestjs/common'
 import { readFile } from 'fs/promises'
-import { homedir } from 'os'
 import { relative, resolve } from 'path'
-import type { Browser, HTTPRequest, Page, PDFOptions } from 'puppeteer-core'
-import puppeteer from 'puppeteer-core'
+import type { HTTPRequest, Page, PDFOptions } from 'puppeteer-core'
 
-import { discoverBrowser, isExecutable } from './browser.js'
+import { BrowserService } from './browser.service.js'
 import { pixels } from './units.js'
 import { mimeType } from '../template/assets.js'
 import { LoggerService } from '@cenk1cenk2/oclif-common'
@@ -31,61 +29,15 @@ export class RendererService {
   private static readonly DOCUMENT = '/__document.html'
   private static readonly MAX_CONTINUOUS_HEIGHT = 80_000
 
-  private browser?: Promise<Browser>
-  private explicit?: string
-
-  constructor(private readonly logger: LoggerService) {
+  constructor(
+    private readonly logger: LoggerService,
+    private readonly browser: BrowserService
+  ) {
     this.logger.setup(this.constructor.name)
   }
 
-  public use(explicit?: string): void {
-    this.explicit = explicit
-  }
-
-  public executable(): string {
-    return discoverBrowser(this.explicit, {
-      platform: process.platform,
-      env: process.env,
-      home: homedir(),
-      executable: isExecutable
-    })
-  }
-
-  public launch(): Promise<Browser> {
-    this.browser ??= (async(): Promise<Browser> => {
-      const executablePath = this.executable()
-
-      this.logger.debug('Launching browser: %s', executablePath)
-
-      // Chromium refuses to start its sandbox as root, which is the default in CI containers
-      const args = process.getuid?.() === 0 || process.env.CI ? ['--no-sandbox'] : []
-      const browser = await puppeteer.launch({ executablePath, args })
-
-      browser.on('disconnected', () => {
-        this.browser = undefined
-      })
-
-      return browser
-    })().catch((err) => {
-      this.browser = undefined
-
-      throw err
-    })
-
-    return this.browser
-  }
-
-  public async close(): Promise<void> {
-    const browser = await this.browser?.catch((): undefined => undefined)
-
-    this.browser = undefined
-
-    await browser?.close()
-  }
-
   public async render(rendered: RenderedDocument, options: RendererOptions): Promise<RendererResult> {
-    const browser = await this.launch()
-    const page = await browser.newPage()
+    const page = await (await this.browser.get()).newPage()
 
     try {
       const assets = await this.load(page, rendered, options)

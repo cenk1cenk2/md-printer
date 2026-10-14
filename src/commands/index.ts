@@ -6,7 +6,7 @@ import type { DynamicModule, RegisterHook, ShouldRunBeforeHook } from '@cenk1cen
 import { Args, Command, Flags, JsonParser, ParserService, YamlParser } from '@cenk1cenk2/oclif-common'
 import { InputFileType, OutputFileType } from '@constants'
 import type { MdPrinterCtx, MdPrinterFlags } from '@interfaces'
-import { ATrustAdapter, I18nService, MarkdownService, PreviewService, PrinterService, RendererService, SessionService, SignatureService, TemplateService } from '@services'
+import { BrowserService, PreviewService, PrinterModule, PrinterService, SessionService } from '@services'
 
 export default class MDPrinter extends Command<typeof MDPrinter> implements RegisterHook, ShouldRunBeforeHook {
   static description = 'Renders a markdown or yaml file through a Svelte template into a PDF or HTML document.'
@@ -97,23 +97,12 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
   }
 
   private printer: PrinterService
-  private renderer: RendererService
+  private browser: BrowserService
 
   public register(cli: DynamicModule): DynamicModule {
     return {
       ...cli,
-      providers: [
-        ...(cli.providers ?? []),
-        I18nService,
-        MarkdownService,
-        TemplateService,
-        RendererService,
-        ATrustAdapter,
-        SignatureService,
-        PrinterService,
-        SessionService,
-        PreviewService
-      ]
+      imports: [...(cli.imports ?? []), PrinterModule]
     }
   }
 
@@ -121,8 +110,8 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
     await this.app.get(ParserService).register(JsonParser, YamlParser)
 
     this.printer = this.app.get(PrinterService)
-    this.renderer = this.app.get(RendererService)
-    this.renderer.use(this.flags.browser)
+    this.browser = this.app.get(BrowserService)
+    this.browser.use(this.flags.browser)
   }
 
   public async run(): Promise<void> {
@@ -143,14 +132,10 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
       signCertificate: this.flags['sign-certificate']
     }
 
-    try {
-      if (this.flags.watch || this.flags.preview) {
-        await this.session(flags)
-      } else {
-        await this.print(flags)
-      }
-    } finally {
-      await this.renderer.close()
+    if (this.flags.watch || this.flags.preview) {
+      await this.session(flags)
+    } else {
+      await this.print(flags)
     }
   }
 
@@ -227,7 +212,7 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
 
       this.logger.info('Preview is running at: %s', url)
 
-      await Promise.race([stopped, this.flags.open ? preview.open(this.renderer.executable(), url) : new Promise<never>(() => undefined)])
+      await Promise.race([stopped, this.flags.open ? preview.open(this.browser.executable(), url) : new Promise<never>(() => undefined)])
 
       await preview.close()
     } else {
