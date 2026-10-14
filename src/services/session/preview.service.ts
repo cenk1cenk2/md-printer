@@ -13,6 +13,7 @@ import serveStatic from 'serve-static'
 import { fileURLToPath } from 'url'
 
 import { isLoopbackRequest } from '../loopback.js'
+import { resolveConfined } from '../template/assets.js'
 import { TemplateService } from '../template/template.service.js'
 import { LoggerService } from '@cenk1cenk2/oclif-common'
 import { OutputFileType } from '@constants'
@@ -182,7 +183,7 @@ export class PreviewService implements OnModuleDestroy {
     }
   }
 
-  private asset(req: IncomingMessage, res: ServerResponse): void {
+  private async asset(req: IncomingMessage, res: ServerResponse): Promise<void> {
     const reject = (status = 404): void => {
       res.writeHead(status)
       res.end()
@@ -192,7 +193,16 @@ export class PreviewService implements OnModuleDestroy {
       return reject()
     }
 
-    serveStatic(this.build.ctx.input.directory, {
+    const base = this.build.ctx.input.directory
+    const url = URL.parse(req.url, 'file:///')
+    const path = url && join(base, fileURLToPath(url))
+
+    // serve-static follows symlinks, so a link pointing outside the directory is refused before it gets the request
+    if (!path || !(await resolveConfined(path, base))) {
+      return reject()
+    }
+
+    serveStatic(base, {
       dotfiles: 'ignore',
       index: false,
       fallthrough: false,

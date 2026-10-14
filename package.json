@@ -45,7 +45,7 @@
     "topicSeparator": " "
   },
   "engines": {
-    "node": ">=24.0.0"
+    "node": ">=24.15.0"
   },
   "keywords": [
     "markdown",
@@ -108,7 +108,7 @@
     "vfile": "^6.0.3",
     "vfile-matter": "^5.0.1",
     "which": "^7.0.0",
-    "write-file-atomic": "^7.0.1",
+    "write-file-atomic": "^8.0.0",
     "yaml": "^2.9.1"
   },
   "devDependencies": {

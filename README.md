@@ -10,7 +10,7 @@ npm i -g @cenk1cenk2/md-printer
 
 ### Requirements
 
-- Node.js >= 24.
+- Node.js >= 24.15.
 - A Chromium-based browser. md-printer uses `puppeteer-core` and never downloads one.
 
 The browser executable is resolved in this order:

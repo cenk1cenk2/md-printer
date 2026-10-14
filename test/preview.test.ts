@@ -1,4 +1,4 @@
-import { mkdir, mkdtemp, rm, writeFile } from 'fs/promises'
+import { mkdir, mkdtemp, rm, symlink, writeFile } from 'fs/promises'
 import { request } from 'http'
 import { tmpdir } from 'os'
 import { join } from 'path'
@@ -44,6 +44,7 @@ describe('PreviewService', () => {
     await writeFile(join(directory, 'document', 'image.png'), 'image')
     await writeFile(join(directory, 'document', '.env'), 'SECRET=1')
     await writeFile(join(directory, 'outside.png'), 'outside')
+    await symlink(join(directory, 'outside.png'), join(directory, 'document', 'link.png'))
 
     preview = new PreviewService(logger, template)
     url = new URL(await preview.listen({ host: '127.0.0.1', port: 0 }))
@@ -64,7 +65,7 @@ describe('PreviewService', () => {
     expect(await status('/image.png')).toBe(200)
   })
 
-  it.each(['/.env', '/../outside.png', '/%2e%2e/outside.png'])('refuses %s', async(path) => {
+  it.each(['/.env', '/../outside.png', '/%2e%2e/outside.png', '/link.png'])('refuses %s', async(path) => {
     expect(await status(path)).toBeGreaterThanOrEqual(400)
   })
 
