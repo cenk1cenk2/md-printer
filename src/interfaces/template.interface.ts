@@ -77,3 +77,8 @@ export interface CompiledModule {
   module: any
   modules: string[]
 }
+
+export interface MarkdownDocument {
+  content: string
+  data: Record<string, any>
+}

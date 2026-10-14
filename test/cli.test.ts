@@ -134,4 +134,17 @@ describe('md-printer', () => {
 
     expect(pages(await run(['--stdin', '-O', '-t', template], '# Pages\n'))).toBe(2)
   })
+
+  it('breaks pages at ::pagebreak, inside flex layouts and in continuous mode', async() => {
+    const markdown = '# One\n\n::pagebreak\n\n<div style="display: flex"><div>left</div><div class="page-break"></div><div>right</div></div>\n'
+
+    expect(pages(await run(['--stdin', '-O'], markdown))).toBe(3)
+    expect(pages(await run(['--stdin', '-O', '--continuous'], markdown))).toBe(3)
+  })
+
+  it('keeps text that only looks like a directive', async() => {
+    const html = (await run(['--stdin', '-O', '-F', 'html'], 'Meet at 10:30am, note:here.\n')).toString()
+
+    expect(html).toContain('Meet at 10:30am, note:here.')
+  })
 })

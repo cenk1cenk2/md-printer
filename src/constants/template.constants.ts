@@ -33,6 +33,8 @@ export enum ContextKey {
 
 export const TAILWIND_STYLE_LANG = 'postcss'
 
+export const PAGE_BREAK_CLASS = 'page-break'
+
 export const PRINTER_MODULE_OPTIONS = Symbol('md-printer:options')
 
 export const I18N_ACCEPTED_TYPES = ['.yaml', '.yml', '.json']

@@ -7,12 +7,14 @@ import type { HTTPRequest, Page } from 'puppeteer-core'
 import { BrowserService } from './browser.service.js'
 import { mimeType } from '../template/assets.js'
 import { LoggerService } from '@cenk1cenk2/oclif-common'
+import { PAGE_BREAK_CLASS } from '@constants'
 import type { RenderedDocument, RendererOptions, RendererResult } from '@interfaces'
 
 @Injectable()
 export class RendererService {
   private static readonly ORIGIN = 'http://md-printer.local'
   private static readonly DOCUMENT = '/__document.html'
+  private static readonly SECTION = 'data-md-printer-section'
 
   constructor(
     private readonly logger: LoggerService,
@@ -26,7 +28,8 @@ export class RendererService {
 
     try {
       const assets = await this.load(page, rendered, options)
-      const pdf = options.continuous ? await this.continuous(page, options) : await this.paginated(page, rendered, options)
+      const sections = await this.split(page)
+      const pdf = options.continuous ? await this.continuous(page, options, sections) : await this.paginated(page, rendered, options)
 
       return { pdf: Buffer.from(pdf), assets }
     } finally {
@@ -95,6 +98,48 @@ export class RendererService {
     }
   }
 
+  /**
+   * Cuts the body into top-level sections at every page break, cloning the containers a break sits in, so a break works anywhere: inside
+   * flex or grid layouts, where CSS fragmentation ignores it, and in continuous mode, where every section becomes a page of its own height.
+   */
+  private split(page: Page): Promise<number> {
+    return page.evaluate(
+      (selector, attribute) => {
+        const markers = Array.from(document.body.querySelectorAll(selector))
+
+        if (!markers.length) {
+          return 1
+        }
+
+        const sections = markers.map((marker) => {
+          const range = document.createRange()
+          const section = document.createElement('div')
+
+          range.setStart(document.body, 0)
+          range.setEndBefore(marker)
+          section.append(range.extractContents())
+          marker.remove()
+
+          return section
+        })
+
+        sections.push(document.createElement('div'))
+        sections.at(-1).append(...Array.from(document.body.childNodes))
+        sections.forEach((section, index) => section.setAttribute(attribute, String(index)))
+        document.body.replaceChildren(...sections)
+
+        const style = document.createElement('style')
+
+        style.textContent = `[${attribute}]:not(:last-child) { break-after: page; }`
+        document.head.append(style)
+
+        return sections.length
+      },
+      `.${PAGE_BREAK_CLASS}`,
+      RendererService.SECTION
+    )
+  }
+
   private paginated(page: Page, rendered: RenderedDocument, options: RendererOptions): Promise<Uint8Array> {
     return page.pdf({
       ...options.pdf,
@@ -108,7 +153,7 @@ export class RendererService {
    * Prints everything as one tall page. Chrome itself resolves the paper size (from a one page probe print) and the margins (as CSS lengths),
    * so md-printer never has to know paper formats or length units.
    */
-  private async continuous(page: Page, options: RendererOptions): Promise<Uint8Array> {
+  private async continuous(page: Page, options: RendererOptions, sections: number): Promise<Uint8Array> {
     const [, points] = Buffer.from(
       await page.pdf({
         ...options.pdf,
@@ -150,24 +195,30 @@ export class RendererService {
 
     await page.setViewport({ width: Math.max(Math.round(width - margin.left - margin.right), 1), height: 800 })
 
-    const height = await page.evaluate(async() => {
-      await document.fonts.ready
+    const heights = await page.evaluate(
+      async(attribute, single) => {
+        await document.fonts.ready
 
-      const top = document.body.getBoundingClientRect().top
+        return (single ? [document.body] : Array.from(document.body.querySelectorAll(`:scope > [${attribute}]`))).map((element) => {
+          const top = element.getBoundingClientRect().top
 
-      return Math.max(
-        document.body.scrollHeight,
-        document.documentElement.scrollHeight,
-        ...Array.from(document.body.querySelectorAll('*')).map((element) => element.getBoundingClientRect().bottom - top)
-      )
-    })
+          return Math.max(
+            element.scrollHeight,
+            single ? document.documentElement.scrollHeight : 0,
+            ...Array.from(element.querySelectorAll('*')).map((child) => child.getBoundingClientRect().bottom - top)
+          )
+        })
+      },
+      RendererService.SECTION,
+      sections === 1
+    )
 
     // the extra centimetre keeps the last line from spilling onto a second page
-    const total = Math.ceil(height + margin.top + margin.bottom + 96 / 2.54)
+    const totals = heights.map((height) => Math.ceil(height + margin.top + margin.bottom + 96 / 2.54))
 
     // Chromium stores the page size as 16-bit points and fails to print anything taller
-    if (total * 0.75 > 65_535) {
-      this.logger.warn('Content is %dpx tall, which is more than a single PDF page can hold, falling back to paginated output.', total)
+    if (totals.some((total) => total * 0.75 > 65_535)) {
+      this.logger.warn('Content is %dpx tall, which is more than a single PDF page can hold, falling back to paginated output.', Math.max(...totals))
 
       return page.pdf({ ...options.pdf, displayHeaderFooter: false })
     }
@@ -177,11 +228,22 @@ export class RendererService {
     delete pdf.format
     delete pdf.landscape
 
-    return page.pdf({
-      ...pdf,
-      width: `${width}px`,
-      height: `${total}px`,
-      pageRanges: '1'
+    if (sections === 1) {
+      return page.pdf({
+        ...pdf,
+        width: `${width}px`,
+        height: `${totals[0]}px`,
+        pageRanges: '1'
+      })
+    }
+
+    // every section is a named page, so Chromium prints each one at its own height
+    await page.addStyleTag({
+      content: totals
+        .map((total, index) => `@page md-printer-${index} { size: ${width}px ${total}px; } [${RendererService.SECTION}="${index}"] { page: md-printer-${index}; }`)
+        .join('\n')
     })
+
+    return page.pdf({ ...pdf, preferCSSPageSize: true })
   }
 }

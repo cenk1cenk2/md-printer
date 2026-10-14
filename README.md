@@ -58,6 +58,12 @@ md-printer document.md -F html
 - Local assets such as images referenced from the document resolve relative to the directory of the input file, or the current directory for stdin. Only files inside that directory are loaded, for PDF and HTML alike. Remote images are loaded as they are.
 - `-T, --title` sets the document title, see [precedence](#precedence).
 
+## Markdown
+
+Markdown is rendered with [unified](https://unifiedjs.com): GitHub flavoured markdown (tables, task lists, footnotes, autolinks), heading ids, syntax highlighting with the selected highlight.js theme, and raw HTML, which is parsed as well, so a heading or code block written in HTML gets its id and highlighting too.
+
+`::pagebreak` on its own line starts a new page. It works anywhere, also inside flex or grid layouts, and in continuous mode, where every part becomes a page of its own height. `<div class="page-break"></div>` in HTML and the `PageBreak` component do the same.
+
 ## Front-matter and settings
 
 Markdown files take YAML front-matter. For YAML input the same keys are top-level keys of the file. All other keys are passed to the template as `data`.
@@ -68,7 +74,7 @@ Markdown files take YAML front-matter. For YAML input the same keys are top-leve
 | `dest`            | Output file, relative to the current directory.                                               |
 | `outputFiletype` | `pdf` (default) or `html`.                                                                    |
 | `language`        | Language for template translations.                                                           |
-| `continuous`      | `true` renders a single page without page breaks.                                             |
+| `continuous`      | `true` renders one page per part, each as tall as its content, split only at page breaks.     |
 | `documentTitle`  | Document title.                                                                               |
 | `pdfOptions`     | Puppeteer [PDF options](https://pptr.dev/api/puppeteer.pdfoptions), merged over the defaults. |
 | `sign`            | Signing options, see [Signing](#signing).                                                     |
@@ -173,7 +179,7 @@ Import from `@cenk1cenk2/md-printer/components`:
 | ---------------- | ------------------------------------------------------------------------------------------------- |
 | `Page`           | Layout wrapper. Children are the body, the `header` and `footer` snippets are the print header and footer of every page. |
 | `Markdown`       | Renders `content` in an `<article class="markdown-body">`, styled by `github-markdown-css` if the template imports it. |
-| `PageBreak`      | Starts a new page. In markdown, `<div class="page-break"></div>` does the same.                   |
+| `PageBreak`      | Starts a new page anywhere, also in continuous mode. In markdown, `::pagebreak` does the same.     |
 | `PageNumber`     | Current page number, filled by Chrome. Header and footer only.                                    |
 | `TotalPages`     | Total page count, filled by Chrome. Header and footer only.                                       |
 | `Title`          | Document title, filled by Chrome. Header and footer only.                                         |

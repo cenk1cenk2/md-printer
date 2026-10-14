@@ -1,5 +1,4 @@
 import { Injectable } from '@nestjs/common'
-import { default as graymatter } from 'gray-matter'
 import { basename, dirname, extname, join, resolve } from 'path'
 import type { PDFOptions } from 'puppeteer-core'
 import { parse as parseYaml } from 'yaml'
@@ -61,16 +60,12 @@ export class PrinterService {
         }
 
       // any other extension is read as markdown, like .markdown, .txt or none at all
-      default: {
-        const { content, data } = graymatter(source)
-
+      default:
         return {
           file,
           directory: file ? dirname(file) : process.cwd(),
-          content,
-          data: data ?? {}
+          ...this.markdown.parse(source)
         }
-      }
     }
   }
 
@@ -131,7 +126,7 @@ export class PrinterService {
       bundle,
       {
         data: input.data,
-        content: this.markdown.render(input.content),
+        content: input.content,
         t: await this.i18n.load(join(options.template, Directory.I18N), { ...options.i18n, language: options.language }),
         language: options.language,
         signature: ctx.signature
