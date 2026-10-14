@@ -1,6 +1,7 @@
-import { mkdir, mkdtemp, rename, rm, writeFile } from 'fs/promises'
-import { basename, dirname, join } from 'path'
+import { mkdir } from 'fs/promises'
+import { dirname } from 'path'
 import { text } from 'stream/consumers'
+import writeFileAtomic from 'write-file-atomic'
 
 import type { CliModuleOptions, DynamicModule, RegisterHook, ShouldRunBeforeHook } from '@cenk1cenk2/oclif-common'
 import { Args, CliModule, Command, Flags, JsonParser, ParserService, YamlParser } from '@cenk1cenk2/oclif-common'
@@ -210,6 +211,8 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
     await preview.close()
 
     await session.stop()
+
+    await writes
   }
 
   private async write(ctx: MdPrinterCtx, content: Buffer): Promise<void> {
@@ -227,16 +230,8 @@ export default class MDPrinter extends Command<typeof MDPrinter> implements Regi
 
     await mkdir(dirname(dest), { recursive: true })
 
-    // write next to the destination and rename into place, so PDF viewers reloading on change never read a half-written file;
-    // the temporary directory stays on the same filesystem, a rename from os.tmpdir() can cross mounts and fail
-    const temporary = await mkdtemp(join(dirname(dest), '.md-printer-'))
-
-    try {
-      await writeFile(join(temporary, basename(dest)), content)
-      await rename(join(temporary, basename(dest)), dest)
-    } finally {
-      await rm(temporary, { recursive: true, force: true })
-    }
+    // PDF viewers reloading on change never read a half-written file
+    await writeFileAtomic(dest, content)
 
     this.logger.info('Written: %s', dest)
   }
