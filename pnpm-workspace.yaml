@@ -8,7 +8,5 @@ minimumReleaseAgeExclude:
   - '@listr2/*'
 
 allowBuilds:
-  '@nestjs/core': false
   '@tailwindcss/oxide': true
-  puppeteer: false
   unrs-resolver: true

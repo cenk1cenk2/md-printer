@@ -89,7 +89,6 @@ typings/
 # DynamoDB Local files
 .dynamodb/
 dist/
-./test/test.pdf
 oclif.manifest.json
 
 test/*.pdf
