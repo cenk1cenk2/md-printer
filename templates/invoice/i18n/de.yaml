@@ -8,6 +8,12 @@ sections:
   notes: NOTIZEN
 invoice: RECHNUNG
 signature: UNTERSCHRIFT
+signed:
+  title: Digital signiert
+  by: Unterzeichner
+  date: Datum
+  issuer: Zertifikat
+  verify: Dieses Dokument ist qualifiziert elektronisch signiert. Prüfung unter
 fields:
   date: Datum
   id: Rechnungsnr.

@@ -8,6 +8,12 @@ sections:
   notes: NOTES
 invoice: INVOICE
 signature: SIGNATURE
+signed:
+  title: Digitally signed
+  by: Signed by
+  date: Date
+  issuer: Certificate
+  verify: This document carries a qualified electronic signature. Verify it at
 fields:
   date: Date
   id: Invoice#
