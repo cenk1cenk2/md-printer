@@ -2,7 +2,6 @@
 stages:
   - install
   - build
-  - test
   - publish
 
 variables:
@@ -48,7 +47,7 @@ build:
       - oclif.manifest.json
 
 test:
-  stage: test
+  stage: build
   extends:
     - .node-lint
   needs:
