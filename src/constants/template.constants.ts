@@ -16,23 +16,25 @@ export enum MediaType {
   PRINT = 'print'
 }
 
-export const TEMPLATE_DIRECTORY = 'templates'
+export enum Directory {
+  TEMPLATES = 'templates',
+  COMPONENTS = 'components',
+  I18N = 'i18n'
+}
 
-export const COMPONENTS_DIRECTORY = 'components'
+export enum ModuleSpecifier {
+  TEMPLATE = 'md-printer:template',
+  COMPONENTS = '@cenk1cenk2/md-printer/components'
+}
 
-export const COMPONENTS_SPECIFIER = '@cenk1cenk2/md-printer/components'
-
-export const TEMPLATE_SPECIFIER = 'md-printer:template'
+export enum ContextKey {
+  RENDER_MODE = 'md-printer:mode',
+  MARKDOWN = 'md-printer:markdown'
+}
 
 export const TAILWIND_STYLE_LANG = 'postcss'
 
 export const PRINTER_MODULE_OPTIONS = Symbol('md-printer:options')
-
-export const RENDER_MODE_CONTEXT = 'md-printer:mode'
-
-export const MARKDOWN_CONTEXT = 'md-printer:markdown'
-
-export const I18N_DIRECTORY = 'i18n'
 
 export const I18N_ACCEPTED_TYPES = ['.yaml', '.yml', '.json']
 
@@ -40,7 +42,7 @@ export const DEFAULT_LANGUAGE = 'en'
 
 export const DEFAULT_TEMPLATE = 'default'
 
-export const DEFAULT_HIGHLIGHT_STYLE = 'github'
+export const DEFAULT_HIGHLIGHT_STYLE = 'atom-one-dark'
 
 export const DEFAULT_PDF_OPTIONS: PDFOptions = {
   format: 'A4',

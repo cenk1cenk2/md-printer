@@ -3,7 +3,7 @@ import { Inject, Injectable } from '@nestjs/common'
 import type { Browser } from 'puppeteer-core'
 import puppeteer from 'puppeteer-core'
 
-import { discoverBrowser, isExecutable } from './browser.js'
+import { discoverBrowser } from './browser.js'
 import { LoggerService } from '@cenk1cenk2/oclif-common'
 import { PRINTER_MODULE_OPTIONS } from '@constants'
 import type { PrinterModuleOptions } from '@interfaces'
@@ -23,7 +23,7 @@ export class BrowserService implements OnModuleDestroy {
   }
 
   public executable(): string {
-    return discoverBrowser(this.options.browser, { env: process.env, executable: isExecutable })
+    return discoverBrowser(this.options.browser, process.env)
   }
 
   public get(): Promise<Browser> {

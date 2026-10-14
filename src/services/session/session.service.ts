@@ -6,7 +6,7 @@ import { join, resolve } from 'path'
 
 import { PrinterService } from '../printer.service.js'
 import { LoggerService } from '@cenk1cenk2/oclif-common'
-import { I18N_DIRECTORY, TemplateFiles } from '@constants'
+import { Directory, TemplateFiles } from '@constants'
 import type { MdPrinterCtx, MdPrinterFlags, SessionEvents, TemplateBundle } from '@interfaces'
 
 /**
@@ -107,7 +107,7 @@ export class SessionService extends EventEmitter<SessionEvents> {
       this.watch([
         input.file,
         join(options.template, TemplateFiles.SETTINGS),
-        join(options.template, I18N_DIRECTORY),
+        join(options.template, Directory.I18N),
         options.sign.certificate && resolve(options.sign.certificate)
       ])
 

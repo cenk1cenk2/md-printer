@@ -11,7 +11,7 @@ import { SignatureService } from './signature/signature.service.js'
 import { inlineAssets } from './template/assets.js'
 import { TemplateService } from './template/template.service.js'
 import { FileSystemService, LoggerService, merge, MergeStrategy } from '@cenk1cenk2/oclif-common'
-import { DEFAULT_HIGHLIGHT_STYLE, DEFAULT_LANGUAGE, DEFAULT_PDF_OPTIONS, DEFAULT_TEMPLATE, I18N_DIRECTORY, InputFileType, MediaType, OutputFileType } from '@constants'
+import { DEFAULT_HIGHLIGHT_STYLE, DEFAULT_LANGUAGE, DEFAULT_PDF_OPTIONS, DEFAULT_TEMPLATE, Directory, InputFileType, MediaType, OutputFileType } from '@constants'
 import type { MdPrinterCtx, MdPrinterFlags, MdPrinterInput, MdPrinterOptions, MdPrinterSignOptions, RenderedDocument, TemplateBundle } from '@interfaces'
 
 /**
@@ -137,7 +137,7 @@ export class PrinterService {
       {
         data: input.data,
         content: this.markdown.render(input.content),
-        t: await this.i18n.load(join(options.template, I18N_DIRECTORY), { ...options.i18n, language: options.language }),
+        t: await this.i18n.load(join(options.template, Directory.I18N), { ...options.i18n, language: options.language }),
         language: options.language,
         signature: ctx.signature
       },

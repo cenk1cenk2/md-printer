@@ -6,18 +6,19 @@ import { createRequire } from 'module'
 import { homedir } from 'os'
 import { dirname, isAbsolute, join, resolve } from 'path'
 import { rolldown } from 'rolldown'
+import { render } from 'svelte/server'
 import { fileURLToPath } from 'url'
 
 import { inlineAssets } from './assets.js'
 import { sveltePlugin } from './svelte.plugin.js'
 import { FileSystemService } from '@cenk1cenk2/oclif-common'
-import { COMPONENTS_DIRECTORY, MARKDOWN_CONTEXT, RENDER_MODE_CONTEXT, RenderMode, TEMPLATE_DIRECTORY, TemplateFiles } from '@constants'
+import { ContextKey, Directory, RenderMode, TemplateFiles } from '@constants'
 import type { MdPrinterSettings, RenderedDocument, RenderedPart, TemplateBundle, TemplateContext, TemplateProps, TemplateRenderOptions, TemplateStylesheet } from '@interfaces'
 
 @Injectable()
 export class TemplateService {
   private static readonly ROOT = fileURLToPath(new URL('../../../', import.meta.url))
-  private static readonly COMPONENTS = fileURLToPath(new URL(`../../${COMPONENTS_DIRECTORY}/index.ts`, import.meta.url))
+  private static readonly COMPONENTS = fileURLToPath(new URL(`../../${Directory.COMPONENTS}/index.ts`, import.meta.url))
   private static readonly ENTRY = fileURLToPath(new URL('./render.entry.ts', import.meta.url))
 
   private readonly require = createRequire(TemplateService.ROOT)
@@ -26,7 +27,7 @@ export class TemplateService {
 
   public resolve(template: string): string {
     const path = template.replace(/^~(?=\/|$)/, homedir())
-    const directory = isAbsolute(path) || path.startsWith('.') || /[\\/]/.test(path) ? resolve(path) : join(TemplateService.ROOT, TEMPLATE_DIRECTORY, path)
+    const directory = isAbsolute(path) || path.startsWith('.') || /[\\/]/.test(path) ? resolve(path) : join(TemplateService.ROOT, Directory.TEMPLATES, path)
 
     if (!this.fs.exists(join(directory, TemplateFiles.TEMPLATE))) {
       throw new Error(`Template does not exist, expected ${TemplateFiles.TEMPLATE} in: ${directory}`)
@@ -47,39 +48,30 @@ export class TemplateService {
 
   public async bundle(directory: string): Promise<TemplateBundle> {
     const stylesheets: TemplateStylesheet[] = []
-    const build = await rolldown({
-      input: TemplateService.ENTRY,
-      platform: 'node',
-      logLevel: 'silent',
-      plugins: [
-        sveltePlugin({
-          template: join(directory, TemplateFiles.TEMPLATE),
-          components: TemplateService.COMPONENTS,
-          root: TemplateService.ROOT,
-          stylesheets
-        })
-      ]
-    })
+    const { module: entry, modules } = await this.compile(TemplateService.ENTRY, join(directory, TemplateFiles.TEMPLATE), stylesheets)
 
-    try {
-      const { output: [chunk] } = await build.generate({ format: 'esm', sourcemap: 'inline' })
-
-      return {
-        entry: await import(`data:text/javascript;base64,${Buffer.from(chunk.code).toString('base64')}`),
-        modules: chunk.moduleIds.filter((id) => isAbsolute(id)),
-        stylesheets
-      }
-    } finally {
-      await build.close()
+    return {
+      entry,
+      modules,
+      stylesheets
     }
+  }
+
+  /**
+   * Renders a standalone Svelte page that takes no props, such as the preview shell.
+   */
+  public async page(file: string): Promise<string> {
+    const { module } = await this.compile(file, file, [])
+
+    return `<!doctype html>${render(module.default).body}`
   }
 
   public async render(directory: string, bundle: TemplateBundle, props: TemplateProps, context: TemplateContext, options: TemplateRenderOptions): Promise<RenderedDocument> {
     const [body, header, footer] = await Promise.all(
       [RenderMode.BODY, RenderMode.HEADER, RenderMode.FOOTER].map((mode) =>
         bundle.entry.part(props, [
-          [RENDER_MODE_CONTEXT, mode],
-          [MARKDOWN_CONTEXT, context.markdown]
+          [ContextKey.RENDER_MODE, mode],
+          [ContextKey.MARKDOWN, context.markdown]
         ])
       )
     )
@@ -104,6 +96,33 @@ export class TemplateService {
     }
   }
 
+  private async compile(input: string, template: string, stylesheets: TemplateStylesheet[]): Promise<{ module: any; modules: string[] }> {
+    const build = await rolldown({
+      input,
+      platform: 'node',
+      logLevel: 'silent',
+      plugins: [
+        sveltePlugin({
+          template,
+          components: TemplateService.COMPONENTS,
+          root: TemplateService.ROOT,
+          stylesheets
+        })
+      ]
+    })
+
+    try {
+      const { output: [chunk] } = await build.generate({ format: 'esm', sourcemap: 'inline' })
+
+      return {
+        module: await import(`data:text/javascript;base64,${Buffer.from(chunk.code).toString('base64')}`),
+        modules: chunk.moduleIds.filter((id) => isAbsolute(id))
+      }
+    } finally {
+      await build.close()
+    }
+  }
+
   private async margin(bundle: TemplateBundle, part: RenderedPart, styles: string, directory: string): Promise<string | undefined> {
     if (!part.body.replace(/<!--[\s\S]*?-->/g, '').trim()) {
       return undefined
@@ -113,7 +132,10 @@ export class TemplateService {
   }
 
   private async css(directory: string, bundle: TemplateBundle, html: string, highlight: string, dependencies: string[]): Promise<string> {
-    const compiler = await compileTailwind([`@import ${JSON.stringify(this.highlightTheme(highlight))};`, ...bundle.stylesheets.map(({ source }) => source)].join('\n'), {
+    // nested under :root so the theme outranks template stylesheets like github-markdown-css, which clear the code block background
+    const theme = `:root { ${readFileSync(this.highlightTheme(highlight), 'utf8')} pre:has(> code.hljs) { padding: 0; background: transparent; } }`
+
+    const compiler = await compileTailwind([theme, ...bundle.stylesheets.map(({ source }) => source)].join('\n'), {
       base: directory,
       from: bundle.stylesheets[0]?.file ?? join(directory, TemplateFiles.TEMPLATE),
       shouldRewriteUrls: true,

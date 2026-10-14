@@ -30,7 +30,7 @@ The browser executable is resolved in this order:
 1. `--browser <path>`. If this path is not executable, md-printer fails instead of falling back.
 2. `PUPPETEER_EXECUTABLE_PATH`
 3. `CHROME_PATH`
-4. Brave, Chrome, Chromium, Edge, in that order, looked up by name on `PATH` and then in their well-known Linux install locations. Only Linux is supported.
+4. Brave, Chrome, Chromium, Edge, in that order, looked up by name on `PATH`. Only Linux is supported.
 
 When running as root or when the `CI` environment variable is set, the browser is started with `--no-sandbox`, because Chromium refuses to start its sandbox as root, which is the default in CI containers.
 
@@ -94,7 +94,7 @@ A template may carry a `settings.json` with defaults for its documents:
 | `sign`            | Signing options.                                                                         |
 | `continuous`      | Render continuously by default.                                                          |
 | `media`           | CSS media type used for printing, `screen` (default) or `print`.                         |
-| `highlightStyle` | highlight.js theme name from `highlight.js/styles`, defaults to `github`.                |
+| `highlightStyle` | highlight.js theme name from `highlight.js/styles`, defaults to `atom-one-dark`.         |
 
 The default `pdfOptions` are `format: A4`, `printBackground: true` and a margin of `30mm 40mm 30mm 20mm` (top, right, bottom, left). `pdfOptions` are merged recursively, so a document can override single keys. `margin` may be a CSS shorthand string such as `"18mm 12mm"`.
 
@@ -232,7 +232,7 @@ md-printer invoice.yaml -t invoice --sign --sign-certificate ~/id-austria.pem
 - `--sign` enables signing. `--sign-provider` selects the provider, `a-trust` is the only one and the default. `--sign-certificate` is a DER or PEM file of your signer certificate.
 - The same keys can be set as `sign` in front-matter or `settings.json`: `enabled`, `provider`, `certificate`, `reason`, `location`, `contact`. Flags win. `reason`, `location` and `contact` are stored in the signature.
 - Signing only works for PDF output and is skipped with `--watch` and `--preview`.
-- The signing session has to run in your browser. md-printer opens a link to a temporary local page, you log in with ID Austria in the A-Trust page, and paste the resulting signature (starts with `MII`) back into the local page. It times out after 10 minutes.
+- The signing session has to run in your browser. md-printer opens a link to a temporary local page, you log in with ID Austria in the A-Trust page, and paste the resulting signature (starts with `MII`) back into the local page. It waits until the signature arrives, press Ctrl+C to abort.
 - With a certificate, the signer name, issuer and serial are passed to the template as `signature`, so `SignatureBlock` can show who signed and when. The certificate must be valid at signing time, and the returned signature is rejected if it was not made with it. Without a certificate only the date is available.
 - Verify the result at https://www.signaturpruefung.gv.at.
 
@@ -246,7 +246,7 @@ md-printer invoice.yaml -t invoice --sign --sign-certificate ~/id-austria.pem
 - Continuous mode has no header and footer.
 - `puppeteer` is replaced by `puppeteer-core`, there is no bundled Chrome, a local Chromium-based browser is required.
 - `--dev` is replaced by `--preview`.
-- The default highlight theme is `github`.
+- The default highlight theme is `atom-one-dark`.
 
 ## Command reference
 

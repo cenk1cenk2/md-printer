@@ -1,7 +1,4 @@
-import { accessSync, constants } from 'fs'
-import { delimiter, join } from 'path'
-
-import type { BrowserEnvironment } from '@interfaces'
+import which from 'which'
 
 export class BrowserNotFoundError extends Error {
   constructor(public readonly tried: string[]) {
@@ -9,60 +6,34 @@ export class BrowserNotFoundError extends Error {
   }
 }
 
-export function isExecutable(path: string): boolean {
-  try {
-    accessSync(path, constants.X_OK)
-
-    return true
-  } catch {
-    return false
-  }
-}
-
 /**
- * Resolves the browser executable: explicit path, environment overrides, then Brave, Chrome, Chromium and Edge by PATH name and well-known install locations.
+ * Resolves the browser executable: explicit path, environment overrides, then Brave, Chrome, Chromium and Edge from PATH.
  */
-export function discoverBrowser(explicit: string | undefined, { env, executable }: BrowserEnvironment): string {
-  const tried: string[] = []
+export function discoverBrowser(explicit: string | undefined, env: NodeJS.ProcessEnv): string {
+  // an explicit path never falls back, so a typo is not silently replaced by another browser
+  const candidates = explicit
+    ? [explicit]
+    : [
+      env.PUPPETEER_EXECUTABLE_PATH,
+      env.CHROME_PATH,
+      'brave',
+      'brave-browser',
+      'brave-browser-stable',
+      'google-chrome-stable',
+      'google-chrome',
+      'chromium',
+      'chromium-browser',
+      'microsoft-edge-stable',
+      'microsoft-edge'
+    ].filter(Boolean)
 
-  for (const path of [explicit, env.PUPPETEER_EXECUTABLE_PATH, env.CHROME_PATH].filter(Boolean)) {
-    tried.push(path)
+  for (const candidate of candidates) {
+    const path = which.sync(candidate, { path: env.PATH, nothrow: true })
 
-    if (executable(path)) {
+    if (path) {
       return path
     }
-
-    if (path === explicit) {
-      throw new BrowserNotFoundError(tried)
-    }
   }
 
-  const directories = (env.PATH ?? '').split(delimiter).filter(Boolean)
-
-  for (const { names, paths } of [
-    { names: ['brave', 'brave-browser', 'brave-browser-stable'], paths: ['/opt/brave.com/brave/brave', '/opt/brave-bin/brave', '/snap/bin/brave'] },
-    { names: ['google-chrome-stable', 'google-chrome'], paths: ['/opt/google/chrome/chrome'] },
-    { names: ['chromium', 'chromium-browser'], paths: ['/usr/bin/chromium', '/usr/lib/chromium/chromium', '/snap/bin/chromium'] },
-    { names: ['microsoft-edge-stable', 'microsoft-edge'], paths: ['/opt/microsoft/msedge/msedge'] }
-  ]) {
-    for (const name of names) {
-      const path = directories.map((directory) => join(directory, name)).find(executable)
-
-      if (path) {
-        return path
-      }
-
-      tried.push(name)
-    }
-
-    for (const path of paths) {
-      tried.push(path)
-
-      if (executable(path)) {
-        return path
-      }
-    }
-  }
-
-  throw new BrowserNotFoundError(tried)
+  throw new BrowserNotFoundError(candidates)
 }

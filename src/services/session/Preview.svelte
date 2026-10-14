@@ -1,4 +1,7 @@
-<!doctype html>
+<!--
+  @component
+  Shell page of the live preview: the HTML and the printed PDF side by side, updated over server-sent events.
+-->
 <html lang="en">
   <head>
     <meta charset="utf-8" />
@@ -31,7 +34,9 @@
         height: 100vh;
         display: grid;
         grid-template-rows: auto 1fr;
-        font: 13px system-ui, sans-serif;
+        font:
+          13px system-ui,
+          sans-serif;
         background: var(--bg);
         color: var(--text);
       }
@@ -116,7 +121,9 @@
         background: var(--panel);
         box-shadow: 0 8px 32px rgb(0 0 0 / 30%);
         white-space: pre-wrap;
-        font: 12px ui-monospace, monospace;
+        font:
+          12px ui-monospace,
+          monospace;
       }
       @media (max-width: 900px) {
         main[data-view='split'] {

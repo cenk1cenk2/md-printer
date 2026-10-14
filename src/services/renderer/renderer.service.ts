@@ -13,7 +13,6 @@ import type { RenderedDocument, RendererOptions, RendererResult } from '@interfa
 export class RendererService {
   private static readonly ORIGIN = 'http://md-printer.local'
   private static readonly DOCUMENT = '/__document.html'
-  private static readonly MAX_CONTINUOUS_HEIGHT = 80_000
 
   constructor(
     private readonly logger: LoggerService,
@@ -169,7 +168,8 @@ export class RendererService {
     // the extra centimetre keeps the last line from spilling onto a second page
     const total = Math.ceil(height + margin.top + margin.bottom + 96 / 2.54)
 
-    if (total > RendererService.MAX_CONTINUOUS_HEIGHT) {
+    // Chromium stores the page size as 16-bit points and fails to print anything taller
+    if (total * 0.75 > 65_535) {
       this.logger.warn('Content is %dpx tall, which is more than a single PDF page can hold, falling back to paginated output.', total)
 
       return page.pdf({ ...options.pdf, displayHeaderFooter: false })

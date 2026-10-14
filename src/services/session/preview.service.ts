@@ -6,8 +6,10 @@ import { createServer } from 'http'
 import type { AddressInfo } from 'net'
 import { tmpdir } from 'os'
 import { join, relative, resolve } from 'path'
+import { fileURLToPath } from 'url'
 
 import { mimeType } from '../template/assets.js'
+import { TemplateService } from '../template/template.service.js'
 import { LoggerService } from '@cenk1cenk2/oclif-common'
 import type { PreviewError, PreviewOptions, SessionBuild } from '@interfaces'
 
@@ -16,20 +18,21 @@ import type { PreviewError, PreviewOptions, SessionBuild } from '@interfaces'
  */
 @Injectable()
 export class PreviewService {
-  private static readonly SHELL = './preview.html'
-
   private server?: Server
   private clients = new Set<ServerResponse>()
   private build?: SessionBuild
   private error?: PreviewError
   private profile?: string
 
-  constructor(private readonly logger: LoggerService) {
+  constructor(
+    private readonly logger: LoggerService,
+    private readonly template: TemplateService
+  ) {
     this.logger.setup(this.constructor.name)
   }
 
   public async listen(options: PreviewOptions): Promise<string> {
-    const shell = await readFile(new URL(PreviewService.SHELL, import.meta.url))
+    const shell = await this.template.page(fileURLToPath(new URL('./Preview.svelte', import.meta.url)))
 
     this.server = createServer((req, res) => {
       this.handle(req, res, shell, options).catch((err) => {
@@ -96,7 +99,7 @@ export class PreviewService {
     }
   }
 
-  private async handle(req: IncomingMessage, res: ServerResponse, shell: Buffer, options: PreviewOptions): Promise<void> {
+  private async handle(req: IncomingMessage, res: ServerResponse, shell: string, options: PreviewOptions): Promise<void> {
     if (!this.trusted(req, options)) {
       res.writeHead(403)
 

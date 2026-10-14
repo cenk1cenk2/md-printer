@@ -2,11 +2,6 @@ import type { PDFOptions } from 'puppeteer-core'
 
 import type { MediaType } from '@constants'
 
-export interface BrowserEnvironment {
-  env: NodeJS.ProcessEnv
-  executable: (path: string) => boolean
-}
-
 export interface PrinterModuleOptions {
   browser?: string
 }

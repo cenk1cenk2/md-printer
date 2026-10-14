@@ -10,7 +10,7 @@ export default [
     tsconfig: 'tsconfig.json'
   }),
   {
-    // the document shell renders <html> and <head>, which svelte-eslint-parser rejects although the compiler renders it
-    ignores: ['./dist/', './bin', './tsdown.config.ts', 'src/services/template/Document.svelte']
+    // the document and preview shells render <html> and <head>, which svelte-eslint-parser rejects although the compiler renders it
+    ignores: ['./dist/', './bin', './tsdown.config.ts', 'src/services/template/Document.svelte', 'src/services/session/Preview.svelte']
   }
 ]

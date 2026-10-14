@@ -1,35 +1,61 @@
-import { describe, expect, it } from 'vitest'
+import { chmod, mkdtemp, rm, writeFile } from 'fs/promises'
+import { tmpdir } from 'os'
+import { join } from 'path'
+import { afterEach, beforeEach, describe, expect, it } from 'vitest'
 
-import type { BrowserEnvironment } from '../src/interfaces/index.js'
 import { BrowserNotFoundError, discoverBrowser } from '../src/services/renderer/browser.js'
 
 describe('discoverBrowser', () => {
-  const environment = (executables: string[], env: NodeJS.ProcessEnv = { PATH: '/usr/local/bin:/usr/bin' }): BrowserEnvironment => ({
-    env,
-    executable: (path) => executables.includes(path)
+  let directory: string
+
+  const executable = async(name: string): Promise<string> => {
+    const path = join(directory, name)
+
+    await writeFile(path, '')
+    await chmod(path, 0o755)
+
+    return path
+  }
+
+  beforeEach(async() => {
+    directory = await mkdtemp(join(tmpdir(), 'md-printer-browser-'))
   })
 
-  it('prefers the explicit path', () => {
-    expect(discoverBrowser('/opt/custom/chrome', environment(['/opt/custom/chrome', '/usr/bin/brave']))).toBe('/opt/custom/chrome')
+  afterEach(async() => {
+    await rm(directory, { recursive: true, force: true })
   })
 
-  it('fails when the explicit path does not exist instead of falling back', () => {
-    expect(() => discoverBrowser('/nope', environment(['/usr/bin/brave']))).toThrow(BrowserNotFoundError)
+  it('prefers the explicit path', async() => {
+    const custom = await executable('custom-chrome')
+
+    await executable('brave')
+
+    expect(discoverBrowser(custom, { PATH: directory })).toBe(custom)
   })
 
-  it('uses the environment overrides before searching', () => {
-    expect(discoverBrowser(undefined, environment(['/env/chrome', '/usr/bin/brave'], { PATH: '/usr/bin', CHROME_PATH: '/env/chrome' }))).toBe('/env/chrome')
+  it('fails when the explicit path does not exist instead of falling back', async() => {
+    await executable('brave')
+
+    expect(() => discoverBrowser(join(directory, 'nope'), { PATH: directory })).toThrow(BrowserNotFoundError)
   })
 
-  it('finds brave on PATH before chrome', () => {
-    expect(discoverBrowser(undefined, environment(['/usr/bin/google-chrome', '/usr/bin/brave']))).toBe('/usr/bin/brave')
+  it('uses the environment overrides before searching', async() => {
+    const override = await executable('env-chrome')
+
+    await executable('brave')
+
+    expect(discoverBrowser(undefined, { PATH: directory, CHROME_PATH: override })).toBe(override)
   })
 
-  it('falls back to well-known install locations', () => {
-    expect(discoverBrowser(undefined, environment(['/opt/brave-bin/brave']))).toBe('/opt/brave-bin/brave')
+  it('finds brave on PATH before chrome', async() => {
+    await executable('google-chrome')
+
+    const brave = await executable('brave')
+
+    expect(discoverBrowser(undefined, { PATH: directory })).toBe(brave)
   })
 
   it('lists every candidate it tried when nothing is found', () => {
-    expect(() => discoverBrowser(undefined, environment([]))).toThrow(expect.objectContaining({ tried: expect.arrayContaining(['brave', '/opt/google/chrome/chrome']) }))
+    expect(() => discoverBrowser(undefined, { PATH: directory })).toThrow(expect.objectContaining({ tried: expect.arrayContaining(['brave', 'google-chrome']) }))
   })
 })

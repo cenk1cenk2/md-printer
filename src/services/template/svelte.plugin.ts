@@ -6,7 +6,7 @@ import { compile, preprocess } from 'svelte/compiler'
 import { pathToFileURL } from 'url'
 
 import { dataUri, isInlinableAsset } from './assets.js'
-import { COMPONENTS_SPECIFIER, TAILWIND_STYLE_LANG, TEMPLATE_SPECIFIER } from '@constants'
+import { ModuleSpecifier, TAILWIND_STYLE_LANG } from '@constants'
 import type { SveltePluginOptions } from '@interfaces'
 
 /**
@@ -21,11 +21,11 @@ export function sveltePlugin({ template, components, root, stylesheets }: Svelte
     name: 'md-printer:svelte',
 
     resolveId(id: string): string | { id: string; external: boolean } | null {
-      if (id === TEMPLATE_SPECIFIER) {
+      if (id === ModuleSpecifier.TEMPLATE) {
         return template
       }
 
-      if (id === COMPONENTS_SPECIFIER) {
+      if (id === ModuleSpecifier.COMPONENTS) {
         return components
       }
 

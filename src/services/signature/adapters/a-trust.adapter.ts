@@ -18,7 +18,6 @@ import type { SignatureRequest } from '@interfaces'
 export class ATrustAdapter extends SignatureAdapter {
   private static readonly ENDPOINT = 'https://service.a-trust.at/mobile/https-security-layer-request/default.aspx'
   private static readonly NAMESPACE = 'http://www.buergerkarte.at/namespaces/securitylayer/1.2#'
-  private static readonly TIMEOUT = 600_000
   private static readonly PAGE = './a-trust.html'
 
   public readonly name = 'a-trust'
@@ -74,10 +73,8 @@ export class ATrustAdapter extends SignatureAdapter {
 
   private async collect(login: string): Promise<Buffer> {
     let resolve: (cms: Buffer) => void
-    let reject: (err: Error) => void
-    const result = new Promise<Buffer>((done, fail) => {
+    const result = new Promise<Buffer>((done) => {
       resolve = done
-      reject = fail
     })
 
     const page = await readFile(new URL(ATrustAdapter.PAGE, import.meta.url))
@@ -124,12 +121,7 @@ export class ATrustAdapter extends SignatureAdapter {
     this.logger.info('Sign the document in the browser, then paste the signature back: %s', url)
     this.open(url)
 
-    const timeout = setTimeout(() => reject(new Error('Timed out waiting for the signature.')), ATrustAdapter.TIMEOUT)
-
-    return result.finally(() => {
-      clearTimeout(timeout)
-      server.close()
-    })
+    return result.finally(() => server.close())
   }
 
   private open(url: string): void {
