@@ -122,4 +122,16 @@ describe('md-printer', () => {
 
     expect(html).toContain('<title>R&amp;D &lt;1></title>')
   })
+
+  it('starts a new page at a PageBreak component', async() => {
+    const template = join(directory, 'page-break-template')
+
+    await mkdir(template, { recursive: true })
+    await writeFile(
+      join(template, 'Template.svelte'),
+      '<script>\n  import { PageBreak } from \'@cenk1cenk2/md-printer/components\'\n</script>\n\n<p>one</p>\n<PageBreak />\n<p>two</p>\n'
+    )
+
+    expect(pages(await run(['--stdin', '-O', '-t', template], '# Pages\n'))).toBe(2)
+  })
 })

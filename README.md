@@ -175,6 +175,7 @@ Import from `@cenk1cenk2/md-printer/components`:
 | ---------------- | ------------------------------------------------------------------------------------------------- |
 | `Page`           | Layout wrapper. Children are the body, the `header` and `footer` snippets are the print header and footer of every page. |
 | `Markdown`       | Renders `content` in an `<article class="markdown-body">`, styled by `github-markdown-css` if the template imports it. |
+| `PageBreak`      | Starts a new page. In markdown, `<div class="page-break"></div>` does the same.                   |
 | `PageNumber`     | Current page number, filled by Chrome. Header and footer only.                                    |
 | `TotalPages`     | Total page count, filled by Chrome. Header and footer only.                                       |
 | `Title`          | Document title, filled by Chrome. Header and footer only.                                         |
