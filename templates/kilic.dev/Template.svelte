@@ -1,7 +1,7 @@
 <script>
   import { Markdown, Page, PageNumber, Title, TotalPages } from '@cenk1cenk2/md-printer/components'
 
-  let { data, content } = $props()
+  let { data } = $props()
 
   const logo = 'https://main.s3.kilic.dev/html/icon.png'
 </script>
@@ -30,7 +30,7 @@
     </footer>
   {/snippet}
 
-  <Markdown {content} />
+  <Markdown />
 </Page>
 
 <style lang="postcss">

@@ -1,4 +1,5 @@
 import { mkdtemp, readFile, rm, writeFile } from 'fs/promises'
+import type { Root } from 'hast'
 import { tmpdir } from 'os'
 import { join } from 'path'
 import { afterAll, beforeAll, describe, expect, it } from 'vitest'
@@ -34,7 +35,7 @@ describe('SessionService', () => {
       input: async() => ({
         file: join(directory, 'input.md'),
         directory,
-        content: '',
+        markdown: { type: 'root', children: [] } as Root,
         data: {}
       }),
       options: async() => ({ template: directory, sign: {} }),
@@ -54,6 +55,7 @@ describe('SessionService', () => {
           entry: undefined,
           modules: [join(directory, 'Template.svelte')],
           stylesheets: [],
+          directives: new Map(),
           source
         } as TemplateBundle
       },

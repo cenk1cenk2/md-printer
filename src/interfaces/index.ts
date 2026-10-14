@@ -1,4 +1,5 @@
 export type * from './commands/index.js'
+export type * from './markdown.interface.js'
 export type * from './renderer.interface.js'
 export type * from './session.interface.js'
 export type * from './signature.interface.js'

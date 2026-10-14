@@ -13,3 +13,11 @@ declare module 'md-printer:template' {
 
   export default component
 }
+
+declare module 'md-printer:template-components' {
+  import type { Component } from 'svelte'
+
+  const components: Record<string, Component<any>>
+
+  export default components
+}

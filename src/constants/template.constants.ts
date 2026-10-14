@@ -24,16 +24,22 @@ export enum Directory {
 
 export enum ModuleSpecifier {
   TEMPLATE = 'md-printer:template',
-  COMPONENTS = '@cenk1cenk2/md-printer/components'
+  COMPONENTS = '@cenk1cenk2/md-printer/components',
+  TEMPLATE_COMPONENTS = 'md-printer:template-components'
 }
 
 export enum ContextKey {
-  RENDER_MODE = 'md-printer:mode'
+  RENDER_MODE = 'md-printer:mode',
+  DOCUMENT = 'md-printer:document',
+  MARKDOWN = 'md-printer:markdown',
+  COMPONENTS = 'md-printer:components'
 }
 
 export const TAILWIND_STYLE_LANG = 'postcss'
 
 export const PAGE_BREAK_CLASS = 'page-break'
+
+export const DIRECTIVE_TAG = 'md-printer-directive'
 
 export const PRINTER_MODULE_OPTIONS = Symbol('md-printer:options')
 

@@ -1,6 +1,7 @@
 import { Injectable } from '@nestjs/common'
 import { compile as compileTailwind } from '@tailwindcss/node'
 import { Scanner } from '@tailwindcss/oxide'
+import { kebabCase } from 'change-case'
 import enhancedResolve from 'enhanced-resolve'
 import { decodeHTML } from 'entities'
 import { readFileSync } from 'fs'
@@ -18,11 +19,12 @@ import { ContextKey, Directory, RenderMode, TemplateFiles } from '@constants'
 import type {
   AssetCache,
   CompiledModule,
+  DocumentContext,
+  MarkdownNode,
   MdPrinterSettings,
   RenderedDocument,
   RenderedPart,
   TemplateBundle,
-  TemplateProps,
   TemplateRenderOptions,
   TemplateStylesheet
 } from '@interfaces'
@@ -75,7 +77,8 @@ export class TemplateService {
     return {
       entry,
       modules,
-      stylesheets
+      stylesheets,
+      directives: new Map(Object.keys(entry.components).map((name) => [kebabCase(name), name]))
     }
   }
 
@@ -85,9 +88,15 @@ export class TemplateService {
     return `<!doctype html>${render(module.default).body}`
   }
 
-  public async render(directory: string, bundle: TemplateBundle, props: TemplateProps, options: TemplateRenderOptions): Promise<RenderedDocument> {
+  public async render(directory: string, bundle: TemplateBundle, document: DocumentContext, markdown: MarkdownNode[], options: TemplateRenderOptions): Promise<RenderedDocument> {
+    const context: [string, unknown][] = [
+      [ContextKey.DOCUMENT, document],
+      [ContextKey.MARKDOWN, markdown],
+      [ContextKey.COMPONENTS, bundle.entry.components]
+    ]
+    const props = { ...document, content: bundle.entry.content(markdown, context) }
     const [body, header, footer] = await Promise.all(
-      [RenderMode.BODY, RenderMode.HEADER, RenderMode.FOOTER].map((mode) => bundle.entry.part(props, [[ContextKey.RENDER_MODE, mode]]))
+      [RenderMode.BODY, RenderMode.HEADER, RenderMode.FOOTER].map((mode) => bundle.entry.part(props, [...context, [ContextKey.RENDER_MODE, mode]]))
     )
 
     const dependencies: string[] = []

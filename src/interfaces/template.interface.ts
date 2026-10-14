@@ -1,13 +1,18 @@
 import type { TFunction } from 'i18next'
+import type { Component } from 'svelte'
 
+import type { MarkdownNode } from './markdown.interface.js'
 import type { MdPrinterSignature } from './signature.interface.js'
 
-export interface TemplateProps {
+export interface DocumentContext {
   data: Record<string, any>
-  content: string
   t: TFunction
   language: string
   signature?: MdPrinterSignature
+}
+
+export interface TemplateProps extends DocumentContext {
+  content: string
 }
 
 export interface RenderedPart {
@@ -28,7 +33,9 @@ export interface MarginShellProps {
 }
 
 export interface TemplateEntry {
+  components: Record<string, Component<any>>
   part: (props: TemplateProps, context: [string, unknown][]) => Promise<RenderedPart>
+  content: (nodes: MarkdownNode[], context: [string, unknown][]) => string
   document: (props: DocumentShellProps) => string
   margin: (props: MarginShellProps) => string
 }
@@ -42,6 +49,7 @@ export interface TemplateBundle {
   entry: TemplateEntry
   modules: string[]
   stylesheets: TemplateStylesheet[]
+  directives: Map<string, string>
 }
 
 export interface TemplateRenderOptions {
@@ -88,9 +96,4 @@ export interface InlinedAssets {
 export interface CompiledModule {
   module: any
   modules: string[]
-}
-
-export interface MarkdownDocument {
-  content: string
-  data: Record<string, any>
 }

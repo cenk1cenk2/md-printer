@@ -3,7 +3,7 @@ import { Injectable } from '@nestjs/common'
 import type { FSWatcher } from 'chokidar'
 import { watch } from 'chokidar'
 import { EventEmitter } from 'events'
-import { join, resolve } from 'path'
+import { dirname, join, resolve } from 'path'
 import { debounce } from 'perfect-debounce'
 
 import { PrinterService } from '../printer.service.js'
@@ -74,7 +74,8 @@ export class SessionService extends EventEmitter<SessionEvents> implements OnMod
 
     this.logger.debug('Changed: %s', file)
 
-    if (this.modules.has(file)) {
+    // a component added to or removed from the template's components folder changes the registry the bundle holds
+    if (this.modules.has(file) || (this.bundle && dirname(file) === join(this.bundle.template, Directory.COMPONENTS))) {
       this.bundle = undefined
     }
 
@@ -98,6 +99,7 @@ export class SessionService extends EventEmitter<SessionEvents> implements OnMod
         template,
         join(options.template, TemplateFiles.SETTINGS),
         join(options.template, Directory.I18N),
+        join(options.template, Directory.COMPONENTS),
         options.sign.certificate && resolve(options.sign.certificate)
       ])
 

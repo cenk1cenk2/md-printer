@@ -1,7 +1,7 @@
 <script>
   import { Markdown, Page } from '@cenk1cenk2/md-printer/components'
 
-  let { data, content } = $props()
+  let { data } = $props()
 </script>
 
 <svelte:head>
@@ -11,7 +11,7 @@
 </svelte:head>
 
 <Page>
-  <Markdown {content} />
+  <Markdown />
 </Page>
 
 <style lang="postcss">

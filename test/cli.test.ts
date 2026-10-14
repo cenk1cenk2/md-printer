@@ -1,5 +1,5 @@
 import { execFile } from 'node:child_process'
-import { chmod, copyFile, mkdir, mkdtemp, readFile, rm, stat, writeFile } from 'node:fs/promises'
+import { chmod, copyFile, mkdir, mkdtemp, readFile, rm, stat, symlink, writeFile } from 'node:fs/promises'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { fileURLToPath } from 'node:url'
@@ -171,5 +171,90 @@ describe('md-printer', () => {
 
     expect(((await stat(output)).mode % 0o1000).toString(8)).toBe('600')
     expect(await readFile(output, 'utf8')).toContain('Private')
+  })
+
+  it('starts a new page at the shared PageBreak component as ::page-break', async() => {
+    expect(pages(await run(['--stdin', '-O'], '# One\n\n::page-break\n\n# Two\n'))).toBe(2)
+  })
+
+  describe('markdown components', () => {
+    let template: string
+
+    const markdown = [
+      '---',
+      'who: Ada',
+      '---',
+      '',
+      '::callout{type="info"}',
+      '',
+      ':::callout{type="warn"}',
+      'Some **bold** text',
+      ':::',
+      '',
+      '- one :items[**two**]{count="3"} three',
+      '',
+      '::title',
+      '',
+      'Meet at 10:30am. ::nope',
+      '',
+      '::nope{a="1"}',
+      ''
+    ].join('\n')
+
+    beforeAll(async() => {
+      template = join(directory, 'components-template')
+
+      await mkdir(join(template, 'components'), { recursive: true })
+      await writeFile(join(template, 'Template.svelte'), '<script>\n  import { Markdown } from \'@cenk1cenk2/md-printer/components\'\n</script>\n\n<Markdown />\n')
+      await writeFile(
+        join(template, 'components', 'Callout.svelte'),
+        [
+          '<script>',
+          '  import { getContext } from \'svelte\'',
+          '',
+          '  let { type, children } = $props()',
+          '',
+          '  const { data } = getContext(\'md-printer:document\')',
+          '</script>',
+          '',
+          '<aside class="callout" data-type="{typeof type}:{type}">{data.who}: {@render children?.()}</aside>',
+          ''
+        ].join('\n')
+      )
+      await writeFile(
+        join(template, 'components', 'Items.svelte'),
+        '<script>\n  let { count, children } = $props()\n</script>\n\n<span class="items" data-count="{typeof count}:{count}">{@render children?.()}</span>\n'
+      )
+      await writeFile(join(template, 'components', 'Title.svelte'), '<h2 class="template-title">From the template</h2>\n')
+    })
+
+    it('renders leaf, container and inline directives through the template components', async() => {
+      const html = (await run(['--stdin', '-O', '-F', 'html', '-t', template], markdown)).toString()
+
+      expect(html).toMatch(/<aside class="callout" data-type="string:info">Ada: (<!--[^>]*-->)*<\/aside>/)
+      expect(html).toMatch(/<aside class="callout" data-type="string:warn">Ada: (<!--[^>]*-->)*<p>Some <strong>bold<\/strong> text<\/p>/)
+      expect(html).toMatch(/<li>(<!--[^>]*-->)*one (<!--[^>]*-->)*<span class="items" data-count="string:3">(<!--[^>]*-->)*<strong>two<\/strong>/)
+      expect(html).toContain('<h2 class="template-title">From the template</h2>')
+    })
+
+    it('keeps directives without a component as written', async() => {
+      const html = (await run(['--stdin', '-O', '-F', 'html', '-t', template], markdown)).toString()
+
+      expect(html).toContain('<p>Meet at 10:30am. ::nope</p>')
+      expect(html).toContain('<p>::nope{a="1"}</p>')
+    })
+
+    it('renders the components into content for templates that place it with {@html content}', async() => {
+      const raw = join(directory, 'raw-content-template')
+
+      await mkdir(raw)
+      await symlink(join(template, 'components'), join(raw, 'components'))
+      await writeFile(join(raw, 'Template.svelte'), '<script>\n  let { content } = $props()\n</script>\n\n<main>{@html content}</main>\n')
+
+      const html = (await run(['--stdin', '-O', '-F', 'html', '-t', raw], markdown)).toString()
+
+      expect(html).toMatch(/<aside class="callout" data-type="string:warn">Ada: (<!--[^>]*-->)*<p>Some <strong>bold<\/strong> text<\/p>/)
+      expect(html).toContain('<p>::nope{a="1"}</p>')
+    })
   })
 })
