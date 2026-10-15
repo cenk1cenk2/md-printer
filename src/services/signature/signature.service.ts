@@ -1,10 +1,11 @@
 import { Injectable } from '@nestjs/common'
 import { plainAddPlaceholder } from '@signpdf/placeholder-plain'
 import { findByteRange, removeTrailingNewLine, SUBFILTER_ETSI_CADES_DETACHED } from '@signpdf/utils'
-import { X509Certificate } from 'crypto'
+import { webcrypto, X509Certificate } from 'crypto'
 import { readFile } from 'fs/promises'
 import { homedir } from 'os'
 import { isAbsolute, join } from 'path'
+import { ContentInfo, getAlgorithmByOID, SignedData } from 'pkijs'
 
 import { ATrustAdapter } from './adapters/a-trust.adapter.js'
 import type { SignatureAdapter } from './signature.adapter.js'
@@ -13,6 +14,7 @@ import type { MdPrinterSignature, MdPrinterSignOptions, SignatureRequest } from 
 @Injectable()
 export class SignatureService {
   private static readonly LENGTH = 16384
+  private static readonly MESSAGE_DIGEST = '1.2.840.113549.1.9.4'
 
   private readonly adapters: SignatureAdapter[]
 
@@ -51,9 +53,7 @@ export class SignatureService {
     const request = this.prepare(pdf, options)
     const cms = await this.adapter(options.provider).sign(request)
 
-    if (options.certificate && !cms.includes(options.certificate.raw)) {
-      throw new Error('The returned signature was not created with the configured certificate, the signature block would show the wrong signer.')
-    }
+    await this.verify(request, cms, options.certificate)
 
     return this.embed(request, cms)
   }
@@ -107,6 +107,54 @@ export class SignatureService {
     }
   }
 
+  private async verify({ pdf, excluded: [from, to] }: SignatureRequest, cms: Buffer, certificate?: X509Certificate): Promise<void> {
+    const content = new Uint8Array(Buffer.concat([pdf.subarray(0, from), pdf.subarray(to + 1)])).buffer
+    let signed: SignedData
+
+    try {
+      signed = new SignedData({ schema: ContentInfo.fromBER(new Uint8Array(cms)).content })
+    } catch(err) {
+      throw new Error(`The returned signature is not a CMS signature: ${(err as Error).message}`, { cause: err })
+    }
+
+    const [info] = signed.signerInfos
+    const digest = info?.signedAttrs?.attributes.find((attribute) => attribute.type === SignatureService.MESSAGE_DIGEST)
+
+    if (!digest) {
+      throw new Error('The returned signature does not carry the digest of the document it signs.')
+    }
+
+    const algorithm = getAlgorithmByOID(info.digestAlgorithm.algorithmId, true, 'digestAlgorithm')
+
+    if (!Buffer.from(digest.values[0].valueBlock.valueHexView).equals(Buffer.from(await webcrypto.subtle.digest(algorithm.name, content)))) {
+      throw new Error('The returned signature belongs to a different document, it is likely left over from an earlier signing.')
+    }
+
+    const { signatureVerified, signerCertificate } = await signed
+      .verify({
+        signer: 0,
+        data: content,
+        extendedMode: true
+      })
+      .catch((err: Error) => {
+        throw new Error(`Can not verify the returned signature: ${err.message}`, { cause: err })
+      })
+    const signer = new X509Certificate(Buffer.from(signerCertificate.toSchema().toBER()))
+
+    if (certificate && !signer.raw.equals(certificate.raw)) {
+      throw new Error(
+        [
+          `The returned signature is signed by ${this.identify(signer)}, but the configured certificate is ${this.identify(certificate)}.`,
+          'The signature block would show the wrong signer.'
+        ].join(' ')
+      )
+    }
+
+    if (!signatureVerified) {
+      throw new Error(`The returned signature does not verify against the certificate of ${this.identify(signer)}.`)
+    }
+  }
+
   private embed({ pdf, excluded: [from, to] }: SignatureRequest, cms: Buffer): Buffer {
     const signature = cms.toString('hex')
     const length = to - from - 1
@@ -116,6 +164,10 @@ export class SignatureService {
     }
 
     return Buffer.concat([pdf.subarray(0, from + 1), Buffer.from(signature.padEnd(length, '0')), pdf.subarray(to)])
+  }
+
+  private identify(certificate: X509Certificate): string {
+    return `${this.commonName(certificate.subject)} (serial ${certificate.serialNumber})`
   }
 
   private commonName(name: string): string {
