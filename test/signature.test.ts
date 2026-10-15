@@ -1,7 +1,5 @@
 import { Integer, ObjectIdentifier, OctetString, Utf8String } from 'asn1js'
 import { webcrypto, X509Certificate } from 'crypto'
-import { readFile } from 'fs/promises'
-import { join } from 'path'
 import {
   Attribute,
   AttributeTypeAndValue,
@@ -102,8 +100,32 @@ describe('SignatureService', () => {
     return new SignatureService({ name: 'test', sign: (request: SignatureRequest) => cms(request, signer, options) } as unknown as ATrustAdapter)
   }
 
+  /**
+   * A single blank page with a classic cross-reference table, which is what the placeholder expects.
+   */
+  function document(): Buffer {
+    const objects = ['<< /Type /Catalog /Pages 2 0 R >>', '<< /Type /Pages /Kids [3 0 R] /Count 1 >>', '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] >>']
+    let body = '%PDF-1.7\n'
+    const offsets = objects.map((object, index) => {
+      const offset = body.length
+
+      body += `${index + 1} 0 obj\n${object}\nendobj\n`
+
+      return offset
+    })
+
+    return Buffer.from(
+      [
+        body + `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`,
+        ...offsets.map((offset) => `${String(offset).padStart(10, '0')} 00000 n \n`),
+        `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${body.length}\n%%EOF\n`
+      ].join(''),
+      'latin1'
+    )
+  }
+
   beforeAll(async() => {
-    pdf = await readFile(join(import.meta.dirname, 'default.pdf'))
+    pdf = document()
     alice = await identity('Alice', 1, { name: 'ECDSA', namedCurve: 'P-256' })
     bob = await identity('Bob', 2, {
       name: 'RSASSA-PKCS1-v1_5',
