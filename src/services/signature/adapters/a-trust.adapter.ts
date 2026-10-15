@@ -9,6 +9,9 @@ import getRawBody from 'raw-body'
 
 import type { MdPrinterSchema } from '../../../modules/md-printer/md-printer.schema.js'
 import { isLoopbackRequest } from '../../loopback.js'
+import { AppWindow } from '../../renderer/app-window.js'
+import { BrowserNotFoundError } from '../../renderer/browser.js'
+import { BrowserService } from '../../renderer/browser.service.js'
 import { SignatureAdapter } from '../signature.adapter.js'
 import { CommandContext, LoggerService } from '@cenk1cenk2/oclif-common'
 import { SignatureProvider } from '@constants'
@@ -19,6 +22,7 @@ import type { SignatureRequest } from '@interfaces'
  *
  * The signing session runs entirely in the browser, since A-Trust closes the session for every other client once the user logs in.
  * The resulting CMS signature is displayed there and pasted back to a temporary local page.
+ * Every signing gets its own browser window and profile, so a result left over from an earlier signing is never at hand to paste.
  */
 @Injectable()
 export class ATrustAdapter extends SignatureAdapter {
@@ -26,7 +30,8 @@ export class ATrustAdapter extends SignatureAdapter {
 
   constructor(
     private readonly logger: LoggerService,
-    private readonly context: CommandContext<typeof MdPrinterSchema>
+    private readonly context: CommandContext<typeof MdPrinterSchema>,
+    private readonly browser: BrowserService
   ) {
     super()
 
@@ -128,7 +133,7 @@ export class ATrustAdapter extends SignatureAdapter {
       }
 
       res.writeHead(200)
-      res.end('Signature received, you can close this tab.')
+      res.end('Signature received.')
 
       resolve(Buffer.from(cms, 'base64'))
     })
@@ -140,16 +145,46 @@ export class ATrustAdapter extends SignatureAdapter {
     const url = `http://127.0.0.1:${(server.address() as AddressInfo).port}/`
 
     this.logger.info('Sign the document in the browser, then paste the signature back: %s', url)
-    this.open(url)
+
+    const window = await this.open(url).catch((err: Error) => {
+      server.close()
+
+      throw err
+    })
 
     this.context.signal.addEventListener('abort', () => reject(new Error('Signing is aborted.')), { once: true })
 
-    return result.finally(() => server.close())
+    window?.closed.then(
+      () => reject(new Error('The signing window is closed before the signature arrived.')),
+      (err: Error) => this.logger.warn('Can not open the signing window, open the link manually: %s (%s)', url, err.message)
+    )
+
+    return result.finally(async() => {
+      server.close()
+
+      await window?.close()
+    })
   }
 
-  private open(url: string): void {
-    spawn('xdg-open', [url], { stdio: 'ignore', detached: true })
-      .on('error', (err) => this.logger.warn('Can not open the browser, open the link manually: %s', err.message))
-      .unref()
+  private async open(url: string): Promise<AppWindow | undefined> {
+    let executable: string
+
+    try {
+      executable = this.browser.executable()
+    } catch(err) {
+      if (!(err instanceof BrowserNotFoundError)) {
+        throw err
+      }
+
+      this.logger.warn('Can not find a browser to sign in a window of its own, close the tabs of any earlier signing before you continue. %s', err.message)
+
+      spawn('xdg-open', [url], { stdio: 'ignore', detached: true })
+        .on('error', (err) => this.logger.warn('Can not open the browser, open the link manually: %s', err.message))
+        .unref()
+
+      return
+    }
+
+    return AppWindow.open(executable, url)
   }
 }
