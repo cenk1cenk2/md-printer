@@ -10,6 +10,16 @@ export class IncompleteSignatureError extends Error {
   }
 }
 
+export class SignatureVerificationError extends Error {
+  constructor(
+    message: string,
+    public readonly cms: Buffer,
+    options?: ErrorOptions
+  ) {
+    super(message, options)
+  }
+}
+
 /**
  * Parses a DER encoded CMS SignedData, telling a signature that is cut short apart from one that is not a signature at all.
  */

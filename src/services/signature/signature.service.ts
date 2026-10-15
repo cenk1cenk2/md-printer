@@ -9,7 +9,7 @@ import type { SignedData } from 'pkijs'
 import { getAlgorithmByOID } from 'pkijs'
 
 import { ATrustAdapter } from './adapters/a-trust.adapter.js'
-import { IncompleteSignatureError, parseSignedData } from './cms.js'
+import { IncompleteSignatureError, parseSignedData, SignatureVerificationError } from './cms.js'
 import type { SignatureAdapter } from './signature.adapter.js'
 import type { MdPrinterSignature, MdPrinterSignOptions, SignatureRequest } from '@interfaces'
 
@@ -55,7 +55,9 @@ export class SignatureService {
     const request = this.prepare(pdf, options)
     const cms = await this.adapter(options.provider).sign(request)
 
-    await this.verify(request, cms, options.certificate)
+    await this.verify(request, cms, options.certificate).catch((err: Error) => {
+      throw new SignatureVerificationError(err.message, cms, { cause: err })
+    })
 
     return this.embed(request, cms)
   }
@@ -133,7 +135,7 @@ export class SignatureService {
     const algorithm = getAlgorithmByOID(info.digestAlgorithm.algorithmId, true, 'digestAlgorithm')
 
     if (!Buffer.from(digest.values[0].valueBlock.valueHexView).equals(Buffer.from(await webcrypto.subtle.digest(algorithm.name, content)))) {
-      throw new Error('The returned signature belongs to a different document, it is likely left over from an earlier signing.')
+      throw new Error('The returned signature belongs to a different document.')
     }
 
     const { signatureVerified, signerCertificate } = await signed
@@ -173,7 +175,7 @@ export class SignatureService {
   }
 
   private identify(certificate: X509Certificate): string {
-    return `${this.commonName(certificate.subject)} (serial ${certificate.serialNumber})`
+    return `${this.commonName(certificate.subject)} (serial ${certificate.serialNumber}, issuer ${this.commonName(certificate.issuer)})`
   }
 
   private commonName(name: string): string {

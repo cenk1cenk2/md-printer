@@ -71,7 +71,7 @@ describe('inlineHtml', () => {
   })
 
   it('returns the assets HTML output read, so a preview session watches them', async() => {
-    const printer = new PrinterService(undefined, { setup: (): void => undefined } as unknown as LoggerService, undefined, undefined, undefined, undefined, undefined)
+    const printer = new PrinterService(undefined, { setup: (): void => undefined } as unknown as LoggerService, undefined, undefined, undefined, undefined, undefined, undefined)
 
     expect(
       (

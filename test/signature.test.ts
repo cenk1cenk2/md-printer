@@ -1,11 +1,15 @@
 import type { X509Certificate } from 'crypto'
-import { beforeAll, describe, expect, it } from 'vitest'
+import { mkdtemp, readFile, rm, writeFile } from 'fs/promises'
+import { tmpdir } from 'os'
+import { join } from 'path'
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
 
 import type { Identity, SignOptions } from './signature.fixtures.js'
 import { document, identity, sign } from './signature.fixtures.js'
-import type { SignatureRequest } from '@interfaces'
+import type { ConfigService, FileSystemService, LoggerService } from '@cenk1cenk2/oclif-common'
+import type { MdPrinterCtx, SignatureRequest } from '@interfaces'
 import type { ATrustAdapter } from '@services'
-import { SignatureService } from '@services'
+import { PrinterService, SignatureService, SignatureVerificationError } from '@services'
 
 describe('SignatureService', () => {
   let pdf: Buffer
@@ -59,13 +63,13 @@ describe('SignatureService', () => {
 
   it('names both signers when the signature is not from the configured certificate', async() => {
     await expect(service(bob).sign(pdf, { date: new Date(), certificate: alice.x509 })).rejects.toThrow(
-      'The returned signature is signed by Bob (serial 02), but the configured certificate is Alice (serial 01).'
+      'The returned signature is signed by Bob (serial 02, issuer Bob), but the configured certificate is Alice (serial 01, issuer Alice).'
     )
   })
 
   it('refuses a signature that does not verify', async() => {
     await expect(service(alice, { tamper: true }).sign(pdf, { date: new Date(), certificate: alice.x509 })).rejects.toThrow(
-      'The returned signature does not verify against the certificate of Alice (serial 01).'
+      'The returned signature does not verify against the certificate of Alice (serial 01, issuer Alice).'
     )
   })
 
@@ -80,5 +84,48 @@ describe('SignatureService', () => {
     const garbage = new SignatureService({ name: 'test', sign: async() => Buffer.from([0x30, 0x03, 0x02, 0x01, 0x01]) } as unknown as ATrustAdapter)
 
     await expect(garbage.sign(pdf, { date: new Date() })).rejects.toThrow('The returned signature can not be parsed as a CMS signature')
+  })
+})
+
+describe('PrinterService.sign', () => {
+  let directory: string
+
+  beforeEach(async() => {
+    directory = await mkdtemp(join(tmpdir(), 'md-printer-sign-'))
+  })
+
+  afterEach(async() => {
+    await rm(directory, { recursive: true, force: true })
+  })
+
+  it.each([
+    ['writes', true],
+    ['does not write', false]
+  ])('%s the returned signature next to the output when verification fails at debug level %s', async(_, debug) => {
+    const dest = join(directory, 'invoice.pdf')
+    const printer = new PrinterService(
+      { write: (file: string, data: Buffer): Promise<void> => writeFile(file, data) } as unknown as FileSystemService,
+      { setup: (): void => undefined, debug: (): void => undefined } as unknown as LoggerService,
+      { isDebug: debug } as ConfigService,
+      undefined,
+      undefined,
+      undefined,
+      undefined,
+      {
+        sign: async(): Promise<never> => {
+          throw new SignatureVerificationError('The returned signature belongs to a different document.', Buffer.from('cms'))
+        }
+      } as unknown as SignatureService
+    )
+
+    await expect(printer.sign({ options: { dest, sign: {} }, signingTime: new Date() } as MdPrinterCtx, Buffer.from(''))).rejects.toThrow(
+      'The returned signature belongs to a different document.'
+    )
+
+    if (debug) {
+      expect(await readFile(`${dest}.cms.der`, 'utf-8')).toBe('cms')
+    } else {
+      await expect(readFile(`${dest}.cms.der`)).rejects.toThrow()
+    }
   })
 })

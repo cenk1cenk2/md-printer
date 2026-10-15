@@ -7,10 +7,11 @@ import { parse as parseYaml } from 'yaml'
 import { I18nService } from './i18n.service.js'
 import { MarkdownService } from './markdown.service.js'
 import { RendererService } from './renderer/renderer.service.js'
+import { SignatureVerificationError } from './signature/cms.js'
 import { SignatureService } from './signature/signature.service.js'
 import { inlineHtml } from './template/assets.js'
 import { TemplateService } from './template/template.service.js'
-import { FileSystemService, LoggerService } from '@cenk1cenk2/oclif-common'
+import { ConfigService, FileSystemService, LoggerService } from '@cenk1cenk2/oclif-common'
 import { DEFAULT_HIGHLIGHT_STYLE, DEFAULT_LANGUAGE, DEFAULT_PDF_OPTIONS, DEFAULT_TEMPLATE, Directory, InputFileType, MediaType, OutputFileType } from '@constants'
 import type { MdPrinterCtx, MdPrinterFlags, MdPrinterInput, MdPrinterOptions, MdPrinterSignOptions, PrinterOutput, RenderedDocument, TemplateBundle } from '@interfaces'
 
@@ -19,6 +20,7 @@ export class PrinterService {
   constructor(
     private readonly fs: FileSystemService,
     private readonly logger: LoggerService,
+    private readonly config: ConfigService,
     private readonly i18n: I18nService,
     private readonly markdown: MarkdownService,
     private readonly template: TemplateService,
@@ -156,11 +158,23 @@ export class PrinterService {
   }
 
   public sign(ctx: MdPrinterCtx, pdf: Buffer): Promise<Buffer> {
-    return this.signature.sign(pdf, {
-      ...ctx.options.sign,
-      date: ctx.signingTime,
-      certificate: ctx.certificate
-    })
+    return this.signature
+      .sign(pdf, {
+        ...ctx.options.sign,
+        date: ctx.signingTime,
+        certificate: ctx.certificate
+      })
+      .catch(async(err: unknown) => {
+        if (err instanceof SignatureVerificationError && this.config.isDebug && ctx.options.dest) {
+          const path = `${ctx.options.dest}.cms.der`
+
+          await this.fs.write(path, err.cms)
+
+          this.logger.debug('The returned signature is written to: %s', path)
+        }
+
+        throw err
+      })
   }
 
   private signOptions(flags: MdPrinterFlags, ...sources: MdPrinterSignOptions[]): MdPrinterSignOptions {
