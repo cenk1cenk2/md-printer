@@ -12,6 +12,7 @@ import { isLoopbackRequest } from '../../loopback.js'
 import { AppWindow } from '../../renderer/app-window.js'
 import { BrowserNotFoundError } from '../../renderer/browser.js'
 import { BrowserService } from '../../renderer/browser.service.js'
+import { IncompleteSignatureError, parseSignedData } from '../cms.js'
 import { SignatureAdapter } from '../signature.adapter.js'
 import { CommandContext, LoggerService } from '@cenk1cenk2/oclif-common'
 import { SignatureProvider } from '@constants'
@@ -132,10 +133,24 @@ export class ATrustAdapter extends SignatureAdapter {
         return res.end('This does not look like a signature, it should start with MII.')
       }
 
+      const signature = Buffer.from(cms, 'base64')
+
+      try {
+        parseSignedData(signature)
+      } catch(err) {
+        res.writeHead(400)
+
+        if (err instanceof IncompleteSignatureError) {
+          return res.end(`The pasted signature is incomplete (got ${err.received} of ${err.declared} bytes), copy the whole signature text from the A-Trust page.`)
+        }
+
+        return res.end(`The pasted text is not a CMS signature: ${(err as Error).message}`)
+      }
+
       res.writeHead(200)
       res.end('Signature received.')
 
-      resolve(Buffer.from(cms, 'base64'))
+      resolve(signature)
     })
 
     server.listen(0, '127.0.0.1')

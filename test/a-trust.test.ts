@@ -1,8 +1,9 @@
 import { access, chmod, mkdtemp, readFile, rm, writeFile } from 'fs/promises'
 import { tmpdir } from 'os'
 import { join } from 'path'
-import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
+import { identity, sign } from './signature.fixtures.js'
 import type { CommandContext, LoggerService } from '@cenk1cenk2/oclif-common'
 import type { BrowserService } from '@services'
 import { ATrustAdapter } from '@services'
@@ -10,6 +11,7 @@ import { ATrustAdapter } from '@services'
 describe('ATrustAdapter', () => {
   let directory: string
   let controller: AbortController
+  let cms: Buffer
   const logger = {
     setup: (): void => undefined,
     debug: (): void => undefined,
@@ -44,6 +46,18 @@ describe('ATrustAdapter', () => {
     return (adapter as unknown as { collect: (login: string) => Promise<Buffer> }).collect('https://service.a-trust.at/identification.aspx?sid=1')
   }
 
+  function paste(page: string, signature: string): Promise<Response> {
+    return fetch(new URL('/signature', page), {
+      method: 'POST',
+      headers: { origin: new URL(page).origin },
+      body: `<sl:CMSSignature>${signature}</sl:CMSSignature>`
+    })
+  }
+
+  beforeAll(async() => {
+    cms = await sign(new ArrayBuffer(8), await identity('Alice', 1, { name: 'ECDSA', namedCurve: 'P-256' }))
+  })
+
   beforeEach(async() => {
     directory = await mkdtemp(join(tmpdir(), 'md-printer-a-trust-'))
     controller = new AbortController()
@@ -63,15 +77,22 @@ describe('ATrustAdapter', () => {
     expect(Object.keys(args)).toEqual(expect.arrayContaining(['no-first-run', 'no-default-browser-check']))
     await expect(access(args['user-data-dir'])).resolves.toBeUndefined()
 
-    const response = await fetch(new URL('/signature', args.app), {
-      method: 'POST',
-      headers: { origin: new URL(args.app).origin },
-      body: '<sl:CMSSignature>MIIBAg==</sl:CMSSignature>'
-    })
-
-    expect(response.status).toBe(200)
-    expect(await signature).toEqual(Buffer.from('MIIBAg==', 'base64'))
+    expect((await paste(args.app, cms.toString('base64'))).status).toBe(200)
+    expect(await signature).toEqual(cms)
     await expect(access(args['user-data-dir'])).rejects.toThrow()
+  })
+
+  it('refuses an incomplete paste and keeps the session open for another one', async() => {
+    const adapter = new ATrustAdapter(logger, { signal: controller.signal } as CommandContext<never>, await browser(true))
+    const signature = collect(adapter)
+    const { app } = await opened()
+    const response = await paste(app, cms.subarray(0, 513).toString('base64'))
+
+    expect(response.status).toBe(400)
+    expect(await response.text()).toBe(`The pasted signature is incomplete (got 513 of ${cms.length} bytes), copy the whole signature text from the A-Trust page.`)
+
+    expect((await paste(app, cms.toString('base64'))).status).toBe(200)
+    expect(await signature).toEqual(cms)
   })
 
   it('fails when the window is closed before the signature arrives', async() => {

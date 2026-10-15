@@ -1,127 +1,27 @@
-import { Integer, ObjectIdentifier, OctetString, Utf8String } from 'asn1js'
-import { webcrypto, X509Certificate } from 'crypto'
-import {
-  Attribute,
-  AttributeTypeAndValue,
-  Certificate,
-  ContentInfo,
-  EncapsulatedContentInfo,
-  IssuerAndSerialNumber,
-  SignedAndUnsignedAttributes,
-  SignedData,
-  SignerInfo
-} from 'pkijs'
+import type { X509Certificate } from 'crypto'
 import { beforeAll, describe, expect, it } from 'vitest'
 
+import type { Identity, SignOptions } from './signature.fixtures.js'
+import { document, identity, sign } from './signature.fixtures.js'
 import type { SignatureRequest } from '@interfaces'
 import type { ATrustAdapter } from '@services'
 import { SignatureService } from '@services'
 
 describe('SignatureService', () => {
-  interface Identity {
-    certificate: Certificate
-    key: CryptoKey
-    x509: X509Certificate
-  }
-
-  interface SignOptions {
-    digest?: (content: ArrayBuffer) => ArrayBuffer
-    tamper?: boolean
-  }
-
   let pdf: Buffer
   let returned: Buffer
   let alice: Identity
   let bob: Identity
 
-  async function identity(name: string, serial: number, algorithm: EcKeyGenParams | RsaHashedKeyGenParams): Promise<Identity> {
-    const keys = (await webcrypto.subtle.generateKey(algorithm, true, ['sign', 'verify'])) as CryptoKeyPair
-    const certificate = new Certificate()
-    const subject = new AttributeTypeAndValue({ type: '2.5.4.3', value: new Utf8String({ value: name }) })
-
-    certificate.version = 2
-    certificate.serialNumber = new Integer({ value: serial })
-    certificate.subject.typesAndValues.push(subject)
-    certificate.issuer.typesAndValues.push(subject)
-    certificate.notBefore.value = new Date(Date.now() - 86_400_000)
-    certificate.notAfter.value = new Date(Date.now() + 86_400_000)
-
-    await certificate.subjectPublicKeyInfo.importKey(keys.publicKey)
-    await certificate.sign(keys.privateKey, 'SHA-256')
-
-    return {
-      certificate,
-      key: keys.privateKey,
-      x509: new X509Certificate(Buffer.from(certificate.toSchema().toBER()))
-    }
-  }
-
-  /**
-   * Builds a detached CMS signature over the byte range content of the request, the way A-Trust returns it.
-   */
-  async function cms({ pdf, excluded: [from, to] }: SignatureRequest, signer: Identity, options: SignOptions = {}): Promise<Buffer> {
-    const content = new Uint8Array(Buffer.concat([pdf.subarray(0, from), pdf.subarray(to + 1)])).buffer
-    const signed = new SignedData({
-      version: 1,
-      encapContentInfo: new EncapsulatedContentInfo({ eContentType: '1.2.840.113549.1.7.1' }),
-      signerInfos: [
-        new SignerInfo({
-          version: 1,
-          sid: new IssuerAndSerialNumber({ issuer: signer.certificate.issuer, serialNumber: signer.certificate.serialNumber }),
-          signedAttrs: new SignedAndUnsignedAttributes({
-            type: 0,
-            attributes: [
-              new Attribute({ type: '1.2.840.113549.1.9.3', values: [new ObjectIdentifier({ value: '1.2.840.113549.1.7.1' })] }),
-              new Attribute({
-                type: '1.2.840.113549.1.9.4',
-                values: [new OctetString({ valueHex: await webcrypto.subtle.digest('SHA-256', options.digest?.(content) ?? content) })]
-              })
-            ]
-          })
-        })
-      ],
-      certificates: [signer.certificate]
-    })
-
-    await signed.sign(signer.key, 0, 'SHA-256', content)
-
-    if (options.tamper) {
-      const signature = signed.signerInfos[0].signature.valueBlock.valueHexView
-
-      signature[8] = 255 - signature[8]
-    }
-
-    returned = Buffer.from(new ContentInfo({ contentType: '1.2.840.113549.1.7.2', content: signed.toSchema(true) }).toSchema().toBER())
-
-    return returned
-  }
-
   function service(signer: Identity, options?: SignOptions): SignatureService {
-    return new SignatureService({ name: 'test', sign: (request: SignatureRequest) => cms(request, signer, options) } as unknown as ATrustAdapter)
-  }
+    return new SignatureService({
+      name: 'test',
+      sign: async({ pdf, excluded: [from, to] }: SignatureRequest): Promise<Buffer> => {
+        returned = await sign(new Uint8Array(Buffer.concat([pdf.subarray(0, from), pdf.subarray(to + 1)])).buffer, signer, options)
 
-  /**
-   * A single blank page with a classic cross-reference table, which is what the placeholder expects.
-   */
-  function document(): Buffer {
-    const objects = ['<< /Type /Catalog /Pages 2 0 R >>', '<< /Type /Pages /Kids [3 0 R] /Count 1 >>', '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 842] >>']
-    let body = '%PDF-1.7\n'
-    const offsets = objects.map((object, index) => {
-      const offset = body.length
-
-      body += `${index + 1} 0 obj\n${object}\nendobj\n`
-
-      return offset
-    })
-
-    return Buffer.from(
-      [
-        body + `xref\n0 ${objects.length + 1}\n0000000000 65535 f \n`,
-        ...offsets.map((offset) => `${String(offset).padStart(10, '0')} 00000 n \n`),
-        `trailer\n<< /Size ${objects.length + 1} /Root 1 0 R >>\nstartxref\n${body.length}\n%%EOF\n`
-      ].join(''),
-      'latin1'
-    )
+        return returned
+      }
+    } as unknown as ATrustAdapter)
   }
 
   beforeAll(async() => {
@@ -169,9 +69,16 @@ describe('SignatureService', () => {
     )
   })
 
-  it('refuses something that is not a CMS signature', async() => {
-    const garbage = new SignatureService({ name: 'test', sign: async() => Buffer.from('MIIB') } as unknown as ATrustAdapter)
+  it('refuses a signature that is cut short', async() => {
+    const complete = await sign(new ArrayBuffer(8), alice)
+    const truncated = new SignatureService({ name: 'test', sign: async() => complete.subarray(0, 500) } as unknown as ATrustAdapter)
 
-    await expect(garbage.sign(pdf, { date: new Date() })).rejects.toThrow('The returned signature is not a CMS signature')
+    await expect(truncated.sign(pdf, { date: new Date(), certificate: alice.x509 })).rejects.toThrow(`The returned signature is incomplete, got 500 of ${complete.length} bytes.`)
+  })
+
+  it('refuses something that is not a CMS signature', async() => {
+    const garbage = new SignatureService({ name: 'test', sign: async() => Buffer.from([0x30, 0x03, 0x02, 0x01, 0x01]) } as unknown as ATrustAdapter)
+
+    await expect(garbage.sign(pdf, { date: new Date() })).rejects.toThrow('The returned signature can not be parsed as a CMS signature')
   })
 })

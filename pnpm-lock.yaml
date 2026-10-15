@@ -199,6 +199,9 @@ importers:
       '@tailwindcss/typography':
         specifier: ^0.5.20
         version: 0.5.20(tailwindcss@4.3.3)
+      asn1js:
+        specifier: ^3.0.10
+        version: 3.0.10
       change-case:
         specifier: ^5.4.4
         version: 5.4.4
@@ -353,9 +356,6 @@ importers:
       '@types/write-file-atomic':
         specifier: ^4.0.3
         version: 4.0.3
-      asn1js:
-        specifier: ^3.0.10
-        version: 3.0.10
       eslint:
         specifier: ^10.12.0
         version: 10.12.0(jiti@2.7.0)(supports-color@8.1.1)

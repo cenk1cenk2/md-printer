@@ -5,9 +5,11 @@ import { webcrypto, X509Certificate } from 'crypto'
 import { readFile } from 'fs/promises'
 import { homedir } from 'os'
 import { isAbsolute, join } from 'path'
-import { ContentInfo, getAlgorithmByOID, SignedData } from 'pkijs'
+import type { SignedData } from 'pkijs'
+import { getAlgorithmByOID } from 'pkijs'
 
 import { ATrustAdapter } from './adapters/a-trust.adapter.js'
+import { IncompleteSignatureError, parseSignedData } from './cms.js'
 import type { SignatureAdapter } from './signature.adapter.js'
 import type { MdPrinterSignature, MdPrinterSignOptions, SignatureRequest } from '@interfaces'
 
@@ -112,9 +114,13 @@ export class SignatureService {
     let signed: SignedData
 
     try {
-      signed = new SignedData({ schema: ContentInfo.fromBER(new Uint8Array(cms)).content })
+      signed = parseSignedData(cms)
     } catch(err) {
-      throw new Error(`The returned signature is not a CMS signature: ${(err as Error).message}`, { cause: err })
+      if (err instanceof IncompleteSignatureError) {
+        throw new Error(`The returned signature is incomplete, got ${err.received} of ${err.declared} bytes.`, { cause: err })
+      }
+
+      throw new Error(`The returned signature can not be parsed as a CMS signature: ${(err as Error).message}`, { cause: err })
     }
 
     const [info] = signed.signerInfos
