@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common'
+import { readdir } from 'fs/promises'
 import i18next from 'i18next'
 import type { Resource, TFunction } from 'i18next'
 import { basename, extname, join } from 'path'
 
-import { ConfigService, FileSystemService } from '@cenk1cenk2/oclif-common'
+import { FileSystemService, ParserService } from '@cenk1cenk2/oclif-common'
 import { DEFAULT_LANGUAGE, I18N_ACCEPTED_TYPES } from '@constants'
 import type { I18nLoadOptions } from '@interfaces'
 
@@ -11,7 +12,7 @@ import type { I18nLoadOptions } from '@interfaces'
 export class I18nService {
   constructor(
     private readonly fs: FileSystemService,
-    private readonly cs: ConfigService
+    private readonly parser: ParserService
   ) {}
 
   public async load(directory: string, options: I18nLoadOptions): Promise<TFunction> {
@@ -31,10 +32,10 @@ export class I18nService {
     const resources: Resource = {}
 
     await Promise.all(
-      (await this.fs.extra.readdir(directory))
+      (await readdir(directory))
         .filter((file) => I18N_ACCEPTED_TYPES.includes(extname(file)))
         .map(async(file) => {
-          resources[basename(file, extname(file))] = { translation: await this.cs.read(join(directory, file)) }
+          resources[basename(file, extname(file))] = { translation: await this.parser.read(join(directory, file)) }
         })
     )
 

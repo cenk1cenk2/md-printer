@@ -104,6 +104,55 @@ describe('md-printer', () => {
     await expect(run(['--stdin'], '# No output\n')).rejects.toThrow(/No output file to write/)
   })
 
+  it('applies the default template when none is given', async() => {
+    const html = (await run(['--stdin', '-O', '-F', 'html'], '# Default\n')).toString()
+
+    expect(html).toContain('Montserrat')
+  })
+
+  describe('input validation', () => {
+    /**
+     * Runs the built CLI expecting it to fail, resolving with its exit code and the lines it wrote to stderr.
+     */
+    function fail(args: string[], input?: string): Promise<{ code: number | null; lines: string[] }> {
+      return new Promise((resolve, reject) => {
+        const child = execFile(process.execPath, [join(root, 'bin', 'run.js'), ...args], { cwd: root }, (err, _stdout, stderr) =>
+          err ? resolve({ code: child.exitCode, lines: stderr.split('\n').filter(Boolean) }) : reject(new Error('Expected the command to fail.'))
+        )
+
+        child.stdin.end(input ?? '')
+      })
+    }
+
+    it('rejects --stdout with --preview', async() => {
+      await expect(fail([join('test', 'default.md'), '--stdout', '--preview'])).resolves.toEqual({
+        code: 2,
+        lines: [expect.stringContaining('Writing to stdout is not supported with --preview.')]
+      })
+    })
+
+    it('rejects an unknown output file type', async() => {
+      await expect(fail([join('test', 'default.md'), '-O', '-F', 'docx'])).resolves.toEqual({
+        code: 2,
+        lines: [expect.stringMatching(/output-filetype.*"pdf"\|"html"/)]
+      })
+    })
+
+    it('rejects --stdin with both a file and an output argument', async() => {
+      await expect(fail(['--stdin', join('test', 'default.md'), 'output.pdf'], '# Stdin\n')).resolves.toEqual({
+        code: 2,
+        lines: [expect.stringContaining('Reading from --stdin takes only the output file argument.')]
+      })
+    })
+
+    it('rejects a missing input', async() => {
+      await expect(fail([])).resolves.toEqual({
+        code: 2,
+        lines: [expect.stringContaining('Either --stdin or file argument must be provided.')]
+      })
+    })
+  })
+
   it('reads files with an unknown extension as markdown', async() => {
     const input = join(directory, 'notes.txt')
 

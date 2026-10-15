@@ -1,238 +1,37 @@
-import { mkdir } from 'fs/promises'
-import { dirname } from 'path'
-import { text } from 'stream/consumers'
-import writeFileAtomic from 'write-file-atomic'
+import { MdPrinterHandler } from '../modules/md-printer/md-printer.handler.js'
+import { MdPrinterModule } from '../modules/md-printer/md-printer.module.js'
+import { MdPrinterSchema } from '../modules/md-printer/md-printer.schema.js'
+import { Args, Command, Flags, UseHandler } from '@cenk1cenk2/oclif-common'
 
-import type { CliModuleOptions, DynamicModule, RegisterHook, ShouldRunBeforeHook } from '@cenk1cenk2/oclif-common'
-import { Args, CliModule, Command, Flags, JsonParser, ParserService, YamlParser } from '@cenk1cenk2/oclif-common'
-import { InputFileType, OutputFileType } from '@constants'
-import type { MdPrinterCtx, MdPrinterFlags } from '@interfaces'
-import { BrowserService, PreviewService, PrinterModule, PrinterService, SessionService } from '@services'
-
-export default class MDPrinter extends Command<typeof MDPrinter> implements RegisterHook, ShouldRunBeforeHook {
+@UseHandler({
+  module: MdPrinterModule,
+  handler: MdPrinterHandler,
+  schema: MdPrinterSchema
+})
+export default class MDPrinter extends Command {
   static description = 'Renders a markdown or yaml file through a Svelte template into a PDF or HTML document.'
 
   static flags = {
-    stdin: Flags.boolean({
-      char: 'I',
-      description: 'Read the input from stdin.'
-    }),
-    ['input-filetype']: Flags.string({
-      char: 'f',
-      options: Object.values(InputFileType),
-      description: 'Input file type. Detected from the file extension, markdown for stdin and unknown extensions.'
-    }),
-    ['output-filetype']: Flags.string({
-      char: 'F',
-      options: Object.values(OutputFileType),
-      description: 'Output file type, defaults to pdf. Overwrites the one defined in front-matter.'
-    }),
-    stdout: Flags.boolean({
-      char: 'O',
-      description: 'Write the output to stdout instead of a file.'
-    }),
-    template: Flags.string({
-      char: 't',
-      description: 'Built-in template name or path to a template directory, defaults to "default". Overwrites the one defined in front-matter.'
-    }),
-    title: Flags.string({
-      char: 'T',
-      description: 'Document title. Overwrites the one defined in front-matter or the template.'
-    }),
-    language: Flags.string({
-      char: 'l',
-      description: 'Language for template translations. Overwrites the one defined in front-matter and template settings.'
-    }),
-    browser: Flags.string({
-      char: 'b',
-      description: 'Browser executable used for printing. Discovered automatically when omitted (Brave, Chrome, Chromium, Edge).'
-    }),
-    continuous: Flags.boolean({
-      description: 'Render the PDF as a single continuous page without page breaks.'
-    }),
-    preview: Flags.boolean({
-      char: 'p',
-      description: 'Rebuild whenever the input, the template or its assets change, show the HTML and the PDF in a live preview and rewrite the output file when there is one.'
-    }),
-    host: Flags.string({
-      description: 'Loopback host for the preview server, it serves the files next to the input and is never exposed to the network.',
-      options: ['127.0.0.1', 'localhost', '::1'],
-      default: '127.0.0.1'
-    }),
-    port: Flags.integer({
-      description: 'Port for the preview server, random when 0.',
-      default: 0
-    }),
-    open: Flags.boolean({
-      description: 'Open the preview window, --no-open keeps rebuilding and writing without one.',
-      default: true,
-      allowNo: true
-    }),
-    sign: Flags.boolean({
-      description: 'Sign the PDF with a qualified electronic signature through ID Austria (A-Trust).'
-    }),
-    ['sign-provider']: Flags.string({
-      description: 'Signature provider, defaults to a-trust. Overwrites the one defined in front-matter and template settings.'
-    }),
-    ['sign-certificate']: Flags.string({
-      description: 'Signer certificate (DER or PEM) used for the visible signature block and to verify the returned signature.'
-    })
+    stdin: Flags.boolean({ char: 'I' }),
+    ['input-filetype']: Flags.string({ char: 'f' }),
+    ['output-filetype']: Flags.string({ char: 'F' }),
+    stdout: Flags.boolean({ char: 'O' }),
+    template: Flags.string({ char: 't' }),
+    title: Flags.string({ char: 'T' }),
+    language: Flags.string({ char: 'l' }),
+    browser: Flags.string({ char: 'b' }),
+    continuous: Flags.boolean(),
+    preview: Flags.boolean({ char: 'p' }),
+    host: Flags.string(),
+    port: Flags.integer(),
+    open: Flags.boolean({ allowNo: true }),
+    sign: Flags.boolean(),
+    ['sign-provider']: Flags.string(),
+    ['sign-certificate']: Flags.string()
   }
 
   static args = {
-    file: Args.string({
-      description: 'Markdown or yaml file to render.',
-      ignoreStdin: true
-    }),
-    output: Args.string({
-      description: 'Output file. Overwrites the one defined in front-matter.',
-      required: false,
-      ignoreStdin: true
-    })
-  }
-
-  private printer: PrinterService
-  private browser: BrowserService
-
-  public register(_cli: DynamicModule, options: CliModuleOptions): DynamicModule {
-    // stdout carries the document with --stdout, so the logs and the logo go to stderr
-    const cli = CliModule.forRoot({ ...options, logger: { stderr: true } })
-
-    cli.imports.push(PrinterModule.forRoot({ browser: this.flags.browser }))
-
-    return cli
-  }
-
-  public async shouldRunBefore(): Promise<void> {
-    await this.app.get(ParserService).register(JsonParser, YamlParser)
-
-    this.printer = this.app.get(PrinterService)
-    this.browser = this.app.get(BrowserService)
-  }
-
-  public async run(): Promise<void> {
-    const flags: MdPrinterFlags = {
-      file: this.flags.stdin ? undefined : this.args.file,
-      // with stdin there is no input file, so the only argument is the output
-      output: this.flags.stdin ? (this.args.output ?? this.args.file) : this.args.output,
-      stdin: this.flags.stdin ? await text(process.stdin) : undefined,
-      inputFiletype: this.flags['input-filetype'],
-      outputFiletype: this.flags['output-filetype'],
-      stdout: this.flags.stdout,
-      template: this.flags.template,
-      title: this.flags.title,
-      language: this.flags.language,
-      continuous: this.flags.continuous,
-      sign: this.flags.sign,
-      signProvider: this.flags['sign-provider'],
-      signCertificate: this.flags['sign-certificate']
-    }
-
-    if (this.flags.preview) {
-      await this.session(flags)
-    } else {
-      await this.print(flags)
-    }
-  }
-
-  private async print(flags: MdPrinterFlags): Promise<void> {
-    const input = await this.printer.input(flags)
-    const ctx: MdPrinterCtx = { input, options: await this.printer.options(flags, input) }
-
-    this.logger.debug('Options: %o', ctx.options)
-
-    await this.printer.prepare(ctx)
-
-    const document = await this.printer.document(ctx, await this.printer.bundle(ctx.options))
-    let { content } = await this.printer.output(ctx, document)
-
-    if (ctx.signature) {
-      content = await this.printer.sign(ctx, content)
-
-      this.logger.info('Document is signed.')
-    }
-
-    await this.write(ctx, content)
-  }
-
-  private async session(flags: MdPrinterFlags): Promise<void> {
-    if (flags.stdout) {
-      throw new Error('Writing to stdout is not supported with --preview.')
-    }
-
-    const session = this.app.get(SessionService)
-    const preview = this.app.get(PreviewService)
-    let writes = Promise.resolve()
-
-    session.on('building', () => preview.building())
-    session.on('failed', (err) => {
-      this.logger.error(err.message)
-
-      preview.failed(err)
-    })
-    session.on('ready', async(build) => {
-      preview.ready(build)
-
-      if (!build.ctx.options.dest) {
-        this.logger.info('Rebuilt in %dms.', build.ms)
-
-        return
-      }
-
-      session.ignore(build.ctx.options.dest)
-
-      // queued, so a slow write never lands after the one of a newer build
-      writes = writes.then(() => this.write(build.ctx, build.output)).catch((err) => this.logger.error(err.message))
-
-      await writes
-    })
-
-    if (flags.sign) {
-      this.logger.warn('Signing is skipped while previewing, run without --preview to sign the document.')
-    }
-
-    // the default handlers exit immediately, which would skip closing the browser, the preview server and the watcher
-    process.removeAllListeners('SIGINT')
-    process.removeAllListeners('SIGTERM')
-
-    const stopped = new Promise<void>((resolve) => {
-      process.once('SIGINT', () => resolve())
-      process.once('SIGTERM', () => resolve())
-    })
-
-    await session.start(flags)
-
-    const url = await preview.listen({ host: this.flags.host, port: this.flags.port })
-
-    this.logger.info('Preview is running at %s, press Ctrl+C to stop.', url)
-
-    await Promise.race([stopped, this.flags.open ? preview.open(this.browser.executable(), url) : new Promise<never>(() => undefined)])
-
-    await preview.close()
-
-    await session.stop()
-
-    await writes
-  }
-
-  private async write(ctx: MdPrinterCtx, content: Buffer): Promise<void> {
-    const { dest } = ctx.options
-
-    if (!dest) {
-      if (!this.flags.stdout) {
-        throw new Error('No output file to write, pass an output argument, set dest in front-matter or use --stdout.')
-      }
-
-      process.stdout.write(content)
-
-      return
-    }
-
-    await mkdir(dirname(dest), { recursive: true })
-
-    // PDF viewers reloading on change never read a half-written file
-    await writeFileAtomic(dest, content)
-
-    this.logger.info('Written: %s', dest)
+    file: Args.string({ ignoreStdin: true }),
+    output: Args.string({ ignoreStdin: true })
   }
 }

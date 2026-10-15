@@ -3,7 +3,7 @@ import type { Root } from 'hast'
 import type { PDFOptions } from 'puppeteer-core'
 
 import type { MdPrinterSignature, MdPrinterSignOptions } from '../signature.interface.js'
-import type { MediaType, OutputFileType } from '@constants'
+import type { InputFileType, MediaType, OutputFileType, SignatureProvider } from '@constants'
 
 export interface MdPrinterI18nOptions {
   language?: string
@@ -37,19 +37,29 @@ export interface MdPrinterOptions {
   sign: MdPrinterSignOptions
 }
 
-export interface MdPrinterFlags {
-  file?: string
+interface MdPrinterFileSource {
+  file: string
+  stdin?: never
+}
+
+interface MdPrinterStdinSource {
+  file?: never
+  stdin: string
+}
+
+export type MdPrinterFlags = (MdPrinterFileSource | MdPrinterStdinSource) & MdPrinterFlagOptions
+
+export interface MdPrinterFlagOptions {
   output?: string
-  stdin?: string
-  inputFiletype?: string
-  outputFiletype?: string
+  inputFiletype?: InputFileType
+  outputFiletype?: OutputFileType
   stdout?: boolean
   template?: string
   title?: string
   language?: string
   continuous?: boolean
   sign?: boolean
-  signProvider?: string
+  signProvider?: SignatureProvider
   signCertificate?: string
 }
 

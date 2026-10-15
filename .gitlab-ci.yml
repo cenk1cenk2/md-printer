@@ -14,6 +14,7 @@ include:
       - /node/install.gitlab-ci.yml
       - /node/build.gitlab-ci.yml
       - /node/lint.gitlab-ci.yml
+      - /node/run.gitlab-ci.yml
 
   - project: devops/pipelines
     ref: semantic-release@2.5.2
@@ -32,10 +33,9 @@ lint:
 
 typecheck:
   stage: build
-  extends:
-    - .node-lint
+  extends: .node-run
   variables:
-    NODE_LINT_COMMAND: typecheck
+    NODE_COMMAND_SCRIPT: typecheck
 
 build:
   stage: build
@@ -64,12 +64,6 @@ test:
     - mkdir -p .apk-cache
     # apk resolves a relative cache directory against the filesystem root, and an empty cache holds no package index
     - apk add --cache-dir "$CI_PROJECT_DIR/.apk-cache" --update-cache chromium font-noto
-
-test-node-24:
-  extends:
-    - test
-  variables:
-    NODE_VERSION: 24-alpine
 
 semantic-release:
   stage: publish

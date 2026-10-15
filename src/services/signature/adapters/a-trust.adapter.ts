@@ -7,9 +7,11 @@ import type { AddressInfo } from 'net'
 import type { RawBodyError } from 'raw-body'
 import getRawBody from 'raw-body'
 
+import type { MdPrinterSchema } from '../../../modules/md-printer/md-printer.schema.js'
 import { isLoopbackRequest } from '../../loopback.js'
 import { SignatureAdapter } from '../signature.adapter.js'
-import { LoggerService } from '@cenk1cenk2/oclif-common'
+import { CommandContext, LoggerService } from '@cenk1cenk2/oclif-common'
+import { SignatureProvider } from '@constants'
 import type { SignatureRequest } from '@interfaces'
 
 /**
@@ -20,9 +22,12 @@ import type { SignatureRequest } from '@interfaces'
  */
 @Injectable()
 export class ATrustAdapter extends SignatureAdapter {
-  public readonly name = 'a-trust'
+  public readonly name = SignatureProvider.A_TRUST
 
-  constructor(private readonly logger: LoggerService) {
+  constructor(
+    private readonly logger: LoggerService,
+    private readonly context: CommandContext<typeof MdPrinterSchema>
+  ) {
     super()
 
     this.logger.setup(this.constructor.name)
@@ -73,8 +78,10 @@ export class ATrustAdapter extends SignatureAdapter {
 
   private async collect(login: string): Promise<Buffer> {
     let resolve: (cms: Buffer) => void
-    const result = new Promise<Buffer>((done) => {
+    let reject: (err: Error) => void
+    const result = new Promise<Buffer>((done, fail) => {
       resolve = done
+      reject = fail
     })
 
     const page = await readFile(new URL('./a-trust.html', import.meta.url))
@@ -134,6 +141,8 @@ export class ATrustAdapter extends SignatureAdapter {
 
     this.logger.info('Sign the document in the browser, then paste the signature back: %s', url)
     this.open(url)
+
+    this.context.signal.addEventListener('abort', () => reject(new Error('Signing is aborted.')), { once: true })
 
     return result.finally(() => server.close())
   }

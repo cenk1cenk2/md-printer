@@ -2,12 +2,12 @@ import { Injectable } from '@nestjs/common'
 import { plainAddPlaceholder } from '@signpdf/placeholder-plain'
 import { findByteRange, removeTrailingNewLine, SUBFILTER_ETSI_CADES_DETACHED } from '@signpdf/utils'
 import { X509Certificate } from 'crypto'
+import { readFile } from 'fs/promises'
 import { homedir } from 'os'
 import { isAbsolute, join } from 'path'
 
 import { ATrustAdapter } from './adapters/a-trust.adapter.js'
 import type { SignatureAdapter } from './signature.adapter.js'
-import { FileSystemService } from '@cenk1cenk2/oclif-common'
 import type { MdPrinterSignature, MdPrinterSignOptions, SignatureRequest } from '@interfaces'
 
 @Injectable()
@@ -16,10 +16,7 @@ export class SignatureService {
 
   private readonly adapters: SignatureAdapter[]
 
-  constructor(
-    private readonly fs: FileSystemService,
-    aTrust: ATrustAdapter
-  ) {
+  constructor(aTrust: ATrustAdapter) {
     this.adapters = [aTrust]
   }
 
@@ -29,7 +26,7 @@ export class SignatureService {
 
   public async certificate(file: string, date: Date): Promise<X509Certificate> {
     const path = file.replace(/^~(?=\/|$)/, homedir())
-    const certificate = new X509Certificate(await this.fs.extra.readFile(isAbsolute(path) ? path : join(process.cwd(), path)))
+    const certificate = new X509Certificate(await readFile(isAbsolute(path) ? path : join(process.cwd(), path)))
 
     if (date < certificate.validFromDate || date > certificate.validToDate) {
       throw new Error(`Signing certificate is not valid at ${date.toISOString()}, it is valid from ${certificate.validFrom} to ${certificate.validTo}.`)

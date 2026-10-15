@@ -26,8 +26,6 @@ async function main() {
 
   await import('source-map-support').then((lib) => lib.install())
 
-  await import('@cenk1cenk2/oclif-common').then((mod) => mod.setup())
-
   const { execute } = await import('@oclif/core')
 
   return execute({ development: true, dir: import.meta.url })
