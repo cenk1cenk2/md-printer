@@ -170,7 +170,7 @@ export class ATrustAdapter extends SignatureAdapter {
     let command: [string, string[]]
 
     try {
-      command = [this.browser.executable(), ['--new-window', url]]
+      command = [this.browser.executable(), [`--app=${url}`]]
     } catch(err) {
       if (!(err instanceof BrowserNotFoundError)) {
         throw err

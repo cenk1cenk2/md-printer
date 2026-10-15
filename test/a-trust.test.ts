@@ -61,18 +61,19 @@ describe('ATrustAdapter', () => {
     await rm(directory, { recursive: true, force: true })
   })
 
-  it('opens the session in a new browser window and takes the pasted signature', async() => {
+  it('opens the session in an app window and takes the pasted signature', async() => {
     const signature = collect()
-    const [flag, page] = await opened()
+    const args = await opened()
+    const page = args[0].replace(/^--app=/, '')
 
-    expect(flag).toBe('--new-window')
+    expect(args).toEqual([`--app=${page}`])
     expect((await paste(page, cms.toString('base64'))).status).toBe(200)
     expect(await signature).toEqual(cms)
   })
 
   it('refuses an incomplete paste and keeps the session open for another one', async() => {
     const signature = collect()
-    const [, page] = await opened()
+    const page = (await opened())[0].replace(/^--app=/, '')
     const response = await paste(page, cms.subarray(0, 513).toString('base64'))
 
     expect(response.status).toBe(400)
