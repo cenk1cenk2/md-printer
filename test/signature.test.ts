@@ -2,7 +2,7 @@ import type { X509Certificate } from 'crypto'
 import { mkdtemp, readFile, rm, writeFile } from 'fs/promises'
 import { tmpdir } from 'os'
 import { join } from 'path'
-import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest'
+import { afterEach, beforeAll, beforeEach, describe, expect, it, vi } from 'vitest'
 
 import type { Identity, SignOptions } from './signature.fixtures.js'
 import { document, identity, sign } from './signature.fixtures.js'
@@ -16,16 +16,18 @@ describe('SignatureService', () => {
   let returned: Buffer
   let alice: Identity
   let bob: Identity
+  const logger = { setup: (): void => undefined, info: vi.fn() }
+
+  function adapter(sign: (request: SignatureRequest) => Promise<Buffer>): SignatureService {
+    return new SignatureService(logger as unknown as LoggerService, { name: 'test', sign } as unknown as ATrustAdapter)
+  }
 
   function service(signer: Identity, options?: SignOptions): SignatureService {
-    return new SignatureService({
-      name: 'test',
-      sign: async({ pdf, excluded: [from, to] }: SignatureRequest): Promise<Buffer> => {
-        returned = await sign(new Uint8Array(Buffer.concat([pdf.subarray(0, from), pdf.subarray(to + 1)])).buffer, signer, options)
+    return adapter(async({ pdf, excluded: [from, to] }) => {
+      returned = await sign(new Uint8Array(Buffer.concat([pdf.subarray(0, from), pdf.subarray(to + 1)])).buffer, signer, options)
 
-        return returned
-      }
-    } as unknown as ATrustAdapter)
+      return returned
+    })
   }
 
   beforeAll(async() => {
@@ -46,6 +48,14 @@ describe('SignatureService', () => {
     const signed = await service(signer()).sign(pdf, { date: new Date(), certificate: signer().x509 })
 
     expect(signed.toString('latin1')).toContain(`/Contents <${returned.toString('hex')}0`)
+  })
+
+  it('prints a summary of the verified signature', async() => {
+    logger.info.mockClear()
+
+    await service(alice).sign(pdf, { date: new Date() })
+
+    expect(logger.info).toHaveBeenCalledWith(expect.stringContaining('the document digest matches and the signature is valid'), 'Alice (serial 01, issuer Alice)')
   })
 
   it('accepts a valid signature without a configured certificate', async() => {
@@ -75,13 +85,13 @@ describe('SignatureService', () => {
 
   it('refuses a signature that is cut short', async() => {
     const complete = await sign(new ArrayBuffer(8), alice)
-    const truncated = new SignatureService({ name: 'test', sign: async() => complete.subarray(0, 500) } as unknown as ATrustAdapter)
+    const truncated = adapter(async() => complete.subarray(0, 500))
 
     await expect(truncated.sign(pdf, { date: new Date(), certificate: alice.x509 })).rejects.toThrow(`The returned signature is incomplete, got 500 of ${complete.length} bytes.`)
   })
 
   it('refuses something that is not a CMS signature', async() => {
-    const garbage = new SignatureService({ name: 'test', sign: async() => Buffer.from([0x30, 0x03, 0x02, 0x01, 0x01]) } as unknown as ATrustAdapter)
+    const garbage = adapter(async() => Buffer.from([0x30, 0x03, 0x02, 0x01, 0x01]))
 
     await expect(garbage.sign(pdf, { date: new Date() })).rejects.toThrow('The returned signature can not be parsed as a CMS signature')
   })

@@ -11,6 +11,7 @@ import { getAlgorithmByOID } from 'pkijs'
 import { ATrustAdapter } from './adapters/a-trust.adapter.js'
 import { IncompleteSignatureError, parseSignedData, SignatureVerificationError } from './cms.js'
 import type { SignatureAdapter } from './signature.adapter.js'
+import { LoggerService } from '@cenk1cenk2/oclif-common'
 import type { MdPrinterSignature, MdPrinterSignOptions, SignatureRequest } from '@interfaces'
 
 @Injectable()
@@ -20,7 +21,12 @@ export class SignatureService {
 
   private readonly adapters: SignatureAdapter[]
 
-  constructor(aTrust: ATrustAdapter) {
+  constructor(
+    private readonly logger: LoggerService,
+    aTrust: ATrustAdapter
+  ) {
+    this.logger.setup(this.constructor.name)
+
     this.adapters = [aTrust]
   }
 
@@ -55,9 +61,11 @@ export class SignatureService {
     const request = this.prepare(pdf, options)
     const cms = await this.adapter(options.provider).sign(request)
 
-    await this.verify(request, cms, options.certificate).catch((err: Error) => {
+    const signer = await this.verify(request, cms, options.certificate).catch((err: Error) => {
       throw new SignatureVerificationError(err.message, cms, { cause: err })
     })
+
+    this.logger.info('Signature is verified, signed by %s: the document digest matches and the signature is valid.', this.identify(signer))
 
     return this.embed(request, cms)
   }
@@ -111,7 +119,7 @@ export class SignatureService {
     }
   }
 
-  private async verify({ pdf, excluded: [from, to] }: SignatureRequest, cms: Buffer, certificate?: X509Certificate): Promise<void> {
+  private async verify({ pdf, excluded: [from, to] }: SignatureRequest, cms: Buffer, certificate?: X509Certificate): Promise<X509Certificate> {
     const content = new Uint8Array(Buffer.concat([pdf.subarray(0, from), pdf.subarray(to + 1)])).buffer
     let signed: SignedData
 
@@ -161,6 +169,8 @@ export class SignatureService {
     if (!signatureVerified) {
       throw new Error(`The returned signature does not verify against the certificate of ${this.identify(signer)}.`)
     }
+
+    return signer
   }
 
   private embed({ pdf, excluded: [from, to] }: SignatureRequest, cms: Buffer): Buffer {
