@@ -1,15 +1,18 @@
 import type { OnModuleDestroy } from '@nestjs/common'
 import { Injectable } from '@nestjs/common'
+import type { ChildProcess } from 'child_process'
+import { spawn } from 'child_process'
 import { once } from 'events'
+import { mkdtemp, rm } from 'fs/promises'
 import type { IncomingMessage, Server, ServerResponse } from 'http'
 import { createServer } from 'http'
 import type { AddressInfo } from 'net'
+import { tmpdir } from 'os'
 import { join } from 'path'
 import serveStatic from 'serve-static'
 import { fileURLToPath } from 'url'
 
 import { isLoopbackRequest } from '../loopback.js'
-import { AppWindow } from '../renderer/app-window.js'
 import { resolveConfined } from '../template/assets.js'
 import { TemplateService } from '../template/template.service.js'
 import { LoggerService } from '@cenk1cenk2/oclif-common'
@@ -22,7 +25,8 @@ export class PreviewService implements OnModuleDestroy {
   private clients = new Set<ServerResponse>()
   private build?: SessionBuild
   private error?: PreviewError
-  private window?: AppWindow
+  private profile?: string
+  private window?: ChildProcess
 
   constructor(
     private readonly logger: LoggerService,
@@ -74,13 +78,14 @@ export class PreviewService implements OnModuleDestroy {
   }
 
   public async open(executable: string, url: string): Promise<void> {
-    this.window = await AppWindow.open(executable, url)
+    this.profile = await mkdtemp(join(tmpdir(), 'md-printer-preview-'))
+    this.window = spawn(executable, [`--app=${url}`, `--user-data-dir=${this.profile}`, '--no-first-run', '--no-default-browser-check'], { stdio: 'ignore' })
 
-    await this.window.closed.catch((err: Error) => {
-      this.logger.warn('Can not open the preview window, open it manually: %s (%s)', url, err.message)
-
-      // the preview keeps running until it is stopped, same as without a window
-      return new Promise<never>(() => undefined)
+    await new Promise<void>((done) => {
+      this.window.on('exit', () => done())
+      this.window.on('error', (err) => {
+        this.logger.warn('Can not open the preview window, open it manually: %s (%s)', url, err.message)
+      })
     })
   }
 
@@ -89,10 +94,11 @@ export class PreviewService implements OnModuleDestroy {
   }
 
   public async close(): Promise<void> {
-    const { server, window } = this
+    const { server, window, profile } = this
 
     this.server = undefined
     this.window = undefined
+    this.profile = undefined
 
     for (const client of this.clients) {
       client.end()
@@ -100,12 +106,19 @@ export class PreviewService implements OnModuleDestroy {
 
     this.clients.clear()
 
-    await window?.close()
+    // the browser holds its profile open until it exits
+    if (window && window.exitCode === null && window.signalCode === null && window.kill()) {
+      await once(window, 'exit')
+    }
 
     if (server?.listening) {
       server.close()
 
       await once(server, 'close')
+    }
+
+    if (profile) {
+      await rm(profile, { recursive: true, force: true })
     }
   }
 

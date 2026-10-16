@@ -5,10 +5,13 @@ import { webcrypto, X509Certificate } from 'crypto'
 import { readFile } from 'fs/promises'
 import { homedir } from 'os'
 import { isAbsolute, join } from 'path'
-import { ContentInfo, getAlgorithmByOID, SignedData } from 'pkijs'
+import type { SignedData } from 'pkijs'
+import { getAlgorithmByOID } from 'pkijs'
 
 import { ATrustAdapter } from './adapters/a-trust.adapter.js'
+import { IncompleteSignatureError, parseSignedData, SignatureVerificationError } from './cms.js'
 import type { SignatureAdapter } from './signature.adapter.js'
+import { LoggerService } from '@cenk1cenk2/oclif-common'
 import type { MdPrinterSignature, MdPrinterSignOptions, SignatureRequest } from '@interfaces'
 
 @Injectable()
@@ -18,7 +21,12 @@ export class SignatureService {
 
   private readonly adapters: SignatureAdapter[]
 
-  constructor(aTrust: ATrustAdapter) {
+  constructor(
+    private readonly logger: LoggerService,
+    aTrust: ATrustAdapter
+  ) {
+    this.logger.setup(this.constructor.name)
+
     this.adapters = [aTrust]
   }
 
@@ -53,7 +61,11 @@ export class SignatureService {
     const request = this.prepare(pdf, options)
     const cms = await this.adapter(options.provider).sign(request)
 
-    await this.verify(request, cms, options.certificate)
+    const signer = await this.verify(request, cms, options.certificate).catch((err: Error) => {
+      throw new SignatureVerificationError(err.message, cms, { cause: err })
+    })
+
+    this.logger.info('Signature is verified, signed by %s: the document digest matches and the signature is valid.', this.identify(signer))
 
     return this.embed(request, cms)
   }
@@ -107,14 +119,18 @@ export class SignatureService {
     }
   }
 
-  private async verify({ pdf, excluded: [from, to] }: SignatureRequest, cms: Buffer, certificate?: X509Certificate): Promise<void> {
+  private async verify({ pdf, excluded: [from, to] }: SignatureRequest, cms: Buffer, certificate?: X509Certificate): Promise<X509Certificate> {
     const content = new Uint8Array(Buffer.concat([pdf.subarray(0, from), pdf.subarray(to + 1)])).buffer
     let signed: SignedData
 
     try {
-      signed = new SignedData({ schema: ContentInfo.fromBER(new Uint8Array(cms)).content })
+      signed = parseSignedData(cms)
     } catch(err) {
-      throw new Error(`The returned signature is not a CMS signature: ${(err as Error).message}`, { cause: err })
+      if (err instanceof IncompleteSignatureError) {
+        throw new Error(`The returned signature is incomplete, got ${err.received} of ${err.declared} bytes.`, { cause: err })
+      }
+
+      throw new Error(`The returned signature can not be parsed as a CMS signature: ${(err as Error).message}`, { cause: err })
     }
 
     const [info] = signed.signerInfos
@@ -127,7 +143,7 @@ export class SignatureService {
     const algorithm = getAlgorithmByOID(info.digestAlgorithm.algorithmId, true, 'digestAlgorithm')
 
     if (!Buffer.from(digest.values[0].valueBlock.valueHexView).equals(Buffer.from(await webcrypto.subtle.digest(algorithm.name, content)))) {
-      throw new Error('The returned signature belongs to a different document, it is likely left over from an earlier signing.')
+      throw new Error('The returned signature belongs to a different document.')
     }
 
     const { signatureVerified, signerCertificate } = await signed
@@ -153,6 +169,8 @@ export class SignatureService {
     if (!signatureVerified) {
       throw new Error(`The returned signature does not verify against the certificate of ${this.identify(signer)}.`)
     }
+
+    return signer
   }
 
   private embed({ pdf, excluded: [from, to] }: SignatureRequest, cms: Buffer): Buffer {
@@ -167,7 +185,7 @@ export class SignatureService {
   }
 
   private identify(certificate: X509Certificate): string {
-    return `${this.commonName(certificate.subject)} (serial ${certificate.serialNumber})`
+    return `${this.commonName(certificate.subject)} (serial ${certificate.serialNumber}, issuer ${this.commonName(certificate.issuer)})`
   }
 
   private commonName(name: string): string {

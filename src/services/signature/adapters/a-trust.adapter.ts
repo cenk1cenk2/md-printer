@@ -9,9 +9,9 @@ import getRawBody from 'raw-body'
 
 import type { MdPrinterSchema } from '../../../modules/md-printer/md-printer.schema.js'
 import { isLoopbackRequest } from '../../loopback.js'
-import { AppWindow } from '../../renderer/app-window.js'
 import { BrowserNotFoundError } from '../../renderer/browser.js'
 import { BrowserService } from '../../renderer/browser.service.js'
+import { IncompleteSignatureError, parseSignedData } from '../cms.js'
 import { SignatureAdapter } from '../signature.adapter.js'
 import { CommandContext, LoggerService } from '@cenk1cenk2/oclif-common'
 import { SignatureProvider } from '@constants'
@@ -22,7 +22,7 @@ import type { SignatureRequest } from '@interfaces'
  *
  * The signing session runs entirely in the browser, since A-Trust closes the session for every other client once the user logs in.
  * The resulting CMS signature is displayed there and pasted back to a temporary local page.
- * Every signing gets its own browser window and profile, so a result left over from an earlier signing is never at hand to paste.
+ * Every signing opens in a new browser window, so it never lands in a tab that still shows the result of an earlier one.
  */
 @Injectable()
 export class ATrustAdapter extends SignatureAdapter {
@@ -132,10 +132,24 @@ export class ATrustAdapter extends SignatureAdapter {
         return res.end('This does not look like a signature, it should start with MII.')
       }
 
-      res.writeHead(200)
-      res.end('Signature received.')
+      const signature = Buffer.from(cms, 'base64')
 
-      resolve(Buffer.from(cms, 'base64'))
+      try {
+        parseSignedData(signature)
+      } catch(err) {
+        res.writeHead(400)
+
+        if (err instanceof IncompleteSignatureError) {
+          return res.end(`The pasted signature is incomplete (got ${err.received} of ${err.declared} bytes), copy the whole signature text from the A-Trust page.`)
+        }
+
+        return res.end(`The pasted text is not a CMS signature: ${(err as Error).message}`)
+      }
+
+      res.writeHead(200)
+      res.end('Signature received, you can close this window.')
+
+      resolve(signature)
     })
 
     server.listen(0, '127.0.0.1')
@@ -145,46 +159,30 @@ export class ATrustAdapter extends SignatureAdapter {
     const url = `http://127.0.0.1:${(server.address() as AddressInfo).port}/`
 
     this.logger.info('Sign the document in the browser, then paste the signature back: %s', url)
-
-    const window = await this.open(url).catch((err: Error) => {
-      server.close()
-
-      throw err
-    })
+    this.open(url)
 
     this.context.signal.addEventListener('abort', () => reject(new Error('Signing is aborted.')), { once: true })
 
-    window?.closed.then(
-      () => reject(new Error('The signing window is closed before the signature arrived.')),
-      (err: Error) => this.logger.warn('Can not open the signing window, open the link manually: %s (%s)', url, err.message)
-    )
-
-    return result.finally(async() => {
-      server.close()
-
-      await window?.close()
-    })
+    return result.finally(() => server.close())
   }
 
-  private async open(url: string): Promise<AppWindow | undefined> {
-    let executable: string
+  private open(url: string): void {
+    let command: [string, string[]]
 
     try {
-      executable = this.browser.executable()
+      command = [this.browser.executable(), [`--app=${url}`]]
     } catch(err) {
       if (!(err instanceof BrowserNotFoundError)) {
         throw err
       }
 
-      this.logger.warn('Can not find a browser to sign in a window of its own, close the tabs of any earlier signing before you continue. %s', err.message)
+      this.logger.warn('Can not find a browser to sign in a new window, close the tabs of any earlier signing before you continue. %s', err.message)
 
-      spawn('xdg-open', [url], { stdio: 'ignore', detached: true })
-        .on('error', (err) => this.logger.warn('Can not open the browser, open the link manually: %s', err.message))
-        .unref()
-
-      return
+      command = ['xdg-open', [url]]
     }
 
-    return AppWindow.open(executable, url)
+    spawn(...command, { stdio: 'ignore', detached: true })
+      .on('error', (err) => this.logger.warn('Can not open the browser, open the link manually: %s', err.message))
+      .unref()
   }
 }
