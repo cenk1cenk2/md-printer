@@ -29,12 +29,12 @@
     <table class="w-full table-auto my-0!">
       <tbody>
         <tr>
-          <td class="w-[30%] text-left align-middle font-bold">{t('fields.date')}</td>
-          <td class="w-[70%] text-right align-middle font-semibold">{date}</td>
+          <td class="w-[30%] text-left align-middle text-sm font-bold">{t('fields.date')}</td>
+          <td class="w-[70%] text-right align-middle text-sm font-semibold whitespace-nowrap">{date}</td>
         </tr>
         <tr>
-          <td class="w-[30%] text-left align-middle font-bold border-t! border-t-gray-100/30!">{t('fields.id')}</td>
-          <td class="w-[70%] text-right align-middle font-semibold border-t! border-t-gray-100/30!">{id}</td>
+          <td class="w-[30%] text-left align-middle text-sm font-bold border-t! border-t-gray-100/30!">{t('fields.id')}</td>
+          <td class="w-[70%] text-right align-middle text-sm font-semibold whitespace-nowrap border-t! border-t-gray-100/30!">{id}</td>
         </tr>
       </tbody>
     </table>
