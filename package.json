@@ -144,7 +144,7 @@
       "path": "./node_modules/@cenk1cenk2/cz-cc"
     }
   },
-  "packageManager": "pnpm@12.11.1",
+  "packageManager": "pnpm@12.11.2",
   "bugs": {
     "url": "https://gitlab.kilic.dev/utils/md-printer/-/issues"
   },
