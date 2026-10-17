@@ -24,7 +24,7 @@ importers:
         specifier: ^5.1.7
         version: 5.1.8
       '@oclif/plugin-help':
-        specifier: ^7.0.3
+        specifier: ^7.0.4
         version: 7.0.4
       '@signpdf/placeholder-plain':
         specifier: ^3.3.0
@@ -72,7 +72,7 @@ importers:
         specifier: ^11.12.0
         version: 11.12.0
       i18next:
-        specifier: ^26.4.2
+        specifier: ^26.4.3
         version: 26.4.6(typescript@6.0.3)
       lightningcss:
         specifier: ^1.33.0
