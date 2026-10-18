@@ -116,7 +116,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
-    "@cenk1cenk2/cz-cc": "^3.0.6",
+    "@cenk1cenk2/cz-cc": "^3.0.8",
     "@cenk1cenk2/eslint-config": "^3.3.9",
     "@tsconfig/node24": "^24.0.5",
     "@types/hast": "^3.0.5",
