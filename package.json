@@ -62,7 +62,7 @@
   "dependencies": {
     "@cenk1cenk2/oclif-common": "^8.0.0",
     "@fontsource/montserrat": "^5.3.0",
-    "@listr2/manager": "^4.3.2",
+    "@listr2/manager": "^4.3.3",
     "@nestjs/common": "^12.1.2",
     "@oclif/core": "^5.1.7",
     "@oclif/plugin-help": "^7.0.4",
@@ -83,7 +83,7 @@
     "highlight.js": "^11.12.0",
     "i18next": "^26.4.3",
     "lightningcss": "^1.33.0",
-    "listr2": "^11.3.0",
+    "listr2": "^11.4.0",
     "lowlight": "^3.3.0",
     "mime": "^4.1.1",
     "perfect-debounce": "^2.1.0",
