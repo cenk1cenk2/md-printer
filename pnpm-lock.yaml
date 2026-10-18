@@ -231,7 +231,7 @@ importers:
         version: 11.12.0
       i18next:
         specifier: ^26.4.3
-        version: 26.4.7(typescript@6.0.3)
+        version: 26.5.2(typescript@6.0.3)
       lightningcss:
         specifier: ^1.33.0
         version: 1.33.0
@@ -2742,8 +2742,8 @@ packages:
     resolution: {integrity: sha512-eKCa6bwnJhvxj14kZk5NCPc6Hb6BdsU9DZcOnmQKSnO1VKrfV0zCvtttPZUsBvjmNDn8rpcJfpwSYnHBjc95MQ==}
     engines: {node: '>=18.18.0'}
 
-  i18next@26.4.7:
-    resolution: {integrity: sha512-p/3hqy6EcuqRs6wNwBYwGGC1fzBJSMxV9zMuN814ab/7QjdZbXfjXwuPZdQbngX6KDOTxM01uUiZyqmMB8ghZg==}
+  i18next@26.5.2:
+    resolution: {integrity: sha512-6fIXt//2MZNok3tULyjnypxe3vbsy3pV1bVg8p2x3yKrzZvp7z3T+wXx/88LQsATRdhyJeAUAvUxEtxsHdJ29w==}
     peerDependencies:
       typescript: ^5 || ^6 || ^7
     peerDependenciesMeta:
@@ -4096,8 +4096,8 @@ packages:
     resolution: {integrity: sha512-6fPc+R4ihwqP6N/aIv2f1gMH8lOVtWQHoqC4yK6oSDVVocumAsfCqjkXnqiYMhmMwS/mEHLp7Vehlt3ql6lEig==}
     engines: {node: '>=8'}
 
-  strtok3@10.5.0:
-    resolution: {integrity: sha512-PgAsgIuizbZN/r4+g4UNvbVCTpJWdoIdI71kIWwKmdIH0vJ0q7ylMVGU8PWj2s9O98y4MtFWiDTIrtNukZMMgQ==}
+  strtok3@10.6.1:
+    resolution: {integrity: sha512-p8ynRS8lXnvA3tsdcUYFjbzwh2MsdBZgxrFT2G+Yb7vNvUfPF+GgHCt/0jkayfsRXA1TwtZstf+JA0V+iQXdHA==}
     engines: {node: '>=18'}
 
   supports-color@5.5.0:
@@ -6720,7 +6720,7 @@ snapshots:
   file-type@22.1.1(supports-color@8.1.1):
     dependencies:
       '@tokenizer/inflate': 0.4.1(supports-color@8.1.1)
-      strtok3: 10.5.0
+      strtok3: 10.6.1
       token-types: 6.1.2
       uint8array-extras: 1.6.0
     transitivePeerDependencies:
@@ -7084,7 +7084,7 @@ snapshots:
 
   human-signals@8.0.1: {}
 
-  i18next@26.4.7(typescript@6.0.3):
+  i18next@26.5.2(typescript@6.0.3):
     optionalDependencies:
       typescript: 6.0.3
 
@@ -8684,7 +8684,7 @@ snapshots:
 
   strip-json-comments@3.1.1: {}
 
-  strtok3@10.5.0:
+  strtok3@10.6.1:
     dependencies:
       '@tokenizer/token': 0.3.0
 
