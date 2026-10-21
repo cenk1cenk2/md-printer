@@ -230,7 +230,7 @@ importers:
         specifier: ^11.12.0
         version: 11.12.0
       i18next:
-        specifier: ^26.4.4
+        specifier: ^26.4.5
         version: 26.5.3(typescript@6.0.3)
       lightningcss:
         specifier: ^1.33.0
@@ -254,7 +254,7 @@ importers:
         specifier: ^7.2.0
         version: 7.2.0
       puppeteer-core:
-        specifier: ^25.13.0
+        specifier: ^25.14.0
         version: 25.14.0
       raw-body:
         specifier: ^4.0.0
@@ -284,7 +284,7 @@ importers:
         specifier: ^11.1.2
         version: 11.1.2
       rolldown:
-        specifier: ^1.2.13
+        specifier: ^1.2.14
         version: 1.2.14
       rxjs:
         specifier: ^7.8.2
