@@ -81,7 +81,7 @@
     "hast-util-from-html": "^2.0.3",
     "hast-util-to-html": "^9.0.5",
     "highlight.js": "^11.12.0",
-    "i18next": "^26.4.5",
+    "i18next": "^26.4.6",
     "lightningcss": "^1.33.0",
     "listr2": "^11.4.0",
     "lowlight": "^3.3.0",
