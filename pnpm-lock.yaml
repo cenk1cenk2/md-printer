@@ -167,8 +167,8 @@ importers:
   .:
     dependencies:
       '@cenk1cenk2/oclif-common':
-        specifier: ^8.0.0
-        version: 8.0.0(@listr2/manager@4.3.3(listr2@11.4.0))(@nestjs/common@12.2.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.2.0(@nestjs/common@12.2.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(@oclif/core@5.1.9)(listr2@11.4.0)(yaml@2.9.1)
+        specifier: ^8.0.1
+        version: 8.0.1(@listr2/manager@4.3.3(listr2@11.4.0))(@nestjs/common@12.2.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.2.0(@nestjs/common@12.2.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(@oclif/core@5.1.9)(listr2@11.4.0)(yaml@2.9.1)
       '@fontsource/montserrat':
         specifier: ^5.3.0
         version: 5.3.0
@@ -519,8 +519,8 @@ packages:
       svelte-eslint-parser:
         optional: true
 
-  '@cenk1cenk2/oclif-common@8.0.0':
-    resolution: {integrity: sha512-1/6uLaPWLxlP2ogn0xg/bcrHD24/IFXcSa85WLFTxaHpbij9juJadPKDXQy0Ghls/NJ9kseqTwf52CXUTkO2yQ==}
+  '@cenk1cenk2/oclif-common@8.0.1':
+    resolution: {integrity: sha512-3w9kyz9uSwiORXzc1jrgyyove3RyxVRwbHDMl/thhC4hOnJJzsfabteWILVwBpdCdvAbYZgbXeYV95lh/I319A==}
     engines: {node: '>= 24'}
     peerDependencies:
       '@listr2/manager': '>= 4'
@@ -4821,7 +4821,7 @@ snapshots:
       - supports-color
       - typescript
 
-  '@cenk1cenk2/oclif-common@8.0.0(@listr2/manager@4.3.3(listr2@11.4.0))(@nestjs/common@12.2.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.2.0(@nestjs/common@12.2.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(@oclif/core@5.1.9)(listr2@11.4.0)(yaml@2.9.1)':
+  '@cenk1cenk2/oclif-common@8.0.1(@listr2/manager@4.3.3(listr2@11.4.0))(@nestjs/common@12.2.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.2.0(@nestjs/common@12.2.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(@oclif/core@5.1.9)(listr2@11.4.0)(yaml@2.9.1)':
     dependencies:
       '@listr2/manager': 4.3.3(listr2@11.4.0)
       '@nestjs/common': 12.2.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1)
