@@ -188,8 +188,8 @@ importers:
         specifier: ^3.3.0
         version: 3.4.0(pdfkit@0.10.0)
       '@signpdf/utils':
-        specifier: ^3.3.0
-        version: 3.4.0
+        specifier: ^4.0.0
+        version: 4.0.0
       '@tailwindcss/node':
         specifier: ^4.3.3
         version: 4.3.3
@@ -1166,6 +1166,10 @@ packages:
   '@signpdf/utils@3.4.0':
     resolution: {integrity: sha512-8Ayesb0qwk9FrrlotPPaGvNKkIwMeTz4WB43kVu20zA/wcPn2s7J0ZSPqsx+ltVYDglL1wYHQFobgrKDccp3kw==}
     engines: {node: '>=12', yarn: '>=1.22.18'}
+
+  '@signpdf/utils@4.0.0':
+    resolution: {integrity: sha512-4uiNqyHTVnXGYK+zhwLKrsykX3d4f0mlbzykyI0BGiNVIZssHo61KmwWzUEbAcE//TpheUd2xD7yA8mjxIpaZg==}
+    engines: {node: '>=22', yarn: '>=1.22.18'}
 
   '@simple-libs/stream-utils@2.0.0':
     resolution: {integrity: sha512-fCTuZK4QBa+39Oz9l4OGfJfz+GpwCp3AqO7Zch3to99xHPgstVsRFpeQ8LNd2o1Gv8raL2mCFwiaHh7bFSp5DQ==}
@@ -5440,6 +5444,8 @@ snapshots:
       - pdfkit
 
   '@signpdf/utils@3.4.0': {}
+
+  '@signpdf/utils@4.0.0': {}
 
   '@simple-libs/stream-utils@2.0.0':
     optional: true
