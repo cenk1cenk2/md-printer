@@ -67,7 +67,7 @@
     "@oclif/core": "^5.1.8",
     "@oclif/plugin-help": "^7.0.5",
     "@signpdf/placeholder-plain": "^3.3.0",
-    "@signpdf/utils": "^3.3.0",
+    "@signpdf/utils": "^4.0.0",
     "@tailwindcss/node": "^4.3.3",
     "@tailwindcss/oxide": "^4.3.3",
     "@tailwindcss/typography": "^0.5.20",
