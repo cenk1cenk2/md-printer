@@ -333,8 +333,8 @@ importers:
         specifier: ^3.0.9
         version: 3.0.9(@types/node@24.19.2)(typescript@6.0.3)
       '@cenk1cenk2/eslint-config':
-        specifier: ^3.4.1
-        version: 3.4.1(@typescript-eslint/utils@8.72.0(eslint@10.13.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3))(eslint-plugin-svelte@3.23.1(eslint@10.13.0(jiti@2.7.0)(supports-color@8.1.1))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(ts-node@10.9.2(@types/node@24.19.2)(typescript@6.0.3)))(eslint@10.13.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(svelte-eslint-parser@1.10.0(svelte@5.57.2(@typescript-eslint/types@8.72.0)))(typescript@6.0.3)
+        specifier: ^3.4.3
+        version: 3.4.3(@typescript-eslint/utils@8.72.0(eslint@10.13.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3))(eslint-plugin-svelte@3.23.1(eslint@10.13.0(jiti@2.7.0)(supports-color@8.1.1))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(ts-node@10.9.2(@types/node@24.19.2)(typescript@6.0.3)))(eslint@10.13.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(svelte-eslint-parser@1.10.0(svelte@5.57.2(@typescript-eslint/types@8.72.0)))(typescript@6.0.3)
       '@tsconfig/node24':
         specifier: ^24.0.5
         version: 24.0.5
@@ -495,8 +495,8 @@ packages:
     resolution: {integrity: sha512-T49YxyHheR+wKWMwKSoKqXdx1yGKk3vd0H3Yn/jS4CNYztCg+rZXfObujvCOWE70t2PeAv80/4L0RWDb8XxUOA==}
     engines: {node: '>= 24'}
 
-  '@cenk1cenk2/eslint-config@3.4.1':
-    resolution: {integrity: sha512-XNfMbR9qOD41pItd26CndWjV4FtYcpeb8RqFU+F+gN5ECdZKpvhLU+wbFFnNoTBRqwQmgewiJyGKVonY3BD1JA==}
+  '@cenk1cenk2/eslint-config@3.4.3':
+    resolution: {integrity: sha512-3bH/7rfm3LOecjrcfT5l8OTZHPMwNv05apviicBMUey19Fxxs2LsrC+LsRXRZiKChbS84TlrXeEpUfXR+BSd+A==}
     peerDependencies:
       '@vue/eslint-config-typescript': '>= 14.1.1'
       eslint: '>= 9'
@@ -4801,7 +4801,7 @@ snapshots:
       - '@types/node'
       - typescript
 
-  '@cenk1cenk2/eslint-config@3.4.1(@typescript-eslint/utils@8.72.0(eslint@10.13.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3))(eslint-plugin-svelte@3.23.1(eslint@10.13.0(jiti@2.7.0)(supports-color@8.1.1))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(ts-node@10.9.2(@types/node@24.19.2)(typescript@6.0.3)))(eslint@10.13.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(svelte-eslint-parser@1.10.0(svelte@5.57.2(@typescript-eslint/types@8.72.0)))(typescript@6.0.3)':
+  '@cenk1cenk2/eslint-config@3.4.3(@typescript-eslint/utils@8.72.0(eslint@10.13.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3))(eslint-plugin-svelte@3.23.1(eslint@10.13.0(jiti@2.7.0)(supports-color@8.1.1))(svelte@5.57.2(@typescript-eslint/types@8.72.0))(ts-node@10.9.2(@types/node@24.19.2)(typescript@6.0.3)))(eslint@10.13.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(svelte-eslint-parser@1.10.0(svelte@5.57.2(@typescript-eslint/types@8.72.0)))(typescript@6.0.3)':
     dependencies:
       '@eslint/js': 10.0.1(eslint@10.13.0(jiti@2.7.0)(supports-color@8.1.1))
       '@stylistic/eslint-plugin': 5.10.0(eslint@10.13.0(jiti@2.7.0)(supports-color@8.1.1))
