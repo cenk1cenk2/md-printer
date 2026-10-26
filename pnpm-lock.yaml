@@ -183,7 +183,7 @@ importers:
         version: 5.1.9
       '@oclif/plugin-help':
         specifier: ^7.0.5
-        version: 7.0.5
+        version: 7.0.6
       '@signpdf/placeholder-plain':
         specifier: ^3.3.0
         version: 3.4.0(pdfkit@0.10.0)
@@ -367,7 +367,7 @@ importers:
         version: 10.2.1
       oclif:
         specifier: ^6.0.10
-        version: 6.0.10(@types/node@24.19.2)(supports-color@8.1.1)
+        version: 6.0.11(@types/node@24.19.2)(supports-color@8.1.1)
       prettier:
         specifier: ^3.9.10
         version: 3.9.10
@@ -1008,12 +1008,12 @@ packages:
     resolution: {integrity: sha512-jZfN6pxHkgDpHD0dk4nhtaUtYdK39oZoWJCfmkpp7CUE+6mUZSb3WDrdBHnxI5n6CJIiWBrLchM7rBvuV0lRSA==}
     engines: {node: '>=22.0.0'}
 
-  '@oclif/plugin-help@7.0.5':
-    resolution: {integrity: sha512-yhDWRNRRgCPXmmlNQoqlVMF75M/6MkLWiSYsxSyCCG3o1cn8NW5pmAzU71LwN/7SVUyqm1ou0y51pQ2CScVvkQ==}
+  '@oclif/plugin-help@7.0.6':
+    resolution: {integrity: sha512-0p9fM8OtQAZi68arvkfvUzbgiVpXGu6fIgkcvTc2wbuIHfDCs6benPU2uxXxfU2yJ0BWJw6cJbCZQN9cK4H6HA==}
     engines: {node: '>=22.0.0'}
 
-  '@oclif/plugin-not-found@4.0.6':
-    resolution: {integrity: sha512-blt1UpQ/+TWjzfcLY89ifQUN/GgJIvBFvwj/QnJUToBDWLKswKWUpUewnrsbZA+MU0XYasluJ1fokCP4bo+Vbg==}
+  '@oclif/plugin-not-found@4.0.7':
+    resolution: {integrity: sha512-i1SKG/rnCx/uy2YYzo3mthouiV5sFC+LXbudwRbjDgHEY87uSGPQG02kRYuge5s5XDmn0c8FOqzu6IVbx1aV5w==}
     engines: {node: '>=22.0.0'}
 
   '@oclif/plugin-warn-if-update-available@4.0.5':
@@ -3508,8 +3508,8 @@ packages:
     resolution: {integrity: sha512-5vvB5+W7ePv+p3uqxi+RcW1XAzLW0/hxt3/4X4Lc4qHudzOhmBiBwOY6DRob4WnanAEGvNcLjF+KNOufrUoEQw==}
     engines: {node: '>=12.20.0'}
 
-  oclif@6.0.10:
-    resolution: {integrity: sha512-LS+ZNHNsp2kXi6zDExwWY143zPeTsTTy+ubK0K6D8s+0a7nEmeInmrGcHJ68QgLYoNw8ubTgAkhl8U3rl9t9Sg==}
+  oclif@6.0.11:
+    resolution: {integrity: sha512-iCnuHD65qqDHWVOm93TZmIZ2g5BVqoT312U5WEEZDZV0A/jeLxKXOjigW+XWv01ml5BEvjxYEvSsslpoOl6OXw==}
     engines: {node: '>=22.0.0'}
     hasBin: true
 
@@ -5331,11 +5331,11 @@ snapshots:
       wrap-ansi: 7.0.0
       wsl-utils: 0.4.0
 
-  '@oclif/plugin-help@7.0.5':
+  '@oclif/plugin-help@7.0.6':
     dependencies:
       '@oclif/core': 5.1.9
 
-  '@oclif/plugin-not-found@4.0.6(@types/node@24.19.2)':
+  '@oclif/plugin-not-found@4.0.7(@types/node@24.19.2)':
     dependencies:
       '@inquirer/prompts': 7.10.1(@types/node@24.19.2)
       '@oclif/core': 5.1.9
@@ -7926,7 +7926,7 @@ snapshots:
 
   obug@3.0.0: {}
 
-  oclif@6.0.10(@types/node@24.19.2)(supports-color@8.1.1):
+  oclif@6.0.11(@types/node@24.19.2)(supports-color@8.1.1):
     dependencies:
       '@aws-sdk/client-cloudfront': 3.1156.0
       '@aws-sdk/client-s3': 3.1156.0
@@ -7934,8 +7934,8 @@ snapshots:
       '@inquirer/input': 2.3.0
       '@inquirer/select': 2.5.0
       '@oclif/core': 5.1.9
-      '@oclif/plugin-help': 7.0.5
-      '@oclif/plugin-not-found': 4.0.6(@types/node@24.19.2)
+      '@oclif/plugin-help': 7.0.6
+      '@oclif/plugin-not-found': 4.0.7(@types/node@24.19.2)
       '@oclif/plugin-warn-if-update-available': 4.0.5(supports-color@8.1.1)
       ansis: 3.17.0
       async-retry: 1.3.3
