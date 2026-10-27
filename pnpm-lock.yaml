@@ -248,13 +248,13 @@ importers:
         specifier: ^2.1.0
         version: 2.1.0
       pkijs:
-        specifier: ^3.4.1
+        specifier: ^3.4.2
         version: 3.4.3
       property-information:
         specifier: ^7.2.0
         version: 7.2.0
       puppeteer-core:
-        specifier: ^25.14.0
+        specifier: ^25.15.0
         version: 25.16.0
       raw-body:
         specifier: ^4.0.0
