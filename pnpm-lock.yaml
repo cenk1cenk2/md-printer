@@ -185,8 +185,8 @@ importers:
         specifier: ^7.0.5
         version: 7.0.6
       '@signpdf/placeholder-plain':
-        specifier: ^3.4.0
-        version: 3.4.0(pdfkit@0.10.0)
+        specifier: ^4.0.0
+        version: 4.0.0(pdfkit@0.10.0)
       '@signpdf/utils':
         specifier: ^4.0.0
         version: 4.0.0
@@ -1153,19 +1153,15 @@ packages:
   '@sec-ant/readable-stream@0.4.1':
     resolution: {integrity: sha512-831qok9r2t8AlxLko40y2ebgSDhenenCatLVeW/uBtnHPyhHOvG0C7TvfgecV+wHzIm5KUICgzmVpWS+IMEAeg==}
 
-  '@signpdf/placeholder-pdfkit010@3.4.0':
-    resolution: {integrity: sha512-fWj/BkZ8JXqzY1HliPuOEWtBmhQZ+sYATJrE3WADNKGb/ZAO0w/Enfb/8wKd8gDR2T2OrMmK299wXmHktXIjqA==}
-    engines: {node: '>=12', yarn: '>=1.22.18'}
+  '@signpdf/placeholder-pdfkit010@4.0.0':
+    resolution: {integrity: sha512-bs274cSJ6/4eIiSECYy2uFr+dKQMkt3x9EEMvHYfbYdXyEEeXYDG/HAi5yOdjcB4UOb5ZuGz3vU4Owy9vPWjeQ==}
+    engines: {node: '>=22', yarn: '>=1.22.18'}
     peerDependencies:
       pdfkit: ~0.10.0
 
-  '@signpdf/placeholder-plain@3.4.0':
-    resolution: {integrity: sha512-uK3Ql35hIjHWV2I5KAfXczuBrnwJfTp2B1Rl6REGllVh479Tj7CQb2o/R6tfkUKcEuT38mpXTlherPkBEZlOAw==}
-    engines: {node: '>=12'}
-
-  '@signpdf/utils@3.4.0':
-    resolution: {integrity: sha512-8Ayesb0qwk9FrrlotPPaGvNKkIwMeTz4WB43kVu20zA/wcPn2s7J0ZSPqsx+ltVYDglL1wYHQFobgrKDccp3kw==}
-    engines: {node: '>=12', yarn: '>=1.22.18'}
+  '@signpdf/placeholder-plain@4.0.0':
+    resolution: {integrity: sha512-Uu2c2Fm/i6fsaxiSJIfaaVC3c+AYlazPb0Mcd2kPVi7I+oIcmL4M3pfuRCKWaNJB8MKE8clcR6LCx+nSoZxq5w==}
+    engines: {node: '>=22'}
 
   '@signpdf/utils@4.0.0':
     resolution: {integrity: sha512-4uiNqyHTVnXGYK+zhwLKrsykX3d4f0mlbzykyI0BGiNVIZssHo61KmwWzUEbAcE//TpheUd2xD7yA8mjxIpaZg==}
@@ -5431,19 +5427,17 @@ snapshots:
 
   '@sec-ant/readable-stream@0.4.1': {}
 
-  '@signpdf/placeholder-pdfkit010@3.4.0(pdfkit@0.10.0)':
+  '@signpdf/placeholder-pdfkit010@4.0.0(pdfkit@0.10.0)':
     dependencies:
-      '@signpdf/utils': 3.4.0
+      '@signpdf/utils': 4.0.0
       pdfkit: 0.10.0
 
-  '@signpdf/placeholder-plain@3.4.0(pdfkit@0.10.0)':
+  '@signpdf/placeholder-plain@4.0.0(pdfkit@0.10.0)':
     dependencies:
-      '@signpdf/placeholder-pdfkit010': 3.4.0(pdfkit@0.10.0)
-      '@signpdf/utils': 3.4.0
+      '@signpdf/placeholder-pdfkit010': 4.0.0(pdfkit@0.10.0)
+      '@signpdf/utils': 4.0.0
     transitivePeerDependencies:
       - pdfkit
-
-  '@signpdf/utils@3.4.0': {}
 
   '@signpdf/utils@4.0.0': {}
 

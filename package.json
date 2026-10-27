@@ -66,7 +66,7 @@
     "@nestjs/common": "^12.2.0",
     "@oclif/core": "^5.1.9",
     "@oclif/plugin-help": "^7.0.5",
-    "@signpdf/placeholder-plain": "^3.4.0",
+    "@signpdf/placeholder-plain": "^4.0.0",
     "@signpdf/utils": "^4.0.0",
     "@tailwindcss/node": "^4.3.3",
     "@tailwindcss/oxide": "^4.3.3",
