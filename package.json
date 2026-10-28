@@ -121,7 +121,7 @@
     "@tsconfig/node24": "^24.0.5",
     "@types/hast": "^3.0.5",
     "@types/mdast": "^4.0.4",
-    "@types/node": "^24.19.2",
+    "@types/node": "^26.6.5",
     "@types/serve-static": "^2.2.0",
     "@types/which": "^3.0.4",
     "@types/write-file-atomic": "^4.0.3",
