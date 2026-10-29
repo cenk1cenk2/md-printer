@@ -13,7 +13,7 @@ include:
     file: /references/workflow.gitlab-ci.yml
 
   - project: devops/pipelines
-    ref: node@2.1.1
+    ref: node@2.2.0
     file:
       - /node/install.gitlab-ci.yml
       - /node/build.gitlab-ci.yml
