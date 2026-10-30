@@ -363,7 +363,7 @@ importers:
         specifier: ^3.23.1
         version: 3.23.1(eslint@10.13.0(jiti@2.7.0)(supports-color@8.1.1))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(ts-node@10.9.2(@types/node@26.6.6)(typescript@6.0.3))
       execa:
-        specifier: ^10.2.0
+        specifier: ^10.2.1
         version: 10.2.1
       oclif:
         specifier: ^6.0.10
@@ -375,7 +375,7 @@ importers:
         specifier: ^4.1.1
         version: 4.1.1(prettier@3.9.10)(svelte@5.57.3(@typescript-eslint/types@8.72.1))
       svelte-eslint-parser:
-        specifier: ^1.9.0
+        specifier: ^1.10.0
         version: 1.10.0(svelte@5.57.3(@typescript-eslint/types@8.72.1))
       ts-node:
         specifier: ^10.9.2
