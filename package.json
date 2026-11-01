@@ -128,7 +128,7 @@
     "eslint": "^10.13.0",
     "eslint-plugin-svelte": "^3.23.1",
     "execa": "^10.2.1",
-    "oclif": "^6.0.13",
+    "oclif": "^6.0.14",
     "prettier": "^3.9.10",
     "prettier-plugin-svelte": "^4.1.1",
     "svelte-eslint-parser": "^1.10.0",
