@@ -104,7 +104,7 @@
     "serve-static": "^2.2.1",
     "source-map-support": "^0.5.21",
     "srcset": "^5.0.3",
-    "svelte": "^5.57.2",
+    "svelte": "^5.57.3",
     "tailwindcss": "^4.3.3",
     "unified": "^11.0.5",
     "unist-util-visit": "^5.2.0",
