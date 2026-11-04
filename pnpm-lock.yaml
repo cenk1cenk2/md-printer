@@ -176,10 +176,10 @@ importers:
         specifier: ^4.3.3
         version: 4.3.3(listr2@11.4.0)
       '@nestjs/common':
-        specifier: ^12.2.0
+        specifier: ^12.3.2
         version: 12.3.2(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1)
       '@oclif/core':
-        specifier: ^5.1.9
+        specifier: ^5.1.10
         version: 5.1.11
       '@oclif/plugin-help':
         specifier: ^7.0.6
@@ -242,13 +242,13 @@ importers:
         specifier: ^3.3.0
         version: 3.3.0
       mime:
-        specifier: ^4.1.1
+        specifier: ^4.1.2
         version: 4.1.2
       perfect-debounce:
         specifier: ^2.1.0
         version: 2.1.0
       pkijs:
-        specifier: ^4.0.0
+        specifier: ^4.0.1
         version: 4.0.1(asn1js@3.1.0)
       property-information:
         specifier: ^7.2.0
