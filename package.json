@@ -75,7 +75,7 @@
     "change-case": "^5.4.4",
     "chokidar": "^6.0.0",
     "enhanced-resolve": "^5.26.0",
-    "entities": "^8.1.0",
+    "entities": "^9.0.0",
     "es-toolkit": "^1.53.0",
     "github-markdown-css": "^5.9.0",
     "hast-util-from-html": "^2.0.3",
