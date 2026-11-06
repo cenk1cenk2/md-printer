@@ -224,7 +224,7 @@ importers:
         specifier: ^2.0.3
         version: 2.0.3
       hast-util-to-html:
-        specifier: ^9.0.5
+        specifier: ^9.0.6
         version: 9.0.6
       highlight.js:
         specifier: ^11.12.0
@@ -284,7 +284,7 @@ importers:
         specifier: ^11.1.2
         version: 11.1.2
       rolldown:
-        specifier: ^1.2.15
+        specifier: ^1.2.16
         version: 1.2.16
       rxjs:
         specifier: ^7.8.2
