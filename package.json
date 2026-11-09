@@ -17,7 +17,7 @@
     "format": "prettier --write packages/ templates/ --log-level warn && eslint --fix"
   },
   "devDependencies": {
-    "@cenk1cenk2/cz-cc": "^3.0.12",
+    "@cenk1cenk2/cz-cc": "^3.0.13",
     "@cenk1cenk2/eslint-config": "^3.4.7",
     "@types/node": "^26.6.6",
     "eslint": "^10.14.0",
