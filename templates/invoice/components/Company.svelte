@@ -2,14 +2,15 @@
   @component
   Logo, sender details and invoice title cells of the invoice header.
 -->
-<script>
-  /**
-   * @type {{
-   *   company: { name?: string, tax_number?: string, address?: string, phone?: string, email?: string, website?: string },
-   *   t: (key: string) => string
-   * }}
-   */
-  let { company, t } = $props()
+<script lang="ts">
+  import type { TFunction } from 'i18next'
+
+  interface Props {
+    company: { name?: string, tax_number?: string, address?: string, phone?: string, email?: string, website?: string }
+    t: TFunction
+  }
+
+  let { company, t }: Props = $props()
 </script>
 
 <img

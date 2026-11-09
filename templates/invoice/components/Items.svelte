@@ -2,17 +2,18 @@
   @component
   Table of invoice line items with their subtotal, tax and total.
 -->
-<script>
+<script lang="ts">
+  import type { TFunction } from 'i18next'
+
   import { round } from '../round.js'
 
-  /**
-   * @type {{
-   *   rows: { item: { description?: string, quantity: number, unit?: string, price: number, tax: number }, subtotal: number, tax: number, total: number }[],
-   *   currency: string,
-   *   t: (key: string) => string
-   * }}
-   */
-  let { rows, currency, t } = $props()
+  interface Props {
+    rows: { item: { description?: string, quantity: number, unit?: string, price: number, tax: number }, subtotal: number, tax: number, total: number }[]
+    currency: string
+    t: TFunction
+  }
+
+  let { rows, currency, t }: Props = $props()
 </script>
 
 <div class="col-span-12 px-16 py-4">

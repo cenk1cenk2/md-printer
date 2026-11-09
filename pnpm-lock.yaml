@@ -165,13 +165,55 @@ settings:
 importers:
 
   .:
+    devDependencies:
+      '@cenk1cenk2/cz-cc':
+        specifier: ^3.0.12
+        version: 3.0.12(@types/node@26.6.6)(typescript@6.0.3)
+      '@cenk1cenk2/eslint-config':
+        specifier: ^3.4.5
+        version: 3.4.5(@typescript-eslint/utils@8.72.1(eslint@10.14.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3))(eslint-plugin-svelte@3.24.1(eslint@10.14.0(jiti@2.7.0)(supports-color@8.1.1))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(ts-node@10.9.2(@types/node@26.6.6)(typescript@6.0.3)))(eslint@10.14.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(svelte-eslint-parser@1.10.1(svelte@5.57.3(@typescript-eslint/types@8.72.1)))(typescript@6.0.3)
+      '@types/node':
+        specifier: ^26.6.6
+        version: 26.6.6
+      eslint:
+        specifier: ^10.14.0
+        version: 10.14.0(jiti@2.7.0)(supports-color@8.1.1)
+      eslint-plugin-svelte:
+        specifier: ^3.23.1
+        version: 3.24.1(eslint@10.14.0(jiti@2.7.0)(supports-color@8.1.1))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(ts-node@10.9.2(@types/node@26.6.6)(typescript@6.0.3))
+      prettier:
+        specifier: ^3.9.10
+        version: 3.9.10
+      prettier-plugin-svelte:
+        specifier: ^4.1.1
+        version: 4.1.1(prettier@3.9.10)(svelte@5.57.3(@typescript-eslint/types@8.72.1))
+      svelte-eslint-parser:
+        specifier: ^1.10.0
+        version: 1.10.1(svelte@5.57.3(@typescript-eslint/types@8.72.1))
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
+
+  packages/md-printer:
     dependencies:
+      '@cenk1cenk2/md-printer-template-cv':
+        specifier: workspace:^
+        version: link:../../templates/cv
+      '@cenk1cenk2/md-printer-template-default':
+        specifier: workspace:^
+        version: link:../../templates/default
+      '@cenk1cenk2/md-printer-template-invoice':
+        specifier: workspace:^
+        version: link:../../templates/invoice
+      '@cenk1cenk2/md-printer-template-kilic.dev':
+        specifier: workspace:^
+        version: link:../../templates/kilic.dev
+      '@cenk1cenk2/md-printer-template-mail':
+        specifier: workspace:^
+        version: link:../../templates/mail
       '@cenk1cenk2/oclif-common':
         specifier: ^8.0.2
         version: 8.0.2(@listr2/manager@4.3.3(listr2@11.4.0))(@nestjs/common@12.4.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.4.0(@nestjs/common@12.4.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(@oclif/core@5.1.11)(listr2@11.4.0)(yaml@2.9.1)
-      '@fontsource/montserrat':
-        specifier: ^5.3.0
-        version: 5.3.0
       '@listr2/manager':
         specifier: ^4.3.3
         version: 4.3.3(listr2@11.4.0)
@@ -217,9 +259,6 @@ importers:
       es-toolkit:
         specifier: ^1.53.1
         version: 1.53.2
-      github-markdown-css:
-        specifier: ^5.9.0
-        version: 5.9.0
       hast-util-from-html:
         specifier: ^2.0.3
         version: 2.1.0
@@ -244,6 +283,9 @@ importers:
       mime:
         specifier: ^4.1.2
         version: 4.1.2
+      mupdf:
+        specifier: ^1.28.1
+        version: 1.28.1
       perfect-debounce:
         specifier: ^2.1.0
         version: 2.1.0
@@ -329,12 +371,6 @@ importers:
         specifier: ^4.6.7
         version: 4.6.7
     devDependencies:
-      '@cenk1cenk2/cz-cc':
-        specifier: ^3.0.12
-        version: 3.0.12(@types/node@26.6.6)(typescript@6.0.3)
-      '@cenk1cenk2/eslint-config':
-        specifier: ^3.4.5
-        version: 3.4.5(@typescript-eslint/utils@8.72.1(eslint@10.14.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3))(eslint-plugin-svelte@3.24.1(eslint@10.14.0(jiti@2.7.0)(supports-color@8.1.1))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(ts-node@10.9.2(@types/node@26.6.6)(typescript@6.0.3)))(eslint@10.14.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(svelte-eslint-parser@1.10.1(svelte@5.57.3(@typescript-eslint/types@8.72.1)))(typescript@6.0.3)
       '@tsconfig/node24':
         specifier: ^24.0.5
         version: 24.0.5
@@ -356,27 +392,12 @@ importers:
       '@types/write-file-atomic':
         specifier: ^4.0.3
         version: 4.0.3
-      eslint:
-        specifier: ^10.14.0
-        version: 10.14.0(jiti@2.7.0)(supports-color@8.1.1)
-      eslint-plugin-svelte:
-        specifier: ^3.23.1
-        version: 3.24.1(eslint@10.14.0(jiti@2.7.0)(supports-color@8.1.1))(svelte@5.57.3(@typescript-eslint/types@8.72.1))(ts-node@10.9.2(@types/node@26.6.6)(typescript@6.0.3))
       execa:
         specifier: ^10.2.1
         version: 10.2.1
       oclif:
         specifier: ^6.0.15
         version: 6.0.15(@types/node@26.6.6)(supports-color@8.1.1)
-      prettier:
-        specifier: ^3.9.10
-        version: 3.9.10
-      prettier-plugin-svelte:
-        specifier: ^4.1.1
-        version: 4.1.1(prettier@3.9.10)(svelte@5.57.3(@typescript-eslint/types@8.72.1))
-      svelte-eslint-parser:
-        specifier: ^1.10.0
-        version: 1.10.1(svelte@5.57.3(@typescript-eslint/types@8.72.1))
       ts-node:
         specifier: ^10.9.2
         version: 10.9.2(@types/node@26.6.6)(typescript@6.0.3)
@@ -395,6 +416,51 @@ importers:
       vitest:
         specifier: ^5.0.5
         version: 5.1.0(@types/node@26.6.6)(vite@8.3.6(@types/node@26.6.6)(jiti@2.7.0)(yaml@2.9.1))
+
+  templates/cv:
+    dependencies:
+      '@fontsource/carlito':
+        specifier: ^5.3.0
+        version: 5.3.0
+      '@fortawesome/fontawesome-free':
+        specifier: ^7.3.1
+        version: 7.3.1
+      svelte:
+        specifier: ^5.57.3
+        version: 5.57.3(@typescript-eslint/types@8.72.1)
+
+  templates/default:
+    dependencies:
+      github-markdown-css:
+        specifier: ^5.9.0
+        version: 5.9.0
+      svelte:
+        specifier: ^5.57.3
+        version: 5.57.3(@typescript-eslint/types@8.72.1)
+
+  templates/invoice:
+    dependencies:
+      svelte:
+        specifier: ^5.57.3
+        version: 5.57.3(@typescript-eslint/types@8.72.1)
+
+  templates/kilic.dev:
+    dependencies:
+      github-markdown-css:
+        specifier: ^5.9.0
+        version: 5.9.0
+      svelte:
+        specifier: ^5.57.3
+        version: 5.57.3(@typescript-eslint/types@8.72.1)
+
+  templates/mail:
+    dependencies:
+      '@fontsource/montserrat':
+        specifier: ^5.3.0
+        version: 5.3.0
+      svelte:
+        specifier: ^5.57.3
+        version: 5.57.3(@typescript-eslint/types@8.72.1)
 
 packages:
 
@@ -602,8 +668,15 @@ packages:
     resolution: {integrity: sha512-IkO+/KEUvwbVpiURZg+P7zF74z5Jxe0UgJxVni+RtoHQ6IZieXaO02kmadomap/q+l6bc/jdPGGqTjhuZnuz1Q==}
     engines: {node: ^20.19.0 || ^22.13.0 || >=24}
 
+  '@fontsource/carlito@5.3.0':
+    resolution: {integrity: sha512-oPqvLGK/dtVzC4KjdDcV/YzQq37sZdMXxD58ADvguPo3dm6yzbBKs40ADmevJF0wLvyvJY7/fPl5YkCQ1njWUw==}
+
   '@fontsource/montserrat@5.3.0':
     resolution: {integrity: sha512-iQPDtZOnmM5ih4JBGaMSXisRap0ixb9bAUw2hDtY7EjVfaqiiNlKtVuJl9XclxUwtwMMHNcWXfQR6zI9x05+Tg==}
+
+  '@fortawesome/fontawesome-free@7.3.1':
+    resolution: {integrity: sha512-wmglKKPDIkgV3aWlZzWECCPoGIkYCulzBwxG9+w7rc5BGapZ6cPMpoPOT8k36J0Ni7PPX6c/rsoMWfS4d1MUMg==}
+    engines: {node: '>=6'}
 
   '@humanfs/core@0.19.2':
     resolution: {integrity: sha512-UhXNm+CFMWcbChXywFwkmhqjs3PRCmcSa/hfBgLIb7oQ5HNb1wS0icWsGtSAUNgefHeI+eBrA8I1fxmbHsGdvA==}
@@ -3441,6 +3514,9 @@ packages:
   ms@2.1.3:
     resolution: {integrity: sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==}
 
+  mupdf@1.28.1:
+    resolution: {integrity: sha512-Gi11Ow2G1SlrXKJNZBL1eAIGFVih5+4ZKqjptamTVaj/5hnlrcVrVbyb7lHE2lfFKdxZPyv9ZtfOOq7XgjzEig==}
+
   mute-stream@0.0.8:
     resolution: {integrity: sha512-nnbWWOkoWyUsTjKrhgD0dcz22mdkSnpYqbEjIm2nhwhuxlSkpywJmBo8h0ZqJdkp73mb90SssHkN4rsRaBAfAA==}
 
@@ -4930,7 +5006,11 @@ snapshots:
       '@eslint/core': 1.2.1
       levn: 0.4.1
 
+  '@fontsource/carlito@5.3.0': {}
+
   '@fontsource/montserrat@5.3.0': {}
+
+  '@fortawesome/fontawesome-free@7.3.1': {}
 
   '@humanfs/core@0.19.2':
     dependencies:
@@ -7861,6 +7941,8 @@ snapshots:
   modern-tar@0.8.6: {}
 
   ms@2.1.3: {}
+
+  mupdf@1.28.1: {}
 
   mute-stream@0.0.8: {}
 

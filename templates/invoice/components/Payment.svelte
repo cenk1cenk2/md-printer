@@ -2,14 +2,15 @@
   @component
   Bank details of the payee, shown beside the totals.
 -->
-<script>
-  /**
-   * @type {{
-   *   payment: { bank?: string, address?: string, bic?: string, routing?: string, name?: string, iban?: string },
-   *   t: (key: string) => string
-   * }}
-   */
-  let { payment, t } = $props()
+<script lang="ts">
+  import type { TFunction } from 'i18next'
+
+  interface Props {
+    payment: { bank?: string, address?: string, bic?: string, routing?: string, name?: string, iban?: string }
+    t: TFunction
+  }
+
+  let { payment, t }: Props = $props()
 </script>
 
 <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-gray-100 bg-gray-900">

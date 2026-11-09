@@ -2,16 +2,17 @@
   @component
   Recipient details and the date/id table of the invoice.
 -->
-<script>
-  /**
-   * @type {{
-   *   client: { name?: string, tax_number?: string, address?: string },
-   *   date: string,
-   *   id: string | number,
-   *   t: (key: string) => string
-   * }}
-   */
-  let { client, date, id, t } = $props()
+<script lang="ts">
+  import type { TFunction } from 'i18next'
+
+  interface Props {
+    client: { name?: string, tax_number?: string, address?: string }
+    date: string
+    id: string | number
+    t: TFunction
+  }
+
+  let { client, date, id, t }: Props = $props()
 </script>
 
 <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-gray-100">

@@ -1,0 +1,404 @@
+import { execFile } from 'node:child_process'
+import { chmod, copyFile, mkdir, mkdtemp, readFile, rm, stat, symlink, writeFile } from 'node:fs/promises'
+import { tmpdir } from 'node:os'
+import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
+import { afterAll, beforeAll, describe, expect, it } from 'vitest'
+
+const root = fileURLToPath(new URL('..', import.meta.url))
+
+/**
+ * Runs the built CLI and resolves with its raw stdout, so the tests see exactly what a pipe would.
+ */
+function run(args: string[], input?: string): Promise<Buffer> {
+  return new Promise((resolve, reject) => {
+    const child = execFile(
+      process.execPath,
+      [join(root, 'bin', 'run.js'), ...args],
+      {
+        cwd: root,
+        encoding: 'buffer',
+        maxBuffer: 64 * 1024 * 1024
+      },
+      (err, stdout, stderr) => (err ? reject(new Error(`${err.message}\n${stderr.toString()}`)) : resolve(stdout))
+    )
+
+    if (input !== undefined) {
+      child.stdin.end(input)
+    }
+  })
+}
+
+function count(buffer: Buffer, needle: string): number {
+  return buffer.toString('latin1').split(needle).length - 1
+}
+
+function pages(pdf: Buffer): number {
+  return pdf.toString('latin1').match(/\/Type\s*\/Page[^s]/g)?.length ?? 0
+}
+
+describe('md-printer', () => {
+  let directory: string
+
+  beforeAll(async() => {
+    directory = await mkdtemp(join(tmpdir(), 'md-printer-test-'))
+  })
+
+  afterAll(async() => {
+    await rm(directory, { recursive: true, force: true })
+  })
+
+  it.each(['default', 'kilic.dev', 'invoice', 'cv'])('renders the %s fixture', async(fixture) => {
+    const output = join(directory, `${fixture}.pdf`)
+
+    await run([join('test', `${fixture}.md`), output])
+
+    const pdf = await readFile(output)
+
+    expect(pdf.subarray(0, 5).toString()).toBe('%PDF-')
+    expect(pages(pdf)).toBe(1)
+  })
+
+  it('writes exactly one PDF to stdout', async() => {
+    const stdout = await run([join('test', 'default.md'), '-O'])
+
+    expect(stdout.subarray(0, 5).toString()).toBe('%PDF-')
+    expect(count(stdout, '%PDF-')).toBe(1)
+    expect(count(stdout, '%%EOF')).toBe(1)
+  })
+
+  it('reads markdown from stdin', async() => {
+    expect((await run(['-O', '--stdin'], '# From stdin\n')).subarray(0, 5).toString()).toBe('%PDF-')
+  })
+
+  it('renders continuous mode as a single page', async() => {
+    const output = join(directory, 'continuous.pdf')
+
+    await run([join('test', 'continuous.md'), output])
+
+    expect(pages(await readFile(output))).toBe(1)
+  })
+
+  it('prints header and footer on every page', async() => {
+    const output = join(directory, 'two-pages.pdf')
+
+    await run(['--stdin', '-t', 'kilic.dev', '-T', 'Two pages', output], '# One\n\n<div class="page-break"></div>\n\n# Two\n')
+
+    expect(pages(await readFile(output))).toBe(2)
+  })
+
+  it('writes self-contained HTML for the mail template', async() => {
+    const html = (await run([join('test', 'mail.md'), '-O'])).toString()
+
+    expect(count(Buffer.from(html), '<!doctype html>')).toBe(1)
+    expect(html).toMatch(/<style/)
+    expect(html).not.toMatch(/md-printer\.local/)
+    expect(html).not.toMatch(/fonts\.(bunny|googleapis)/)
+  })
+
+  it('fails on a directory without a template', async() => {
+    await expect(run([join('test', 'default.md'), '-O', '-t', 'test'])).rejects.toThrow(/Template does not exist/)
+  })
+
+  it('fails instead of writing to the terminal when there is no output', async() => {
+    await expect(run(['--stdin'], '# No output\n')).rejects.toThrow(/No output file to write/)
+  })
+
+  it('applies the default template when none is given', async() => {
+    const html = (await run(['--stdin', '-O', '-F', 'html'], '# Default\n')).toString()
+
+    expect(html).toContain('Montserrat')
+  })
+
+  it('resolves the dependencies a template brings in its own node_modules before md-printer ones', async() => {
+    const template = join(directory, 'template-with-dependencies')
+    const modules = join(template, 'node_modules')
+
+    await mkdir(join(modules, 'local-kit'), { recursive: true })
+    await writeFile(join(modules, 'local-kit', 'package.json'), JSON.stringify({
+      name: 'local-kit', main: 'index.js', type: 'module'
+    }))
+    await writeFile(join(modules, 'local-kit', 'index.js'), 'export const greeting = \'from local-kit\'\n')
+    await writeFile(join(modules, 'local-kit', 'mark.svg'), '<svg xmlns="http://www.w3.org/2000/svg" width="1" height="1"></svg>')
+    // md-printer depends on both packages itself, the template's copies have to win
+    await mkdir(join(modules, 'yaml'), { recursive: true })
+    await writeFile(join(modules, 'yaml', 'package.json'), JSON.stringify({
+      name: 'yaml', main: 'index.js', type: 'module'
+    }))
+    await writeFile(join(modules, 'yaml', 'index.js'), 'export const stringify = () => \'template yaml\'\n')
+    await mkdir(join(modules, 'highlight.js', 'styles'), { recursive: true })
+    await writeFile(join(modules, 'highlight.js', 'package.json'), JSON.stringify({ name: 'highlight.js' }))
+    await writeFile(join(modules, 'highlight.js', 'styles', 'github.css'), '.template-css { color: rgb(1, 2, 3); }\n')
+    await writeFile(
+      join(template, 'Template.svelte'),
+      [
+        '<script lang="ts">',
+        '  import { greeting } from \'local-kit\'',
+        '  import mark from \'local-kit/mark.svg\'',
+        '  import { stringify } from \'yaml\'',
+        '</script>',
+        '',
+        '<p class="template-css">{greeting} / {stringify()}</p>',
+        '<img src={mark} alt="" />',
+        '',
+        '<style lang="postcss">',
+        '  @import \'highlight.js/styles/github.css\';',
+        '</style>',
+        ''
+      ].join('\n')
+    )
+
+    const html = (await run(['--stdin', '-O', '-F', 'html', '-t', template], '# Dependencies\n')).toString()
+
+    expect(html).toContain('from local-kit / template yaml')
+    expect(html).toContain('src="data:image/svg+xml;base64,')
+    expect(html).toMatch(/\.template-css\s*\{\s*color:\s*(rgb\(1,\s*2,\s*3\)|#010203)/)
+  })
+
+  it('names the template directory when a dependency of the template is not installed', async() => {
+    const template = join(directory, 'template-missing-dependency')
+
+    await mkdir(template, { recursive: true })
+    await writeFile(
+      join(template, 'Template.svelte'),
+      ['<script lang="ts">', '  import { greeting } from \'not-installed-kit\'', '</script>', '', '<p>{greeting}</p>', ''].join('\n')
+    )
+
+    await expect(run(['--stdin', '-O', '-F', 'html', '-t', template], '# Missing\n')).rejects.toThrow(
+      new RegExp(`not-installed-kit[\\s\\S]*Install it in the template directory: ${template}`)
+    )
+  })
+
+  describe('attachments', () => {
+    let attachments: string
+
+    beforeAll(async() => {
+      attachments = join(directory, 'attachments')
+
+      await mkdir(attachments)
+      await run(['--stdin', join(attachments, 'reference.pdf')], '# Reference\n\n::pagebreak\n\n# Reference, page two\n')
+    })
+
+    const render = async(frontmatter: string, args: string[] = []): Promise<Buffer> => {
+      const input = join(attachments, 'document.md')
+
+      await writeFile(input, `---\n${frontmatter}\n---\n\n# Document\n`)
+
+      return run([input, '-O', ...args])
+    }
+
+    it('merges the attachments of the front-matter into the PDF', async() => {
+      const pdf = await render(
+        ['attachments:', '  - file: ./reference.pdf', '    position: before', '  - file: ./reference.pdf', '    compress: true', 'compress: true'].join('\n')
+      )
+
+      expect(pdf.subarray(0, 5).toString()).toBe('%PDF-')
+      expect(pages(pdf)).toBe(5)
+    })
+
+    it('rejects an invalid position', async() => {
+      await expect(render(['attachments:', '  - file: ./reference.pdf', '    position: middle'].join('\n'))).rejects.toThrow(/invalid position: middle/)
+    })
+
+    it('rejects attachments for HTML output', async() => {
+      await expect(render(['attachments:', '  - file: ./reference.pdf'].join('\n'), ['-F', 'html'])).rejects.toThrow(/only supported for PDF output/)
+    })
+  })
+
+  describe('input validation', () => {
+    /**
+     * Runs the built CLI expecting it to fail, resolving with its exit code and the lines it wrote to stderr.
+     */
+    function fail(args: string[], input?: string): Promise<{ code: number | null; lines: string[] }> {
+      return new Promise((resolve, reject) => {
+        const child = execFile(process.execPath, [join(root, 'bin', 'run.js'), ...args], { cwd: root }, (err, _stdout, stderr) =>
+          err ? resolve({ code: child.exitCode, lines: stderr.split('\n').filter(Boolean) }) : reject(new Error('Expected the command to fail.'))
+        )
+
+        child.stdin.end(input ?? '')
+      })
+    }
+
+    it('rejects --stdout with --preview', async() => {
+      await expect(fail([join('test', 'default.md'), '--stdout', '--preview'])).resolves.toEqual({
+        code: 2,
+        lines: [expect.stringContaining('Writing to stdout is not supported with --preview.')]
+      })
+    })
+
+    it('rejects an unknown output file type', async() => {
+      await expect(fail([join('test', 'default.md'), '-O', '-F', 'docx'])).resolves.toEqual({
+        code: 2,
+        lines: [expect.stringMatching(/output-filetype.*"pdf"\|"html"/)]
+      })
+    })
+
+    it('rejects --stdin with both a file and an output argument', async() => {
+      await expect(fail(['--stdin', join('test', 'default.md'), 'output.pdf'], '# Stdin\n')).resolves.toEqual({
+        code: 2,
+        lines: [expect.stringContaining('Reading from --stdin takes only the output file argument.')]
+      })
+    })
+
+    it('rejects a missing input', async() => {
+      await expect(fail([])).resolves.toEqual({
+        code: 2,
+        lines: [expect.stringContaining('Either --stdin or file argument must be provided.')]
+      })
+    })
+  })
+
+  it('reads files with an unknown extension as markdown', async() => {
+    const input = join(directory, 'notes.txt')
+
+    await writeFile(input, '# Notes\n')
+
+    expect((await run([input, '-O'])).subarray(0, 5).toString()).toBe('%PDF-')
+  })
+
+  it('escapes a template title once', async() => {
+    const template = join(directory, 'title-template')
+
+    await mkdir(template, { recursive: true })
+    await writeFile(join(template, 'Template.svelte'), '<svelte:head><title>{"R&D <1>"}</title></svelte:head>\n<p>body</p>\n')
+
+    const html = (await run(['--stdin', '-O', '-F', 'html', '-t', template], '# Title\n')).toString()
+
+    expect(html).toContain('<title>R&amp;D &lt;1></title>')
+  })
+
+  it('starts a new page at a PageBreak component', async() => {
+    const template = join(directory, 'page-break-template')
+
+    await mkdir(template, { recursive: true })
+    await writeFile(
+      join(template, 'Template.svelte'),
+      '<script>\n  import { PageBreak } from \'@cenk1cenk2/md-printer/components\'\n</script>\n\n<p>one</p>\n<PageBreak />\n<p>two</p>\n'
+    )
+
+    expect(pages(await run(['--stdin', '-O', '-t', template], '# Pages\n'))).toBe(2)
+  })
+
+  it('breaks pages at ::pagebreak, inside flex layouts and in continuous mode', async() => {
+    const markdown = '# One\n\n::pagebreak\n\n<div style="display: flex"><div>left</div><div class="page-break"></div><div>right</div></div>\n'
+
+    expect(pages(await run(['--stdin', '-O'], markdown))).toBe(3)
+    expect(pages(await run(['--stdin', '-O', '--continuous'], markdown))).toBe(3)
+  })
+
+  it('keeps text that only looks like a directive', async() => {
+    const html = (await run(['--stdin', '-O', '-F', 'html'], 'Meet at 10:30am, note:here.\n')).toString()
+
+    expect(html).toContain('Meet at 10:30am, note:here.')
+  })
+
+  it('keeps code samples in HTML output untouched', async() => {
+    const input = join(directory, 'code', 'input.md')
+
+    await mkdir(join(directory, 'code'), { recursive: true })
+    await copyFile(join(root, 'test', 'assets', 'landscape.svg'), join(directory, 'code', 'x.svg'))
+    await writeFile(input, 'Inline `url(x.svg)` here.\n\n```\n<img src="x.svg">\n```\n\n![image](x.svg)\n')
+
+    const html = (await run([input, '-F', 'html', '-O'])).toString()
+
+    expect(html).toContain('<code>url(x.svg)</code>')
+    expect(html).toContain('&lt;img src="x.svg">')
+    expect(html).toMatch(/<img src="data:image\/svg\+xml;base64,[^"]+" alt="image">/)
+  })
+
+  it('keeps the file mode of an existing output', async() => {
+    const output = join(directory, 'private.html')
+
+    await writeFile(output, '')
+    await chmod(output, 0o600)
+    await run(['--stdin', '-F', 'html', output], '# Private\n')
+
+    expect(((await stat(output)).mode % 0o1000).toString(8)).toBe('600')
+    expect(await readFile(output, 'utf8')).toContain('Private')
+  })
+
+  it('starts a new page at the shared PageBreak component as ::page-break', async() => {
+    expect(pages(await run(['--stdin', '-O'], '# One\n\n::page-break\n\n# Two\n'))).toBe(2)
+  })
+
+  describe('markdown components', () => {
+    let template: string
+
+    const markdown = [
+      '---',
+      'who: Ada',
+      '---',
+      '',
+      '::callout{type="info"}',
+      '',
+      ':::callout{type="warn"}',
+      'Some **bold** text',
+      ':::',
+      '',
+      '- one :items[**two**]{count="3"} three',
+      '',
+      '::title',
+      '',
+      'Meet at 10:30am. ::nope',
+      '',
+      '::nope{a="1"}',
+      ''
+    ].join('\n')
+
+    beforeAll(async() => {
+      template = join(directory, 'components-template')
+
+      await mkdir(join(template, 'components'), { recursive: true })
+      await writeFile(join(template, 'Template.svelte'), '<script>\n  import { Markdown } from \'@cenk1cenk2/md-printer/components\'\n</script>\n\n<Markdown />\n')
+      await writeFile(
+        join(template, 'components', 'Callout.svelte'),
+        [
+          '<script>',
+          '  import { getContext } from \'svelte\'',
+          '',
+          '  let { type, children } = $props()',
+          '',
+          '  const { data } = getContext(\'md-printer:document\')',
+          '</script>',
+          '',
+          '<aside class="callout" data-type="{typeof type}:{type}">{data.who}: {@render children?.()}</aside>',
+          ''
+        ].join('\n')
+      )
+      await writeFile(
+        join(template, 'components', 'Items.svelte'),
+        '<script>\n  let { count, children } = $props()\n</script>\n\n<span class="items" data-count="{typeof count}:{count}">{@render children?.()}</span>\n'
+      )
+      await writeFile(join(template, 'components', 'Title.svelte'), '<h2 class="template-title">From the template</h2>\n')
+    })
+
+    it('renders leaf, container and inline directives through the template components', async() => {
+      const html = (await run(['--stdin', '-O', '-F', 'html', '-t', template], markdown)).toString()
+
+      expect(html).toMatch(/<aside class="callout" data-type="string:info">Ada: (<!--[^>]*-->)*<\/aside>/)
+      expect(html).toMatch(/<aside class="callout" data-type="string:warn">Ada: (<!--[^>]*-->)*<p>Some <strong>bold<\/strong> text<\/p>/)
+      expect(html).toMatch(/<li>(<!--[^>]*-->)*one (<!--[^>]*-->)*<span class="items" data-count="string:3">(<!--[^>]*-->)*<strong>two<\/strong>/)
+      expect(html).toContain('<h2 class="template-title">From the template</h2>')
+    })
+
+    it('keeps directives without a component as written', async() => {
+      const html = (await run(['--stdin', '-O', '-F', 'html', '-t', template], markdown)).toString()
+
+      expect(html).toContain('<p>Meet at 10:30am. ::nope</p>')
+      expect(html).toContain('<p>::nope{a="1"}</p>')
+    })
+
+    it('renders the components into content for templates that place it with {@html content}', async() => {
+      const raw = join(directory, 'raw-content-template')
+
+      await mkdir(raw)
+      await symlink(join(template, 'components'), join(raw, 'components'))
+      await writeFile(join(raw, 'Template.svelte'), '<script>\n  let { content } = $props()\n</script>\n\n<main>{@html content}</main>\n')
+
+      const html = (await run(['--stdin', '-O', '-F', 'html', '-t', raw], markdown)).toString()
+
+      expect(html).toMatch(/<aside class="callout" data-type="string:warn">Ada: (<!--[^>]*-->)*<p>Some <strong>bold<\/strong> text<\/p>/)
+      expect(html).toContain('<p>::nope{a="1"}</p>')
+    })
+  })
+})
