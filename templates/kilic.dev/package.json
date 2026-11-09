@@ -13,13 +13,6 @@
   "publishConfig": {
     "access": "public"
   },
-  "files": [
-    "**/*.svelte",
-    "**/*.ts",
-    "**/*.json",
-    "**/*.yaml",
-    "!release.config.cjs"
-  ],
   "keywords": [
     "md-printer",
     "md-printer-template",

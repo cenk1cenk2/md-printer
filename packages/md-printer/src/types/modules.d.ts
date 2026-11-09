@@ -22,6 +22,13 @@ declare module 'md-printer:template-components' {
   export default components
 }
 
+declare module 'md-printer:extension' {
+  /** The namespaces of the extension modules in order. */
+  const modules: Record<string, unknown>[]
+
+  export default modules
+}
+
 declare module '*.svg' {
   const uri: string
 

@@ -5,6 +5,16 @@ export enum TemplateFiles {
   SETTINGS = 'settings.json'
 }
 
+/** Where a template keeps its files unless `files` in its settings says otherwise, the root locations of 3.x come last. */
+export const TEMPLATE_LAYOUT = {
+  template: ['template/Template.svelte', 'Template.svelte'],
+  components: ['template/components', 'components'],
+  extension: ['src', '.'],
+  i18n: ['i18n']
+}
+
+export const TEMPLATE_EXTENSION_FILES = ['extension.ts', 'extension.mts', 'extension.cts', 'extension.js', 'extension.mjs', 'extension.cjs']
+
 export enum RenderMode {
   BODY = 'body',
   HEADER = 'header',
@@ -19,6 +29,12 @@ export enum MediaType {
 /** Built-in templates are packages named with this prefix, which md-printer depends on. */
 export const TEMPLATE_PACKAGE_PREFIX = '@cenk1cenk2/md-printer-template-'
 
+export enum TemplateSourceType {
+  BUILTIN = 'builtin',
+  PACKAGE = 'package',
+  DIRECTORY = 'directory'
+}
+
 export enum Directory {
   COMPONENTS = 'components',
   I18N = 'i18n'
@@ -27,14 +43,16 @@ export enum Directory {
 export enum ModuleSpecifier {
   TEMPLATE = 'md-printer:template',
   COMPONENTS = '@cenk1cenk2/md-printer/components',
-  TEMPLATE_COMPONENTS = 'md-printer:template-components'
+  TEMPLATE_COMPONENTS = 'md-printer:template-components',
+  EXTENSION = 'md-printer:extension'
 }
 
 export enum ContextKey {
   RENDER_MODE = 'md-printer:mode',
   DOCUMENT = 'md-printer:document',
   MARKDOWN = 'md-printer:markdown',
-  COMPONENTS = 'md-printer:components'
+  COMPONENTS = 'md-printer:components',
+  EXTENSION = 'md-printer:extension'
 }
 
 export const TAILWIND_STYLE_LANG = 'postcss'

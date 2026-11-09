@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common'
 import { cloneDeep, mergeWith, uniq } from 'es-toolkit'
-import { basename, dirname, extname, join, resolve } from 'path'
+import { basename, dirname, extname, resolve } from 'path'
 import type { PDFOptions } from 'puppeteer-core'
 import { parse as parseYaml } from 'yaml'
 
@@ -11,6 +11,8 @@ import { RendererService } from './renderer/renderer.service.js'
 import { SignatureVerificationError } from './signature/cms.js'
 import { SignatureService } from './signature/signature.service.js'
 import { inlineHtml } from './template/assets.js'
+import type { TemplateSource } from './template/template.schema.js'
+import { issues, TemplateSourceSchema } from './template/template.schema.js'
 import { TemplateService } from './template/template.service.js'
 import { ConfigService, FileSystemService, LoggerService } from '@cenk1cenk2/oclif-common'
 import {
@@ -19,10 +21,10 @@ import {
   DEFAULT_LANGUAGE,
   DEFAULT_PDF_OPTIONS,
   DEFAULT_TEMPLATE,
-  Directory,
   InputFileType,
   MediaType,
-  OutputFileType
+  OutputFileType,
+  TemplateSourceType
 } from '@constants'
 import type {
   MdPrinterAttachment,
@@ -89,8 +91,8 @@ export class PrinterService {
 
   public async options(flags: MdPrinterFlags, input: MdPrinterInput): Promise<MdPrinterOptions> {
     const { data } = input
-    const template = this.template.resolve(flags.template ?? data.template ?? DEFAULT_TEMPLATE)
-    const settings = await this.template.settings(template)
+    const source = this.templateSource(this.templateFlags(flags) ?? data.template) ?? DEFAULT_TEMPLATE
+    const { directory: template, settings, files } = await this.template.resolve(source, input.directory)
     const output = (flags.outputFiletype ?? data.outputFiletype ?? OutputFileType.PDF) as OutputFileType
 
     if (!Object.values(OutputFileType).includes(output)) {
@@ -101,6 +103,7 @@ export class PrinterService {
 
     return {
       template,
+      files,
       output,
       dest: dest && resolve(dest),
       title: flags.title ?? data.documentTitle,
@@ -117,7 +120,7 @@ export class PrinterService {
   }
 
   public bundle(options: MdPrinterOptions): Promise<TemplateBundle> {
-    return this.template.bundle(options.template)
+    return this.template.bundle(options.files)
   }
 
   /**
@@ -146,7 +149,7 @@ export class PrinterService {
       bundle,
       {
         data: input.data,
-        t: await this.i18n.load(join(options.template, Directory.I18N), { ...options.i18n, language: options.language }),
+        t: await this.i18n.load(options.files.i18n, { ...options.i18n, language: options.language }),
         language: options.language,
         signature: ctx.signature
       },
@@ -209,6 +212,36 @@ export class PrinterService {
 
         throw err
       })
+  }
+
+  private templateFlags({ template, templateType, templateDirectory }: MdPrinterFlags): unknown {
+    if (!templateType) {
+      return template
+    }
+
+    return {
+      type: templateType,
+      [templateType === TemplateSourceType.DIRECTORY ? 'path' : 'name']: template,
+      ...(templateDirectory !== undefined && { directory: templateDirectory })
+    }
+  }
+
+  private templateSource(value: unknown): string | TemplateSource | undefined {
+    if (value === undefined || value === null) {
+      return undefined
+    }
+
+    if (typeof value === 'string') {
+      return value
+    }
+
+    const { success, data, error } = TemplateSourceSchema.safeParse(value)
+
+    if (!success) {
+      throw new Error(`Template is invalid: ${issues(error)}`)
+    }
+
+    return data
   }
 
   private attachments(value: unknown): MdPrinterAttachment[] {

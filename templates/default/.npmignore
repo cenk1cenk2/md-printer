@@ -1,0 +1,5 @@
+# release tooling; template/, src/, i18n/ and settings.json are published
+CHANGELOG.md
+release.config.cjs
+tsconfig*.json
+*.test.ts

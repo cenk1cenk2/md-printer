@@ -38,7 +38,18 @@ describe('SessionService', () => {
         markdown: { type: 'root', children: [] } as Root,
         data: {}
       }),
-      options: async() => ({ template: directory, sign: {} }),
+      options: async() => ({
+        template: directory,
+        files: {
+          directory,
+          template: join(directory, 'Template.svelte'),
+          components: [join(directory, 'components')],
+          i18n: [join(directory, 'i18n')],
+          extension: [] as string[],
+          candidates: [] as string[]
+        },
+        sign: {}
+      }),
       bundle: async(): Promise<TemplateBundle> => {
         const source = await readFile(join(directory, 'Template.svelte'), 'utf8')
 
@@ -52,6 +63,7 @@ describe('SessionService', () => {
         }
 
         return {
+          template: join(directory, 'Template.svelte'),
           entry: undefined,
           modules: [join(directory, 'Template.svelte')],
           stylesheets: [],

@@ -7,24 +7,29 @@ import { decodeHTML } from 'entities'
 import { readFileSync } from 'fs'
 import { createRequire } from 'module'
 import { homedir } from 'os'
-import { dirname, isAbsolute, join, resolve } from 'path'
+import { dirname, isAbsolute, join, relative, resolve, sep } from 'path'
 import { rolldown } from 'rolldown'
 import { render } from 'svelte/server'
-import { fileURLToPath } from 'url'
+import { fileURLToPath, pathToFileURL } from 'url'
 
-import { inlineCss, inlineHtml } from './assets.js'
+import { inlineCss, inlineHtml, resolveConfined } from './assets.js'
 import { sveltePlugin } from './svelte.plugin.js'
+import type { TemplatePackageSource, TemplateSource } from './template.schema.js'
+import { issues, TemplateSettingsSchema } from './template.schema.js'
 import { FileSystemService } from '@cenk1cenk2/oclif-common'
-import { ContextKey, Directory, RenderMode, TEMPLATE_PACKAGE_PREFIX, TemplateFiles } from '@constants'
+import { ContextKey, Directory, RenderMode, TEMPLATE_EXTENSION_FILES, TEMPLATE_LAYOUT, TEMPLATE_PACKAGE_PREFIX, TemplateFiles, TemplateSourceType } from '@constants'
 import type {
   AssetCache,
   CompiledModule,
   DocumentContext,
   MarkdownNode,
   MdPrinterSettings,
+  MdPrinterTemplateFiles,
   RenderedDocument,
   RenderedPart,
+  ResolvedTemplate,
   TemplateBundle,
+  TemplatePaths,
   TemplateRenderOptions,
   TemplateStylesheet
 } from '@interfaces'
@@ -49,32 +54,23 @@ export class TemplateService {
 
   constructor(private readonly fs: FileSystemService) {}
 
-  public resolve(template: string): string {
-    const path = template.replace(/^~(?=\/|$)/, homedir())
-    const directory = isAbsolute(path) || path.startsWith('.') || /[\\/]/.test(path) ? resolve(path) : this.builtin(path)
-
-    if (!this.fs.exists(join(directory, TemplateFiles.TEMPLATE))) {
-      throw new Error(`Template does not exist, expected ${TemplateFiles.TEMPLATE} in: ${directory}`)
-    }
-
-    return directory
-  }
-
-  public async settings(directory: string): Promise<MdPrinterSettings> {
-    const file = join(directory, TemplateFiles.SETTINGS)
-
-    if (!this.fs.exists(file)) {
-      return {}
-    }
-
-    return JSON.parse(await this.fs.read(file))
-  }
-
-  public async bundle(directory: string): Promise<TemplateBundle> {
-    const stylesheets: TemplateStylesheet[] = []
-    const { module: entry, modules } = await this.compile(TemplateService.ENTRY, join(directory, TemplateFiles.TEMPLATE), stylesheets)
+  public async resolve(template: string | TemplateSource, base: string): Promise<ResolvedTemplate> {
+    const directory = await this.locate(template, base)
+    const settings = await this.settings(directory)
 
     return {
+      directory,
+      settings,
+      files: await this.paths(directory, settings.files)
+    }
+  }
+
+  public async bundle(files: TemplatePaths): Promise<TemplateBundle> {
+    const stylesheets: TemplateStylesheet[] = []
+    const { module: entry, modules } = await this.compile(TemplateService.ENTRY, stylesheets, files)
+
+    return {
+      template: files.template,
       entry,
       modules,
       stylesheets,
@@ -83,7 +79,7 @@ export class TemplateService {
   }
 
   public async page(file: string): Promise<string> {
-    const { module } = await this.compile(file, file, [])
+    const { module } = await this.compile(file, [], { directory: dirname(file), template: file })
 
     return `<!doctype html>${render(module.default).body}`
   }
@@ -92,9 +88,14 @@ export class TemplateService {
     const context: [string, unknown][] = [
       [ContextKey.DOCUMENT, document],
       [ContextKey.MARKDOWN, markdown],
-      [ContextKey.COMPONENTS, bundle.entry.components]
+      [ContextKey.COMPONENTS, bundle.entry.components],
+      [ContextKey.EXTENSION, bundle.entry.extension]
     ]
-    const props = { ...document, content: bundle.entry.content(markdown, context) }
+    const props = {
+      ...document,
+      extension: bundle.entry.extension,
+      content: bundle.entry.content(markdown, context)
+    }
     const [body, header, footer] = await Promise.all(
       [RenderMode.BODY, RenderMode.HEADER, RenderMode.FOOTER].map((mode) => bundle.entry.part(props, [...context, [ContextKey.RENDER_MODE, mode]]))
     )
@@ -122,6 +123,29 @@ export class TemplateService {
     }
   }
 
+  private locate(template: string | TemplateSource, base: string): Promise<string> | string {
+    if (typeof template === 'string') {
+      const path = this.expand(template)
+
+      return isAbsolute(path) || path.startsWith('.') || /[\\/]/.test(path) ? resolve(path) : this.builtin(path)
+    }
+
+    switch (template.type) {
+      case TemplateSourceType.BUILTIN:
+        return this.builtin(template.name)
+
+      case TemplateSourceType.PACKAGE:
+        return this.package(template, base)
+
+      case TemplateSourceType.DIRECTORY:
+        return resolve(base, this.expand(template.path))
+    }
+  }
+
+  private expand(path: string): string {
+    return path.replace(/^~(?=\/|$)/, homedir())
+  }
+
   /** A built-in template is a package of its own, so it brings its own fonts, icons and stylesheets as dependencies. */
   private builtin(name: string): string {
     const pkg = `${TEMPLATE_PACKAGE_PREFIX}${name}`
@@ -129,11 +153,122 @@ export class TemplateService {
     try {
       return dirname(this.require.resolve(`${pkg}/package.json`))
     } catch {
-      throw new Error(`Template does not exist, expected the built-in template package ${pkg} or a path to a directory with ${TemplateFiles.TEMPLATE}.`)
+      throw new Error(`Template does not exist, expected the built-in template package ${pkg} or a path to a template directory.`)
     }
   }
 
-  private async compile(input: string, template: string, stylesheets: TemplateStylesheet[]): Promise<CompiledModule> {
+  private async package({ name, directory }: TemplatePackageSource, base: string): Promise<string> {
+    const root = this.installed(name, [...new Set([base, process.cwd()]), TemplateService.ROOT])
+
+    if (directory === undefined) {
+      return root
+    }
+
+    const confined = await resolveConfined(resolve(root, directory), root)
+
+    if (!confined) {
+      throw new Error(`Template directory "${directory}" of the package ${name} has to exist inside the package: ${root}`)
+    }
+
+    return confined
+  }
+
+  private installed(name: string, roots: string[]): string {
+    for (const root of roots) {
+      try {
+        return dirname(createRequire(join(root, 'package.json')).resolve(`${name}/package.json`))
+      } catch {
+        continue
+      }
+    }
+
+    throw new Error(`Template does not exist, the package ${name} is not installed in any of: ${roots.join(', ')}`)
+  }
+
+  private async settings(directory: string): Promise<MdPrinterSettings> {
+    const file = join(directory, TemplateFiles.SETTINGS)
+
+    if (!this.fs.exists(file)) {
+      return {}
+    }
+
+    const { success, data, error } = TemplateSettingsSchema.safeParse(JSON.parse(await this.fs.read(file)))
+
+    if (!success) {
+      throw new Error(`Template settings are invalid in ${file}: ${issues(error)}`)
+    }
+
+    return data as MdPrinterSettings
+  }
+
+  private async paths(directory: string, files: MdPrinterTemplateFiles = {}): Promise<TemplatePaths> {
+    const template = files.template ? await this.configured(directory, 'template', files.template) : this.first(directory, TEMPLATE_LAYOUT.template)
+    const components = files.components
+      ? await Promise.all([files.components].flat().map((path) => this.configured(directory, 'components', path)))
+      : [this.first(directory, TEMPLATE_LAYOUT.components) ?? join(directory, TEMPLATE_LAYOUT.components[0])]
+    const i18n = files.i18n
+      ? await Promise.all([files.i18n].flat().map((path) => this.configured(directory, 'i18n', path)))
+      : [this.first(directory, TEMPLATE_LAYOUT.i18n) ?? join(directory, TEMPLATE_LAYOUT.i18n[0])]
+    const extension = files.extension
+      ? await Promise.all([files.extension].flat().map((path) => this.configured(directory, 'extension', path)))
+      : [this.extension(directory)].filter((path) => path !== undefined)
+
+    if (!template) {
+      throw new Error(`Template does not exist, expected ${TEMPLATE_LAYOUT.template.join(' or ')} in: ${directory}`)
+    }
+
+    return {
+      directory,
+      template,
+      components,
+      i18n,
+      extension,
+      candidates: [
+        ...(files.template ? [template] : TEMPLATE_LAYOUT.template.map((path) => join(directory, path))),
+        ...(files.components ? components : TEMPLATE_LAYOUT.components.map((path) => join(directory, path))),
+        ...(files.i18n ? i18n : TEMPLATE_LAYOUT.i18n.map((path) => join(directory, path))),
+        ...(files.extension ? extension : TEMPLATE_LAYOUT.extension.flatMap((path) => TEMPLATE_EXTENSION_FILES.map((file) => join(directory, path, file))))
+      ]
+    }
+  }
+
+  private async configured(directory: string, key: string, value: string): Promise<string> {
+    const path = resolve(directory, value)
+    const rel = relative(directory, path)
+    const outside = rel === '..' || rel.startsWith(`..${sep}`) || isAbsolute(rel)
+
+    if (!outside && !this.fs.exists(path)) {
+      throw new Error(`Template settings point files.${key} to a path that does not exist: ${path}`)
+    }
+
+    if (outside || !(await resolveConfined(path, directory))) {
+      throw new Error(`Template settings point files.${key} outside of the template directory: ${value}`)
+    }
+
+    return path
+  }
+
+  private first(directory: string, paths: string[]): string | undefined {
+    return paths.map((path) => join(directory, path)).find((path) => this.fs.exists(path))
+  }
+
+  private extension(directory: string): string | undefined {
+    for (const location of TEMPLATE_LAYOUT.extension) {
+      const files = TEMPLATE_EXTENSION_FILES.filter((file) => this.fs.exists(join(directory, location, file)))
+
+      if (files.length > 1) {
+        throw new Error(`Template has more than one extension module, keep one of ${files.join(', ')} in: ${join(directory, location)}`)
+      }
+
+      if (files.length === 1) {
+        return join(directory, location, files[0])
+      }
+    }
+
+    return undefined
+  }
+
+  private async compile(input: string, stylesheets: TemplateStylesheet[], files: Pick<TemplatePaths, 'directory' | 'template'> & Partial<TemplatePaths>): Promise<CompiledModule> {
     const build = await rolldown({
       input,
       platform: 'node',
@@ -141,15 +276,17 @@ export class TemplateService {
       onLog(_, log, handler): void {
         // left alone, an unresolved import only fails when node loads the bundle, without naming the template
         if (log.code === 'UNRESOLVED_IMPORT') {
-          handler('error', { ...log, message: `${log.message} Install it in the template directory: ${dirname(template)}` })
+          handler('error', { ...log, message: `${log.message} Install it in the template directory: ${files.directory}` })
         }
       },
       plugins: [
         sveltePlugin({
-          template,
+          template: files.template,
           components: TemplateService.COMPONENTS,
+          templateComponents: files.components,
           root: TemplateService.ROOT,
-          stylesheets
+          stylesheets,
+          extension: files.extension
         })
       ]
     })
@@ -157,8 +294,11 @@ export class TemplateService {
     try {
       const { output: [chunk] } = await build.generate({ format: 'esm', sourcemap: 'inline' })
 
+      // a data: module has no location for the require of CommonJS modules to start from
+      const code = chunk.code.replaceAll('createRequire(import.meta.url)', `createRequire(${JSON.stringify(pathToFileURL(files.template).href)})`)
+
       return {
-        module: await import(`data:text/javascript;base64,${Buffer.from(chunk.code).toString('base64')}`),
+        module: await import(`data:text/javascript;base64,${Buffer.from(code).toString('base64')}`),
         modules: chunk.moduleIds.filter((id) => isAbsolute(id))
       }
     } finally {
@@ -184,7 +324,7 @@ export class TemplateService {
 
     const compiler = await compileTailwind([theme, ...bundle.stylesheets.map(({ source }) => source)].join('\n'), {
       base: directory,
-      from: bundle.stylesheets[0]?.file ?? join(directory, TemplateFiles.TEMPLATE),
+      from: bundle.stylesheets[0]?.file ?? bundle.template,
       shouldRewriteUrls: true,
       onDependency: (path) => dependencies.push(path),
       customCssResolver: async(id, base) => this.resolveFrom(this.stylesheets, id, [base, directory, TemplateService.ROOT]),
