@@ -132,7 +132,7 @@
     "tsdown": "^0.23.4",
     "typescript": "^6.0.3",
     "vite": "^8.3.5",
-    "vitest": "^5.0.5"
+    "vitest": "^5.1.0"
   },
   "bugs": {
     "url": "https://gitlab.kilic.dev/utils/md-printer/-/issues"
