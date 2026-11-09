@@ -1,12 +1,13 @@
 import { Injectable } from '@nestjs/common'
 import { cloneDeep, mergeWith, uniq } from 'es-toolkit'
-import { basename, dirname, extname, resolve } from 'path'
+import { basename, dirname, extname, join, resolve } from 'path'
 import type { PDFOptions } from 'puppeteer-core'
 import { parse as parseYaml } from 'yaml'
 
 import { I18nService } from './i18n.service.js'
 import { MarkdownService } from './markdown.service.js'
 import { PdfService } from './pdf/pdf.service.js'
+import { DestSchema } from './printer.schema.js'
 import { RendererService } from './renderer/renderer.service.js'
 import { SignatureVerificationError } from './signature/cms.js'
 import { SignatureService } from './signature/signature.service.js'
@@ -99,7 +100,7 @@ export class PrinterService {
       throw new Error(`Output file type is not supported: ${output}, use one of ${Object.values(OutputFileType).join(', ')}.`)
     }
 
-    const dest = flags.stdout ? undefined : (flags.output ?? data.dest ?? (input.file ? `${basename(input.file, extname(input.file))}.${output}` : undefined))
+    const dest = flags.stdout ? undefined : (flags.output ?? this.dest(data.dest, input.file && `${basename(input.file, extname(input.file))}.${output}`))
 
     return {
       template,
@@ -242,6 +243,28 @@ export class PrinterService {
     }
 
     return data
+  }
+
+  private dest(value: unknown, filename?: string): string | undefined {
+    if (value === undefined || value === null) {
+      return filename
+    }
+
+    if (typeof value === 'string') {
+      return value
+    }
+
+    const { success, data, error } = DestSchema.safeParse(value)
+
+    if (!success) {
+      throw new Error(`Dest is invalid: ${issues(error)}`)
+    }
+
+    if (!data.filename && !filename) {
+      throw new Error('Dest needs a filename when there is no input file to name the output after.')
+    }
+
+    return join(data.directory ?? '.', data.filename ?? filename)
   }
 
   private attachments(value: unknown): MdPrinterAttachment[] {

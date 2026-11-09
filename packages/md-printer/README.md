@@ -93,7 +93,7 @@ Markdown files take YAML front-matter. For YAML input the same keys are top-leve
 | Key               | Description                                                                                   |
 | ----------------- | --------------------------------------------------------------------------------------------- |
 | `template`        | Built-in template name, path to a template directory or an object, see [Template sources](#template-sources). |
-| `dest`            | Output file, relative to the current directory, not to the input file.                        |
+| `dest`            | Output file, relative to the current directory, not to the input file. Also an object, see [Output destination](#output-destination). |
 | `outputFiletype` | `pdf` (default) or `html`.                                                                    |
 | `language`        | Language for template translations.                                                           |
 | `continuous`      | `true` renders one page per part, each as tall as its content, split only at page breaks.     |
@@ -127,6 +127,19 @@ pdfOptions:
   margin: 20mm
 ---
 ```
+
+### Output destination
+
+`dest` is a file path, or an object that splits it into a `directory` and a `filename`. Both keys are optional: `directory` defaults to the current directory and `filename` to `<input name>.<pdf|html>`, so a document can pick a folder and keep its own name. Without an input file (stdin) the object needs a `filename`.
+
+```yaml
+---
+dest:
+  directory: ./out
+---
+```
+
+`document.md` with the front-matter above is written to `./out/document.pdf`. The output argument still wins over `dest` in either form.
 
 ### Precedence
 

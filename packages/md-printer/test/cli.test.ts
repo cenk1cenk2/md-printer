@@ -366,6 +366,64 @@ describe('md-printer', () => {
     })
   })
 
+  describe('dest', () => {
+    const document = async(name: string, dest: unknown): Promise<string> => {
+      const input = join(directory, 'dest', `${name}.md`)
+
+      await mkdir(dirname(input), { recursive: true })
+      await writeFile(input, `---\noutputFiletype: html\ndest: ${JSON.stringify(dest)}\n---\n\n# Document\n`)
+
+      return input
+    }
+
+    it('writes to a string path as before', async() => {
+      const output = join(directory, 'dest', 'string', 'out.html')
+
+      await run([await document('string', output)])
+
+      expect((await readFile(output)).toString()).toContain('<!doctype html>')
+    })
+
+    it('names the file after the input when the object has only a directory', async() => {
+      const output = join(directory, 'dest', 'directory-only')
+
+      await run([await document('named', { directory: output })])
+
+      expect((await readFile(join(output, 'named.html'))).toString()).toContain('<!doctype html>')
+    })
+
+    it('writes the filename into the directory', async() => {
+      const output = join(directory, 'dest', 'both')
+
+      await run([await document('both', { directory: output, filename: 'report.html' })])
+
+      expect((await readFile(join(output, 'report.html'))).toString()).toContain('<!doctype html>')
+    })
+
+    it('lets the output argument win over the object', async() => {
+      const output = join(directory, 'dest', 'argument.html')
+
+      await run([await document('argument', { directory: join(directory, 'dest', 'ignored') }), output])
+
+      expect((await readFile(output)).toString()).toContain('<!doctype html>')
+      await expect(stat(join(directory, 'dest', 'ignored'))).rejects.toThrow()
+    })
+
+    it('fails without a filename when reading from stdin', async() => {
+      await expect(run(['--stdin', '-F', 'html'], `---\ndest: ${JSON.stringify({ directory })}\n---\n\n# Stdin\n`)).rejects.toThrow(
+        /Dest needs a filename when there is no input file/
+      )
+    })
+
+    it.each([
+      [{ directory: 'out', name: 'x.pdf' }, /Dest is invalid: .*name/],
+      [{ filename: '' }, /Dest is invalid: filename: /],
+      [42, /Dest is invalid: Use a string or an object with a directory and a filename/]
+    ])('rejects %j', async(dest, message) => {
+      await expect(run([await document('invalid', dest)])).rejects.toThrow(message)
+    })
+  })
+
   describe('shared components', () => {
     const scaffold = async(name: string, files: [string, string][]): Promise<string> => {
       const template = join(directory, name)
