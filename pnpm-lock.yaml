@@ -212,11 +212,11 @@ importers:
         specifier: workspace:^
         version: link:../../templates/mail
       '@cenk1cenk2/oclif-common':
-        specifier: ^8.0.2
-        version: 8.0.2(@listr2/manager@4.3.3(listr2@11.4.0))(@nestjs/common@12.4.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.4.0(@nestjs/common@12.4.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(@oclif/core@5.1.11)(listr2@11.4.0)(yaml@2.9.1)
+        specifier: ^8.0.4
+        version: 8.0.4(@listr2/manager@4.3.4(listr2@11.4.1))(@nestjs/common@12.4.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.4.0(@nestjs/common@12.4.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(@oclif/core@5.1.11)(listr2@11.4.1)(yaml@2.9.1)
       '@listr2/manager':
-        specifier: ^4.3.3
-        version: 4.3.3(listr2@11.4.0)
+        specifier: ^4.3.4
+        version: 4.3.4(listr2@11.4.1)
       '@nestjs/common':
         specifier: ^12.3.2
         version: 12.4.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1)
@@ -275,8 +275,8 @@ importers:
         specifier: ^1.33.0
         version: 1.33.0
       listr2:
-        specifier: ^11.4.0
-        version: 11.4.0
+        specifier: ^11.4.1
+        version: 11.4.1
       lowlight:
         specifier: ^3.3.0
         version: 3.3.0
@@ -577,8 +577,8 @@ packages:
     peerDependencies:
       svelte: ^5.57.3
 
-  '@cenk1cenk2/oclif-common@8.0.2':
-    resolution: {integrity: sha512-lWiHKARQC0ctCy+5yroCpxHKWMWQYiTEedscutb0CFm25CiW+CldR4OJRUdAIoEEAzsudTk3r7miNkmyIzt73g==}
+  '@cenk1cenk2/oclif-common@8.0.4':
+    resolution: {integrity: sha512-9yFqpa0I6RWMyMr/DnFx61rDDSlb5h2JsWKgRU/tSoM+2vHHxrj2cVXbcHFGJBvNQk4nhRC6VA3ZYtFrpdwfqA==}
     engines: {node: '>= 24'}
     peerDependencies:
       '@listr2/manager': '>= 4'
@@ -1013,8 +1013,8 @@ packages:
   '@keyv/serialize@1.1.1':
     resolution: {integrity: sha512-dXn3FZhPv0US+7dtJsIi2R+c7qWYiReoEh5zUntWCf4oSpMNib8FDhSoed6m3QyZdx5hK7iLFkYk3rNxwt8vTA==}
 
-  '@listr2/manager@4.3.3':
-    resolution: {integrity: sha512-YEUmR41RI7n69Le4kyl+0D8c/gS8RxcSPVRqGGUKkYqh26nswIct8jOeaTKsZRvoGNbU/E51qkNCUYObdsLcaA==}
+  '@listr2/manager@4.3.4':
+    resolution: {integrity: sha512-5R0D10DI5jNBNpXu7vFfQkjihUFWkVKGcMEUGLsEbpvAM0oswZUlmVxPLY9QH6Fq1IqF2TZwZgK3xjUkDQy0ag==}
     engines: {node: '>=22.13.0'}
     peerDependencies:
       listr2: ^11.0.0
@@ -3232,8 +3232,8 @@ packages:
   lines-and-columns@1.2.4:
     resolution: {integrity: sha512-7ylylesZQ/PV29jhEDl3Ufjo6ZX7gCqJr5F7PKrqc93v7fzSymt1BpwEU8nAUXs8qzzvqhbjhK5QZg6Mt/HkBg==}
 
-  listr2@11.4.0:
-    resolution: {integrity: sha512-N6jpS9lEmqGcWqJqryuOfjPUTn7mcDvG5ndsTlZk4Aohwfywc7deqjscI9lm7K+FHS6anZmazE8/IQxQfVTHZg==}
+  listr2@11.4.1:
+    resolution: {integrity: sha512-Mc8GEdPxl6b7bxFNwUJPOuGlrLSbnudPqF6F2EkgNr9dZQWezIrCfwywoGhy4eIdQvfJgbT7/rITN9S7uX89gQ==}
     engines: {node: '>=22.13.0'}
 
   load-esm@1.0.3:
@@ -4862,11 +4862,11 @@ snapshots:
   '@cenk1cenk2/cz-cc@3.0.12(@types/node@26.6.6)(typescript@6.0.3)':
     dependencies:
       '@inquirer/prompts': 8.7.5(@types/node@26.6.6)
-      '@listr2/prompt-adapter-inquirer': 4.3.3(@inquirer/prompts@8.7.5(@types/node@26.6.6))(@types/node@26.6.6)(listr2@11.4.0)
+      '@listr2/prompt-adapter-inquirer': 4.3.3(@inquirer/prompts@8.7.5(@types/node@26.6.6))(@types/node@26.6.6)(listr2@11.4.1)
       commitizen: 4.3.2(@types/node@26.6.6)(typescript@6.0.3)
       conventional-commit-types: 3.0.0
       find-git-root: 1.1.0
-      listr2: 11.4.0
+      listr2: 11.4.1
     transitivePeerDependencies:
       - '@types/node'
       - typescript
@@ -4901,9 +4901,9 @@ snapshots:
     dependencies:
       svelte: 5.57.3(@typescript-eslint/types@8.72.1)
 
-  '@cenk1cenk2/oclif-common@8.0.2(@listr2/manager@4.3.3(listr2@11.4.0))(@nestjs/common@12.4.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.4.0(@nestjs/common@12.4.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(@oclif/core@5.1.11)(listr2@11.4.0)(yaml@2.9.1)':
+  '@cenk1cenk2/oclif-common@8.0.4(@listr2/manager@4.3.4(listr2@11.4.1))(@nestjs/common@12.4.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.4.0(@nestjs/common@12.4.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(@oclif/core@5.1.11)(listr2@11.4.1)(yaml@2.9.1)':
     dependencies:
-      '@listr2/manager': 4.3.3(listr2@11.4.0)
+      '@listr2/manager': 4.3.4(listr2@11.4.1)
       '@nestjs/common': 12.4.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1)
       '@nestjs/core': 12.4.0(@nestjs/common@12.4.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2)
       '@oclif/core': 5.1.11
@@ -4911,7 +4911,7 @@ snapshots:
       cosmiconfig: 10.0.1
       dotenv: 18.0.9
       es-toolkit: 1.53.2
-      listr2: 11.4.0
+      listr2: 11.4.1
       reflect-metadata: 0.2.2
       yaml: 2.9.1
 
@@ -5349,15 +5349,15 @@ snapshots:
 
   '@keyv/serialize@1.1.1': {}
 
-  '@listr2/manager@4.3.3(listr2@11.4.0)':
+  '@listr2/manager@4.3.4(listr2@11.4.1)':
     dependencies:
-      listr2: 11.4.0
+      listr2: 11.4.1
 
-  '@listr2/prompt-adapter-inquirer@4.3.3(@inquirer/prompts@8.7.5(@types/node@26.6.6))(@types/node@26.6.6)(listr2@11.4.0)':
+  '@listr2/prompt-adapter-inquirer@4.3.3(@inquirer/prompts@8.7.5(@types/node@26.6.6))(@types/node@26.6.6)(listr2@11.4.1)':
     dependencies:
       '@inquirer/prompts': 8.7.5(@types/node@26.6.6)
       '@inquirer/type': 4.2.1(@types/node@26.6.6)
-      listr2: 11.4.0
+      listr2: 11.4.1
     transitivePeerDependencies:
       - '@types/node'
 
@@ -7465,7 +7465,7 @@ snapshots:
   lines-and-columns@1.2.4:
     optional: true
 
-  listr2@11.4.0:
+  listr2@11.4.1:
     dependencies:
       cli-truncate: 6.2.0
       log-update: 8.0.0
