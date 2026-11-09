@@ -2,19 +2,20 @@
   @component
   Subtotal, tax and total summary of the invoice.
 -->
-<script>
+<script lang="ts">
+  import type { TFunction } from 'i18next'
+
   import { round } from '../round.js'
 
-  /**
-   * @type {{
-   *   subtotal: number,
-   *   tax: number,
-   *   total: number,
-   *   currency: string,
-   *   t: (key: string) => string
-   * }}
-   */
-  let { subtotal, tax, total, currency, t } = $props()
+  interface Props {
+    subtotal: number
+    tax: number
+    total: number
+    currency: string
+    t: TFunction
+  }
+
+  let { subtotal, tax, total, currency, t }: Props = $props()
 </script>
 
 <div class="col-span-5 flex flex-col justify-center m-8 mr-16">

@@ -2,16 +2,17 @@
   @component
   Signature block of the invoice: the digital signature when signing is enabled, an empty box otherwise.
 -->
-<script>
+<script lang="ts">
+  import type { TFunction } from 'i18next'
+
   import { SignatureBlock } from '@cenk1cenk2/md-printer/components'
 
-  /**
-   * @type {{
-   *   signature?: { date: string, name?: string, issuer?: string, serial?: string },
-   *   t: (key: string) => string
-   * }}
-   */
-  let { signature, t } = $props()
+  interface Props {
+    signature?: { date: string, name?: string, issuer?: string, serial?: string }
+    t: TFunction
+  }
+
+  let { signature, t }: Props = $props()
 </script>
 
 {#if signature}

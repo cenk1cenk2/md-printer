@@ -1,4 +1,6 @@
-<script>
+<script lang="ts">
+  import type { TFunction } from 'i18next'
+
   import Client from './components/Client.svelte'
   import Company from './components/Company.svelte'
   import Items from './components/Items.svelte'
@@ -8,9 +10,41 @@
   import Totals from './components/Totals.svelte'
   import { Page, PageNumber, TotalPages, Title } from '@cenk1cenk2/md-printer/components'
 
-  let { data, content, t, signature } = $props()
+  interface Party {
+    name?: string
+    tax_number?: string
+    address?: string
+    phone?: string
+    email?: string
+    website?: string
+  }
 
-  const { company = {}, client = {}, payment = {}, currency = '', date, id } = $derived(data)
+  interface Item {
+    description?: string
+    quantity: number
+    unit?: string
+    price: number
+    tax: number
+  }
+
+  interface Props {
+    data: {
+      company?: Party
+      client?: Party
+      payment?: { bank?: string, address?: string, bic?: string, routing?: string, name?: string, iban?: string }
+      currency?: string
+      date?: string
+      id?: string | number
+      items?: Item[]
+    }
+    content: string
+    t: TFunction
+    signature?: { date: string, name?: string, issuer?: string, serial?: string }
+  }
+
+  let { data, content, t, signature }: Props = $props()
+
+  const { company = {} as Party, client = {} as Party, payment = {}, currency = '', date, id } = $derived(data)
 
   const rows = $derived.by(() =>
     (data.items ?? []).map((item) => {

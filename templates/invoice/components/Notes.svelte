@@ -2,14 +2,15 @@
   @component
   Rendered markdown body of the document as the invoice notes.
 -->
-<script>
-  /**
-   * @type {{
-   *   content: string,
-   *   t: (key: string) => string
-   * }}
-   */
-  let { content, t } = $props()
+<script lang="ts">
+  import type { TFunction } from 'i18next'
+
+  interface Props {
+    content: string
+    t: TFunction
+  }
+
+  let { content, t }: Props = $props()
 </script>
 
 <div class="col-span-1 flex flex-col justify-center text-lg font-extrabold text-gray-100">

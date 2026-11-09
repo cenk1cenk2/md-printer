@@ -1,0 +1,34 @@
+{
+  "name": "@cenk1cenk2/md-printer-template-default",
+  "version": "0.0.0",
+  "description": "md-printer template: Plain markdown document styled with github-markdown-css.",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://gitlab.kilic.dev/utils/md-printer.git",
+    "directory": "templates/default"
+  },
+  "author": "Cenk Kilic",
+  "license": "MIT",
+  "publishConfig": {
+    "access": "public"
+  },
+  "files": [
+    "**/*.svelte",
+    "**/*.ts",
+    "**/*.json",
+    "**/*.yaml",
+    "!release.config.cjs"
+  ],
+  "keywords": [
+    "md-printer",
+    "md-printer-template",
+    "svelte"
+  ],
+  "dependencies": {
+    "github-markdown-css": "^5.9.0"
+  },
+  "peerDependencies": {
+    "svelte": "^5.57.3"
+  }
+}

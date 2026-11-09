@@ -1,7 +1,11 @@
-<script>
+<script lang="ts">
   import { Markdown, Page } from '@cenk1cenk2/md-printer/components'
 
-  let { data } = $props()
+  interface Props {
+    data: { documentTitle?: string }
+  }
+
+  let { data }: Props = $props()
 </script>
 
 <svelte:head>

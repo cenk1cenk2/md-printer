@@ -1,30 +1,9 @@
 {
-  "extends": "@tsconfig/node24/tsconfig.json",
+  "extends": "./packages/md-printer/tsconfig.json",
+  // the whole workspace, so the templates are type-checked and linted with the CLI
   "compilerOptions": {
-    "lib": ["ES2023"],
-    "module": "Node16",
-    "moduleResolution": "Node16",
-    "types": ["node"],
-    "resolveJsonModule": true,
-    "declaration": true,
-    "sourceMap": true,
-    "removeComments": false,
-    "noUnusedLocals": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "incremental": false,
-    "strictNullChecks": false,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "skipLibCheck": true,
-    "forceConsistentCasingInFileNames": true,
-    "outDir": "./dist",
-    "paths": {
-      "@interfaces": ["./src/interfaces/index.js"],
-      "@constants": ["./src/constants/index.js"],
-      "@services": ["./src/services/index.js"]
-    }
+    "rootDir": "."
   },
-  "exclude": ["node_modules"],
-  "include": ["src/**/*", "test/**/*", "vitest.config.ts"]
+  "include": ["packages/md-printer/src/**/*", "packages/md-printer/test/**/*", "packages/md-printer/vitest.config.ts", "templates/*/**/*.ts"],
+  "exclude": ["**/node_modules", "**/dist"]
 }

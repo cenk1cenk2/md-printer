@@ -1,4 +1,6 @@
-packages: []
+packages:
+  - packages/*
+  - templates/*
 
 minimumReleaseAge: 1440
 

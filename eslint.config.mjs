@@ -11,6 +11,13 @@ export default [
   }),
   {
     // the document and preview shells render <html> and <head>, which svelte-eslint-parser rejects although the compiler renders it
-    ignores: ['./dist/', './bin', './tsdown.config.ts', 'src/services/template/Document.svelte', 'src/services/session/Preview.svelte']
+    ignores: [
+      '**/dist/',
+      'packages/md-printer/bin',
+      'packages/md-printer/tsdown.config.ts',
+      '**/release.config.cjs',
+      'packages/md-printer/src/services/template/Document.svelte',
+      'packages/md-printer/src/services/session/Preview.svelte'
+    ]
   }
 ]

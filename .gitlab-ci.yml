@@ -47,8 +47,8 @@ build:
     - .node-build
   artifacts:
     paths:
-      - dist/
-      - oclif.manifest.json
+      - packages/md-printer/dist/
+      - packages/md-printer/oclif.manifest.json
 
 test:
   stage: build
@@ -73,6 +73,9 @@ semantic-release:
   stage: publish
   extends:
     - .semantic-release
+  variables:
+    # the CLI and every template are packages of the workspace, released by multi-semantic-release and tagged <package>@<version>
+    SEMANTIC_RELEASE_WORKSPACE: "true"
   dependencies:
     - build
   rules:
