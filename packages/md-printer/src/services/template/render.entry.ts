@@ -2,9 +2,9 @@ import Template from 'md-printer:template'
 import components from 'md-printer:template-components'
 import { render } from 'svelte/server'
 
+import Nodes from '../../components/Nodes.svelte'
 import Document from './Document.svelte'
 import Margin from './Margin.svelte'
-import Nodes from '../../components/Nodes.svelte'
 import type { DocumentShellProps, MarginShellProps, MarkdownNode, RenderedPart, TemplateProps } from '@interfaces'
 
 export { components }
