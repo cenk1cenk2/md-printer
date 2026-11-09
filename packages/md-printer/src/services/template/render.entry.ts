@@ -1,3 +1,4 @@
+import modules from 'md-printer:extension'
 import Template from 'md-printer:template'
 import components from 'md-printer:template-components'
 import { render } from 'svelte/server'
@@ -7,7 +8,10 @@ import Document from './Document.svelte'
 import Margin from './Margin.svelte'
 import type { DocumentShellProps, MarginShellProps, MarkdownNode, RenderedPart, TemplateProps } from '@interfaces'
 
-export { components }
+// a CommonJS module also comes with module.exports as the default
+const extension = Object.fromEntries(modules.flatMap((module) => Object.entries(module).filter(([name]) => name !== 'default')))
+
+export { components, extension }
 
 /**
  * Entry of every template bundle, compiled at runtime together with the template it renders.

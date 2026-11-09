@@ -15,15 +15,22 @@ export class I18nService {
     private readonly parser: ParserService
   ) {}
 
-  public async load(directory: string, options: I18nLoadOptions): Promise<TFunction> {
+  /** Loads the folders in order, a key of a later folder replacing the same key of an earlier one while nested keys merge. */
+  public async load(directories: string[], options: I18nLoadOptions): Promise<TFunction> {
     const instance = i18next.createInstance()
 
     await instance.init({
       lng: options.language,
       fallbackLng: options.fallback ?? options.language ?? DEFAULT_LANGUAGE,
-      resources: this.fs.exists(directory) ? await this.resources(directory) : {},
+      resources: {},
       interpolation: { escapeValue: false }
     })
+
+    for (const directory of directories.filter((directory) => this.fs.exists(directory))) {
+      for (const [language, { translation }] of Object.entries(await this.resources(directory))) {
+        instance.addResourceBundle(language, 'translation', translation, true, true)
+      }
+    }
 
     return instance.getFixedT(options.language)
   }

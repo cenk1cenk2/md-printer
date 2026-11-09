@@ -17,6 +17,8 @@ export default class MDPrinter extends Command {
     ['output-filetype']: Flags.string({ char: 'F' }),
     stdout: Flags.boolean({ char: 'O' }),
     template: Flags.string({ char: 't' }),
+    ['template-type']: Flags.string(),
+    ['template-directory']: Flags.string(),
     title: Flags.string({ char: 'T' }),
     language: Flags.string({ char: 'l' }),
     browser: Flags.string({ char: 'b' }),

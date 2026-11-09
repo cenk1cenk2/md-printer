@@ -1,6 +1,6 @@
 import { z } from 'zod'
 
-import { InputFileType, OutputFileType, PreviewHost, SignatureProvider } from '@constants'
+import { InputFileType, OutputFileType, PreviewHost, SignatureProvider, TemplateSourceType } from '@constants'
 
 export const MdPrinterSchema = z
   .object({
@@ -9,7 +9,14 @@ export const MdPrinterSchema = z
       ['input-filetype']: z.enum(InputFileType).optional().describe('Input file type. Detected from the file extension, markdown for stdin and unknown extensions.'),
       ['output-filetype']: z.enum(OutputFileType).optional().describe('Output file type, defaults to pdf. Overwrites the one defined in front-matter.'),
       stdout: z.boolean().default(false).describe('Write the output to stdout instead of a file.'),
-      template: z.string().optional().describe('Built-in template name or path to a template directory, defaults to "default". Overwrites the one defined in front-matter.'),
+      template: z
+        .string()
+        .optional()
+        .describe(
+          'Built-in template name or path to a template directory, defaults to "default", read as --template-type when given. Overwrites the one defined in front-matter.'
+        ),
+      ['template-type']: z.string().optional().describe('How to read --template, one of builtin, package or directory, like the type of the object form in front-matter.'),
+      ['template-directory']: z.string().optional().describe('Directory inside the package to use as the template, only valid with --template-type package.'),
       title: z.string().optional().describe('Document title. Overwrites the one defined in front-matter or the template.'),
       language: z.string().optional().describe('Language for template translations. Overwrites the one defined in front-matter and template settings.'),
       browser: z.string().optional().describe('Browser executable used for printing. Discovered automatically when omitted (Brave, Chrome, Chromium, Edge).'),
@@ -43,6 +50,14 @@ export const MdPrinterSchema = z
 
     if (flags.stdin && args.output) {
       ctx.addIssue({ code: 'custom', message: 'Reading from --stdin takes only the output file argument.' })
+    }
+
+    if (flags['template-type'] && !flags.template) {
+      ctx.addIssue({ code: 'custom', message: '--template-type needs --template to read.' })
+    }
+
+    if (flags['template-directory'] !== undefined && flags['template-type'] !== TemplateSourceType.PACKAGE) {
+      ctx.addIssue({ code: 'custom', message: '--template-directory is only valid with --template-type package.' })
     }
 
     if (flags.stdout && flags.preview) {

@@ -29,6 +29,8 @@ export class MdPrinterHandler implements CommandHandler<typeof MdPrinterSchema> 
       outputFiletype: flags['output-filetype'],
       stdout: flags.stdout,
       template: flags.template,
+      templateType: flags['template-type'],
+      templateDirectory: flags['template-directory'],
       title: flags.title,
       language: flags.language,
       continuous: flags.continuous,

@@ -2,13 +2,14 @@ import type { OnModuleDestroy } from '@nestjs/common'
 import { Injectable } from '@nestjs/common'
 import type { FSWatcher } from 'chokidar'
 import { watch } from 'chokidar'
+import { isEqual } from 'es-toolkit'
 import { EventEmitter } from 'events'
 import { dirname, join, resolve } from 'path'
 import { debounce } from 'perfect-debounce'
 
 import { PrinterService } from '../printer.service.js'
 import { LoggerService } from '@cenk1cenk2/oclif-common'
-import { Directory, TemplateFiles } from '@constants'
+import { TemplateFiles } from '@constants'
 import type { MdPrinterCtx, MdPrinterFlags, SessionBundle, SessionEvents } from '@interfaces'
 
 /**
@@ -74,8 +75,8 @@ export class SessionService extends EventEmitter<SessionEvents> implements OnMod
 
     this.logger.debug('Changed: %s', file)
 
-    // a component added to or removed from the template's components folder changes the registry the bundle holds
-    if (this.modules.has(file) || (this.bundle && dirname(file) === join(this.bundle.template, Directory.COMPONENTS))) {
+    // a component added to or removed from one of the template's components folders changes the registry the bundle holds
+    if (this.modules.has(file) || this.bundle?.files.components.includes(dirname(file))) {
       this.bundle = undefined
     }
 
@@ -90,21 +91,15 @@ export class SessionService extends EventEmitter<SessionEvents> implements OnMod
     try {
       const input = await this.printer.input(this.flags)
       const options = await this.printer.options(this.flags, input)
-      const template = join(options.template, TemplateFiles.TEMPLATE)
+      const { files } = options
 
       // the template itself is watched before its first bundle, so an edit made while it bundles is not lost
-      this.modules.add(template)
-      this.watch([
-        input.file,
-        template,
-        join(options.template, TemplateFiles.SETTINGS),
-        join(options.template, Directory.I18N),
-        join(options.template, Directory.COMPONENTS),
-        options.sign.certificate && resolve(options.sign.certificate)
-      ])
+      this.modules = new Set([...this.modules, files.template])
+      this.watch([input.file, files.template, ...files.candidates, join(options.template, TemplateFiles.SETTINGS), options.sign.certificate && resolve(options.sign.certificate)])
 
-      if (this.bundle?.template !== options.template) {
-        this.bundle = { template: options.template, bundle: this.printer.bundle(options) }
+      // an extension module that appeared or a changed files section resolves to other paths
+      if (!isEqual(this.bundle?.files, files)) {
+        this.bundle = { files, bundle: this.printer.bundle(options) }
       }
 
       const cached = this.bundle
@@ -121,7 +116,7 @@ export class SessionService extends EventEmitter<SessionEvents> implements OnMod
         return
       }
 
-      this.modules = new Set([template, ...bundle.modules])
+      this.modules = new Set([files.template, ...bundle.modules])
       this.watch(bundle.modules)
 
       const ctx: MdPrinterCtx = { input, options }

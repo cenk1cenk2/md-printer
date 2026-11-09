@@ -92,7 +92,7 @@ Markdown files take YAML front-matter. For YAML input the same keys are top-leve
 
 | Key               | Description                                                                                   |
 | ----------------- | --------------------------------------------------------------------------------------------- |
-| `template`        | Built-in template name or path to a template directory.                                       |
+| `template`        | Built-in template name, path to a template directory or an object, see [Template sources](#template-sources). |
 | `dest`            | Output file, relative to the current directory, not to the input file.                        |
 | `outputFiletype` | `pdf` (default) or `html`.                                                                    |
 | `language`        | Language for template translations.                                                           |
@@ -177,7 +177,7 @@ md-printer document.md out.pdf --preview --no-open
 
 ### Built-in templates
 
-Every built-in template is a package of its own, `@cenk1cenk2/md-printer-template-<name>`, published from the `templates/` directory of this repository. md-printer depends on all of them, so they install with it, and each one brings the fonts, icons and stylesheets it uses as its own dependencies.
+Every built-in template is a package of its own, `@cenk1cenk2/md-printer-template-<name>`. md-printer depends on all of them, so they install with it, and each one brings the fonts, icons and stylesheets it uses as its own dependencies. `default`, `kilic.dev` and `mail` are published from the `templates/` directory of this repository, `cv` from https://gitlab.kilic.dev/cenk/cv and `invoice` from https://gitlab.kilic.dev/cenk/invoices.
 
 | Name        | Description                                                                                                    |
 | ----------- | -------------------------------------------------------------------------------------------------------------- |
@@ -187,17 +187,82 @@ Every built-in template is a package of its own, `@cenk1cenk2/md-printer-templat
 | `cv`        | CV in the table layout of a classic Word CV, from front-matter (`name`, `suffix`, `title`, `tagline`, `photo`) and Markdown sections placed with the `::section`, `:::details` / `::detail` / `:::pair`, `:::entry`, `::::group` / `:::course`, `::skill`, `:::note` and `:::languages` / `::language` components. The PDF is tagged and has an outline, so screening tools read it as text. See `test/cv.md`. |
 | `mail`      | Plain content with no margin and Tailwind typography, meant for HTML output.                                   |
 
+### Template sources
+
+`-t` and a string `template` in front-matter take a built-in name or a path. A value without a path separator is a built-in name, anything with `/` or starting with `.` or `~` is a path, relative to the current directory.
+
+`template` in front-matter can also be an object selecting the source by `type`. This is the only way to use a template from an npm package.
+
+```yaml
+---
+template:
+  type: package
+  name: '@cenk1cenk2/md-printer-template-cv'
+---
+```
+
+| `type`      | Keys                 | Description                                                                                                                                                                                                                                                  |
+| ----------- | -------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `builtin`   | `name`               | The package `@cenk1cenk2/md-printer-template-<name>` from md-printer's own dependencies.                                                                                                                                                                     |
+| `package`   | `name`, `directory?` | An npm package, resolved from the directory of the input file (its `node_modules`, walking up like Node does), then from the current directory, then from md-printer's own dependencies. The package directory is the template directory. `directory` selects a subdirectory of the package instead, and may not leave the package, symlinks included. |
+| `directory` | `path`               | A template directory, relative to the directory of the input file.                                                                                                                                                                                           |
+
+The same on the command line, where flags win over front-matter. `--template-type` says how to read `-t`, and `--template-directory` is the `directory` of a package. A `--template-type directory` path is relative to the input file too. Without `--template-type`, `-t` is a built-in name or a path as above.
+
+```sh
+md-printer document.md --template-type package -t @cenk1cenk2/md-printer-template-cv
+md-printer document.md --template-type package -t my-templates --template-directory letters
+md-printer document.md --template-type builtin -t cv
+md-printer document.md --template-type directory -t ./template
+```
+
+An unknown `type`, a missing or unknown key, or a `package` that is not installed fails the run. A package has to allow access to its `package.json`, so one with an `exports` map lists `./package.json` there.
+
 ### Authoring a template
 
-A template is a directory. Pass it with `-t ./path` or `template: ./path`. A value without a path separator is a built-in name, anything with `/` or starting with `.` or `~` is a path.
+A template is a directory. Pass it with `-t ./path`, `template: ./path` or as one of the other [template sources](#template-sources). Its Svelte files and its TypeScript are kept apart, so ESLint, Prettier and tsconfig can target each group:
 
 ```
 my-template/
-  Template.svelte   required
-  settings.json     optional
-  i18n/             optional, en.yaml, de.json, ...
-  components/       optional, *.svelte placed from markdown, see Markdown components
+  package.json             optional, see below
+  settings.json            optional, always at the root
+  i18n/                    optional, en.yaml, de.json, ...
+  template/
+    Template.svelte        required
+    components/*.svelte    optional, placed from markdown, see Markdown components
+  src/
+    extension.ts           optional, see Extension module
+    *.ts                   optional, plain modules
 ```
+
+`files` in `settings.json` moves any of these. Every key is optional and defaults to the layout above:
+
+```json
+{
+  "files": {
+    "template": "template/Template.svelte",
+    "components": "template/components",
+    "extension": "src/extension.ts",
+    "i18n": "i18n"
+  }
+}
+```
+
+- `components`, `extension` and `i18n` also take an array, read in order: a component of a later folder replaces one of the same name, an export of a later extension module replaces one of the same name, and a key of a later i18n folder replaces the same key while nested keys merge. Use this to share components or translations between templates:
+
+  ```json
+  {
+    "files": {
+      "components": ["template/shared", "template/components"],
+      "extension": ["src/format.ts", "src/extension.ts"],
+      "i18n": ["i18n/shared", "i18n"]
+    }
+  }
+  ```
+
+- Paths are relative to the template directory. A path leaving it, a path that does not exist and an unknown key each fail the build.
+- A template written for 3.x keeps working: for each key `files` does not set, when the default location is missing, the root location is used if it exists, that is `Template.svelte`, `components/` and `extension.*`. A path set in `files` never falls back.
+- A package keeps what it does not publish out with an `.npmignore`, as the built-in templates do, for example `release.config.cjs` and `CHANGELOG.md`.
 
 `Template.svelte` is a Svelte 5 component receiving these props:
 
@@ -208,6 +273,7 @@ my-template/
 | `t`         | i18next translate function, loaded from `i18n/<language>.(yaml\|yml\|json)`.                |
 | `language`  | The resolved language.                                                                       |
 | `signature` | `{ date, name?, issuer?, serial? }` while signing is enabled, otherwise `undefined`.         |
+| `extension` | The named exports of the [extension module](#extension-module), empty without one.           |
 
 Set the document title with `<svelte:head><title>...</title></svelte:head>`.
 
@@ -227,6 +293,31 @@ Images are imported, which inlines them as data URIs:
 <img src={logo} alt="logo" />
 ```
 
+#### Extension module
+
+A template may contain one extension module, `src/extension.ts`, `.mts`, `.cts`, `.js`, `.mjs` or `.cjs`, so the template can bring its own functions. More than one at the default location fails the build, naming the files; to combine several modules, list them in `files.extension`.
+
+```ts
+// src/extension.ts
+export function money(value: number): string {
+  return `${value.toFixed(2)} EUR`
+}
+```
+
+It is compiled in the same bundle as the template, so TypeScript works and its imports resolve like those of the template's own modules, from its `node_modules` first. Its named exports are available as the `extension` prop of `Template.svelte`, through the `md-printer:extension` context with `getContext`, and in any component with the `getExtension` helper:
+
+```svelte
+<script lang="ts">
+  import { getExtension } from '@cenk1cenk2/md-printer/components'
+
+  const { money } = getExtension<typeof import('../../src/extension.js')>()
+</script>
+
+<span>{money(12)}</span>
+```
+
+The default export is left out. An extension only exposes its exports, md-printer calls none of them by itself. `--preview` rebuilds when the module changes, is added or is removed.
+
 #### Shared components
 
 Import from `@cenk1cenk2/md-printer/components`:
@@ -240,7 +331,9 @@ Import from `@cenk1cenk2/md-printer/components`:
 | `TotalPages`     | Total page count, filled by Chrome. Header and footer only.                                       |
 | `Title`          | Document title, filled by Chrome. Header and footer only.                                         |
 | `Date`           | Print date, filled by Chrome. Header and footer only.                                             |
-| `SignatureBlock` | Visible signature block for the `signature` prop. Needs Tailwind in a `<style lang="postcss">` block. Optional `labels` prop overrides its texts. |
+| `Localized`      | Text for the language of the document from props named after languages, `<Localized en="Invoice" de="Rechnung" />` or `:localized{en="Invoice" de="Rechnung"}`, for words that need no entry in `i18n/`. Takes the language, then its base language (`de` for `de-AT`), then `fallback`, otherwise nothing. In a template a prop can also be a snippet for markup. Plain text without a wrapper element. |
+| `Translate`      | Text translated with the `i18n/` directory of the template, `<Translate key="present" />` or `::translate{key="present"}`, inline as `:translate{key="present"}`. Plain text without a wrapper element. Optional `fallback` for a missing key, otherwise the key itself is printed. |
+| `SignatureBlock` | Hands the signature, `{ date, name?, issuer?, serial? }`, to its `children` snippet, so the template draws the visible block with its own markup and styles. Takes the `signature` prop, or as `::signature-block` the signature of the document. Renders nothing without a signature or without `children`, so a template gives `::signature-block` its markup with its own `template/components/SignatureBlock.svelte`, see below. |
 
 ```svelte
 <script>
@@ -266,10 +359,32 @@ Import from `@cenk1cenk2/md-printer/components`:
 
 #### Markdown components
 
-Every `*.svelte` file in the template's `components/` directory can be placed from markdown, see [Components](#components). The shared components can be placed the same way, for example `::page-break` or `::signature-block`, except `Markdown`. A template component with the same name as a shared one replaces it.
+Every `*.svelte` file in the template's `template/components/` directory can be placed from markdown, see [Components](#components). The shared components can be placed the same way, for example `::page-break` or `::signature-block`, except `Markdown`.
+
+A template replaces or extends any shared component, `SignatureBlock` and `Translate` included, with a file of the same name in `template/components/`:
+
+- **Replace:** `template/components/SignatureBlock.svelte` is what `::signature-block` renders from then on. This is about directives: a component that imports `SignatureBlock` from `@cenk1cenk2/md-printer/components` keeps getting the original, so import `./components/SignatureBlock.svelte` to use the replacement in the template itself.
+- **Extend:** that import always reaches md-printer's original, also from a file with the same name, so a component can wrap it:
 
 ```svelte
-<!-- components/Callout.svelte -->
+<!-- template/components/SignatureBlock.svelte -->
+<script>
+  import { SignatureBlock } from '@cenk1cenk2/md-printer/components'
+
+  let props = $props()
+</script>
+
+<SignatureBlock {...props}>
+  {#snippet children(signature)}
+    <section class="my-8">
+      <strong>Digitally signed</strong> by {signature.name} on {signature.date}
+    </section>
+  {/snippet}
+</SignatureBlock>
+```
+
+```svelte
+<!-- template/components/Callout.svelte -->
 <script>
   import { getContext } from 'svelte'
 
@@ -309,7 +424,7 @@ md-printer invoice.yaml -t invoice --sign --sign-certificate ~/id-austria.pem
 - Signing only works for PDF output and is skipped with `--preview`.
 - The signing session has to run in your browser. md-printer opens a temporary local page in an app window of the discovered browser, using your normal profile (or with `xdg-open` when none is found), you log in with ID Austria in the A-Trust page, and paste the resulting signature (starts with `MII`) back into the local page. A paste that is cut short is refused on the page, so you can copy it again. It waits until the signature arrives, press Ctrl+C to abort.
 - The returned signature is always verified before it is embedded: its digest must match this document and it must be cryptographically valid. The result is printed with the signer name, serial and issuer. A failed verification fails the run, and with `--log-level debug` the returned signature is written next to the output as `<output>.cms.der`.
-- With a certificate, the signer name, issuer and serial are passed to the template as `signature`, so `SignatureBlock` can show who signed and when. The certificate must be valid at signing time, and the returned signature is rejected if it was not made with it. Without a certificate only the date is available.
+- With a certificate, the signer name, issuer and serial are passed to the template as `signature`, so the template can show who signed and when through `SignatureBlock`. The certificate must be valid at signing time, and the returned signature is rejected if it was not made with it. Without a certificate only the date is available.
 - Verify the result at https://www.signaturpruefung.gv.at.
 
 ## Migrating from 2.x
@@ -334,58 +449,67 @@ Renders a markdown or yaml file through a Svelte template into a PDF or HTML doc
 USAGE
   $ md-printer  [FILE] [OUTPUT] [--log-level
     silent|direct|fatal|error|warn|info|verbose|debug|trace] [-I] [-f
-    md|yaml|yml] [-F pdf|html] [-O] [-t <value>] [-T <value>] [-l <value>] [-b
-    <value>] [--continuous] [-p] [--host 127.0.0.1|localhost|::1] [--port
-    <value>] [--open] [--sign] [--sign-provider a-trust] [--sign-certificate
-    <value>]
+    md|yaml|yml] [-F pdf|html] [-O] [-t <value>] [--template-type <value>]
+    [--template-directory <value>] [-T <value>] [-l <value>] [-b <value>]
+    [--continuous] [-p] [--host 127.0.0.1|localhost|::1] [--port <value>]
+    [--open] [--sign] [--sign-provider a-trust] [--sign-certificate <value>]
 
 ARGUMENTS
   [FILE]    Markdown or yaml file to render.
   [OUTPUT]  Output file. Overwrites the one defined in front-matter.
 
 FLAGS
-  -F, --output-filetype=<option>  Output file type, defaults to pdf. Overwrites
-                                  the one defined in front-matter.
-                                  <options: pdf|html>
-  -I, --stdin                     Read the input from stdin.
-  -O, --stdout                    Write the output to stdout instead of a file.
-  -T, --title=<value>             Document title. Overwrites the one defined in
-                                  front-matter or the template.
-  -b, --browser=<value>           Browser executable used for printing.
-                                  Discovered automatically when omitted (Brave,
-                                  Chrome, Chromium, Edge).
-  -f, --input-filetype=<option>   Input file type. Detected from the file
-                                  extension, markdown for stdin and unknown
-                                  extensions.
-                                  <options: md|yaml|yml>
-  -l, --language=<value>          Language for template translations. Overwrites
-                                  the one defined in front-matter and template
-                                  settings.
-  -p, --preview                   Rebuild whenever the input, the template or
-                                  its assets change, show the HTML and the PDF
-                                  in a live preview and rewrite the output file
-                                  when there is one.
-  -t, --template=<value>          Built-in template name or path to a template
-                                  directory, defaults to "default". Overwrites
-                                  the one defined in front-matter.
-      --continuous                Render the PDF as a single continuous page
-                                  without page breaks.
-      --host=<option>             [default: 127.0.0.1] Loopback host for the
-                                  preview server, it serves the files next to
-                                  the input and is never exposed to the network.
-                                  <options: 127.0.0.1|localhost|::1>
-      --[no-]open                 Open the preview window, --no-open keeps
-                                  rebuilding and writing without one.
-      --port=<value>              Port for the preview server, random when 0.
-      --sign                      Sign the PDF with a qualified electronic
-                                  signature through ID Austria (A-Trust).
-      --sign-certificate=<value>  Signer certificate (DER or PEM) used for the
-                                  visible signature block and to verify the
-                                  returned signature.
-      --sign-provider=<option>    Signature provider, defaults to a-trust.
-                                  Overwrites the one defined in front-matter and
-                                  template settings.
-                                  <options: a-trust>
+  -F, --output-filetype=<option>    Output file type, defaults to pdf.
+                                    Overwrites the one defined in front-matter.
+                                    <options: pdf|html>
+  -I, --stdin                       Read the input from stdin.
+  -O, --stdout                      Write the output to stdout instead of a
+                                    file.
+  -T, --title=<value>               Document title. Overwrites the one defined
+                                    in front-matter or the template.
+  -b, --browser=<value>             Browser executable used for printing.
+                                    Discovered automatically when omitted
+                                    (Brave, Chrome, Chromium, Edge).
+  -f, --input-filetype=<option>     Input file type. Detected from the file
+                                    extension, markdown for stdin and unknown
+                                    extensions.
+                                    <options: md|yaml|yml>
+  -l, --language=<value>            Language for template translations.
+                                    Overwrites the one defined in front-matter
+                                    and template settings.
+  -p, --preview                     Rebuild whenever the input, the template or
+                                    its assets change, show the HTML and the PDF
+                                    in a live preview and rewrite the output
+                                    file when there is one.
+  -t, --template=<value>            Built-in template name or path to a template
+                                    directory, defaults to "default", read as
+                                    --template-type when given. Overwrites the
+                                    one defined in front-matter.
+      --continuous                  Render the PDF as a single continuous page
+                                    without page breaks.
+      --host=<option>               [default: 127.0.0.1] Loopback host for the
+                                    preview server, it serves the files next to
+                                    the input and is never exposed to the
+                                    network.
+                                    <options: 127.0.0.1|localhost|::1>
+      --[no-]open                   Open the preview window, --no-open keeps
+                                    rebuilding and writing without one.
+      --port=<value>                Port for the preview server, random when 0.
+      --sign                        Sign the PDF with a qualified electronic
+                                    signature through ID Austria (A-Trust).
+      --sign-certificate=<value>    Signer certificate (DER or PEM) used for the
+                                    visible signature block and to verify the
+                                    returned signature.
+      --sign-provider=<option>      Signature provider, defaults to a-trust.
+                                    Overwrites the one defined in front-matter
+                                    and template settings.
+                                    <options: a-trust>
+      --template-directory=<value>  Directory inside the package to use as the
+                                    template, only valid with --template-type
+                                    package.
+      --template-type=<value>       How to read --template, one of builtin,
+                                    package or directory, like the type of the
+                                    object form in front-matter.
 
 CLI FLAGS
   --log-level=<option>  [default: INFO, env: LOG_LEVEL] Set the log level of the

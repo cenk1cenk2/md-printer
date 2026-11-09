@@ -4,6 +4,6 @@
   "compilerOptions": {
     "rootDir": "."
   },
-  "include": ["packages/md-printer/src/**/*", "packages/md-printer/test/**/*", "packages/md-printer/vitest.config.ts", "templates/*/**/*.ts"],
+  "include": ["packages/md-printer/src/**/*", "packages/md-printer/test/**/*", "packages/md-printer/vitest.config.ts", "templates/*/src/**/*.ts"],
   "exclude": ["**/node_modules", "**/dist"]
 }

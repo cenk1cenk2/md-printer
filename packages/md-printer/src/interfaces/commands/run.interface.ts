@@ -4,6 +4,7 @@ import type { PDFOptions } from 'puppeteer-core'
 
 import type { MdPrinterAttachment } from '../attachment.interface.js'
 import type { MdPrinterSignature, MdPrinterSignOptions } from '../signature.interface.js'
+import type { TemplatePaths } from '../template.interface.js'
 import type { InputFileType, MediaType, OutputFileType, SignatureProvider } from '@constants'
 
 export interface MdPrinterI18nOptions {
@@ -15,7 +16,18 @@ export interface I18nLoadOptions extends MdPrinterI18nOptions {
   language: string
 }
 
+export interface MdPrinterTemplateFiles {
+  template?: string
+  /** One folder or several, a component of a later folder replaces one of the same name in an earlier folder. */
+  components?: string | string[]
+  /** One module or several, an export of a later module replaces one of the same name in an earlier module. */
+  extension?: string | string[]
+  /** One folder or several, a key of a later folder replaces the same key of an earlier folder. */
+  i18n?: string | string[]
+}
+
 export interface MdPrinterSettings {
+  files?: MdPrinterTemplateFiles
   pdfOptions?: PDFOptions
   i18n?: MdPrinterI18nOptions
   sign?: MdPrinterSignOptions
@@ -26,6 +38,7 @@ export interface MdPrinterSettings {
 
 export interface MdPrinterOptions {
   template: string
+  files: TemplatePaths
   output: OutputFileType
   dest?: string
   title?: string
@@ -58,6 +71,8 @@ export interface MdPrinterFlagOptions {
   outputFiletype?: OutputFileType
   stdout?: boolean
   template?: string
+  templateType?: string
+  templateDirectory?: string
   title?: string
   language?: string
   continuous?: boolean
