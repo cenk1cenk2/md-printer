@@ -197,14 +197,14 @@ importers:
   packages/md-printer:
     dependencies:
       '@cenk1cenk2/md-printer-template-cv':
-        specifier: ^1.0.0
-        version: 1.0.0(svelte@5.57.3(@typescript-eslint/types@8.72.1))
+        specifier: ^1.1.0
+        version: 1.1.0(svelte@5.57.3(@typescript-eslint/types@8.72.1))
       '@cenk1cenk2/md-printer-template-default':
         specifier: workspace:^
         version: link:../../templates/default
       '@cenk1cenk2/md-printer-template-invoice':
-        specifier: ^1.0.0
-        version: 1.0.0(svelte@5.57.3(@typescript-eslint/types@8.72.1))
+        specifier: ^1.1.0
+        version: 1.1.0(svelte@5.57.3(@typescript-eslint/types@8.72.1))
       '@cenk1cenk2/md-printer-template-kilic.dev':
         specifier: workspace:^
         version: link:../../templates/kilic.dev
@@ -567,13 +567,13 @@ packages:
       svelte-eslint-parser:
         optional: true
 
-  '@cenk1cenk2/md-printer-template-cv@1.0.0':
-    resolution: {integrity: sha512-8ojPnBAO7ioXNwnkcgRRmps7oGHWWmuDwFGgp2AyqduHFi0iGOFTWNpQdkSgOyNkAEb/ixOyo2bTsY9rXlLkVA==}
+  '@cenk1cenk2/md-printer-template-cv@1.1.0':
+    resolution: {integrity: sha512-NSWPsMxMr4K5ys1UNDwp5x/d0Z+b2Hwse7pMQOsvDOv86qbD8kv0ODEIlz3dq4fwfMtJqoCHitBXEvxOtUFWIQ==}
     peerDependencies:
       svelte: ^5.57.3
 
-  '@cenk1cenk2/md-printer-template-invoice@1.0.0':
-    resolution: {integrity: sha512-bK8cPk0eI4Kcq5wyJLsr/sjG23Cljb2YJFosVgsUsGZUQuF8CD1BO4ofyat7p9CSILup2Po7XpBY4qHc6xqZsw==}
+  '@cenk1cenk2/md-printer-template-invoice@1.1.0':
+    resolution: {integrity: sha512-NGJn5Q9IVsvXqYpXNbMe7sokttZNgN9uSmzWSi+Cm69QFL/5dx2WDhhlp53M1d7YViFN5NzBTlVFKt++7m0ETA==}
     peerDependencies:
       svelte: ^5.57.3
 
@@ -4891,14 +4891,16 @@ snapshots:
       - supports-color
       - typescript
 
-  '@cenk1cenk2/md-printer-template-cv@1.0.0(svelte@5.57.3(@typescript-eslint/types@8.72.1))':
+  '@cenk1cenk2/md-printer-template-cv@1.1.0(svelte@5.57.3(@typescript-eslint/types@8.72.1))':
     dependencies:
       '@fontsource/carlito': 5.3.0
       '@fortawesome/fontawesome-free': 7.3.1
       svelte: 5.57.3(@typescript-eslint/types@8.72.1)
 
-  '@cenk1cenk2/md-printer-template-invoice@1.0.0(svelte@5.57.3(@typescript-eslint/types@8.72.1))':
+  '@cenk1cenk2/md-printer-template-invoice@1.1.0(svelte@5.57.3(@typescript-eslint/types@8.72.1))':
     dependencies:
+      '@fontsource/montserrat': 5.3.0
+      '@fortawesome/fontawesome-free': 7.3.1
       svelte: 5.57.3(@typescript-eslint/types@8.72.1)
 
   '@cenk1cenk2/oclif-common@8.0.4(@listr2/manager@4.3.4(listr2@11.4.1))(@nestjs/common@12.4.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.4.0(@nestjs/common@12.4.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(@oclif/core@5.1.11)(listr2@11.4.1)(yaml@2.9.1)':
