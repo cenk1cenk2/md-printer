@@ -197,8 +197,8 @@ importers:
   packages/md-printer:
     dependencies:
       '@cenk1cenk2/md-printer-template-cv':
-        specifier: ^1.1.0
-        version: 1.1.0(svelte@5.57.3(@typescript-eslint/types@8.72.2))
+        specifier: ^2.0.0
+        version: 2.0.0(svelte@5.57.3(@typescript-eslint/types@8.72.2))
       '@cenk1cenk2/md-printer-template-default':
         specifier: workspace:^
         version: link:../../templates/default
@@ -567,8 +567,8 @@ packages:
       svelte-eslint-parser:
         optional: true
 
-  '@cenk1cenk2/md-printer-template-cv@1.1.0':
-    resolution: {integrity: sha512-NSWPsMxMr4K5ys1UNDwp5x/d0Z+b2Hwse7pMQOsvDOv86qbD8kv0ODEIlz3dq4fwfMtJqoCHitBXEvxOtUFWIQ==}
+  '@cenk1cenk2/md-printer-template-cv@2.0.0':
+    resolution: {integrity: sha512-GsE3YTZ4NLijwb8Xf2Af6pqjEHFedUkhsH3/5MzlBDKBBoRDF+ZXbe0xC3g8C5zeCWuGvlMZdlGzjPLjCXcDDA==}
     peerDependencies:
       svelte: ^5.57.3
 
@@ -666,8 +666,16 @@ packages:
   '@fontsource/montserrat@5.3.0':
     resolution: {integrity: sha512-iQPDtZOnmM5ih4JBGaMSXisRap0ixb9bAUw2hDtY7EjVfaqiiNlKtVuJl9XclxUwtwMMHNcWXfQR6zI9x05+Tg==}
 
+  '@fortawesome/fontawesome-common-types@7.3.1':
+    resolution: {integrity: sha512-k0C0sdHmZtAo6dRDtd1Z/qcpyHbL0CKsjV8seMY/21xGhY5Wsv0XRmiI/xEEH4y2c9b1+jvgNs/3EqhV27yUEA==}
+    engines: {node: '>=6'}
+
   '@fortawesome/fontawesome-free@7.3.1':
     resolution: {integrity: sha512-wmglKKPDIkgV3aWlZzWECCPoGIkYCulzBwxG9+w7rc5BGapZ6cPMpoPOT8k36J0Ni7PPX6c/rsoMWfS4d1MUMg==}
+    engines: {node: '>=6'}
+
+  '@fortawesome/free-solid-svg-icons@7.3.1':
+    resolution: {integrity: sha512-v0BLa0eqg7ubvVWeNSHVBs8fWH/GJicERZoJaxJ3FE/lj67VSqzoMg9pzfZVOfLMX10y0pGwQAuxoRVVH2patg==}
     engines: {node: '>=6'}
 
   '@humanfs/core@0.19.2':
@@ -4168,6 +4176,11 @@ packages:
       svelte:
         optional: true
 
+  svelte-fa@4.0.4:
+    resolution: {integrity: sha512-85BomCGkTrH8kPDGvb8JrVwq9CqR9foprbKjxemP4Dtg3zPR7OXj5hD0xVYK0C+UCzFI1zooLoK/ndIX6aYXAw==}
+    peerDependencies:
+      svelte: ^4.0.0 || ^5.0.0
+
   svelte@5.57.3:
     resolution: {integrity: sha512-5mAftM3SoDV9X0zdF386F9p2pv8iKOwi/KfBS1XnBAkVCKFzVOLHUoa8iGWAt4buoicLmyWVRpuuD5wplXOQsg==}
     engines: {node: '>=18'}
@@ -4891,11 +4904,12 @@ snapshots:
       - supports-color
       - typescript
 
-  '@cenk1cenk2/md-printer-template-cv@1.1.0(svelte@5.57.3(@typescript-eslint/types@8.72.2))':
+  '@cenk1cenk2/md-printer-template-cv@2.0.0(svelte@5.57.3(@typescript-eslint/types@8.72.2))':
     dependencies:
       '@fontsource/carlito': 5.3.0
-      '@fortawesome/fontawesome-free': 7.3.1
+      '@fortawesome/free-solid-svg-icons': 7.3.1
       svelte: 5.57.3(@typescript-eslint/types@8.72.2)
+      svelte-fa: 4.0.4(svelte@5.57.3(@typescript-eslint/types@8.72.2))
 
   '@cenk1cenk2/md-printer-template-invoice@1.1.0(svelte@5.57.3(@typescript-eslint/types@8.72.2))':
     dependencies:
@@ -5014,7 +5028,13 @@ snapshots:
 
   '@fontsource/montserrat@5.3.0': {}
 
+  '@fortawesome/fontawesome-common-types@7.3.1': {}
+
   '@fortawesome/fontawesome-free@7.3.1': {}
+
+  '@fortawesome/free-solid-svg-icons@7.3.1':
+    dependencies:
+      '@fortawesome/fontawesome-common-types': 7.3.1
 
   '@humanfs/core@0.19.2':
     dependencies:
@@ -8739,6 +8759,10 @@ snapshots:
       postcss-selector-parser: 7.2.0
       semver: 7.8.6
     optionalDependencies:
+      svelte: 5.57.3(@typescript-eslint/types@8.72.2)
+
+  svelte-fa@4.0.4(svelte@5.57.3(@typescript-eslint/types@8.72.2)):
+    dependencies:
       svelte: 5.57.3(@typescript-eslint/types@8.72.2)
 
   svelte@5.57.3(@typescript-eslint/types@8.72.2):
