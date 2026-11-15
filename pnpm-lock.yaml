@@ -171,7 +171,7 @@ importers:
         version: 3.0.13(@types/node@26.6.6)(typescript@6.0.3)
       '@cenk1cenk2/eslint-config':
         specifier: ^3.4.7
-        version: 3.4.7(@typescript-eslint/utils@8.72.2(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3))(eslint-plugin-svelte@3.24.1(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))(svelte@5.57.3(@typescript-eslint/types@8.72.2))(ts-node@10.9.2(@types/node@26.6.6)(typescript@6.0.3)))(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(svelte-eslint-parser@1.10.1(svelte@5.57.3(@typescript-eslint/types@8.72.2)))(typescript@6.0.3)
+        version: 3.4.8(@typescript-eslint/utils@8.72.2(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3))(eslint-plugin-svelte@3.24.1(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))(svelte@5.57.3(@typescript-eslint/types@8.72.2))(ts-node@10.9.2(@types/node@26.6.6)(typescript@6.0.3)))(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(svelte-eslint-parser@1.10.1(svelte@5.57.3(@typescript-eslint/types@8.72.2)))(typescript@6.0.3)
       '@types/node':
         specifier: ^26.6.6
         version: 26.6.6
@@ -213,7 +213,7 @@ importers:
         version: link:../../templates/mail
       '@cenk1cenk2/oclif-common':
         specifier: ^8.0.4
-        version: 8.0.4(@listr2/manager@4.3.4(listr2@11.4.1))(@nestjs/common@12.5.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.5.0(@nestjs/common@12.5.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(@oclif/core@5.1.12)(listr2@11.4.1)(yaml@2.9.1)
+        version: 8.0.5(@listr2/manager@4.3.4(listr2@11.4.1))(@nestjs/common@12.5.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.5.0(@nestjs/common@12.5.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(@oclif/core@5.1.12)(listr2@11.4.1)(yaml@2.9.1)
       '@listr2/manager':
         specifier: ^4.3.4
         version: 4.3.4(listr2@11.4.1)
@@ -225,7 +225,7 @@ importers:
         version: 5.1.12
       '@oclif/plugin-help':
         specifier: ^7.0.7
-        version: 7.0.7
+        version: 7.0.8
       '@signpdf/placeholder-plain':
         specifier: ^4.0.0
         version: 4.0.0(pdfkit@0.10.0)
@@ -543,8 +543,8 @@ packages:
     resolution: {integrity: sha512-Q3Xmu9YpGGptKoSti+VelaISsEtmXCortg1vy0CbIoiDw9LFREhT2c2WJE0cAkFf2VA4wMlu0UANQ9kgLb6dng==}
     engines: {node: '>= 24'}
 
-  '@cenk1cenk2/eslint-config@3.4.7':
-    resolution: {integrity: sha512-0NP1QSYR7QpiHqDf4ljGILRZEjzN8GRCMq4OoSDb83Q0c0p7fWfv8dhJoocwNX6kCwA9rjYnd7YheI+WjxrSZw==}
+  '@cenk1cenk2/eslint-config@3.4.8':
+    resolution: {integrity: sha512-VEDWtLA7ba/LLBNdVIXREJzPTzY0CRzQG3R+FfJSdkPrUxPYP/CrrnaWRec+v6ndqXiZHuCT5p+Lzg2TP9aPOA==}
     peerDependencies:
       '@vue/eslint-config-typescript': '>= 14.1.1'
       eslint: '>= 9'
@@ -577,8 +577,8 @@ packages:
     peerDependencies:
       svelte: ^5.57.3
 
-  '@cenk1cenk2/oclif-common@8.0.4':
-    resolution: {integrity: sha512-9yFqpa0I6RWMyMr/DnFx61rDDSlb5h2JsWKgRU/tSoM+2vHHxrj2cVXbcHFGJBvNQk4nhRC6VA3ZYtFrpdwfqA==}
+  '@cenk1cenk2/oclif-common@8.0.5':
+    resolution: {integrity: sha512-/8/dpDh9s/VHn1L5TjMPdHBC09XOKPCTaCWg62HMm/+O1IrB9Wau2JxhNuzFpvBFTO4zyaZ27xYEIWlifPKIhA==}
     engines: {node: '>= 24'}
     peerDependencies:
       '@listr2/manager': '>= 4'
@@ -1084,8 +1084,8 @@ packages:
     resolution: {integrity: sha512-t8W/ljOb9DIsFNXbfLU4UpZ8+C/X0QuvJOuQXQVCthiw5zSdwKnKoq7HmyBUJwwo28302eiN0rRj8vN9k1U1Mw==}
     engines: {node: '>=22.0.0'}
 
-  '@oclif/plugin-help@7.0.7':
-    resolution: {integrity: sha512-k1mWE1bp3AhO6MIKRpdgbGKiPORNCikYRhpGCM7kIz0ywn72/vijoSPOxTfZRbVZyJKFtR25rZ9Lj+QGG2aBNQ==}
+  '@oclif/plugin-help@7.0.8':
+    resolution: {integrity: sha512-U1XBWB0M9x4qAOHbqyN9ltOeyOsoVCgOULzi9x9LqTQsuyYM6Wch9q1GlVhkcczdcR4Ww0wXKrIJ/RlhrGhAuQ==}
     engines: {node: '>=22.0.0'}
 
   '@oclif/plugin-not-found@4.0.7':
@@ -4891,7 +4891,7 @@ snapshots:
       - '@types/node'
       - typescript
 
-  '@cenk1cenk2/eslint-config@3.4.7(@typescript-eslint/utils@8.72.2(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3))(eslint-plugin-svelte@3.24.1(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))(svelte@5.57.3(@typescript-eslint/types@8.72.2))(ts-node@10.9.2(@types/node@26.6.6)(typescript@6.0.3)))(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(svelte-eslint-parser@1.10.1(svelte@5.57.3(@typescript-eslint/types@8.72.2)))(typescript@6.0.3)':
+  '@cenk1cenk2/eslint-config@3.4.8(@typescript-eslint/utils@8.72.2(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(typescript@6.0.3))(eslint-plugin-svelte@3.24.1(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))(svelte@5.57.3(@typescript-eslint/types@8.72.2))(ts-node@10.9.2(@types/node@26.6.6)(typescript@6.0.3)))(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))(supports-color@8.1.1)(svelte-eslint-parser@1.10.1(svelte@5.57.3(@typescript-eslint/types@8.72.2)))(typescript@6.0.3)':
     dependencies:
       '@eslint/js': 10.0.1(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))
       '@stylistic/eslint-plugin': 5.10.0(eslint@10.15.0(jiti@2.7.0)(supports-color@8.1.1))
@@ -4924,7 +4924,7 @@ snapshots:
       '@fortawesome/fontawesome-free': 7.3.1
       svelte: 5.57.3(@typescript-eslint/types@8.72.2)
 
-  '@cenk1cenk2/oclif-common@8.0.4(@listr2/manager@4.3.4(listr2@11.4.1))(@nestjs/common@12.5.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.5.0(@nestjs/common@12.5.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(@oclif/core@5.1.12)(listr2@11.4.1)(yaml@2.9.1)':
+  '@cenk1cenk2/oclif-common@8.0.5(@listr2/manager@4.3.4(listr2@11.4.1))(@nestjs/common@12.5.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.5.0(@nestjs/common@12.5.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(@oclif/core@5.1.12)(listr2@11.4.1)(yaml@2.9.1)':
     dependencies:
       '@listr2/manager': 4.3.4(listr2@11.4.1)
       '@nestjs/common': 12.5.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1)
@@ -5446,7 +5446,7 @@ snapshots:
       wrap-ansi: 7.0.0
       wsl-utils: 0.4.0
 
-  '@oclif/plugin-help@7.0.7':
+  '@oclif/plugin-help@7.0.8':
     dependencies:
       '@oclif/core': 5.1.12
 
@@ -8044,7 +8044,7 @@ snapshots:
       '@inquirer/input': 2.3.0
       '@inquirer/select': 2.5.0
       '@oclif/core': 5.1.12
-      '@oclif/plugin-help': 7.0.7
+      '@oclif/plugin-help': 7.0.8
       '@oclif/plugin-not-found': 4.0.7(@types/node@26.6.6)
       '@oclif/plugin-warn-if-update-available': 4.0.5(supports-color@8.1.1)
       ansis: 3.17.0
