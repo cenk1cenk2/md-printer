@@ -224,7 +224,7 @@ importers:
         specifier: ^5.1.11
         version: 5.1.12
       '@oclif/plugin-help':
-        specifier: ^7.0.6
+        specifier: ^7.0.7
         version: 7.0.7
       '@signpdf/placeholder-plain':
         specifier: ^4.0.0
