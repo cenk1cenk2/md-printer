@@ -212,7 +212,7 @@ importers:
         specifier: workspace:^
         version: link:../../templates/mail
       '@cenk1cenk2/oclif-common':
-        specifier: ^8.0.4
+        specifier: ^8.0.5
         version: 8.0.5(@listr2/manager@4.3.4(listr2@11.4.1))(@nestjs/common@12.5.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(@nestjs/core@12.5.0(@nestjs/common@12.5.0(reflect-metadata@0.2.2)(rxjs@7.8.2)(supports-color@8.1.1))(reflect-metadata@0.2.2)(rxjs@7.8.2))(@oclif/core@5.1.12)(listr2@11.4.1)(yaml@2.9.1)
       '@listr2/manager':
         specifier: ^4.3.4
