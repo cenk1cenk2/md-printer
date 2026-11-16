@@ -225,7 +225,7 @@ importers:
         version: 5.1.12
       '@oclif/plugin-help':
         specifier: ^7.0.7
-        version: 7.0.8
+        version: 7.0.9
       '@signpdf/placeholder-plain':
         specifier: ^4.0.0
         version: 4.0.0(pdfkit@0.10.0)
@@ -1084,8 +1084,8 @@ packages:
     resolution: {integrity: sha512-t8W/ljOb9DIsFNXbfLU4UpZ8+C/X0QuvJOuQXQVCthiw5zSdwKnKoq7HmyBUJwwo28302eiN0rRj8vN9k1U1Mw==}
     engines: {node: '>=22.0.0'}
 
-  '@oclif/plugin-help@7.0.8':
-    resolution: {integrity: sha512-U1XBWB0M9x4qAOHbqyN9ltOeyOsoVCgOULzi9x9LqTQsuyYM6Wch9q1GlVhkcczdcR4Ww0wXKrIJ/RlhrGhAuQ==}
+  '@oclif/plugin-help@7.0.9':
+    resolution: {integrity: sha512-pxinZNS9FW5BmyTEMrXFgJT9OI8Y0DB8qfkgmx5d4H5A+oZFB0Gl0Cs/6TETOMAKg8ocWl4c5uZYXNReUscAPQ==}
     engines: {node: '>=22.0.0'}
 
   '@oclif/plugin-not-found@4.0.7':
@@ -5446,7 +5446,7 @@ snapshots:
       wrap-ansi: 7.0.0
       wsl-utils: 0.4.0
 
-  '@oclif/plugin-help@7.0.8':
+  '@oclif/plugin-help@7.0.9':
     dependencies:
       '@oclif/core': 5.1.12
 
@@ -8044,7 +8044,7 @@ snapshots:
       '@inquirer/input': 2.3.0
       '@inquirer/select': 2.5.0
       '@oclif/core': 5.1.12
-      '@oclif/plugin-help': 7.0.8
+      '@oclif/plugin-help': 7.0.9
       '@oclif/plugin-not-found': 4.0.7(@types/node@26.6.6)
       '@oclif/plugin-warn-if-update-available': 4.0.5(supports-color@8.1.1)
       ansis: 3.17.0
