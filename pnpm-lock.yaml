@@ -279,7 +279,7 @@ importers:
         version: 11.12.0
       i18next:
         specifier: ^27.1.1
-        version: 27.2.1(typescript@6.0.3)
+        version: 27.2.2(typescript@6.0.3)
       lightningcss:
         specifier: ^1.33.0
         version: 1.33.0
@@ -459,12 +459,12 @@ packages:
     resolution: {integrity: sha512-OHlfkNzDFjYnwNPABhwAkDTUi0HPjfsKUHJDR0bSMORpCXNzRpInPCNCIT08xKDhjaPlcLJ+2Av+Sk7hHnuC8A==}
     engines: {node: '>=20.0.0'}
 
-  '@aws-sdk/client-cloudfront@3.1172.0':
-    resolution: {integrity: sha512-sU440XzcSUhEowGAOdDwIEXznDl3eSz0cc4Wd4/2aCp4gvB+/dDlJYvCGatW0Q6sz2kxjD7VjMgXA9tTwdukrQ==}
+  '@aws-sdk/client-cloudfront@3.1173.0':
+    resolution: {integrity: sha512-CSM6i61Y7gpvuiREhj3d8NaGcUpWzC9Dm4Moq09sn//QiDmOEPo8kGLceTBxYYA72MzlFzt7yQPmXRnRrMy3bw==}
     engines: {node: '>=20.0.0'}
 
-  '@aws-sdk/client-s3@3.1172.0':
-    resolution: {integrity: sha512-ByCRHFlL9yui61J5e4w9nrDZcRUbAzd+78z9Q1DQWoAT2HE1XwjtDGEx86GdNTu1+oSyerNhl8eijF6jMUvEpg==}
+  '@aws-sdk/client-s3@3.1173.0':
+    resolution: {integrity: sha512-eFlCOczCvpv1CN37d0BzUxoHmw2ARrMtqQ4JC0pkh5kx/SU9oUKlNtWkqrNg+QRNob0MAi3+SbQQnP5FCcKpHg==}
     engines: {node: '>=20.0.0'}
 
   '@aws-sdk/core@3.981.0':
@@ -2886,8 +2886,8 @@ packages:
     resolution: {integrity: sha512-eKCa6bwnJhvxj14kZk5NCPc6Hb6BdsU9DZcOnmQKSnO1VKrfV0zCvtttPZUsBvjmNDn8rpcJfpwSYnHBjc95MQ==}
     engines: {node: '>=18.18.0'}
 
-  i18next@27.2.1:
-    resolution: {integrity: sha512-dNYOxb2d+zjmn/vlvx99XribYwtJ/WcIfVY3d61QkOKAiJ1Kgt7Ow+mBq8v7YUC/K3dCr9dDDEjheKbRycWGdA==}
+  i18next@27.2.2:
+    resolution: {integrity: sha512-1/AJgz/bpE/YL6tqekQlZAzDhkmrUBbgU8+Xon/Lwv6c5WdYuyFZ9mb86OVfR2C2XujUDT7Rz23Ydaq4l981lA==}
     engines: {node: '>=22'}
     peerDependencies:
       typescript: ^5 || ^6 || ^7
@@ -4063,9 +4063,9 @@ packages:
   snake-case@3.0.4:
     resolution: {integrity: sha512-LAOh4z89bGQvl9pFfNF8V146i7o7/CqFPbqzYgP+yYzDIDeS9HaNFtXABamRW+AQzEVODcvE79ljJ+8a9YSdMg==}
 
-  source-map-js@1.2.3:
-    resolution: {integrity: sha512-xj+WrAkyv5Qp+t7r9N5HvCBu7g1qOe6CKRNpq22X1GGcPEQADFU54v5qsPVs3/vrUFQ7XivFrcAVKA2stI0kWA==}
-    engines: {node: '>=0.10.0'}
+  source-map-js@1.2.4:
+    resolution: {integrity: sha512-J7ZjMvHd9O1fcT/5V09QWaaSl2BbWx3F6O08spde82Namf9UB0GxRVIPiNbVsdKkoizHiSpTodo3vp2bAy91MA==}
+    engines: {node: '>=6.0.0'}
 
   source-map-support@0.5.21:
     resolution: {integrity: sha512-uBHU3L3czsIyYXKX88fdrGovxdSCoTGDRZ6SYXtSRxLZUzHg5P/66Ht6uoUlHu9EZod+inXhKo3qQgwXUT/y1w==}
@@ -4696,7 +4696,7 @@ snapshots:
       '@smithy/types': 4.20.0
       tslib: 2.9.1
 
-  '@aws-sdk/client-cloudfront@3.1172.0':
+  '@aws-sdk/client-cloudfront@3.1173.0':
     dependencies:
       '@aws-sdk/core': 3.981.0
       '@aws-sdk/credential-provider-node': 3.972.97
@@ -4707,7 +4707,7 @@ snapshots:
       '@smithy/types': 4.20.0
       tslib: 2.9.1
 
-  '@aws-sdk/client-s3@3.1172.0':
+  '@aws-sdk/client-s3@3.1173.0':
     dependencies:
       '@aws-sdk/checksums': 3.1002.5
       '@aws-sdk/core': 3.981.0
@@ -5700,7 +5700,7 @@ snapshots:
       jiti: 2.7.0
       lightningcss: 1.33.0
       magic-string: 1.4.5
-      source-map-js: 1.2.3
+      source-map-js: 1.2.4
       tailwindcss: 4.3.5
 
   '@tailwindcss/oxide-android-arm64@4.3.5':
@@ -7190,7 +7190,7 @@ snapshots:
 
   human-signals@8.0.1: {}
 
-  i18next@27.2.1(typescript@6.0.3):
+  i18next@27.2.2(typescript@6.0.3):
     optionalDependencies:
       typescript: 6.0.3
 
@@ -8048,8 +8048,8 @@ snapshots:
 
   oclif@6.0.15(@types/node@26.6.6)(supports-color@8.1.1):
     dependencies:
-      '@aws-sdk/client-cloudfront': 3.1172.0
-      '@aws-sdk/client-s3': 3.1172.0
+      '@aws-sdk/client-cloudfront': 3.1173.0
+      '@aws-sdk/client-s3': 3.1173.0
       '@inquirer/confirm': 3.2.0
       '@inquirer/input': 2.3.0
       '@inquirer/select': 2.5.0
@@ -8250,7 +8250,7 @@ snapshots:
     dependencies:
       nanoid: 3.3.20
       picocolors: 1.1.1
-      source-map-js: 1.2.3
+      source-map-js: 1.2.4
 
   powershell-utils@0.1.0: {}
 
@@ -8649,7 +8649,7 @@ snapshots:
       dot-case: 3.0.4
       tslib: 2.9.1
 
-  source-map-js@1.2.3: {}
+  source-map-js@1.2.4: {}
 
   source-map-support@0.5.21:
     dependencies:
